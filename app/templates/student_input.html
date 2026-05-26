@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>学生信息输入</h1>
+
+        <p class="subtitle">
+            请填写学生基础信息、技能、项目经历和目标岗位，系统将用于后续能力画像与岗位匹配分析。
+        </p>
+
+        <div class="card">
+            <form action="/student/submit" method="post" class="form">
+
+                <label>姓名</label>
+                <input type="text" name="name" placeholder="例如：张三" required>
+
+                <label>专业</label>
+                <input type="text" name="major" placeholder="例如：计算机科学与技术" required>
+
+                <label>年级</label>
+                <input type="text" name="grade" placeholder="例如：研一 / 大三" required>
+
+                <label>目标岗位</label>
+                <input type="text" name="target_job" placeholder="例如：AI算法工程师 / Java后端工程师" required>
+
+                <label>掌握技能</label>
+                <textarea name="skills" rows="4" placeholder="例如：Python、Java、Linux、MySQL、FastAPI、机器学习" required></textarea>
+
+                <label>项目经历</label>
+                <textarea name="projects" rows="4" placeholder="例如：学生管理系统、智能门禁系统、文本分类项目"></textarea>
+
+                <label>竞赛经历</label>
+                <textarea name="competitions" rows="3" placeholder="例如：蓝桥杯、研电赛、互联网+"></textarea>
+
+                <label>证书</label>
+                <textarea name="certificates" rows="3" placeholder="例如：英语六级、软考、计算机等级考试"></textarea>
+
+                <label>个人补充说明</label>
+                <textarea name="self_intro" rows="4" placeholder="可以填写自己的优势、不足、就业目标等"></textarea>
+
+                <button type="submit" class="btn">提交诊断信息</button>
+            </form>
+        </div>
+
+        <a href="/" class="link">返回首页</a>
+    </div>
+</body>
+</html>

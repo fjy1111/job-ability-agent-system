@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>学生信息提交结果</h1>
+
+        <p class="subtitle">
+            后端已经成功接收到学生信息。下一步将基于这些信息生成能力画像。
+        </p>
+
+        <div class="card">
+            <h2>基础信息</h2>
+
+            <p><strong>姓名：</strong>{{ student.name }}</p>
+            <p><strong>专业：</strong>{{ student.major }}</p>
+            <p><strong>年级：</strong>{{ student.grade }}</p>
+            <p><strong>目标岗位：</strong>{{ student.target_job }}</p>
+
+            <h2>能力相关信息</h2>
+
+            <p><strong>掌握技能：</strong>{{ student.skills }}</p>
+            <p><strong>项目经历：</strong>{{ student.projects }}</p>
+            <p><strong>竞赛经历：</strong>{{ student.competitions }}</p>
+            <p><strong>证书：</strong>{{ student.certificates }}</p>
+            <p><strong>个人说明：</strong>{{ student.self_intro }}</p>
+        </div>
+
+        <a href="/student/input" class="btn">重新填写</a>
+        <a href="/" class="link">返回首页</a>
+    </div>
+</body>
+</html>

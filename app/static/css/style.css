@@ -53,3 +53,42 @@ h1 {
 .btn:hover {
     background: #155bb5;
 }
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form label {
+    font-weight: bold;
+    color: #1f3a5f;
+    margin-top: 10px;
+}
+
+.form input,
+.form textarea {
+    padding: 12px;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+}
+
+.form input:focus,
+.form textarea:focus {
+    outline: none;
+    border-color: #1f73e0;
+    box-shadow: 0 0 0 2px rgba(31, 115, 224, 0.15);
+}
+
+.link {
+    display: inline-block;
+    margin-left: 20px;
+    color: #1f73e0;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
