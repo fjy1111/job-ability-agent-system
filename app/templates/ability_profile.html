@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>学生能力画像</h1>
+
+        <p class="subtitle">
+            系统根据学生基础信息、技能、项目经历和职业目标，生成四维能力画像。
+        </p>
+
+        <div class="card">
+            <h2>学生基础信息</h2>
+            <p><strong>姓名：</strong>{{ student.name }}</p>
+            <p><strong>专业：</strong>{{ student.major }}</p>
+            <p><strong>年级：</strong>{{ student.grade }}</p>
+            <p><strong>目标岗位：</strong>{{ student.target_job }}</p>
+        </div>
+
+        <div class="card">
+            <h2>四维能力评分</h2>
+
+            <div class="score-item">
+                <div class="score-title">
+                    <strong>专业基础能力</strong>
+                    <span>{{ ability_scores.professional }} 分</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{ ability_scores.professional }}%;"></div>
+                </div>
+                <p>{{ ability_explain.professional }}</p>
+            </div>
+
+            <div class="score-item">
+                <div class="score-title">
+                    <strong>技术实践能力</strong>
+                    <span>{{ ability_scores.practice }} 分</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{ ability_scores.practice }}%;"></div>
+                </div>
+                <p>{{ ability_explain.practice }}</p>
+            </div>
+
+            <div class="score-item">
+                <div class="score-title">
+                    <strong>工具技能能力</strong>
+                    <span>{{ ability_scores.tools }} 分</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{ ability_scores.tools }}%;"></div>
+                </div>
+                <p>{{ ability_explain.tools }}</p>
+            </div>
+
+            <div class="score-item">
+                <div class="score-title">
+                    <strong>职业发展能力</strong>
+                    <span>{{ ability_scores.career }} 分</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{ ability_scores.career }}%;"></div>
+                </div>
+                <p>{{ ability_explain.career }}</p>
+            </div>
+        </div>
+
+        <a href="/student/input" class="btn">重新诊断</a>
+        <a href="/app/static" class="link">返回首页</a>
+    </div>
+</body>
+</html>
