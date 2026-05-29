@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="/static/css/style.css">
+
+    <!-- 引入 ECharts 图表库 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -19,6 +22,13 @@
             <p><strong>专业：</strong>{{ student.major }}</p>
             <p><strong>年级：</strong>{{ student.grade }}</p>
             <p><strong>目标岗位：</strong>{{ student.target_job }}</p>
+        </div>
+
+        <div class="card">
+            <h2>能力雷达图</h2>
+
+            <!-- ECharts 图表容器 -->
+            <div id="radarChart" class="chart-box"></div>
         </div>
 
         <div class="card">
@@ -70,7 +80,59 @@
         </div>
 
         <a href="/student/input" class="btn">重新诊断</a>
-        <a href="/app/static" class="link">返回首页</a>
+        <a href="/" class="link">返回首页</a>
     </div>
+
+    <script>
+        // 1. 从后端模板中拿到能力分数
+        const professionalScore = {{ ability_scores.professional }};
+        const practiceScore = {{ ability_scores.practice }};
+        const toolsScore = {{ ability_scores.tools }};
+        const careerScore = {{ ability_scores.career }};
+
+        // 2. 找到页面中的图表容器
+        const chartDom = document.getElementById('radarChart');
+
+        // 3. 初始化 ECharts 图表
+        const myChart = echarts.init(chartDom);
+
+        // 4. 配置雷达图
+        const option = {
+            tooltip: {},
+            radar: {
+                indicator: [
+                    { name: '专业基础能力', max: 100 },
+                    { name: '技术实践能力', max: 100 },
+                    { name: '工具技能能力', max: 100 },
+                    { name: '职业发展能力', max: 100 }
+                ]
+            },
+            series: [
+                {
+                    name: '能力画像',
+                    type: 'radar',
+                    data: [
+                        {
+                            value: [
+                                professionalScore,
+                                practiceScore,
+                                toolsScore,
+                                careerScore
+                            ],
+                            name: '当前学生能力'
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // 5. 渲染图表
+        myChart.setOption(option);
+
+        // 6. 浏览器窗口变化时，图表自动适配
+        window.addEventListener('resize', function () {
+            myChart.resize();
+        });
+    </script>
 </body>
 </html>
