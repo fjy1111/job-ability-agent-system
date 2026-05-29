@@ -1,11 +1,11 @@
 {
-    "name": "张三",
-    "major": "计算机科学与技术",
+    "name": "lisheng",
+    "major": "计算机",
     "grade": "研一",
-    "target_job": "AI应用开发工程师",
-    "skills": "fasfd",
-    "projects": "dthdj",
-    "competitions": "etgser",
-    "certificates": "fsegs",
-    "self_intro": "sdgg"
+    "target_job": "AI算法工程师",
+    "skills": "Python",
+    "projects": "智能门禁系统",
+    "competitions": "蓝桥杯，飞腾杯",
+    "certificates": "英语四级",
+    "self_intro": "很能吃苦"
 }
