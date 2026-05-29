@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+<div class="history-page">
+
+    <div class="history-header">
+        <div>
+            <h1>历史诊断记录</h1>
+            <p>查看系统中已保存的学生能力诊断结果</p>
+        </div>
+
+        <div class="history-header-buttons">
+            <a href="/" class="history-back-button">返回首页</a>
+            <a href="/student/input" class="history-new-button">新建诊断</a>
+        </div>
+    </div>
+
+    {% if records %}
+    <div class="history-table-card">
+        <table class="history-table">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>姓名</th>
+                <th>专业</th>
+                <th>年级</th>
+                <th>目标岗位</th>
+                <th>诊断时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.id }}</td>
+                <td>{{ record.name }}</td>
+                <td>{{ record.major }}</td>
+                <td>{{ record.grade }}</td>
+                <td>{{ record.target_job }}</td>
+                <td>{{ record.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <a href="/ability/profile/{{ record.id }}"
+                       class="history-view-button">
+                        查看画像
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <div class="history-empty">
+        <h2>暂时没有诊断记录</h2>
+        <p>提交一次学生信息后，诊断结果会显示在这里。</p>
+        <a href="/student/input" class="history-new-button">立即开始诊断</a>
+    </div>
+    {% endif %}
+
+</div>
+</body>
+</html>
