@@ -79,6 +79,124 @@
             </div>
         </div>
 
+        {% if agent_result %}
+
+        <div class="card diagnosis-summary-card">
+            <h2>智能诊断总结</h2>
+            <p>{{ summary }}</p>
+        </div>
+
+        <div class="analysis-columns">
+            <div class="card">
+                <h2>当前优势</h2>
+                <ul class="analysis-list advantage-list">
+                    {% for item in advantages %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>能力短板</h2>
+                <ul class="analysis-list weakness-list">
+                    {% for item in weaknesses %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>TOP5 岗位推荐</h2>
+
+            <p class="match-analysis">
+                {{ job_match_analysis }}
+            </p>
+
+            <table class="job-table">
+                <thead>
+                <tr>
+                    <th>排名</th>
+                    <th>推荐岗位</th>
+                    <th>方向</th>
+                    <th>匹配度</th>
+                    <th>已具备技能</th>
+                    <th>待补充技能</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for job in job_recommendations %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ job.job_name }}</td>
+                    <td>{{ job.category }}</td>
+                    <td>
+                        <span class="match-score">
+                            {{ job.match_score }} 分
+                        </span>
+                    </td>
+                    <td>
+                        {% if job.matched_skills %}
+                            {{ job.matched_skills | join('、') }}
+                        {% else %}
+                            暂无明确证据
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if job.skill_gaps %}
+                            {{ job.skill_gaps | join('、') }}
+                        {% else %}
+                            暂无明显缺口
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>个性化成长路径</h2>
+
+            <div class="growth-path">
+                {% for stage in growth_path %}
+                <div class="growth-stage">
+                    <div class="stage-header">
+                        <h3>{{ stage.stage }}</h3>
+                        <span>{{ stage.duration }}</span>
+                    </div>
+
+                    <p class="stage-goal">
+                        <strong>阶段目标：</strong>{{ stage.goal }}
+                    </p>
+
+                    <div class="stage-content">
+                        <div>
+                            <h4>行动任务</h4>
+                            <ul>
+                                {% for action in stage.actions %}
+                                <li>{{ action }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4>验收成果</h4>
+                            <ul>
+                                {% for item in stage.deliverables %}
+                                <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% endif %}
+
         <a href="/student/input" class="btn">重新诊断</a>
         <a href="/" class="link">返回首页</a>
     </div>
