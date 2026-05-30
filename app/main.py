@@ -15,7 +15,7 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 from app.agent.diagnosis_agent import run_diagnosis_agent
-
+from app.services.job_match_service import calculate_job_match
 
 # =========================================================
 # 项目路径配置
@@ -111,10 +111,105 @@ class DiagnosisRecord(Base):
         nullable=False
     )
 
+class JobKnowledgeRecord(Base):
+    """
+    岗位能力知识图谱表
+    用数据库保存岗位与技能、项目、课程、证书之间的关系
+    """
+    __tablename__ = "job_knowledge_records"
 
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+
+    job_name: Mapped[str] = mapped_column(String(100), nullable=False)
+
+    required_skills_json: Mapped[str] = mapped_column(Text, nullable=False)
+    related_projects_json: Mapped[str] = mapped_column(Text, default="[]")
+    recommended_courses_json: Mapped[str] = mapped_column(Text, default="[]")
+    recommended_certificates_json: Mapped[str] = mapped_column(Text, default="[]")
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.now,
+        nullable=False
+    )
+
+def init_job_knowledge_data():
+    """
+    初始化岗位能力知识图谱数据。
+    如果数据库中已有岗位数据，则不重复插入。
+    """
+    db = SessionLocal()
+
+    try:
+        count = db.query(JobKnowledgeRecord).count()
+
+        if count > 0:
+            print("[JobKnowledge] 岗位知识图谱数据已存在，无需重复初始化")
+            return
+
+        default_jobs = [
+            {
+                "job_name": "AI应用开发工程师",
+                "required_skills": ["Python", "FastAPI", "LangChain", "SQL", "大模型API调用"],
+                "related_projects": ["AI聊天助手", "知识库问答系统", "简历生成系统"],
+                "recommended_courses": ["Python程序设计", "数据库原理", "人工智能导论"],
+                "recommended_certificates": ["英语六级", "软考程序员"]
+            },
+            {
+                "job_name": "Java后端工程师",
+                "required_skills": ["Java", "Spring Boot", "MySQL", "Redis", "Linux"],
+                "related_projects": ["学生管理系统", "电商后台系统", "权限管理系统"],
+                "recommended_courses": ["Java程序设计", "数据库原理", "软件工程"],
+                "recommended_certificates": ["软考程序员", "英语六级"]
+            },
+            {
+                "job_name": "数据分析师",
+                "required_skills": ["Python", "SQL", "Excel", "Pandas", "数据可视化"],
+                "related_projects": ["数据分析项目", "用户画像分析", "销售数据分析"],
+                "recommended_courses": ["概率论与数理统计", "数据库原理", "数据挖掘"],
+                "recommended_certificates": ["英语六级"]
+            },
+            {
+                "job_name": "前端开发工程师",
+                "required_skills": ["HTML", "CSS", "JavaScript", "Vue", "接口调用"],
+                "related_projects": ["个人博客", "后台管理系统", "数据可视化大屏"],
+                "recommended_courses": ["Web前端开发", "软件工程"],
+                "recommended_certificates": ["英语六级"]
+            },
+            {
+                "job_name": "测试工程师",
+                "required_skills": ["软件测试", "Python", "接口测试", "Linux", "自动化测试"],
+                "related_projects": ["接口测试项目", "自动化测试脚本", "缺陷管理系统"],
+                "recommended_courses": ["软件工程", "软件测试技术"],
+                "recommended_certificates": ["软件测试相关证书"]
+            }
+        ]
+
+        for job in default_jobs:
+            record = JobKnowledgeRecord(
+                job_name=job["job_name"],
+                required_skills_json=json.dumps(job["required_skills"], ensure_ascii=False),
+                related_projects_json=json.dumps(job["related_projects"], ensure_ascii=False),
+                recommended_courses_json=json.dumps(job["recommended_courses"], ensure_ascii=False),
+                recommended_certificates_json=json.dumps(job["recommended_certificates"], ensure_ascii=False)
+            )
+
+            db.add(record)
+
+        db.commit()
+        print("[JobKnowledge] 岗位知识图谱初始化完成")
+
+    finally:
+        db.close()
 # 自动创建数据库表
 # 如果 diagnosis_records 表不存在，程序启动时会自动创建
 Base.metadata.create_all(bind=engine)
+
+init_job_knowledge_data()
 
 
 def get_db():
@@ -438,3 +533,59 @@ def health_check():
         "status": "ok",
         "message": "系统运行正常"
     }
+
+@app.get("/job/match")
+def job_match(request: Request, db: Session = Depends(get_db)):
+    """
+    岗位匹配页面：
+    学生信息从 diagnosis_records 表读取；
+    岗位知识图谱从 job_knowledge_records 表读取。
+    """
+
+    student_record = (
+        db.query(DiagnosisRecord)
+        .order_by(DiagnosisRecord.created_at.desc())
+        .first()
+    )
+
+    if student_record is None:
+        student_data = {
+            "name": "未填写",
+            "major": "未填写",
+            "grade": "未填写",
+            "target_job": "未填写",
+            "skills": "",
+            "projects": "",
+            "competitions": "",
+            "certificates": "",
+            "self_intro": ""
+        }
+
+        job_matches = []
+
+    else:
+        student_data = {
+            "name": student_record.name,
+            "major": student_record.major,
+            "grade": student_record.grade,
+            "target_job": student_record.target_job,
+            "skills": student_record.skills,
+            "projects": student_record.projects,
+            "competitions": student_record.competitions,
+            "certificates": student_record.certificates,
+            "self_intro": student_record.self_intro
+        }
+
+        job_records = db.query(JobKnowledgeRecord).all()
+
+        job_matches = calculate_job_match(student_data, job_records)
+
+    return templates.TemplateResponse(
+        request,
+        "job_match.html",
+        {
+            "title": "岗位匹配结果",
+            "student": student_data,
+            "job_matches": job_matches
+        }
+    )

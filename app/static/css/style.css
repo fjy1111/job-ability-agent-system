@@ -414,3 +414,32 @@ h1 {
         overflow-x: auto;
     }
 }
+.job-card {
+    padding: 20px;
+    border: 1px solid #e4e7ed;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    background: #fafcff;
+}
+
+.job-card p {
+    line-height: 1.8;
+}
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.secondary-btn {
+    background: #ffffff;
+    color: #1f73e0;
+    border: 1px solid #1f73e0;
+}
+
+.secondary-btn:hover {
+    background: #eaf3ff;
+    color: #155bb5;
+}
