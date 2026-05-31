@@ -1,5 +1,6 @@
 from __future__ import annotations
-
+import json
+import re
 import os
 from pathlib import Path
 from typing import Any, TypedDict
@@ -197,31 +198,65 @@ def _clamp_score(score: int) -> int:
 def _contains(text: str, keyword: str) -> bool:
     return keyword.lower() in text.lower()
 
+def extract_json_from_llm_text(text: str) -> dict:
+    """
+    从大模型返回文本中提取 JSON。
+    兼容 ```json ... ``` 包裹的情况。
+    """
+
+    text = text.strip()
+
+    # 去掉 markdown 代码块
+    if text.startswith("```"):
+        text = re.sub(r"^```json", "", text, flags=re.IGNORECASE).strip()
+        text = re.sub(r"^```", "", text).strip()
+        text = re.sub(r"```$", "", text).strip()
+
+    # 尝试直接解析
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+
+    # 如果前后有解释文字，截取第一个 { 到最后一个 }
+    start = text.find("{")
+    end = text.rfind("}")
+
+    if start != -1 and end != -1 and end > start:
+        json_text = text[start:end + 1]
+        return json.loads(json_text)
+
+    raise ValueError("大模型返回内容不是合法 JSON")
+
 
 def _create_llm() -> ChatOpenAI | None:
     """
-    根据 .env 创建模型。
-    没有配置模型时返回 None，系统仍能使用规则版结果。
+    根据 .env 创建大模型。
+    支持 DeepSeek 等 OpenAI 兼容接口。
     """
 
     use_llm = os.getenv("USE_LLM", "false").lower() == "true"
     api_key = os.getenv("LLM_API_KEY", "").strip()
-    model = os.getenv("LLM_MODEL", "").strip()
     base_url = os.getenv("LLM_BASE_URL", "").strip()
+    model = os.getenv("LLM_MODEL", "").strip()
 
-    if not use_llm or not api_key or not model:
+    if not use_llm:
         return None
 
-    kwargs: dict[str, Any] = {
-        "model": model,
-        "api_key": api_key,
-        "temperature": 0
-    }
+    if not api_key:
+        raise RuntimeError("USE_LLM=true，但没有配置 LLM_API_KEY")
 
-    if base_url:
-        kwargs["base_url"] = base_url
+    if not model:
+        raise RuntimeError("USE_LLM=true，但没有配置 LLM_MODEL")
 
-    return ChatOpenAI(**kwargs)
+    return ChatOpenAI(
+        model=model,
+        api_key=api_key,
+        base_url=base_url or None,
+        temperature=0.2,
+        timeout=60,
+        max_retries=2
+    )
 
 
 # =========================================================
@@ -535,8 +570,9 @@ def _fallback_report(state: DiagnosisState) -> dict[str, Any]:
 
 def generate_report_node(state: DiagnosisState) -> dict[str, Any]:
     """
-    有大模型配置时生成更自然的诊断报告；
-    没有配置或调用失败时，自动使用默认规则版报告。
+    使用大模型生成诊断总结和成长路径。
+    DeepSeek 普通聊天调用可用，但 with_structured_output 可能报 BadRequestError，
+    所以这里改成普通 JSON 文本输出，再由 Python 解析。
     """
 
     llm = _create_llm()
@@ -552,51 +588,114 @@ def generate_report_node(state: DiagnosisState) -> dict[str, Any]:
     prompt = f"""
 你是“岗位能力达成学生成长诊断与精准就业智能体系统”的职业诊断专家。
 
-请根据给定信息生成中文诊断报告。
+请根据学生信息、四维能力分数和TOP5岗位推荐结果，生成诊断报告。
 
 重要要求：
 1. 不得编造学生没有填写的证书、竞赛、实习或项目。
 2. 四维能力分数已经由系统算法计算完成，不允许修改。
 3. TOP5 岗位排序和匹配分数已经由系统计算完成，不允许修改。
-4. 你的任务仅是解释结果，并生成具体、可执行的成长路径。
-5. 成长路径必须包含三个阶段，每阶段都应有行动任务和可验收成果。
-6. 语言适合直接展示在学生端网页中，避免空泛套话。
+4. 你的任务是解释结果，并生成具体、可执行的成长路径。
+5. 必须只输出 JSON，不要输出 Markdown，不要输出解释文字，不要使用 ```json 代码块。
+6. growth_path 必须包含三个阶段。
+7. 每个阶段必须包含 stage、duration、goal、actions、deliverables 五个字段。
+8. actions 建议 3 条，deliverables 建议 2 条。
 
 学生信息：
-{student}
+{json.dumps(student, ensure_ascii=False)}
 
 系统识别技能：
-{recognized_skills}
+{json.dumps(recognized_skills, ensure_ascii=False)}
 
 四维能力分数：
-{scores}
+{json.dumps(scores, ensure_ascii=False)}
 
-TOP5 岗位推荐：
-{recommendations}
+TOP5岗位推荐：
+{json.dumps(recommendations, ensure_ascii=False)}
+
+请严格按照下面 JSON 格式输出：
+
+{{
+  "summary": "整体诊断总结，100到200字",
+  "advantages": [
+    "优势1",
+    "优势2",
+    "优势3"
+  ],
+  "weaknesses": [
+    "短板1",
+    "短板2",
+    "短板3"
+  ],
+  "job_match_analysis": "结合TOP5岗位推荐结果进行分析，说明为什么推荐这些岗位以及主要差距",
+  "growth_path": [
+    {{
+      "stage": "第一阶段：基础补强",
+      "duration": "第1-2个月",
+      "goal": "本阶段目标",
+      "actions": [
+        "行动任务1",
+        "行动任务2",
+        "行动任务3"
+      ],
+      "deliverables": [
+        "验收成果1",
+        "验收成果2"
+      ]
+    }},
+    {{
+      "stage": "第二阶段：项目实践",
+      "duration": "第3-4个月",
+      "goal": "本阶段目标",
+      "actions": [
+        "行动任务1",
+        "行动任务2",
+        "行动任务3"
+      ],
+      "deliverables": [
+        "验收成果1",
+        "验收成果2"
+      ]
+    }},
+    {{
+      "stage": "第三阶段：就业准备",
+      "duration": "第5-6个月",
+      "goal": "本阶段目标",
+      "actions": [
+        "行动任务1",
+        "行动任务2",
+        "行动任务3"
+      ],
+      "deliverables": [
+        "验收成果1",
+        "验收成果2"
+      ]
+    }}
+  ]
+}}
 """
 
     try:
-        structured_llm = llm.with_structured_output(AIReport)
-        report = structured_llm.invoke(prompt)
+        response = llm.invoke(prompt)
+        content = response.content
+
+        report = extract_json_from_llm_text(content)
 
         return {
-            "summary": report.summary,
-            "advantages": report.advantages,
-            "weaknesses": report.weaknesses,
-            "job_match_analysis": report.job_match_analysis,
-            "growth_path": [
-                stage.model_dump() for stage in report.growth_path
-            ],
-            "used_llm": True
+            "summary": report.get("summary", ""),
+            "advantages": report.get("advantages", []),
+            "weaknesses": report.get("weaknesses", []),
+            "job_match_analysis": report.get("job_match_analysis", ""),
+            "growth_path": report.get("growth_path", []),
+            "used_llm": True,
+            "agent_warning": ""
         }
 
     except Exception as exc:
         fallback = _fallback_report(state)
         fallback["agent_warning"] = (
-            f"大模型调用失败，当前展示规则版诊断结果：{type(exc).__name__}"
+            f"大模型调用失败，当前展示规则版诊断结果：{type(exc).__name__}: {exc}"
         )
         return fallback
-
 
 # =========================================================
 # 构建 LangGraph 智能体
