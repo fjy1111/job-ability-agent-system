@@ -235,7 +235,7 @@ def _create_llm() -> ChatOpenAI | None:
     支持 DeepSeek 等 OpenAI 兼容接口。
     """
 
-    use_llm = os.getenv("USE_LLM", "false").lower() == "true"
+    use_llm = os.getenv("USE_LLM", "true").lower() == "true"
     api_key = os.getenv("LLM_API_KEY", "").strip()
     base_url = os.getenv("LLM_BASE_URL", "").strip()
     model = os.getenv("LLM_MODEL", "").strip()

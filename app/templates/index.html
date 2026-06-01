@@ -3,11 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=6">
 </head>
 <body>
     <div class="container">
         <h1>岗位能力达成学生成长诊断与精准就业智能体系统</h1>
+
+        {% if username %}
+        <p class="subtitle">
+            当前登录用户：{{ username }}
+            <a href="/logout" class="link">退出登录</a>
+        </p>
+        {% endif %}
+
+        {% if message %}
+        <p class="success-message">
+            {{ message }}
+        </p>
+        {% endif %}
 
         <p class="subtitle">
             面向学生、学校、企业三方协同的人才培养与精准就业智能体系统
@@ -24,8 +37,10 @@
             </ul>
         </div>
 
-        <a class="btn" href="/student/input">开始诊断</a>
-        <a href="/history" class="history-button">查看历史诊断记录</a>
+        <div class="button-group">
+            <a class="btn" href="/student/input">开始诊断</a>
+            <a class="btn secondary-btn" href="/history">查看历史诊断记录</a>
+        </div>
     </div>
 </body>
 </html>

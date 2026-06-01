@@ -443,3 +443,159 @@ h1 {
     background: #eaf3ff;
     color: #155bb5;
 }
+
+.success-message {
+    color: #137333;
+    background: #e6f4ea;
+    border: 1px solid #b7dfc2;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+/* ==============================
+   登录 / 注册页面
+   ============================== */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background:
+        radial-gradient(circle at top left, rgba(31, 115, 224, 0.16), transparent 32%),
+        linear-gradient(135deg, #f5f7fb 0%, #eef3fb 100%);
+}
+
+.auth-card {
+    width: 420px;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 42px 38px;
+    box-shadow: 0 18px 45px rgba(31, 58, 95, 0.14);
+    border: 1px solid rgba(31, 115, 224, 0.08);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header h1 {
+    margin: 0;
+    font-size: 32px;
+    color: #1f3a5f;
+    letter-spacing: 1px;
+}
+
+.auth-header p {
+    margin-top: 12px;
+    font-size: 15px;
+    color: #667085;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f3a5f;
+}
+
+.form-group input {
+    height: 46px;
+    padding: 0 14px;
+    border: 1px solid #d9e2ef;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    color: #222;
+    background: #fbfdff;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #1f73e0;
+    box-shadow: 0 0 0 3px rgba(31, 115, 224, 0.14);
+    background: #ffffff;
+}
+
+.auth-btn {
+    height: 48px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 10px;
+    background: #1f73e0;
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    transition: all 0.2s ease;
+}
+
+.auth-btn:hover {
+    background: #155bb5;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(31, 115, 224, 0.24);
+}
+
+.auth-footer {
+    margin-top: 26px;
+    text-align: center;
+    font-size: 15px;
+    color: #667085;
+}
+
+.auth-footer a {
+    margin-left: 6px;
+    color: #1f73e0;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    color: #d93025;
+    background: #fdecea;
+    border: 1px solid #f5c2c0;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.success-message {
+    color: #137333;
+    background: #e6f4ea;
+    border: 1px solid #b7dfc2;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+@media (max-width: 520px) {
+    .auth-card {
+        width: 100%;
+        padding: 34px 24px;
+    }
+
+    .auth-header h1 {
+        font-size: 28px;
+    }
+}
