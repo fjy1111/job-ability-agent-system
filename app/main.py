@@ -114,7 +114,10 @@ class DiagnosisRecord(Base):
         primary_key=True,
         autoincrement=True
     )
-
+    user_id: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True
+    )
     name: Mapped[str] = mapped_column(String(50), nullable=False)
     major: Mapped[str] = mapped_column(String(100), nullable=False)
     grade: Mapped[str] = mapped_column(String(30), nullable=False)
@@ -446,12 +449,107 @@ def render_ability_profile(
             "growth_path": agent_result.get("growth_path", [])
         }
     )
+def build_growth_trend(records: list[DiagnosisRecord]) -> dict:
+    """
+    根据当前用户的全部历史诊断记录，生成成长轨迹数据。
+    重点：综合成长变化与能力变化，默认比较“最近一次”和“上一次”。
+    """
 
+    trend_items = []
 
+    for index, record in enumerate(records, start=1):
+        average_score = round(
+            (
+                record.professional_score
+                + record.practice_score
+                + record.tools_score
+                + record.career_score
+            ) / 4,
+            2
+        )
+
+        trend_items.append({
+            "index": index,
+            "record": record,
+            "created_at": record.created_at,
+            "professional_score": record.professional_score,
+            "practice_score": record.practice_score,
+            "tools_score": record.tools_score,
+            "career_score": record.career_score,
+            "average_score": average_score
+        })
+
+    latest_item = trend_items[-1]
+
+    # 如果只有一次诊断，没有“上一次”，就拿自己和自己比，变化为 0
+    if len(trend_items) >= 2:
+        previous_item = trend_items[-2]
+    else:
+        previous_item = trend_items[-1]
+
+    total_change = round(
+        latest_item["average_score"] - previous_item["average_score"],
+        2
+    )
+
+    professional_change = latest_item["professional_score"] - previous_item["professional_score"]
+    practice_change = latest_item["practice_score"] - previous_item["practice_score"]
+    tools_change = latest_item["tools_score"] - previous_item["tools_score"]
+    career_change = latest_item["career_score"] - previous_item["career_score"]
+
+    changes = [
+        {
+            "name": "专业基础能力",
+            "change": professional_change,
+            "previous": previous_item["professional_score"],
+            "latest": latest_item["professional_score"]
+        },
+        {
+            "name": "技术实践能力",
+            "change": practice_change,
+            "previous": previous_item["practice_score"],
+            "latest": latest_item["practice_score"]
+        },
+        {
+            "name": "工具技能能力",
+            "change": tools_change,
+            "previous": previous_item["tools_score"],
+            "latest": latest_item["tools_score"]
+        },
+        {
+            "name": "职业发展能力",
+            "change": career_change,
+            "previous": previous_item["career_score"],
+            "latest": latest_item["career_score"]
+        },
+    ]
+
+    best_improvement = max(changes, key=lambda x: x["change"])
+    weakest_dimension = min(changes, key=lambda x: x["latest"])
+
+    if weakest_dimension["name"] == "专业基础能力":
+        next_suggestion = "建议继续补充专业课程知识、岗位理论基础和相关证书。"
+    elif weakest_dimension["name"] == "技术实践能力":
+        next_suggestion = "建议继续完成项目实战，积累可展示的项目经历。"
+    elif weakest_dimension["name"] == "工具技能能力":
+        next_suggestion = "建议重点提升 Python、数据库、Linux、AI 工具等工程工具能力。"
+    else:
+        next_suggestion = "建议优化简历表达、面试准备和职业目标描述。"
+
+    return {
+        "trend_items": trend_items,
+        "previous_item": previous_item,
+        "latest_item": latest_item,
+        "diagnosis_count": len(records),
+        "total_change": total_change,
+        "changes": changes,
+        "best_improvement": best_improvement,
+        "weakest_dimension": weakest_dimension,
+        "next_suggestion": next_suggestion
+    }
 # =========================================================
 # 用户注册 / 登录路由
 # =========================================================
-
 @app.get("/register")
 def register_page(request: Request):
     """
@@ -718,6 +816,7 @@ def student_submit(
     ability_scores = agent_result["ability_scores"]
 
     record = DiagnosisRecord(
+        user_id=request.session.get("user_id"),
         name=name,
         major=major,
         grade=grade,
@@ -914,3 +1013,53 @@ def health_check():
         "status": "ok",
         "message": "系统运行正常"
     }
+@app.get("/growth/trend")
+def growth_trend(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """
+    当前登录用户的个人全部成长轨迹。
+    """
+
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    user_id = request.session.get("user_id")
+
+    records = (
+        db.query(DiagnosisRecord)
+        .filter(DiagnosisRecord.user_id == user_id)
+        .order_by(
+            DiagnosisRecord.created_at.asc(),
+            DiagnosisRecord.id.asc()
+        )
+        .all()
+    )
+
+    if len(records) == 0:
+        return templates.TemplateResponse(
+            request,
+            "growth_trend.html",
+            {
+                "title": "个人成长轨迹",
+                "has_data": False,
+                "message": "当前账号暂无诊断记录，请先完成一次学生能力诊断。",
+                "username": request.session.get("username")
+            }
+        )
+
+    trend = build_growth_trend(records)
+
+    return templates.TemplateResponse(
+        request,
+        "growth_trend.html",
+        {
+            "title": "个人成长轨迹",
+            "has_data": True,
+            "trend": trend,
+            "username": request.session.get("username")
+        }
+    )

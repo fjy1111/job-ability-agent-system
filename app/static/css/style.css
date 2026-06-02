@@ -599,3 +599,131 @@ h1 {
         font-size: 28px;
     }
 }
+/* =========================
+   个人成长轨迹页面
+========================= */
+
+.growth-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px;
+}
+
+.growth-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.growth-header h1 {
+    margin: 0 0 10px;
+    color: #1f3a5f;
+}
+
+.growth-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 16px;
+}
+
+.growth-header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.growth-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.growth-table thead {
+    background: #f8fafc;
+}
+
+.growth-table th,
+.growth-table td {
+    padding: 16px 18px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.growth-table th:first-child,
+.growth-table td:first-child {
+    text-align: left;
+}
+
+.growth-table th {
+    color: #475569;
+    font-size: 15px;
+}
+
+.growth-table td {
+    color: #1e293b;
+    font-size: 16px;
+}
+
+.change-up {
+    color: #16a34a;
+    font-weight: 700;
+}
+
+.change-down {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+.change-flat {
+    color: #64748b;
+    font-weight: 700;
+}
+
+.growth-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-bottom: 30px;
+}
+
+.growth-summary-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 26px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.growth-summary-card h3 {
+    color: #1f3a5f;
+    margin: 0 0 14px;
+}
+
+.growth-summary-card p {
+    color: #64748b;
+    margin: 0;
+}
+
+.growth-number {
+    font-size: 34px;
+    color: #2563eb !important;
+    font-weight: 800;
+    margin-bottom: 10px !important;
+}
+
+@media screen and (max-width: 900px) {
+    .growth-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+    }
+
+    .growth-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .growth-table {
+        display: block;
+        overflow-x: auto;
+    }
+}

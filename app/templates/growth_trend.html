@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=9">
+</head>
+<body>
+    <div class="growth-page">
+        <div class="growth-header">
+            <div>
+                <h1>个人成长轨迹</h1>
+                <p>基于当前账号的全部历史诊断记录，展示能力成长变化。</p>
+            </div>
+
+            <div class="growth-header-actions">
+                <a href="/" class="history-back-button">返回首页</a>
+                <a href="/student/input" class="history-new-button">再次诊断</a>
+            </div>
+        </div>
+
+        {% if not has_data %}
+            <div class="history-empty">
+                <h2>暂无成长记录</h2>
+                <p>{{ message }}</p>
+                <a href="/student/input" class="btn">开始诊断</a>
+            </div>
+        {% else %}
+
+            <!-- 顶部统计卡片 -->
+            <div class="growth-summary-grid">
+                <div class="growth-summary-card">
+                    <h3>诊断次数</h3>
+                    <p class="growth-number">{{ trend.diagnosis_count }}</p>
+                    <p>当前账号累计诊断次数</p>
+                </div>
+
+                <div class="growth-summary-card">
+                    <h3>最新成长达成度</h3>
+                    <p class="growth-number">{{ trend.latest_item.average_score }}%</p>
+                    <p>根据最近一次四维能力平均分计算</p>
+                </div>
+
+                <div class="growth-summary-card">
+                    <h3>本轮成长变化</h3>
+                    <p class="growth-number">
+                        {% if trend.total_change > 0 %}
+                            +{{ trend.total_change }}
+                        {% else %}
+                            {{ trend.total_change }}
+                        {% endif %}
+                    </p>
+                    <p>相比上一次诊断的综合能力变化</p>
+                </div>
+            </div>
+
+            <!-- 全部历史诊断记录表 -->
+            <div class="card">
+                <h2>全部诊断记录趋势</h2>
+
+                <table class="growth-table">
+                    <thead>
+                        <tr>
+                            <th>次数</th>
+                            <th>诊断时间</th>
+                            <th>专业基础</th>
+                            <th>技术实践</th>
+                            <th>工具技能</th>
+                            <th>职业发展</th>
+                            <th>平均分</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in trend.trend_items %}
+                        <tr>
+                            <td>第 {{ item.index }} 次</td>
+                            <td>{{ item.created_at }}</td>
+                            <td>{{ item.professional_score }}</td>
+                            <td>{{ item.practice_score }}</td>
+                            <td>{{ item.tools_score }}</td>
+                            <td>{{ item.career_score }}</td>
+                            <td><strong>{{ item.average_score }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 和上一次诊断进行能力对比 -->
+            <div class="card">
+                <h2>能力变化总结</h2>
+
+                <table class="growth-table">
+                    <thead>
+                        <tr>
+                            <th>能力维度</th>
+                            <th>上一次分数</th>
+                            <th>当前分数</th>
+                            <th>相比上一次变化</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in trend.changes %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.previous }}</td>
+                            <td>{{ item.latest }}</td>
+                            <td>
+                                {% if item.change > 0 %}
+                                    <span class="change-up">+{{ item.change }}</span>
+                                {% elif item.change < 0 %}
+                                    <span class="change-down">{{ item.change }}</span>
+                                {% else %}
+                                    <span class="change-flat">0</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 阶段性总结 -->
+            <div class="card">
+                <h2>阶段性成长结论</h2>
+
+                <p>
+                    当前账号共完成
+                    <strong>{{ trend.diagnosis_count }}</strong>
+                    次诊断，最近一次综合能力相比上一次诊断变化为
+                    <strong>
+                        {% if trend.total_change > 0 %}
+                            +{{ trend.total_change }}
+                        {% else %}
+                            {{ trend.total_change }}
+                        {% endif %}
+                    </strong>
+                    分。
+                </p>
+
+                <p>
+                    本轮提升最明显的能力是
+                    <strong>{{ trend.best_improvement.name }}</strong>，
+                    当前相对薄弱的能力是
+                    <strong>{{ trend.weakest_dimension.name }}</strong>。
+                </p>
+
+                <p>
+                    <strong>下一阶段建议：</strong>{{ trend.next_suggestion }}
+                </p>
+            </div>
+
+        {% endif %}
+    </div>
+</body>
+</html>
