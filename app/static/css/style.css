@@ -727,3 +727,116 @@ h1 {
         overflow-x: auto;
     }
 }
+
+
+/* =========================
+   TOP5
+========================= */
+.top5-detail-section {
+    margin-top: 36px;
+}
+
+.section-title {
+    margin-bottom: 20px;
+    color: #0f3768;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.job-detail-card {
+    background: #ffffff;
+    border: 1px solid #e4e8f0;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 6px 20px rgba(15, 55, 104, 0.06);
+}
+
+.job-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.job-detail-header h3 {
+    margin: 0;
+    color: #0f3768;
+    font-size: 20px;
+}
+
+.job-subtitle {
+    margin-top: 8px;
+    color: #5d6b82;
+}
+
+.score-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #2563eb;
+    font-weight: 700;
+}
+
+.path-summary {
+    margin-top: 16px;
+    line-height: 1.8;
+    color: #334155;
+    background: #f8fafc;
+    padding: 14px 16px;
+    border-radius: 10px;
+}
+
+.detail-block {
+    margin-top: 22px;
+}
+
+.detail-block h4 {
+    color: #0f3768;
+    margin-bottom: 12px;
+}
+
+.detail-block li {
+    margin-bottom: 12px;
+    line-height: 1.8;
+}
+
+.priority-tag {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 12px;
+}
+
+.stage-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.stage-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+}
+
+.stage-card h5 {
+    margin: 0 0 8px 0;
+    color: #1e3a8a;
+    font-size: 16px;
+}
+
+.stage-duration {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.deliverable {
+    margin-top: 10px;
+    color: #0f766e;
+    font-weight: 600;
+}
