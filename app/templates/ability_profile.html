@@ -7,6 +7,164 @@
 
     <!-- 引入 ECharts 图表库 -->
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+
+
+    <style>
+        /* TOP5 岗位差距清单与个性化路径 */
+        .job-main-row td {
+            vertical-align: middle;
+        }
+
+        .gap-summary-row td {
+            padding-top: 0;
+            border-top: none;
+            background: #ffffff;
+        }
+
+        .gap-summary-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 18px;
+            margin: 0 0 10px 0;
+            padding: 12px 16px;
+            border: 1px dashed #cfe0f5;
+            border-radius: 12px;
+            background: #f8fbff;
+            color: #334155;
+            line-height: 1.8;
+        }
+
+        .gap-summary-text {
+            flex: 1;
+        }
+
+        .gap-label {
+            color: #0f3768;
+            font-weight: 700;
+        }
+
+        .gap-empty {
+            color: #64748b;
+        }
+
+        .path-toggle-btn {
+            flex-shrink: 0;
+            border: none;
+            border-radius: 999px;
+            padding: 8px 16px;
+            background: #1f73e0;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .path-toggle-btn:hover {
+            background: #155bb5;
+        }
+
+        .top5-path-row {
+            display: none;
+        }
+
+        .top5-path-row.show {
+            display: table-row;
+        }
+
+        .top5-path-row td {
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .top5-path-box {
+            margin: 0 0 18px 0;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            background: #f8fbff;
+        }
+
+        .top5-path-box h3 {
+            margin: 0 0 12px 0;
+            color: #0f3768;
+        }
+
+        .path-summary {
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #334155;
+            line-height: 1.8;
+        }
+
+        .detail-block {
+            margin-top: 18px;
+        }
+
+        .detail-block h4 {
+            color: #0f3768;
+            margin-bottom: 10px;
+        }
+
+        .detail-block li {
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+
+        .priority-tag {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: #fee2e2;
+            color: #dc2626;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .stage-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+        }
+
+        .stage-card {
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #ffffff;
+        }
+
+        .stage-card h5 {
+            margin: 0 0 8px 0;
+            color: #1e3a8a;
+        }
+
+        .stage-duration {
+            color: #64748b;
+            font-size: 14px;
+            margin: 4px 0 10px 0;
+        }
+
+        .stage-goal-mini {
+            color: #334155;
+            margin: 6px 0 10px 0;
+            line-height: 1.7;
+        }
+
+        .deliverable {
+            margin-top: 10px;
+            color: #0f766e;
+            font-weight: 700;
+        }
+
+        .empty-tip {
+            color: #64748b;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -126,8 +284,16 @@
                 </thead>
 
                 <tbody>
-                {% for job in job_recommendations %}
-                <tr>
+                {% for job in job_recommendations[:5] %}
+                {% set ns = namespace(detail=None) %}
+                {% if job.gap_detail is defined and job.gap_detail %}
+                    {% set ns.detail = job.gap_detail %}
+                {% elif top5_gap_paths is defined and top5_gap_paths and top5_gap_paths|length >= loop.index %}
+                    {% set ns.detail = top5_gap_paths[loop.index0] %}
+                {% endif %}
+                {% set detail = ns.detail %}
+
+                <tr class="job-main-row">
                     <td>{{ loop.index }}</td>
                     <td>{{ job.job_name }}</td>
                     <td>{{ job.category }}</td>
@@ -148,6 +314,139 @@
                             {{ job.skill_gaps | join('、') }}
                         {% else %}
                             暂无明显缺口
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr class="gap-summary-row">
+                    <td colspan="6">
+                        <div class="gap-summary-box">
+                            <div class="gap-summary-text">
+                                <span class="gap-label">岗位差距清单：</span>
+                                {% if detail and detail.gap_list %}
+                                    {% for gap in detail.gap_list %}
+                                        {% if gap.skill is defined %}
+                                            {{ gap.skill }}
+                                        {% else %}
+                                            {{ gap }}
+                                        {% endif %}
+                                        {% if not loop.last %}、{% endif %}
+                                    {% endfor %}
+                                {% elif job.skill_gaps %}
+                                    {{ job.skill_gaps | join('、') }}
+                                {% else %}
+                                    <span class="gap-empty">暂无明显差距，建议继续补充项目成果。</span>
+                                {% endif %}
+                            </div>
+
+                            <button
+                                type="button"
+                                class="path-toggle-btn"
+                                onclick="toggleTop5Path('top5-path-{{ loop.index }}', this)"
+                            >
+                                查看个性化路径
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr id="top5-path-{{ loop.index }}" class="top5-path-row">
+                    <td colspan="6">
+                        {% if detail %}
+                        <div class="top5-path-box">
+                            <h3>{{ job.job_name }}：岗位差距清单 + 补齐路径</h3>
+
+                            {% if detail.path_summary %}
+                            <p class="path-summary">{{ detail.path_summary }}</p>
+                            {% endif %}
+
+                            <div class="detail-block">
+                                <h4>一、岗位差距清单</h4>
+                                {% if detail.gap_list %}
+                                <ul>
+                                    {% for gap in detail.gap_list %}
+                                    <li>
+                                        {% if gap.skill is defined %}
+                                            <strong>{{ gap.skill }}</strong>
+                                            {% if gap.priority %}
+                                            <span class="priority-tag">{{ gap.priority }}</span>
+                                            {% endif %}
+                                            {% if gap.reason %}
+                                            <br>差距原因：{{ gap.reason }}
+                                            {% endif %}
+                                            {% if gap.fix_suggestion %}
+                                            <br>补齐建议：{{ gap.fix_suggestion }}
+                                            {% endif %}
+                                        {% else %}
+                                            <strong>{{ gap }}</strong>
+                                        {% endif %}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                {% else %}
+                                <p class="empty-tip">暂无详细差距清单。</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="detail-block">
+                                <h4>二、推荐项目</h4>
+                                {% if detail.recommended_projects %}
+                                <ul>
+                                    {% for project in detail.recommended_projects %}
+                                    <li>{{ project }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% else %}
+                                <p class="empty-tip">暂无推荐项目。</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="detail-block">
+                                <h4>三、学习阶段</h4>
+                                {% if detail.learning_stages %}
+                                <div class="stage-list">
+                                    {% for stage in detail.learning_stages %}
+                                    <div class="stage-card">
+                                        <h5>{{ stage.stage }}</h5>
+
+                                        {% if stage.duration %}
+                                        <p class="stage-duration">{{ stage.duration }}</p>
+                                        {% endif %}
+
+                                        {% if stage.goal %}
+                                        <p class="stage-goal-mini"><strong>阶段目标：</strong>{{ stage.goal }}</p>
+                                        {% endif %}
+
+                                        {% if stage.actions %}
+                                        <ul>
+                                            {% for task in stage.actions %}
+                                            <li>{{ task }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+
+                                        {% if stage.deliverables %}
+                                        <p class="deliverable">阶段成果：</p>
+                                        <ul>
+                                            {% for item in stage.deliverables %}
+                                            <li>{{ item }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% elif stage.deliverable %}
+                                        <p class="deliverable">阶段成果：{{ stage.deliverable }}</p>
+                                        {% endif %}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p class="empty-tip">暂无学习阶段规划。</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="top5-path-box">
+                            <p class="empty-tip">该岗位暂无个性化路径数据。请确认后端已把 top5_gap_paths 传入 ability_profile.html。</p>
+                        </div>
                         {% endif %}
                     </td>
                 </tr>
@@ -252,6 +551,21 @@
         window.addEventListener('resize', function () {
             myChart.resize();
         });
+    </script>
+
+
+    <script>
+        function toggleTop5Path(rowId, btn) {
+            const row = document.getElementById(rowId);
+            if (!row) {
+                return;
+            }
+
+            const isShow = row.classList.toggle('show');
+            if (btn) {
+                btn.textContent = isShow ? '收起个性化路径' : '查看个性化路径';
+            }
+        }
     </script>
 </body>
 </html>

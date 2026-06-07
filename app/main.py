@@ -21,7 +21,7 @@ from sqlalchemy.orm import (
 
 from app.agent.diagnosis_agent import run_diagnosis_agent
 from app.services.job_match_service import calculate_job_match
-
+from app.services.llm_gap_path_agent import generate_top5_gap_paths
 
 # =========================================================
 # 项目路径配置
@@ -429,6 +429,25 @@ def render_ability_profile(
 
     agent_result = load_agent_result(record)
 
+    job_recommendations = agent_result.get("job_recommendations", [])
+    top5_gap_paths = agent_result.get("top5_gap_paths", [])
+
+    gap_map = {
+        item.get("job_name"): item
+        for item in top5_gap_paths
+        if isinstance(item, dict)
+    }
+
+    for index, job in enumerate(job_recommendations):
+        if index < 5:
+            detail = gap_map.get(job.get("job_name"))
+
+            # 岗位名匹配不上时，按 TOP5 顺序兜底
+            if detail is None and index < len(top5_gap_paths):
+                detail = top5_gap_paths[index]
+
+            job["gap_detail"] = detail or {}
+
     return templates.TemplateResponse(
         request,
         "ability_profile.html",
@@ -446,6 +465,7 @@ def render_ability_profile(
             "weaknesses": agent_result.get("weaknesses", []),
             "job_match_analysis": agent_result.get("job_match_analysis", ""),
             "job_recommendations": agent_result.get("job_recommendations", []),
+            "top5_gap_paths": top5_gap_paths,
             "growth_path": agent_result.get("growth_path", [])
         }
     )
@@ -815,6 +835,25 @@ def student_submit(
     agent_result = run_diagnosis_agent(student_data)
     ability_scores = agent_result["ability_scores"]
 
+    gap_path_result = generate_top5_gap_paths(
+        student_data={
+            "name": name,
+            "major": major,
+            "grade": grade,
+            "target_job": target_job,
+            "skills": skills,
+            "projects": projects,
+            "competitions": competitions,
+            "certificates": certificates,
+            "self_intro": self_intro,
+        },
+        job_recommendations=agent_result.get("job_recommendations", [])
+    )
+
+    agent_result["top5_gap_paths"] = gap_path_result.get("top5_gap_paths", [])
+    agent_result["used_llm"] = gap_path_result.get("used_llm", False)
+    agent_result["agent_warning"] = gap_path_result.get("agent_warning", "")
+
     record = DiagnosisRecord(
         user_id=request.session.get("user_id"),
         name=name,
@@ -944,6 +983,7 @@ def job_match(
     岗位匹配页面：
     学生信息从 diagnosis_records 表读取；
     岗位知识图谱从 job_knowledge_records 表读取。
+    同时为 TOP5 岗位生成差距清单、补齐路径、推荐项目和学习阶段。
     """
 
     redirect_response = get_login_redirect(request)
@@ -951,8 +991,11 @@ def job_match(
     if redirect_response:
         return redirect_response
 
+    user_id = request.session.get("user_id")
+
     student_record = (
         db.query(DiagnosisRecord)
+        .filter(DiagnosisRecord.user_id == user_id)
         .order_by(
             DiagnosisRecord.created_at.desc(),
             DiagnosisRecord.id.desc()
@@ -991,6 +1034,50 @@ def job_match(
         job_records = db.query(JobKnowledgeRecord).all()
 
         job_matches = calculate_job_match(student_data, job_records)
+
+        # 只分析 TOP5
+        top5_jobs = job_matches[:5]
+
+        # 读取原来的 agent_result_json，避免覆盖能力诊断结果
+        agent_result = load_agent_result(student_record)
+
+        # 如果之前没有生成过 TOP5 差距路径，就调用大模型生成一次
+        top5_gap_paths = agent_result.get("top5_gap_paths", [])
+
+        if not top5_gap_paths and top5_jobs:
+            top5_gap_paths = generate_top5_gap_paths(
+                student_data=student_data,
+                top5_jobs=top5_jobs
+            )
+
+            agent_result["top5_gap_paths"] = top5_gap_paths
+
+            student_record.agent_result_json = json.dumps(
+                agent_result,
+                ensure_ascii=False
+            )
+
+            db.add(student_record)
+            db.commit()
+            db.refresh(student_record)
+
+        # 把每个岗位的差距路径挂到对应 job_match 上
+        gap_map = {
+            item.get("job_name"): item
+            for item in top5_gap_paths
+        }
+
+        for index, job in enumerate(job_matches):
+            if index < 5:
+                detail = gap_map.get(job.get("job_name"))
+
+                # 如果岗位名没匹配上，就按顺序兜底
+                if detail is None and index < len(top5_gap_paths):
+                    detail = top5_gap_paths[index]
+
+                job["gap_detail"] = detail or {}
+            else:
+                job["gap_detail"] = {}
 
     return templates.TemplateResponse(
         request,
