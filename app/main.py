@@ -4,7 +4,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from datetime import datetime
 
-from fastapi import FastAPI, Request, Form, Depends, HTTPException
+from fastapi import FastAPI, Request, Form, Depends, HTTPException, UploadFile, File
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
@@ -22,6 +22,10 @@ from sqlalchemy.orm import (
 from app.agent.diagnosis_agent import run_diagnosis_agent
 from app.services.job_match_service import calculate_job_match
 from app.services.llm_gap_path_agent import generate_top5_gap_paths
+from app.services.resume_optimizer_service import (
+    extract_resume_text_from_upload,
+    optimize_resume,
+)
 
 # =========================================================
 # 项目路径配置
@@ -772,6 +776,126 @@ def index(request: Request):
             "title": "岗位能力达成学生成长诊断与精准就业智能体系统",
             "username": request.session.get("username"),
             "message": ""
+        }
+    )
+
+
+@app.get("/resume/optimize")
+def resume_optimize_page(request: Request):
+    """
+    AI 简历优化页面。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    return templates.TemplateResponse(
+        request,
+        "resume_optimize.html",
+        {
+            "title": "AI 优化简历",
+            "username": request.session.get("username"),
+            "result": None,
+            "errors": [],
+            "warnings": [],
+            "input_data": {
+                "resume_text": "",
+                "job_description": "",
+                "target_role": "",
+                "output_language": "auto",
+                "harvard_format": False,
+                "uploaded_filename": ""
+            }
+        }
+    )
+
+
+@app.post("/resume/optimize")
+def resume_optimize_submit(
+    request: Request,
+    resume_text: str = Form(""),
+    job_description: str = Form(""),
+    target_role: str = Form(""),
+    output_language: str = Form("auto"),
+    harvard_format: str | None = Form(None),
+    resume_file: UploadFile | None = File(None)
+):
+    """
+    接收简历文本/文件和招聘信息，生成 AI 优化结果。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    upload_warnings = []
+    uploaded_filename = ""
+    uploaded_resume_text = ""
+
+    if resume_file is not None and resume_file.filename:
+        uploaded_filename = resume_file.filename
+        file_content = resume_file.file.read()
+        uploaded_resume_text, upload_warnings = extract_resume_text_from_upload(
+            uploaded_filename,
+            file_content
+        )
+
+    final_resume_text = resume_text.strip() or uploaded_resume_text.strip()
+    final_job_description = job_description.strip()
+    errors = []
+
+    if not final_resume_text:
+        errors.append("请上传可解析的简历文件，或直接粘贴简历文本。")
+
+    if not final_job_description:
+        errors.append("请粘贴招聘岗位描述。")
+
+    input_data = {
+        "resume_text": resume_text.strip() or uploaded_resume_text.strip(),
+        "job_description": final_job_description,
+        "target_role": target_role.strip(),
+        "output_language": output_language,
+        "harvard_format": harvard_format == "on",
+        "uploaded_filename": uploaded_filename
+    }
+
+    if errors:
+        return templates.TemplateResponse(
+            request,
+            "resume_optimize.html",
+            {
+                "title": "AI 优化简历",
+                "username": request.session.get("username"),
+                "result": None,
+                "errors": errors,
+                "warnings": upload_warnings,
+                "input_data": input_data
+            }
+        )
+
+    result = optimize_resume(
+        resume_text=final_resume_text,
+        job_description=final_job_description,
+        target_role=target_role,
+        output_language=output_language,
+        harvard_format=harvard_format == "on"
+    )
+
+    warnings = list(upload_warnings)
+    if result.get("agent_warning"):
+        warnings.append(result["agent_warning"])
+
+    return templates.TemplateResponse(
+        request,
+        "resume_optimize.html",
+        {
+            "title": "AI 优化简历",
+            "username": request.session.get("username"),
+            "result": result,
+            "errors": [],
+            "warnings": warnings,
+            "input_data": input_data
         }
     )
 
