@@ -27,3 +27,4 @@ python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8080
 统一优化主要页面底部操作按钮样式，减少普通文字链接带来的视觉混乱。
 补充 AI 简历优化缺失的服务模块和页面模板，避免项目启动时因缺少文件报错。
 修复 /job/match 页面参数调用错误导致的 Internal Server Error，并兼容旧的 top5_gap_paths 数据格式。
+新增 AI 模拟面试页面，路径：/interview/mock；支持目标岗位、岗位描述、简历文本/文件输入，进入面试后由 AI 面试官连续提问，并在每次回答后生成评分、亮点和改进建议。
