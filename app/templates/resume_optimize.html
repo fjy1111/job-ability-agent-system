@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=11">
+</head>
+<body class="resume-page-body">
+    <header class="resume-topbar">
+        <a class="resume-brand" href="/">
+            <span class="resume-brand-mark">
+                <span class="resume-brand-paper"></span>
+                <span class="resume-brand-orbit"></span>
+            </span>
+            <span>
+                <strong>AI 优化简历</strong>
+                <small>面向目标岗位优化表达</small>
+            </span>
+        </a>
+
+        <nav class="resume-nav">
+            <a href="/">首页</a>
+            <a href="/student/input">能力诊断</a>
+            <a href="/ability/profile">能力画像</a>
+            <a href="/job/match">岗位匹配</a>
+            <a class="active" href="/resume/optimize">简历优化</a>
+        </nav>
+
+        <div class="resume-account">
+            {% if username %}
+            <span class="resume-user-badge">{{ username[:1] | upper }}</span>
+            {% endif %}
+            <a href="/logout">退出</a>
+        </div>
+    </header>
+
+    <main class="resume-workspace">
+        <div class="resume-tabs">
+            <a class="active" href="/resume/optimize">简历输入</a>
+            <span>岗位匹配</span>
+            <span>优化结果</span>
+        </div>
+
+        {% for error in errors %}
+        <div class="resume-alert error">
+            <p>{{ error }}</p>
+        </div>
+        {% endfor %}
+
+        {% for warning in warnings %}
+        <div class="resume-alert warning">
+            <p>{{ warning }}</p>
+        </div>
+        {% endfor %}
+
+        <form action="/resume/optimize" method="post" enctype="multipart/form-data" class="resume-form">
+            <section class="resume-optimizer-card upload">
+                <div class="resume-card-title">
+                    <span class="resume-title-icon document"></span>
+                    <h1>上传或粘贴简历</h1>
+                </div>
+
+                <label class="resume-upload-zone">
+                    <span class="resume-upload-icon"></span>
+                    <span>
+                        <strong>选择简历文件</strong>
+                        <small>{{ input_data.uploaded_filename or "支持 txt / md / csv，Word、PDF 可复制文本到下方" }}</small>
+                    </span>
+                    <em>浏览文件</em>
+                    <input type="file" name="resume_file" accept=".txt,.md,.csv">
+                </label>
+
+                <div class="resume-textarea-wrap">
+                    <label for="resume_text">简历文本</label>
+                    <textarea id="resume_text" name="resume_text" rows="10" placeholder="粘贴你的简历内容">{{ input_data.resume_text }}</textarea>
+                </div>
+            </section>
+
+            <section class="resume-optimizer-card">
+                <div class="resume-card-title">
+                    <span class="resume-title-icon link"></span>
+                    <h2>目标岗位信息</h2>
+                </div>
+
+                <label class="resume-field">
+                    <span>目标岗位</span>
+                    <input type="text" name="target_role" value="{{ input_data.target_role }}" placeholder="例如：AI 应用开发工程师">
+                </label>
+
+                <label class="resume-field">
+                    <span>招聘岗位描述</span>
+                    <textarea name="job_description" rows="8" placeholder="粘贴 JD、任职要求或岗位能力要求">{{ input_data.job_description }}</textarea>
+                </label>
+
+                <div class="resume-options-grid">
+                    <label class="resume-field">
+                        <span>输出语言</span>
+                        <select name="output_language">
+                            <option value="auto" {% if input_data.output_language == "auto" %}selected{% endif %}>自动识别</option>
+                            <option value="zh" {% if input_data.output_language == "zh" %}selected{% endif %}>中文</option>
+                            <option value="en" {% if input_data.output_language == "en" %}selected{% endif %}>英文</option>
+                        </select>
+                    </label>
+
+                    <label class="resume-check-option">
+                        <input type="checkbox" name="harvard_format" {% if input_data.harvard_format %}checked{% endif %}>
+                        <span></span>
+                        <strong>Harvard 格式</strong>
+                        <small>保留选项用于后续扩展</small>
+                    </label>
+                </div>
+
+                <button type="submit" class="resume-primary-action">
+                    生成优化建议
+                </button>
+            </section>
+        </form>
+
+        {% if result %}
+        <section class="resume-optimizer-card ai-result">
+            <div class="resume-card-title">
+                <span class="resume-title-icon bolt"></span>
+                <h2>优化结果</h2>
+                <span class="resume-status-dot"></span>
+            </div>
+
+            <div class="resume-score-grid">
+                <div>
+                    <strong>{{ result.overall_score }}</strong>
+                    <span>综合匹配</span>
+                </div>
+                <div>
+                    <strong>{{ result.keyword_score }}</strong>
+                    <span>关键词覆盖</span>
+                </div>
+                <div>
+                    <strong>{{ result.structure_score }}</strong>
+                    <span>结构表达</span>
+                </div>
+            </div>
+
+            <p class="resume-result-summary">{{ result.summary }}</p>
+
+            <div class="resume-result-layout">
+                <div class="resume-output-panel">
+                    <div class="resume-output-head">
+                        <h3>优化稿</h3>
+                    </div>
+                    <pre>{{ result.optimized_resume }}</pre>
+                </div>
+
+                <aside class="resume-insight-panel">
+                    <h3>优势</h3>
+                    <div class="resume-tag-list good">
+                        {% for item in result.strengths %}
+                        <span>{{ item }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <h3>待提升</h3>
+                    <div class="resume-tag-list gap">
+                        {% for item in result.weaknesses %}
+                        <span>{{ item }}</span>
+                        {% endfor %}
+                    </div>
+                </aside>
+            </div>
+
+            <div class="resume-rewrite-list">
+                <h3>改写建议</h3>
+                {% for item in result.rewrite_suggestions %}
+                <article>
+                    <strong>{{ item.section }}</strong>
+                    <p>原写法：{{ item.before }}</p>
+                    <p>建议写法：{{ item.after }}</p>
+                    <small>{{ item.reason }}</small>
+                </article>
+                {% endfor %}
+            </div>
+
+            <div class="resume-action-items">
+                {% for item in result.action_items %}
+                <p>{{ item }}</p>
+                {% endfor %}
+            </div>
+        </section>
+        {% else %}
+        <section class="resume-optimizer-card locked">
+            <div class="resume-card-title">
+                <span class="resume-title-icon lock"></span>
+                <h2>结果预览</h2>
+            </div>
+            <div class="resume-empty-state">
+                <span class="resume-empty-bolt"></span>
+                <p>填写简历和岗位描述后，这里会显示优化建议。</p>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+</body>
+</html>
