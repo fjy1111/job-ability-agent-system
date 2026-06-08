@@ -3,47 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="/static/css/style.css?v=6">
+    <link rel="stylesheet" href="/static/css/style.css?v=11">
 </head>
-<body>
-    <div class="container">
-        <h1>岗位能力达成学生成长诊断与精准就业智能体系统</h1>
+<body class="app-body">
+    <div class="app-shell">
+        <aside class="app-sidebar">
+            <a class="app-brand text-only" href="/">
+                <span class="app-brand-text">
+                    <strong>就业能力匹配工作平台</strong>
+                </span>
+            </a>
 
-        {% if username %}
-        <p class="subtitle">
-            当前登录用户：{{ username }}
-            <a href="/logout" class="link">退出登录</a>
-        </p>
-        {% endif %}
+            <nav class="app-nav" aria-label="主导航">
+                <a class="active" href="/">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M3 11l9-8 9 8"></path>
+                        <path d="M5 10v10h14V10"></path>
+                        <path d="M9 20v-6h6v6"></path>
+                    </svg>
+                    <span>首页</span>
+                </a>
+                <a href="/student/input">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M12 5v14"></path>
+                        <path d="M5 12h14"></path>
+                    </svg>
+                    <span>能力诊断</span>
+                </a>
+                <a href="/ability/profile">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M4 19V5"></path>
+                        <path d="M4 19h16"></path>
+                        <path d="M7 16l4-5 3 3 5-8"></path>
+                    </svg>
+                    <span>能力画像</span>
+                </a>
+                <a href="/job/match">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <circle cx="12" cy="12" r="8"></circle>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <span>岗位匹配</span>
+                </a>
+                <a href="/growth/trend">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M4 18h16"></path>
+                        <path d="M7 15l3-4 4 3 4-7"></path>
+                    </svg>
+                    <span>成长轨迹</span>
+                </a>
+                <a href="/history">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M5 4h14v16H5z"></path>
+                        <path d="M8 8h8"></path>
+                        <path d="M8 12h8"></path>
+                        <path d="M8 16h5"></path>
+                    </svg>
+                    <span>历史记录</span>
+                </a>
+            </nav>
 
-        {% if message %}
-        <p class="success-message">
-            {{ message }}
-        </p>
-        {% endif %}
+            <div class="app-sidebar-footer">
+                {% if username %}
+                <span class="sidebar-user">{{ username }}</span>
+                {% endif %}
+                <a href="/logout">退出登录</a>
+            </div>
+        </aside>
 
-        <p class="subtitle">
-            面向学生、学校、企业三方协同的人才培养与精准就业智能体系统
-        </p>
+        <main class="app-main">
+            <header class="app-topbar">
+                <label class="app-search">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="M16 16l4 4"></path>
+                    </svg>
+                    <input type="search" value="" placeholder="搜索职业路径、岗位能力、学生画像..." aria-label="搜索职业路径、岗位能力、学生画像">
+                </label>
 
-        <div class="card">
-            <h2>系统核心功能</h2>
-            <ul>
-                <li>学生能力画像分析</li>
-                <li>岗位能力匹配分析</li>
-                <li>个性化成长路径规划</li>
-                <li>智能职业发展建议</li>
-                <li>Word / PDF 报告导出</li>
-            </ul>
-        </div>
+                {% if username %}
+                <div class="user-pill">
+                    <span>{{ username[:1] | upper }}</span>
+                    <strong>{{ username }}</strong>
+                </div>
+                {% endif %}
+            </header>
 
-        <div class="button-group">
+            <div class="workspace">
+                {% if message %}
+                <p class="success-message">{{ message }}</p>
+                {% endif %}
 
-            <a class="btn" href="/student/input">开始诊断</a>
-            <a class="btn secondary-btn" href="/resume/optimize">AI 优化简历</a>
-            <a class="btn secondary-btn" href="/history">查看历史诊断记录</a>
-            <a class="btn secondary-btn" href="/growth/trend">个人成长轨迹</a>
-        </div>
+                <section class="workspace-hero">
+                    <div>
+                        <p class="eyebrow">精准就业智能体系统</p>
+                        <h1>我的能力成长工作台</h1>
+                        <p>围绕学生能力、岗位匹配和成长路径，集中管理每一次就业准备进展。</p>
+                    </div>
+                    <a class="hero-link" href="/student/input">
+                        开始一次新诊断
+                        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                            <path d="M5 12h14"></path>
+                            <path d="M13 6l6 6-6 6"></path>
+                        </svg>
+                    </a>
+                </section>
+
+                <section class="workspace-section">
+                    <div class="section-heading">
+                        <h2>我的核心功能</h2>
+                        <div class="filter-pills" aria-label="功能分类">
+                            <span class="active">全部</span>
+                            <span>诊断</span>
+                            <span>匹配</span>
+                            <span>成长</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-grid main-features">
+                        <a class="feature-card tone-blue" href="/student/input">
+                            <span class="feature-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" focusable="false">
+                                    <path d="M12 5v14"></path>
+                                    <path d="M5 12h14"></path>
+                                </svg>
+                            </span>
+                            <strong>开始能力诊断</strong>
+                            <small>录入学生信息、技能与目标岗位</small>
+                        </a>
+
+                        <a class="feature-card tone-cyan" href="/ability/profile">
+                            <span class="feature-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" focusable="false">
+                                    <path d="M12 3l8 5v8l-8 5-8-5V8z"></path>
+                                    <path d="M12 7v10"></path>
+                                    <path d="M7 10l10 4"></path>
+                                    <path d="M17 10L7 14"></path>
+                                </svg>
+                            </span>
+                            <strong>生成能力雷达图</strong>
+                            <small>查看四维能力画像与诊断总结</small>
+                        </a>
+
+                        <a class="feature-card tone-green" href="/job/match">
+                            <span class="feature-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" focusable="false">
+                                    <circle cx="12" cy="12" r="8"></circle>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </span>
+                            <strong>岗位匹配分析</strong>
+                            <small>生成 TOP5 推荐岗位与差距清单</small>
+                        </a>
+
+                        <a class="feature-card tone-amber" href="/resume/optimize">
+                            <span class="feature-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" focusable="false">
+                                    <path d="M6 3h9l3 3v15H6z"></path>
+                                    <path d="M14 3v4h4"></path>
+                                    <path d="M9 12h6"></path>
+                                    <path d="M9 16h6"></path>
+                                </svg>
+                            </span>
+                            <strong>AI 优化简历</strong>
+                            <small>围绕目标岗位优化简历表达</small>
+                        </a>
+                    </div>
+                </section>
+
+                <section class="workspace-section">
+                    <div class="section-heading">
+                        <h2>我的成长档案</h2>
+                        <a class="section-more" href="/history">
+                            查看全部记录
+                            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                                <path d="M5 12h14"></path>
+                                <path d="M13 6l6 6-6 6"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div class="feature-grid archive-features">
+                        <a class="feature-card compact tone-violet" href="/history">
+                            <span class="feature-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" focusable="false">
+                                    <path d="M5 4h14v16H5z"></path>
+                                    <path d="M8 8h8"></path>
+                                    <path d="M8 12h8"></path>
+                                    <path d="M8 16h5"></path>
+                                </svg>
+                            </span>
+                            <strong>历史诊断记录</strong>
+                            <small>回看每一次学生能力画像</small>
+                        </a>
+
+                        <a class="feature-card compact tone-slate" href="/growth/trend">
+                            <span class="feature-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" focusable="false">
+                                    <path d="M4 18h16"></path>
+                                    <path d="M7 15l3-4 4 3 4-7"></path>
+                                </svg>
+                            </span>
+                            <strong>个人成长轨迹</strong>
+                            <small>按时间查看综合能力变化</small>
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </main>
     </div>
 </body>
 </html>

@@ -435,6 +435,10 @@ def render_ability_profile(
 
     job_recommendations = agent_result.get("job_recommendations", [])
     top5_gap_paths = agent_result.get("top5_gap_paths", [])
+    if isinstance(top5_gap_paths, dict):
+        top5_gap_paths = top5_gap_paths.get("top5_gap_paths", [])
+    if not isinstance(top5_gap_paths, list):
+        top5_gap_paths = []
 
     gap_map = {
         item.get("job_name"): item
@@ -1167,14 +1171,21 @@ def job_match(
 
         # 如果之前没有生成过 TOP5 差距路径，就调用大模型生成一次
         top5_gap_paths = agent_result.get("top5_gap_paths", [])
+        if isinstance(top5_gap_paths, dict):
+            top5_gap_paths = top5_gap_paths.get("top5_gap_paths", [])
+        if not isinstance(top5_gap_paths, list):
+            top5_gap_paths = []
 
         if not top5_gap_paths and top5_jobs:
-            top5_gap_paths = generate_top5_gap_paths(
+            gap_path_result = generate_top5_gap_paths(
                 student_data=student_data,
-                top5_jobs=top5_jobs
+                job_recommendations=top5_jobs
             )
 
+            top5_gap_paths = gap_path_result.get("top5_gap_paths", [])
             agent_result["top5_gap_paths"] = top5_gap_paths
+            agent_result["used_llm"] = gap_path_result.get("used_llm", False)
+            agent_result["agent_warning"] = gap_path_result.get("agent_warning", "")
 
             student_record.agent_result_json = json.dumps(
                 agent_result,
@@ -1189,6 +1200,7 @@ def job_match(
         gap_map = {
             item.get("job_name"): item
             for item in top5_gap_paths
+            if isinstance(item, dict)
         }
 
         for index, job in enumerate(job_matches):
