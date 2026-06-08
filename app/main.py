@@ -22,6 +22,10 @@ from sqlalchemy.orm import (
 from app.agent.diagnosis_agent import run_diagnosis_agent
 from app.services.job_match_service import calculate_job_match
 from app.services.llm_gap_path_agent import generate_top5_gap_paths
+from app.services.mock_interview_service import (
+    build_interview_session,
+    respond_to_interview_answer,
+)
 from app.services.resume_optimizer_service import (
     extract_resume_text_from_upload,
     optimize_resume,
@@ -902,6 +906,147 @@ def resume_optimize_submit(
             "input_data": input_data
         }
     )
+
+
+@app.get("/interview/mock")
+def mock_interview_page(request: Request):
+    """
+    AI 模拟面试页面。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    return templates.TemplateResponse(
+        request,
+        "mock_interview.html",
+        {
+            "title": "AI 模拟面试",
+            "username": request.session.get("username")
+        }
+    )
+
+
+@app.post("/interview/start")
+async def mock_interview_start(
+    request: Request,
+    target_role: str = Form(""),
+    job_description: str = Form(""),
+    resume_text: str = Form(""),
+    resume_file: UploadFile | None = File(None)
+):
+    """
+    创建一次模拟面试会话，返回首轮问题。
+    """
+    if not request.session.get("user_id"):
+        return {
+            "ok": False,
+            "errors": ["请先登录后使用 AI 模拟面试。"]
+        }
+
+    upload_warnings = []
+    uploaded_filename = ""
+    uploaded_resume_text = ""
+
+    if resume_file is not None and resume_file.filename:
+        uploaded_filename = resume_file.filename
+        file_content = await resume_file.read()
+        uploaded_resume_text, upload_warnings = extract_resume_text_from_upload(
+            uploaded_filename,
+            file_content
+        )
+
+    final_target_role = target_role.strip()
+    final_job_description = job_description.strip()
+    final_resume_text = resume_text.strip() or uploaded_resume_text.strip()
+
+    errors = []
+    if not final_target_role and not final_job_description and not final_resume_text:
+        errors.append("请至少填写目标岗位信息，或粘贴/上传一份简历。")
+
+    if errors:
+        return {
+            "ok": False,
+            "errors": errors,
+            "warnings": upload_warnings
+        }
+
+    session = build_interview_session(
+        target_role=final_target_role,
+        job_description=final_job_description,
+        resume_text=final_resume_text
+    )
+
+    return {
+        "ok": True,
+        "warnings": upload_warnings,
+        "uploaded_filename": uploaded_filename,
+        "session": session,
+        "opening_message": session["opening_message"],
+        "question": session["current_question"],
+        "round_index": session["current_round"],
+        "total_rounds": session["total_rounds"]
+    }
+
+
+@app.post("/interview/answer")
+async def mock_interview_answer(request: Request):
+    """
+    接收用户回答，返回本轮点评和下一轮问题。
+    """
+    if not request.session.get("user_id"):
+        return {
+            "ok": False,
+            "errors": ["请先登录后使用 AI 模拟面试。"]
+        }
+
+    try:
+        payload = await request.json()
+    except Exception:
+        return {
+            "ok": False,
+            "errors": ["回答数据格式不正确，请刷新页面后重试。"]
+        }
+
+    session = payload.get("session") or {}
+    question = (payload.get("question") or session.get("current_question") or "").strip()
+    answer = (payload.get("answer") or "").strip()
+    history = payload.get("history") or []
+    if not isinstance(history, list):
+        history = []
+
+    try:
+        round_index = int(payload.get("round_index") or session.get("current_round") or 1)
+    except (TypeError, ValueError):
+        round_index = 1
+
+    errors = []
+    if not session:
+        errors.append("面试会话已失效，请重新进入模拟面试。")
+    if not question:
+        errors.append("当前问题为空，请重新进入模拟面试。")
+    if not answer:
+        errors.append("请先输入本轮回答。")
+
+    if errors:
+        return {
+            "ok": False,
+            "errors": errors
+        }
+
+    result = respond_to_interview_answer(
+        session=session,
+        question=question,
+        answer=answer,
+        round_index=round_index,
+        history=history
+    )
+
+    return {
+        "ok": True,
+        **result
+    }
 
 
 @app.get("/student/input")
