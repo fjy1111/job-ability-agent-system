@@ -20,7 +20,7 @@ from sqlalchemy.orm import (
 )
 
 from app.agent.diagnosis_agent import run_diagnosis_agent
-from app.services.job_match_service import calculate_job_match
+from app.services.llm_ability_match_service import calculate_job_match, calculate_ai_job_match, score_four_dimensions_llm
 from app.services.llm_gap_path_agent import generate_top5_gap_paths
 from app.services.mock_interview_service import (
     build_interview_session,
@@ -174,7 +174,10 @@ class JobKnowledgeRecord(Base):
     )
 
     job_name: Mapped[str] = mapped_column(String(100), nullable=False)
-
+    company_name: Mapped[str] = mapped_column(String(100), default="")
+    hiring_city: Mapped[str] = mapped_column(String(100), default="")
+    educational_requirements: Mapped[str] = mapped_column(String(200), default="")
+    salary_range: Mapped[str] = mapped_column(String(100), default="")
     required_skills_json: Mapped[str] = mapped_column(Text, nullable=False)
     related_projects_json: Mapped[str] = mapped_column(Text, default="[]")
     recommended_courses_json: Mapped[str] = mapped_column(Text, default="[]")
@@ -1106,6 +1109,13 @@ def student_submit(
     }
 
     agent_result = run_diagnosis_agent(student_data)
+    ai_assessment = score_four_dimensions_llm(student_data)
+    if ai_assessment.get("used_llm"):
+        agent_result["ability_scores"] = ai_assessment["ability_scores"]
+        agent_result["score_evidence"] = ai_assessment["score_evidence"]
+        agent_result["recognized_skills"] = ai_assessment.get("recognized_skills", [])
+        agent_result["assessment_summary"] = ai_assessment.get("assessment_summary", "")
+
     ability_scores = agent_result["ability_scores"]
 
     gap_path_result = generate_top5_gap_paths(
