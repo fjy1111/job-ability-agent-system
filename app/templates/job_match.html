@@ -149,6 +149,10 @@
         系统基于岗位能力知识图谱，对学生能力与岗位需求进行匹配分析。
     </p>
 
+    {% if error %}
+    <div class="error-message">{{ error }}</div>
+    {% endif %}
+
     <div class="card">
         <h2>学生信息</h2>
         <p><strong>姓名：</strong>{{ student.name }}</p>

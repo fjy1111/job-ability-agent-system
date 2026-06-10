@@ -19,10 +19,9 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 
-from app.agent.diagnosis_agent import run_diagnosis_agent
-from app.services.llm_ability_match_service import calculate_job_match, calculate_ai_job_match, score_four_dimensions_llm
-from app.agent.diagnosis_agent import ABILITY_DIMENSIONS, AGENT_ROSTER, run_diagnosis_agent
-from app.services.job_match_service import calculate_job_match
+from app.services.llm_ability_match_service import calculate_job_match
+from app.agent.diagnosis_agent import AGENT_ROSTER, run_diagnosis_agent
+from app.services.llm_errors import LLMCallError
 from app.services.llm_gap_path_agent import generate_top5_gap_paths
 from app.services.mock_interview_service import (
     build_interview_session,
@@ -31,6 +30,9 @@ from app.services.mock_interview_service import (
 from app.services.resume_optimizer_service import (
     extract_resume_text_from_upload,
     optimize_resume,
+)
+from app.services.resume_profile_extractor_service import (
+    extract_student_profile_from_resume,
 )
 
 # =========================================================
@@ -347,19 +349,6 @@ def get_login_redirect(request: Request):
 # 业务辅助函数
 # =========================================================
 
-def calculate_ability_scores(student_data: dict) -> dict:
-    """
-    当前仍然使用模拟能力分数。
-    后续你可以在这里接入真正的岗位能力诊断算法。
-    """
-    return {
-        "professional": 75,
-        "practice": 70,
-        "tools": 80,
-        "career": 65
-    }
-
-
 def build_student_data(record: DiagnosisRecord) -> dict:
     """
     将数据库记录转换为模板页面需要的学生信息字典。
@@ -402,188 +391,6 @@ def load_agent_result(record: DiagnosisRecord | None) -> dict:
         return {}
 
 
-def profile_score_level(score: int) -> str:
-    if score >= 85:
-        return "优势突出"
-    if score >= 70:
-        return "稳定具备"
-    if score >= 55:
-        return "已有基础"
-    if score >= 40:
-        return "需要补强"
-    return "信息不足"
-
-
-def build_ability_profile_fallback(
-    student_data: dict,
-    ability_scores: dict,
-    agent_result: dict
-) -> dict:
-    """
-    旧记录可能保存了岗位匹配版总结。
-    画像页只动态回填能力画像字段，不把旧岗位推荐内容带入页面。
-    """
-
-    recognized_skills = agent_result.get("recognized_skills", [])
-    score_evidence = agent_result.get("score_evidence", {})
-
-    strongest_key = max(ABILITY_DIMENSIONS, key=lambda key: ability_scores.get(key, 0))
-    weakest_key = min(ABILITY_DIMENSIONS, key=lambda key: ability_scores.get(key, 0))
-    average_score = round(sum(ability_scores.values()) / max(len(ability_scores), 1), 1)
-
-    dimension_insights = []
-    evidence_cards = []
-
-    for key, meta in ABILITY_DIMENSIONS.items():
-        score = ability_scores.get(key, 0)
-        evidence = score_evidence.get(key, [])
-        if not evidence:
-            evidence = ["旧记录未保存该维度的详细证据，可重新诊断生成完整证据卡。"]
-
-        level = profile_score_level(score)
-        dimension_insights.append({
-            "key": key,
-            "name": meta["name"],
-            "score": score,
-            "level": level,
-            "conclusion": f"{meta['name']}当前处于“{level}”水平。",
-            "evidence": evidence,
-            "next_action": meta["next_action"]
-        })
-        evidence_cards.append({
-            "dimension": key,
-            "name": meta["name"],
-            "agent": meta["agent"],
-            "evidence": evidence,
-            "confidence": "中" if score >= 55 else "低",
-            "interpretation": f"该证据卡根据历史分数和已保存证据动态回填，当前分数为 {score} 分。"
-        })
-
-    profile_tags = []
-    if recognized_skills:
-        profile_tags.append(f"显性技能 {len(recognized_skills)} 项")
-    if student_data.get("projects"):
-        profile_tags.append("有项目经历")
-    else:
-        profile_tags.append("项目证据待补充")
-    if student_data.get("target_job"):
-        profile_tags.append("职业目标已填写")
-
-    risk_flags = []
-    if not student_data.get("projects"):
-        risk_flags.append("项目经历为空，实践能力缺少可展示证据。")
-    if not student_data.get("self_intro"):
-        risk_flags.append("自我介绍为空，职业表达和经历复盘证据不足。")
-    if ability_scores.get(weakest_key, 0) < 55:
-        risk_flags.append(f"{ABILITY_DIMENSIONS[weakest_key]['name']}低于 55 分，需要优先补强。")
-
-    development_focus = []
-    for index, key in enumerate(
-        sorted(ABILITY_DIMENSIONS, key=lambda item: ability_scores.get(item, 0))[:3],
-        start=1
-    ):
-        meta = ABILITY_DIMENSIONS[key]
-        development_focus.append({
-            "name": meta["name"],
-            "priority": "高" if index == 1 else "中",
-            "reason": f"当前得分 {ability_scores.get(key, 0)} 分，处于“{profile_score_level(ability_scores.get(key, 0))}”水平。",
-            "action": meta["next_action"]
-        })
-
-    growth_path = [
-        {
-            "stage": "第一阶段：画像校准与基础补强",
-            "duration": "第1-2周",
-            "goal": f"围绕{ABILITY_DIMENSIONS[weakest_key]['name']}补齐基础证据。",
-            "actions": [
-                "整理课程、技能、项目、证书清单，补充掌握程度。",
-                "针对最低分维度完成一轮知识点复盘。",
-                "把经历改写为可验证的能力证据。"
-            ],
-            "deliverables": ["能力证据清单", "最低分维度补强笔记"]
-        },
-        {
-            "stage": "第二阶段：实践作品沉淀",
-            "duration": "第3-6周",
-            "goal": "形成一个能支撑能力画像的项目或作品材料。",
-            "actions": [
-                "选择一个真实场景设计小型项目。",
-                "使用 Git 记录开发过程并完善 README。",
-                "总结项目中的个人职责、技术动作和结果。"
-            ],
-            "deliverables": ["项目仓库", "项目复盘文档"]
-        },
-        {
-            "stage": "第三阶段：表达复盘与二次画像",
-            "duration": "第7-8周",
-            "goal": "把能力证据转化为简历素材和下一轮画像数据。",
-            "actions": [
-                "围绕四维能力整理简历素材。",
-                "准备优势和短板的自我介绍话术。",
-                "重新提交诊断，观察画像变化。"
-            ],
-            "deliverables": ["能力证据型简历素材", "二次画像对比记录"]
-        }
-    ]
-
-    learning_tasks = [
-        {
-            "dimension": item["name"],
-            "task": item["action"],
-            "timebox": "1周",
-            "output": "可检查的学习记录或项目材料"
-        }
-        for item in development_focus
-    ]
-
-    return {
-        "summary": (
-            f"当前能力画像均值约为 {average_score} 分，"
-            f"{ABILITY_DIMENSIONS[strongest_key]['name']}相对突出，"
-            f"{ABILITY_DIMENSIONS[weakest_key]['name']}需要优先补强。"
-            "本页已按能力画像视角重新组织历史记录，仅保留能力诊断和成长建议。"
-        ),
-        "advantages": [
-            f"{ABILITY_DIMENSIONS[strongest_key]['name']}得分最高，当前为 {ability_scores.get(strongest_key, 0)} 分。",
-            (
-                f"已识别到显性技能：{'、'.join(recognized_skills[:6])}。"
-                if recognized_skills
-                else "已保存基础画像信息，可继续补充技能证据。"
-            ),
-            "能力画像可继续用于成长跟踪和学习任务拆解。"
-        ],
-        "weaknesses": [
-            f"{ABILITY_DIMENSIONS[weakest_key]['name']}当前得分最低，为 {ability_scores.get(weakest_key, 0)} 分。",
-            risk_flags[0] if risk_flags else "建议继续补充可量化成果，提升画像可信度。",
-            "旧记录缺少完整工作流轨迹，重新诊断后可生成多智能体过程记录。"
-        ],
-        "profile_tags": profile_tags,
-        "risk_flags": risk_flags or ["暂未发现高风险短板，建议继续补充可量化成果。"],
-        "evidence_cards": evidence_cards,
-        "dimension_insights": dimension_insights,
-        "development_focus": development_focus,
-        "learning_tasks": learning_tasks,
-        "quality_review": [
-            "该历史记录已按能力画像视角动态回填。",
-            "岗位匹配内容未在画像页展示。",
-            "重新诊断后可生成完整多智能体工作流轨迹。"
-        ],
-        "workflow_steps": [],
-        "tool_calls": [],
-        "collaboration_log": [],
-        "review_findings": [],
-        "shared_workspace": {
-            "legacy_record": True,
-            "note": "旧记录未保存多智能体工具调用链，当前为动态回填画像。"
-        },
-        "agent_roster": AGENT_ROSTER,
-        "llm_agents": [],
-        "growth_path": growth_path,
-        "used_llm": False,
-        "agent_warning": agent_result.get("agent_warning", "")
-    }
-
-
 def normalize_ability_profile_result(
     student_data: dict,
     ability_scores: dict,
@@ -600,39 +407,65 @@ def normalize_ability_profile_result(
     if has_new_profile:
         normalized = dict(agent_result)
         normalized["agent_roster"] = normalized.get("agent_roster") or AGENT_ROSTER
-
-        if not normalized.get("tool_calls"):
-            normalized["tool_calls"] = [{
-                "tool_name": "LegacyProfileCompatibilityTool",
-                "called_by": "画像页兼容适配器",
-                "purpose": "兼容旧版或半新版画像记录，标记该记录未保存完整工具调用链",
-                "input_summary": "agent_result_json + diagnosis_records scores",
-                "output_summary": "已补齐专家角色展示；建议重新诊断生成完整工具链",
-                "status": "completed"
-            }]
-
-        if not normalized.get("collaboration_log"):
-            normalized["collaboration_log"] = [{
-                "sender": "画像页兼容适配器",
-                "receiver": "前端画像展示",
-                "message": "该历史记录没有保存专家交接链，当前仅做兼容展示；重新诊断后会生成完整 LLM 协作记录。",
-                "artifact": "legacy_profile_adapter"
-            }]
-
-        if not normalized.get("review_findings"):
-            normalized["review_findings"] = [{
-                "severity": "medium",
-                "dimension": "历史记录",
-                "finding": "该记录缺少新版工具调用和专家交接证据，建议重新诊断生成完整链路。"
-            }]
-
         return normalized
 
-    return build_ability_profile_fallback(
-        student_data=student_data,
-        ability_scores=ability_scores,
-        agent_result=agent_result
-    )
+    return {}
+
+
+REMOVED_PROFILE_SECTION_TERMS = (
+    "成长规划智能体",
+    "成长路径",
+    "细化任务",
+    "growth_path",
+    "learning_tasks",
+    "growth_plan",
+    "task_decomposition",
+    "TaskDecompositionTool",
+)
+
+
+def _contains_removed_profile_section(value) -> bool:
+    if isinstance(value, (dict, list)):
+        text = json.dumps(value, ensure_ascii=False)
+    else:
+        text = str(value or "")
+    return any(term in text for term in REMOVED_PROFILE_SECTION_TERMS)
+
+
+def sanitize_ability_profile_display(agent_result: dict) -> dict:
+    if not agent_result:
+        return {}
+
+    sanitized = dict(agent_result)
+    sanitized.pop("growth_path", None)
+    sanitized.pop("learning_tasks", None)
+
+    for key in ("agent_roster", "llm_agents"):
+        values = sanitized.get(key, [])
+        if isinstance(values, list):
+            sanitized[key] = [
+                item for item in values
+                if not _contains_removed_profile_section(item)
+            ]
+
+    for key in ("tool_calls", "collaboration_log", "workflow_steps"):
+        values = sanitized.get(key, [])
+        if isinstance(values, list):
+            sanitized[key] = [
+                item for item in values
+                if not _contains_removed_profile_section(item)
+            ]
+
+    return sanitized
+
+
+def detect_agent_intent(message: str) -> str:
+    text = (message or "").strip()
+    if any(keyword in text for keyword in ["优化", "改简历", "润色", "简历优化"]):
+        return "resume"
+    if any(keyword in text for keyword in ["画像", "能力", "诊断", "分析我"]):
+        return "profile"
+    return ""
 
 
 def render_ability_profile(
@@ -652,15 +485,15 @@ def render_ability_profile(
 
     if record is None:
         student_data = {
-            "name": "未填写",
-            "major": "未填写",
-            "grade": "未填写",
-            "target_job": "未填写",
-            "skills": "",
-            "projects": "",
-            "competitions": "",
-            "certificates": "",
-            "self_intro": ""
+            "name": "无",
+            "major": "无",
+            "grade": "无",
+            "target_job": "无",
+            "skills": "无",
+            "projects": "无",
+            "competitions": "无",
+            "certificates": "无",
+            "self_intro": "无"
         }
 
         ability_scores = {
@@ -680,6 +513,7 @@ def render_ability_profile(
         ability_scores=ability_scores,
         agent_result=raw_agent_result
     )
+    agent_result = sanitize_ability_profile_display(agent_result)
 
     job_recommendations = agent_result.get("job_recommendations", [])
     top5_gap_paths = agent_result.get("top5_gap_paths", [])
@@ -696,13 +530,7 @@ def render_ability_profile(
 
     for index, job in enumerate(job_recommendations):
         if index < 5:
-            detail = gap_map.get(job.get("job_name"))
-
-            # 岗位名匹配不上时，按 TOP5 顺序兜底
-            if detail is None and index < len(top5_gap_paths):
-                detail = top5_gap_paths[index]
-
-            job["gap_detail"] = detail or {}
+            job["gap_detail"] = gap_map.get(job.get("job_name")) or {}
 
     return templates.TemplateResponse(
         request,
@@ -724,7 +552,6 @@ def render_ability_profile(
             "evidence_cards": agent_result.get("evidence_cards", []),
             "dimension_insights": agent_result.get("dimension_insights", []),
             "development_focus": agent_result.get("development_focus", []),
-            "learning_tasks": agent_result.get("learning_tasks", []),
             "quality_review": agent_result.get("quality_review", []),
             "workflow_steps": agent_result.get("workflow_steps", []),
             "tool_calls": agent_result.get("tool_calls", []),
@@ -733,7 +560,6 @@ def render_ability_profile(
             "shared_workspace": agent_result.get("shared_workspace", {}),
             "agent_roster": agent_result.get("agent_roster", []),
             "llm_agents": agent_result.get("llm_agents", []),
-            "growth_path": agent_result.get("growth_path", []),
             "used_llm": agent_result.get("used_llm", False),
             "agent_warning": agent_result.get("agent_warning", "")
         }
@@ -1045,6 +871,119 @@ def index(request: Request):
     )
 
 
+@app.post("/agent/chat")
+async def agent_chat(
+    request: Request,
+    message: str = Form(""),
+    resume_file: UploadFile | None = File(None),
+    db: Session = Depends(get_db)
+):
+    """
+    首页聊天式智能体入口：根据用户指令分支到能力画像或简历优化。
+    """
+    if not request.session.get("user_id"):
+        return {
+            "ok": False,
+            "errors": ["请先登录后使用智能体。"]
+        }
+
+    message = message.strip()
+    intent = detect_agent_intent(message)
+    upload_warnings = []
+    uploaded_filename = ""
+    resume_text = ""
+
+    if resume_file is not None and resume_file.filename:
+        uploaded_filename = resume_file.filename
+        file_content = await resume_file.read()
+        resume_text, upload_warnings = extract_resume_text_from_upload(
+            uploaded_filename,
+            file_content
+        )
+
+    if not resume_text and len(message) > 120:
+        resume_text = message
+
+    if not intent:
+        return {
+            "ok": False,
+            "errors": ["请告诉智能体要生成画像还是优化简历。"],
+            "warnings": upload_warnings
+        }
+
+    if not resume_text:
+        return {
+            "ok": False,
+            "errors": ["请先拖入简历。"],
+            "warnings": upload_warnings
+        }
+
+    try:
+        if intent == "profile":
+            student_data = extract_student_profile_from_resume(message, resume_text)
+            student_context = {
+                **student_data,
+                "resume_text": resume_text,
+                "normalized_text": resume_text,
+            }
+            agent_result = run_diagnosis_agent(student_context)
+            ability_scores = agent_result["ability_scores"]
+
+            record = DiagnosisRecord(
+                user_id=request.session.get("user_id"),
+                name=student_data["name"],
+                major=student_data["major"],
+                grade=student_data["grade"],
+                target_job=student_data["target_job"],
+                skills=student_data["skills"],
+                projects=student_data["projects"],
+                competitions=student_data["competitions"],
+                certificates=student_data["certificates"],
+                self_intro=student_data["self_intro"],
+                professional_score=ability_scores["professional"],
+                practice_score=ability_scores["practice"],
+                tools_score=ability_scores["tools"],
+                career_score=ability_scores["career"],
+                agent_status="completed",
+                agent_result_json=json.dumps(agent_result, ensure_ascii=False)
+            )
+            db.add(record)
+            db.commit()
+            db.refresh(record)
+
+            return {
+                "ok": True,
+                "intent": "profile",
+                "warnings": upload_warnings,
+                "uploaded_filename": uploaded_filename,
+                "reply": "能力画像已生成。",
+                "redirect_url": f"/ability/profile/{record.id}",
+                "summary": agent_result.get("summary", "")
+            }
+
+        result = optimize_resume(
+            resume_text=resume_text,
+            job_description=message,
+            target_role="",
+            output_language="auto",
+            harvard_format=False
+        )
+        return {
+            "ok": True,
+            "intent": "resume",
+            "warnings": upload_warnings,
+            "uploaded_filename": uploaded_filename,
+            "reply": "简历优化已完成。",
+            "result": result
+        }
+    except LLMCallError:
+        return {
+            "ok": False,
+            "errors": ["调用LLM失败"],
+            "warnings": upload_warnings
+        }
+
+
 @app.get("/resume/optimize")
 def resume_optimize_page(request: Request):
     """
@@ -1139,13 +1078,27 @@ def resume_optimize_submit(
             }
         )
 
-    result = optimize_resume(
-        resume_text=final_resume_text,
-        job_description=final_job_description,
-        target_role=target_role,
-        output_language=output_language,
-        harvard_format=harvard_format == "on"
-    )
+    try:
+        result = optimize_resume(
+            resume_text=final_resume_text,
+            job_description=final_job_description,
+            target_role=target_role,
+            output_language=output_language,
+            harvard_format=harvard_format == "on"
+        )
+    except LLMCallError:
+        return templates.TemplateResponse(
+            request,
+            "resume_optimize.html",
+            {
+                "title": "AI 优化简历",
+                "username": request.session.get("username"),
+                "result": None,
+                "errors": ["调用LLM失败"],
+                "warnings": upload_warnings,
+                "input_data": input_data
+            }
+        )
 
     warnings = list(upload_warnings)
     if result.get("agent_warning"):
@@ -1229,11 +1182,18 @@ async def mock_interview_start(
             "warnings": upload_warnings
         }
 
-    session = build_interview_session(
-        target_role=final_target_role,
-        job_description=final_job_description,
-        resume_text=final_resume_text
-    )
+    try:
+        session = build_interview_session(
+            target_role=final_target_role,
+            job_description=final_job_description,
+            resume_text=final_resume_text
+        )
+    except LLMCallError:
+        return {
+            "ok": False,
+            "errors": ["调用LLM失败"],
+            "warnings": upload_warnings
+        }
 
     return {
         "ok": True,
@@ -1292,13 +1252,19 @@ async def mock_interview_answer(request: Request):
             "errors": errors
         }
 
-    result = respond_to_interview_answer(
-        session=session,
-        question=question,
-        answer=answer,
-        round_index=round_index,
-        history=history
-    )
+    try:
+        result = respond_to_interview_answer(
+            session=session,
+            question=question,
+            answer=answer,
+            round_index=round_index,
+            history=history
+        )
+    except LLMCallError:
+        return {
+            "ok": False,
+            "errors": ["调用LLM失败"]
+        }
 
     return {
         "ok": True,
@@ -1321,7 +1287,8 @@ def student_input(request: Request):
         "student_input.html",
         {
             "title": "学生信息输入",
-            "username": request.session.get("username")
+            "username": request.session.get("username"),
+            "error": ""
         }
     )
 
@@ -1362,34 +1329,20 @@ def student_submit(
         "self_intro": self_intro
     }
 
-    agent_result = run_diagnosis_agent(student_data)
-    ai_assessment = score_four_dimensions_llm(student_data)
-    if ai_assessment.get("used_llm"):
-        agent_result["ability_scores"] = ai_assessment["ability_scores"]
-        agent_result["score_evidence"] = ai_assessment["score_evidence"]
-        agent_result["recognized_skills"] = ai_assessment.get("recognized_skills", [])
-        agent_result["assessment_summary"] = ai_assessment.get("assessment_summary", "")
+    try:
+        agent_result = run_diagnosis_agent(student_data)
+    except LLMCallError:
+        return templates.TemplateResponse(
+            request,
+            "student_input.html",
+            {
+                "title": "学生信息输入",
+                "username": request.session.get("username"),
+                "error": "调用LLM失败"
+            }
+        )
 
     ability_scores = agent_result["ability_scores"]
-
-    gap_path_result = generate_top5_gap_paths(
-        student_data={
-            "name": name,
-            "major": major,
-            "grade": grade,
-            "target_job": target_job,
-            "skills": skills,
-            "projects": projects,
-            "competitions": competitions,
-            "certificates": certificates,
-            "self_intro": self_intro,
-        },
-        job_recommendations=agent_result.get("job_recommendations", [])
-    )
-
-    agent_result["top5_gap_paths"] = gap_path_result.get("top5_gap_paths", [])
-    agent_result["used_llm"] = gap_path_result.get("used_llm", False)
-    agent_result["agent_warning"] = gap_path_result.get("agent_warning", "")
 
     record = DiagnosisRecord(
         user_id=request.session.get("user_id"),
@@ -1542,15 +1495,15 @@ def job_match(
 
     if student_record is None:
         student_data = {
-            "name": "未填写",
-            "major": "未填写",
-            "grade": "未填写",
-            "target_job": "未填写",
-            "skills": "",
-            "projects": "",
-            "competitions": "",
-            "certificates": "",
-            "self_intro": ""
+            "name": "无",
+            "major": "无",
+            "grade": "无",
+            "target_job": "无",
+            "skills": "无",
+            "projects": "无",
+            "competitions": "无",
+            "certificates": "无",
+            "self_intro": "无"
         }
 
         job_matches = []
@@ -1570,7 +1523,20 @@ def job_match(
 
         job_records = db.query(JobKnowledgeRecord).all()
 
-        job_matches = calculate_job_match(student_data, job_records)
+        try:
+            job_matches = calculate_job_match(student_data, job_records)
+        except LLMCallError:
+            return templates.TemplateResponse(
+                request,
+                "job_match.html",
+                {
+                    "title": "岗位匹配结果",
+                    "student": student_data,
+                    "job_matches": [],
+                    "username": request.session.get("username"),
+                    "error": "调用LLM失败"
+                }
+            )
 
         # 只分析 TOP5
         top5_jobs = job_matches[:5]
@@ -1586,10 +1552,23 @@ def job_match(
             top5_gap_paths = []
 
         if not top5_gap_paths and top5_jobs:
-            gap_path_result = generate_top5_gap_paths(
-                student_data=student_data,
-                job_recommendations=top5_jobs
-            )
+            try:
+                gap_path_result = generate_top5_gap_paths(
+                    student_data=student_data,
+                    job_recommendations=top5_jobs
+                )
+            except LLMCallError:
+                return templates.TemplateResponse(
+                    request,
+                    "job_match.html",
+                    {
+                        "title": "岗位匹配结果",
+                        "student": student_data,
+                        "job_matches": [],
+                        "username": request.session.get("username"),
+                        "error": "调用LLM失败"
+                    }
+                )
 
             top5_gap_paths = gap_path_result.get("top5_gap_paths", [])
             agent_result["top5_gap_paths"] = top5_gap_paths
@@ -1614,13 +1593,7 @@ def job_match(
 
         for index, job in enumerate(job_matches):
             if index < 5:
-                detail = gap_map.get(job.get("job_name"))
-
-                # 如果岗位名没匹配上，就按顺序兜底
-                if detail is None and index < len(top5_gap_paths):
-                    detail = top5_gap_paths[index]
-
-                job["gap_detail"] = detail or {}
+                job["gap_detail"] = gap_map.get(job.get("job_name")) or {}
             else:
                 job["gap_detail"] = {}
 
@@ -1631,7 +1604,8 @@ def job_match(
             "title": "岗位匹配结果",
             "student": student_data,
             "job_matches": job_matches,
-            "username": request.session.get("username")
+            "username": request.session.get("username"),
+            "error": ""
         }
     )
 

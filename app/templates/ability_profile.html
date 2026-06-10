@@ -657,7 +657,7 @@
             <div>
                 <p class="profile-eyebrow">MULTI-AGENT ABILITY PROFILE</p>
                 <h1>学生能力画像分析</h1>
-                <p>一个画像任务由多个 LLM 专家围绕同一份共享状态协作完成：专家先调用工具取证和审计，再进行交接、质询、规划和最终复核。</p>
+                <p>基于简历信息生成学生能力画像、证据归因和风险提示。</p>
             </div>
 
             <nav class="profile-actions" aria-label="页面操作">
@@ -674,7 +674,7 @@
         {% endif %}
 
         <section class="route-split">
-            <p>当前页面只呈现学生能力画像、证据归因和成长任务；岗位排名、岗位差距和补齐路径已放到独立的岗位匹配分析页。</p>
+            <p>当前页面只呈现学生基础信息、能力雷达图、画像总结、证据归因和风险提示；岗位匹配放在独立分析页。</p>
             <a href="/job/match" class="profile-btn">进入岗位匹配</a>
         </section>
 
@@ -700,42 +700,6 @@
                             <strong>{{ student.target_job }}</strong>
                         </div>
                     </div>
-                </section>
-
-                <section class="profile-panel">
-                    <h2>能力画像工作流</h2>
-
-                    <div class="agent-status">
-                        {% if used_llm %}
-                        <span class="status-pill">LLM 专家协作</span>
-                        {% else %}
-                        <span class="status-pill rule">规则兜底工作流</span>
-                        {% endif %}
-
-                        {% for agent in agent_roster %}
-                        <span class="profile-tag">{{ agent }}</span>
-                        {% endfor %}
-                    </div>
-
-                    {% if workflow_steps %}
-                    <div class="workflow-list">
-                        {% for step in workflow_steps %}
-                        <div class="workflow-step">
-                            <span class="workflow-index">{{ step.step }}</span>
-                            <div class="workflow-body">
-                                <div class="workflow-title-row">
-                                    <strong>{{ step.agent }}</strong>
-                                    <span class="workflow-role">{{ step.llm_role }}</span>
-                                </div>
-                                <p>{{ step.task }}</p>
-                                <p class="workflow-output">{{ step.output }}</p>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    <p class="empty-state">暂无工作流轨迹。旧记录可重新诊断后生成完整多智能体流程。</p>
-                    {% endif %}
                 </section>
 
                 <section class="profile-panel">
@@ -911,45 +875,6 @@
                     {% endif %}
                 </section>
 
-                <section class="profile-panel">
-                    <h2>成长路径</h2>
-                    {% if growth_path %}
-                    <div class="growth-path">
-                        {% for stage in growth_path %}
-                        <article class="growth-stage">
-                            <div class="stage-header">
-                                <h3>{{ stage.stage }}</h3>
-                                <span>{{ stage.duration }}</span>
-                            </div>
-
-                            <p class="stage-goal"><strong>阶段目标：</strong>{{ stage.goal }}</p>
-
-                            <div class="stage-content">
-                                <div>
-                                    <h4>行动任务</h4>
-                                    <ul>
-                                        {% for action in stage.actions %}
-                                        <li>{{ action }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-
-                                <div>
-                                    <h4>验收成果</h4>
-                                    <ul>
-                                        {% for item in stage.deliverables %}
-                                        <li>{{ item }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                        </article>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    <p class="empty-state">暂无成长路径。</p>
-                    {% endif %}
-                </section>
                 {% endif %}
             </div>
 
@@ -1028,34 +953,6 @@
                     </div>
                     {% else %}
                     <p class="empty-state">暂无发展焦点。</p>
-                    {% endif %}
-                </section>
-
-                <section class="profile-panel">
-                    <h2>细化任务</h2>
-                    {% if learning_tasks %}
-                    <div class="task-grid">
-                        {% for task in learning_tasks %}
-                        <article class="task-item">
-                            <strong>{{ task.dimension }}</strong>
-                            <p>{{ task.task }}</p>
-                            {% if task.timebox %}
-                            <p><strong>周期：</strong>{{ task.timebox }}</p>
-                            {% endif %}
-                            {% if task.tool_check %}
-                            <p><strong>检查方式：</strong>{{ task.tool_check }}</p>
-                            {% endif %}
-                            {% if task.acceptance %}
-                            <p><strong>验收标准：</strong>{{ task.acceptance }}</p>
-                            {% endif %}
-                            {% if task.output %}
-                            <p><strong>产物：</strong>{{ task.output }}</p>
-                            {% endif %}
-                        </article>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    <p class="empty-state">暂无细化任务。</p>
                     {% endif %}
                 </section>
 

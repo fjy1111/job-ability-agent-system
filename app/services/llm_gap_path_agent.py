@@ -4,106 +4,91 @@ import re
 from typing import Any, Dict, List
 
 from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+
+from app.services.llm_errors import LLMCallError
 
 load_dotenv()
 
 
 def safe_json_loads(text: str) -> Dict[str, Any]:
-    """
-    防止大模型返回 ```json ... ``` 或前后带解释文字。
-    """
     if not text:
-        return {}
+        raise LLMCallError()
 
     text = text.strip()
-
-    text = re.sub(r"^```json", "", text)
-    text = re.sub(r"^```", "", text)
-    text = re.sub(r"```$", "", text)
-    text = text.strip()
+    text = re.sub(r"^```(?:json)?", "", text, flags=re.IGNORECASE).strip()
+    text = re.sub(r"```$", "", text).strip()
 
     try:
-        return json.loads(text)
-    except Exception:
-        pass
-
-    match = re.search(r"\{[\s\S]*\}", text)
-    if match:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        match = re.search(r"\{[\s\S]*\}", text)
+        if not match:
+            raise LLMCallError()
         try:
-            return json.loads(match.group(0))
-        except Exception:
-            return {}
+            data = json.loads(match.group(0))
+        except json.JSONDecodeError:
+            raise LLMCallError()
 
-    return {}
+    if not isinstance(data, dict):
+        raise LLMCallError()
+    return data
 
 
-def fallback_top5_gap_paths(job_recommendations: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """
-    大模型失败时的兜底逻辑：根据已有 skill_gaps 给每个岗位生成简单路径。
-    """
-    result = []
+def _create_llm() -> ChatOpenAI:
+    if os.getenv("USE_LLM", "true").lower() != "true":
+        raise LLMCallError()
 
-    for job in job_recommendations[:5]:
-        job_name = job.get("job_name", "未知岗位")
-        skill_gaps = job.get("skill_gaps", [])
+    api_key = (
+        os.getenv("LLM_API_KEY")
+        or os.getenv("OPENAI_API_KEY")
+        or os.getenv("DEEPSEEK_API_KEY")
+        or os.getenv("DASHSCOPE_API_KEY")
+    )
+    model = (
+        os.getenv("GAP_PATH_MODEL")
+        or os.getenv("LLM_MODEL")
+        or os.getenv("OPENAI_MODEL")
+        or os.getenv("DEEPSEEK_MODEL")
+        or os.getenv("DASHSCOPE_MODEL")
+    )
+    base_url = (
+        os.getenv("LLM_BASE_URL")
+        or os.getenv("OPENAI_BASE_URL")
+        or os.getenv("DEEPSEEK_BASE_URL")
+        or os.getenv("DASHSCOPE_BASE_URL")
+    )
 
-        result.append({
-            "job_name": job_name,
-            "gap_list": skill_gaps,
-            "recommended_projects": [
-                f"{job_name}相关小型练习项目",
-                f"{job_name}方向综合实战项目"
-            ],
-            "learning_stages": [
-                {
-                    "stage": "第一阶段：基础补强",
-                    "duration": "第1-2个月",
-                    "goal": f"补齐{job_name}岗位所需的基础技能",
-                    "actions": [
-                        f"系统学习岗位短板技能：{'、'.join(skill_gaps) if skill_gaps else '岗位基础技能'}",
-                        "整理学习笔记，完成基础练习",
-                        "结合目标岗位要求，建立技能清单"
-                    ],
-                    "deliverables": [
-                        "一份岗位技能差距清单",
-                        "一份基础学习笔记",
-                        "若干基础练习代码或文档"
-                    ]
-                },
-                {
-                    "stage": "第二阶段：项目实践",
-                    "duration": "第3-4个月",
-                    "goal": f"完成一个与{job_name}匹配的项目作品",
-                    "actions": [
-                        "选择一个岗位相关项目进行完整实践",
-                        "完成需求分析、实现过程和结果总结",
-                        "将项目整理到简历或作品集中"
-                    ],
-                    "deliverables": [
-                        "一个完整项目作品",
-                        "一份项目说明文档",
-                        "一份可写入简历的项目经历"
-                    ]
-                },
-                {
-                    "stage": "第三阶段：就业准备",
-                    "duration": "第5-6个月",
-                    "goal": f"提升{job_name}岗位投递竞争力",
-                    "actions": [
-                        "根据岗位要求修改简历",
-                        "准备常见面试问题",
-                        "进行模拟面试和复盘"
-                    ],
-                    "deliverables": [
-                        "一份岗位定制简历",
-                        "一份面试题复盘文档",
-                        "一份投递岗位清单"
-                    ]
-                }
-            ]
-        })
+    if not api_key or not model:
+        raise LLMCallError()
 
-    return result
+    kwargs: dict[str, Any] = {
+        "model": model,
+        "api_key": api_key,
+        "temperature": 0.25,
+        "timeout": 60,
+        "max_retries": 0,
+    }
+    if base_url:
+        kwargs["base_url"] = base_url
+    return ChatOpenAI(**kwargs)
+
+
+def _validate_gap_paths(parsed: Dict[str, Any], expected_count: int) -> List[Dict[str, Any]]:
+    paths = parsed.get("top5_gap_paths")
+    if not isinstance(paths, list) or len(paths) != expected_count:
+        raise LLMCallError()
+
+    required_fields = {"job_name", "gap_list", "recommended_projects", "learning_stages"}
+    normalized: List[Dict[str, Any]] = []
+    for item in paths:
+        if not isinstance(item, dict) or not required_fields.issubset(item.keys()):
+            raise LLMCallError()
+        if not isinstance(item.get("learning_stages"), list) or len(item["learning_stages"]) != 3:
+            raise LLMCallError()
+        normalized.append(item)
+
+    return normalized
 
 
 def generate_top5_gap_paths(
@@ -111,17 +96,16 @@ def generate_top5_gap_paths(
     job_recommendations: List[Dict[str, Any]]
 ) -> Dict[str, Any]:
     """
-    为 TOP5 每个岗位生成：
-    1. 岗位差距清单
-    2. 推荐项目
-    3. 个性化补齐路径
+    为 TOP5 岗位生成岗位差距、推荐项目和三阶段补齐路径。
+    大模型不可用、异常或返回结构不完整时，直接抛出“调用LLM失败”。
     """
-
-    # 你这里根据自己用的模型接口改。
-    # 如果你现在已经有 OpenAI / DeepSeek / 通义千问调用代码，
-    # 只需要把 prompt 换成下面这个即可。
-
-    api_key = os.getenv("OPENAI_API_KEY") or os.getenv("DASHSCOPE_API_KEY") or os.getenv("DEEPSEEK_API_KEY")
+    top_jobs = job_recommendations[:5]
+    if not top_jobs:
+        return {
+            "top5_gap_paths": [],
+            "used_llm": True,
+            "agent_warning": ""
+        }
 
     prompt = f"""
 你是大学生就业能力诊断系统中的岗位成长路径规划智能体。
@@ -130,14 +114,12 @@ def generate_top5_gap_paths(
 {json.dumps(student_data, ensure_ascii=False)}
 
 下面是系统已经计算出的 TOP5 岗位推荐结果：
-{json.dumps(job_recommendations[:5], ensure_ascii=False)}
+{json.dumps(top_jobs, ensure_ascii=False)}
 
 请你必须为 TOP5 中的每一个岗位都生成个性化成长路径，不能只生成第一个岗位。
-
 返回严格 JSON，不要 Markdown，不要解释文字。
 
 字段要求如下：
-
 {{
   "top5_gap_paths": [
     {{
@@ -174,47 +156,20 @@ def generate_top5_gap_paths(
 要求：
 1. top5_gap_paths 的长度必须等于输入岗位数量，最多 5 个。
 2. 每个岗位都要有自己的 gap_list、recommended_projects、learning_stages。
-3. 不要只围绕匹配度最高的岗位生成。
-4. gap_list 要结合该岗位的 skill_gaps 和学生已有技能。
-5. recommended_projects 要贴合岗位方向。
-6. learning_stages 必须是三个阶段。
+3. gap_list 要结合该岗位的 skill_gaps 和学生已有技能。
+4. recommended_projects 要贴合岗位方向。
+5. learning_stages 必须是三个阶段。
 """
 
     try:
-        # ====== 这里替换成你自己原来的大模型调用方式 ======
-        # 下面这个只是示例结构，不能直接凭空调用。
-        #
-        # response_text = call_llm(prompt)
-        #
-        # parsed = safe_json_loads(response_text)
-
-        parsed = {}
-
-        # 如果你暂时还没有接好大模型，就先走兜底
-        if not parsed:
-            parsed = {
-                "top5_gap_paths": fallback_top5_gap_paths(job_recommendations)
-            }
-
-        top5_gap_paths = parsed.get("top5_gap_paths", [])
-
-        # 防止大模型少生成，自动补齐到 TOP5
-        if len(top5_gap_paths) < len(job_recommendations[:5]):
-            existed_names = {item.get("job_name") for item in top5_gap_paths if isinstance(item, dict)}
-            fallback_items = fallback_top5_gap_paths(job_recommendations)
-
-            for item in fallback_items:
-                if item.get("job_name") not in existed_names:
-                    top5_gap_paths.append(item)
-
-        parsed["top5_gap_paths"] = top5_gap_paths[:5]
-        parsed["used_llm"] = bool(api_key)
-
-        return parsed
-
-    except Exception as e:
+        response = _create_llm().invoke(prompt)
+        parsed = safe_json_loads(str(response.content))
         return {
-            "top5_gap_paths": fallback_top5_gap_paths(job_recommendations),
-            "used_llm": False,
-            "agent_warning": str(e)
+            "top5_gap_paths": _validate_gap_paths(parsed, len(top_jobs)),
+            "used_llm": True,
+            "agent_warning": ""
         }
+    except LLMCallError:
+        raise
+    except Exception:
+        raise LLMCallError()
