@@ -19,7 +19,7 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 
-from app.agent.diagnosis_agent import run_diagnosis_agent
+from app.agent.diagnosis_agent import ABILITY_DIMENSIONS, AGENT_ROSTER, run_diagnosis_agent
 from app.services.job_match_service import calculate_job_match
 from app.services.llm_gap_path_agent import generate_top5_gap_paths
 from app.services.mock_interview_service import (
@@ -397,6 +397,239 @@ def load_agent_result(record: DiagnosisRecord | None) -> dict:
         return {}
 
 
+def profile_score_level(score: int) -> str:
+    if score >= 85:
+        return "优势突出"
+    if score >= 70:
+        return "稳定具备"
+    if score >= 55:
+        return "已有基础"
+    if score >= 40:
+        return "需要补强"
+    return "信息不足"
+
+
+def build_ability_profile_fallback(
+    student_data: dict,
+    ability_scores: dict,
+    agent_result: dict
+) -> dict:
+    """
+    旧记录可能保存了岗位匹配版总结。
+    画像页只动态回填能力画像字段，不把旧岗位推荐内容带入页面。
+    """
+
+    recognized_skills = agent_result.get("recognized_skills", [])
+    score_evidence = agent_result.get("score_evidence", {})
+
+    strongest_key = max(ABILITY_DIMENSIONS, key=lambda key: ability_scores.get(key, 0))
+    weakest_key = min(ABILITY_DIMENSIONS, key=lambda key: ability_scores.get(key, 0))
+    average_score = round(sum(ability_scores.values()) / max(len(ability_scores), 1), 1)
+
+    dimension_insights = []
+    evidence_cards = []
+
+    for key, meta in ABILITY_DIMENSIONS.items():
+        score = ability_scores.get(key, 0)
+        evidence = score_evidence.get(key, [])
+        if not evidence:
+            evidence = ["旧记录未保存该维度的详细证据，可重新诊断生成完整证据卡。"]
+
+        level = profile_score_level(score)
+        dimension_insights.append({
+            "key": key,
+            "name": meta["name"],
+            "score": score,
+            "level": level,
+            "conclusion": f"{meta['name']}当前处于“{level}”水平。",
+            "evidence": evidence,
+            "next_action": meta["next_action"]
+        })
+        evidence_cards.append({
+            "dimension": key,
+            "name": meta["name"],
+            "agent": meta["agent"],
+            "evidence": evidence,
+            "confidence": "中" if score >= 55 else "低",
+            "interpretation": f"该证据卡根据历史分数和已保存证据动态回填，当前分数为 {score} 分。"
+        })
+
+    profile_tags = []
+    if recognized_skills:
+        profile_tags.append(f"显性技能 {len(recognized_skills)} 项")
+    if student_data.get("projects"):
+        profile_tags.append("有项目经历")
+    else:
+        profile_tags.append("项目证据待补充")
+    if student_data.get("target_job"):
+        profile_tags.append("职业目标已填写")
+
+    risk_flags = []
+    if not student_data.get("projects"):
+        risk_flags.append("项目经历为空，实践能力缺少可展示证据。")
+    if not student_data.get("self_intro"):
+        risk_flags.append("自我介绍为空，职业表达和经历复盘证据不足。")
+    if ability_scores.get(weakest_key, 0) < 55:
+        risk_flags.append(f"{ABILITY_DIMENSIONS[weakest_key]['name']}低于 55 分，需要优先补强。")
+
+    development_focus = []
+    for index, key in enumerate(
+        sorted(ABILITY_DIMENSIONS, key=lambda item: ability_scores.get(item, 0))[:3],
+        start=1
+    ):
+        meta = ABILITY_DIMENSIONS[key]
+        development_focus.append({
+            "name": meta["name"],
+            "priority": "高" if index == 1 else "中",
+            "reason": f"当前得分 {ability_scores.get(key, 0)} 分，处于“{profile_score_level(ability_scores.get(key, 0))}”水平。",
+            "action": meta["next_action"]
+        })
+
+    growth_path = [
+        {
+            "stage": "第一阶段：画像校准与基础补强",
+            "duration": "第1-2周",
+            "goal": f"围绕{ABILITY_DIMENSIONS[weakest_key]['name']}补齐基础证据。",
+            "actions": [
+                "整理课程、技能、项目、证书清单，补充掌握程度。",
+                "针对最低分维度完成一轮知识点复盘。",
+                "把经历改写为可验证的能力证据。"
+            ],
+            "deliverables": ["能力证据清单", "最低分维度补强笔记"]
+        },
+        {
+            "stage": "第二阶段：实践作品沉淀",
+            "duration": "第3-6周",
+            "goal": "形成一个能支撑能力画像的项目或作品材料。",
+            "actions": [
+                "选择一个真实场景设计小型项目。",
+                "使用 Git 记录开发过程并完善 README。",
+                "总结项目中的个人职责、技术动作和结果。"
+            ],
+            "deliverables": ["项目仓库", "项目复盘文档"]
+        },
+        {
+            "stage": "第三阶段：表达复盘与二次画像",
+            "duration": "第7-8周",
+            "goal": "把能力证据转化为简历素材和下一轮画像数据。",
+            "actions": [
+                "围绕四维能力整理简历素材。",
+                "准备优势和短板的自我介绍话术。",
+                "重新提交诊断，观察画像变化。"
+            ],
+            "deliverables": ["能力证据型简历素材", "二次画像对比记录"]
+        }
+    ]
+
+    learning_tasks = [
+        {
+            "dimension": item["name"],
+            "task": item["action"],
+            "timebox": "1周",
+            "output": "可检查的学习记录或项目材料"
+        }
+        for item in development_focus
+    ]
+
+    return {
+        "summary": (
+            f"当前能力画像均值约为 {average_score} 分，"
+            f"{ABILITY_DIMENSIONS[strongest_key]['name']}相对突出，"
+            f"{ABILITY_DIMENSIONS[weakest_key]['name']}需要优先补强。"
+            "本页已按能力画像视角重新组织历史记录，仅保留能力诊断和成长建议。"
+        ),
+        "advantages": [
+            f"{ABILITY_DIMENSIONS[strongest_key]['name']}得分最高，当前为 {ability_scores.get(strongest_key, 0)} 分。",
+            (
+                f"已识别到显性技能：{'、'.join(recognized_skills[:6])}。"
+                if recognized_skills
+                else "已保存基础画像信息，可继续补充技能证据。"
+            ),
+            "能力画像可继续用于成长跟踪和学习任务拆解。"
+        ],
+        "weaknesses": [
+            f"{ABILITY_DIMENSIONS[weakest_key]['name']}当前得分最低，为 {ability_scores.get(weakest_key, 0)} 分。",
+            risk_flags[0] if risk_flags else "建议继续补充可量化成果，提升画像可信度。",
+            "旧记录缺少完整工作流轨迹，重新诊断后可生成多智能体过程记录。"
+        ],
+        "profile_tags": profile_tags,
+        "risk_flags": risk_flags or ["暂未发现高风险短板，建议继续补充可量化成果。"],
+        "evidence_cards": evidence_cards,
+        "dimension_insights": dimension_insights,
+        "development_focus": development_focus,
+        "learning_tasks": learning_tasks,
+        "quality_review": [
+            "该历史记录已按能力画像视角动态回填。",
+            "岗位匹配内容未在画像页展示。",
+            "重新诊断后可生成完整多智能体工作流轨迹。"
+        ],
+        "workflow_steps": [],
+        "tool_calls": [],
+        "collaboration_log": [],
+        "review_findings": [],
+        "shared_workspace": {
+            "legacy_record": True,
+            "note": "旧记录未保存多智能体工具调用链，当前为动态回填画像。"
+        },
+        "agent_roster": AGENT_ROSTER,
+        "llm_agents": [],
+        "growth_path": growth_path,
+        "used_llm": False,
+        "agent_warning": agent_result.get("agent_warning", "")
+    }
+
+
+def normalize_ability_profile_result(
+    student_data: dict,
+    ability_scores: dict,
+    agent_result: dict
+) -> dict:
+    if not agent_result:
+        return {}
+
+    has_new_profile = bool(
+        agent_result.get("dimension_insights")
+        or agent_result.get("workflow_steps")
+    )
+
+    if has_new_profile:
+        normalized = dict(agent_result)
+        normalized["agent_roster"] = normalized.get("agent_roster") or AGENT_ROSTER
+
+        if not normalized.get("tool_calls"):
+            normalized["tool_calls"] = [{
+                "tool_name": "LegacyProfileCompatibilityTool",
+                "called_by": "画像页兼容适配器",
+                "purpose": "兼容旧版或半新版画像记录，标记该记录未保存完整工具调用链",
+                "input_summary": "agent_result_json + diagnosis_records scores",
+                "output_summary": "已补齐专家角色展示；建议重新诊断生成完整工具链",
+                "status": "completed"
+            }]
+
+        if not normalized.get("collaboration_log"):
+            normalized["collaboration_log"] = [{
+                "sender": "画像页兼容适配器",
+                "receiver": "前端画像展示",
+                "message": "该历史记录没有保存专家交接链，当前仅做兼容展示；重新诊断后会生成完整 LLM 协作记录。",
+                "artifact": "legacy_profile_adapter"
+            }]
+
+        if not normalized.get("review_findings"):
+            normalized["review_findings"] = [{
+                "severity": "medium",
+                "dimension": "历史记录",
+                "finding": "该记录缺少新版工具调用和专家交接证据，建议重新诊断生成完整链路。"
+            }]
+
+        return normalized
+
+    return build_ability_profile_fallback(
+        student_data=student_data,
+        ability_scores=ability_scores,
+        agent_result=agent_result
+    )
+
+
 def render_ability_profile(
     request: Request,
     record: DiagnosisRecord | None
@@ -435,30 +668,12 @@ def render_ability_profile(
         student_data = build_student_data(record)
         ability_scores = build_ability_scores(record)
 
-    agent_result = load_agent_result(record)
-
-    job_recommendations = agent_result.get("job_recommendations", [])
-    top5_gap_paths = agent_result.get("top5_gap_paths", [])
-    if isinstance(top5_gap_paths, dict):
-        top5_gap_paths = top5_gap_paths.get("top5_gap_paths", [])
-    if not isinstance(top5_gap_paths, list):
-        top5_gap_paths = []
-
-    gap_map = {
-        item.get("job_name"): item
-        for item in top5_gap_paths
-        if isinstance(item, dict)
-    }
-
-    for index, job in enumerate(job_recommendations):
-        if index < 5:
-            detail = gap_map.get(job.get("job_name"))
-
-            # 岗位名匹配不上时，按 TOP5 顺序兜底
-            if detail is None and index < len(top5_gap_paths):
-                detail = top5_gap_paths[index]
-
-            job["gap_detail"] = detail or {}
+    raw_agent_result = load_agent_result(record)
+    agent_result = normalize_ability_profile_result(
+        student_data=student_data,
+        ability_scores=ability_scores,
+        agent_result=raw_agent_result
+    )
 
     return templates.TemplateResponse(
         request,
@@ -475,10 +690,23 @@ def render_ability_profile(
             "summary": agent_result.get("summary", ""),
             "advantages": agent_result.get("advantages", []),
             "weaknesses": agent_result.get("weaknesses", []),
-            "job_match_analysis": agent_result.get("job_match_analysis", ""),
-            "job_recommendations": agent_result.get("job_recommendations", []),
-            "top5_gap_paths": top5_gap_paths,
-            "growth_path": agent_result.get("growth_path", [])
+            "profile_tags": agent_result.get("profile_tags", []),
+            "risk_flags": agent_result.get("risk_flags", []),
+            "evidence_cards": agent_result.get("evidence_cards", []),
+            "dimension_insights": agent_result.get("dimension_insights", []),
+            "development_focus": agent_result.get("development_focus", []),
+            "learning_tasks": agent_result.get("learning_tasks", []),
+            "quality_review": agent_result.get("quality_review", []),
+            "workflow_steps": agent_result.get("workflow_steps", []),
+            "tool_calls": agent_result.get("tool_calls", []),
+            "collaboration_log": agent_result.get("collaboration_log", []),
+            "review_findings": agent_result.get("review_findings", []),
+            "shared_workspace": agent_result.get("shared_workspace", {}),
+            "agent_roster": agent_result.get("agent_roster", []),
+            "llm_agents": agent_result.get("llm_agents", []),
+            "growth_path": agent_result.get("growth_path", []),
+            "used_llm": agent_result.get("used_llm", False),
+            "agent_warning": agent_result.get("agent_warning", "")
         }
     )
 def build_growth_trend(records: list[DiagnosisRecord]) -> dict:
@@ -1107,25 +1335,6 @@ def student_submit(
 
     agent_result = run_diagnosis_agent(student_data)
     ability_scores = agent_result["ability_scores"]
-
-    gap_path_result = generate_top5_gap_paths(
-        student_data={
-            "name": name,
-            "major": major,
-            "grade": grade,
-            "target_job": target_job,
-            "skills": skills,
-            "projects": projects,
-            "competitions": competitions,
-            "certificates": certificates,
-            "self_intro": self_intro,
-        },
-        job_recommendations=agent_result.get("job_recommendations", [])
-    )
-
-    agent_result["top5_gap_paths"] = gap_path_result.get("top5_gap_paths", [])
-    agent_result["used_llm"] = gap_path_result.get("used_llm", False)
-    agent_result["agent_warning"] = gap_path_result.get("agent_warning", "")
 
     record = DiagnosisRecord(
         user_id=request.session.get("user_id"),
