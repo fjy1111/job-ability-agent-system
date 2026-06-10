@@ -19,6 +19,8 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 
+from app.agent.diagnosis_agent import run_diagnosis_agent
+from app.services.llm_ability_match_service import calculate_job_match, calculate_ai_job_match, score_four_dimensions_llm
 from app.agent.diagnosis_agent import ABILITY_DIMENSIONS, AGENT_ROSTER, run_diagnosis_agent
 from app.services.job_match_service import calculate_job_match
 from app.services.llm_gap_path_agent import generate_top5_gap_paths
@@ -174,7 +176,10 @@ class JobKnowledgeRecord(Base):
     )
 
     job_name: Mapped[str] = mapped_column(String(100), nullable=False)
-
+    company_name: Mapped[str] = mapped_column(String(100), default="")
+    hiring_city: Mapped[str] = mapped_column(String(100), default="")
+    educational_requirements: Mapped[str] = mapped_column(String(200), default="")
+    salary_range: Mapped[str] = mapped_column(String(100), default="")
     required_skills_json: Mapped[str] = mapped_column(Text, nullable=False)
     related_projects_json: Mapped[str] = mapped_column(Text, default="[]")
     recommended_courses_json: Mapped[str] = mapped_column(Text, default="[]")
@@ -669,11 +674,35 @@ def render_ability_profile(
         ability_scores = build_ability_scores(record)
 
     raw_agent_result = load_agent_result(record)
+
     agent_result = normalize_ability_profile_result(
         student_data=student_data,
         ability_scores=ability_scores,
         agent_result=raw_agent_result
     )
+
+    job_recommendations = agent_result.get("job_recommendations", [])
+    top5_gap_paths = agent_result.get("top5_gap_paths", [])
+    if isinstance(top5_gap_paths, dict):
+        top5_gap_paths = top5_gap_paths.get("top5_gap_paths", [])
+    if not isinstance(top5_gap_paths, list):
+        top5_gap_paths = []
+
+    gap_map = {
+        item.get("job_name"): item
+        for item in top5_gap_paths
+        if isinstance(item, dict)
+    }
+
+    for index, job in enumerate(job_recommendations):
+        if index < 5:
+            detail = gap_map.get(job.get("job_name"))
+
+            # 岗位名匹配不上时，按 TOP5 顺序兜底
+            if detail is None and index < len(top5_gap_paths):
+                detail = top5_gap_paths[index]
+
+            job["gap_detail"] = detail or {}
 
     return templates.TemplateResponse(
         request,
@@ -1334,7 +1363,33 @@ def student_submit(
     }
 
     agent_result = run_diagnosis_agent(student_data)
+    ai_assessment = score_four_dimensions_llm(student_data)
+    if ai_assessment.get("used_llm"):
+        agent_result["ability_scores"] = ai_assessment["ability_scores"]
+        agent_result["score_evidence"] = ai_assessment["score_evidence"]
+        agent_result["recognized_skills"] = ai_assessment.get("recognized_skills", [])
+        agent_result["assessment_summary"] = ai_assessment.get("assessment_summary", "")
+
     ability_scores = agent_result["ability_scores"]
+
+    gap_path_result = generate_top5_gap_paths(
+        student_data={
+            "name": name,
+            "major": major,
+            "grade": grade,
+            "target_job": target_job,
+            "skills": skills,
+            "projects": projects,
+            "competitions": competitions,
+            "certificates": certificates,
+            "self_intro": self_intro,
+        },
+        job_recommendations=agent_result.get("job_recommendations", [])
+    )
+
+    agent_result["top5_gap_paths"] = gap_path_result.get("top5_gap_paths", [])
+    agent_result["used_llm"] = gap_path_result.get("used_llm", False)
+    agent_result["agent_warning"] = gap_path_result.get("agent_warning", "")
 
     record = DiagnosisRecord(
         user_id=request.session.get("user_id"),
