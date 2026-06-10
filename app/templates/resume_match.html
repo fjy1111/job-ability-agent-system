@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=13">
+    <style>
+        .mapping-page {
+            min-height: 100vh;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .mapping-shell {
+            width: min(1280px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 28px 0 46px;
+        }
+
+        .mapping-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 22px;
+        }
+
+        .mapping-header h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 0;
+        }
+
+        .mapping-header p {
+            margin: 8px 0 0;
+            color: #607086;
+            line-height: 1.7;
+        }
+
+        .mapping-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .mapping-nav a {
+            padding: 9px 13px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #315071;
+            background: #ffffff;
+            border: 1px solid #dbe4f0;
+            font-size: 14px;
+        }
+
+        .mapping-panel {
+            background: #ffffff;
+            border: 1px solid #dfe7f2;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 16px 34px rgba(15, 35, 66, 0.06);
+        }
+
+        .mapping-form {
+            display: block;
+        }
+
+        .mapping-upload {
+            border: 1px dashed #9db4d4;
+            background: #f8fbff;
+            border-radius: 8px;
+            padding: 16px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .mapping-upload span {
+            color: #526479;
+            line-height: 1.7;
+        }
+
+        .mapping-upload strong {
+            color: #183b66;
+        }
+
+        .mapping-upload input[type="file"] {
+            width: 100%;
+        }
+
+        .mapping-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .mapping-actions button {
+            border: 0;
+            border-radius: 8px;
+            background: #0f67d8;
+            color: #ffffff;
+            padding: 11px 18px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .mapping-alert {
+            margin: 12px 0;
+            padding: 11px 13px;
+            border-radius: 8px;
+            line-height: 1.7;
+        }
+
+        .mapping-alert.error {
+            background: #fff1f2;
+            color: #be123c;
+            border: 1px solid #fecdd3;
+        }
+
+        .mapping-alert.warning {
+            background: #fff7ed;
+            color: #9a3412;
+            border: 1px solid #fed7aa;
+        }
+
+        .tree-card {
+            margin-top: 18px;
+            padding: 18px;
+            border-radius: 8px;
+            border: 1px solid #dfe7f2;
+            background: #ffffff;
+            box-shadow: 0 16px 34px rgba(15, 35, 66, 0.06);
+        }
+
+        .tree-head {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        .tree-head h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #17375e;
+        }
+
+        .tree-canvas {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(240px, 360px);
+            gap: 42px;
+            align-items: start;
+            min-height: 460px;
+            padding: 22px;
+            border-radius: 8px;
+            background: #f3f6fa;
+            overflow: hidden;
+        }
+
+        .tree-canvas.has-jobs {
+            grid-template-columns: minmax(220px, 0.8fr) minmax(260px, 1fr);
+        }
+
+        .tree-canvas.has-abilities {
+            grid-template-columns: minmax(220px, 0.7fr) minmax(260px, 1fr) minmax(220px, 0.8fr);
+        }
+
+        .tree-lines {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .tree-column {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            gap: 10px;
+        }
+
+        .tree-column.is-hidden {
+            display: none;
+        }
+
+        .tree-column h3 {
+            margin: 0;
+            color: #516278;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .tree-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .tree-node {
+            width: 100%;
+            min-height: 54px;
+            border: 1px solid #d8e2ef;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 8px 20px rgba(15, 35, 66, 0.05);
+            color: #16365f;
+            text-align: left;
+            cursor: pointer;
+            transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+        }
+
+        .tree-node:hover,
+        .tree-node.is-active {
+            border-color: #0f67d8;
+            box-shadow: 0 10px 24px rgba(15, 103, 216, 0.14);
+            transform: translateY(-1px);
+        }
+
+        .course-node {
+            padding: 14px 16px;
+        }
+
+        .course-node strong,
+        .job-name,
+        .ability-node strong {
+            display: block;
+            overflow-wrap: anywhere;
+            letter-spacing: 0;
+        }
+
+        .job-node {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 13px 14px;
+            border-color: #bbf7d0;
+        }
+
+        .job-node.is-active {
+            border-color: #16a34a;
+            box-shadow: 0 10px 24px rgba(22, 163, 74, 0.14);
+        }
+
+        .job-score {
+            flex: 0 0 auto;
+            min-width: 46px;
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: #dcfce7;
+            color: #166534;
+            font-weight: 700;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .ability-node {
+            min-height: 48px;
+            padding: 13px 14px;
+            border: 1px solid #dbe8ff;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #1e3a6d;
+            box-shadow: 0 8px 20px rgba(15, 35, 66, 0.05);
+        }
+
+        .empty-state {
+            color: #64748b;
+            border: 1px dashed #c7d6ea;
+            border-radius: 8px;
+            padding: 16px;
+            background: #ffffff;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 900px) {
+            .tree-canvas,
+            .tree-canvas.has-jobs,
+            .tree-canvas.has-abilities {
+                grid-template-columns: 1fr;
+            }
+
+            .mapping-header,
+            .tree-head {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .tree-lines {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="mapping-page">
+<main class="mapping-shell">
+    <header class="mapping-header">
+        <div>
+            <h1>课程-岗位智能映射</h1>
+            <p>从简历中自动识别已学课程，推理课程能力标签，并映射到真实岗位数据。</p>
+        </div>
+        <nav class="mapping-nav">
+            <a href="/">首页</a>
+            <a href="/resume/optimize">简历优化</a>
+            <a href="/job/match">岗位匹配</a>
+            <a href="/logout">退出</a>
+        </nav>
+    </header>
+
+    {% for error in errors %}
+    <div class="mapping-alert error">{{ error }}</div>
+    {% endfor %}
+
+    {% for warning in warnings %}
+    <div class="mapping-alert warning">{{ warning }}</div>
+    {% endfor %}
+
+    <section class="mapping-panel">
+        <form action="/resume/match" method="post" enctype="multipart/form-data">
+            <div class="mapping-form">
+                <label class="mapping-upload">
+                    <strong>上传简历文件</strong>
+                    <span>{{ input_data.uploaded_filename or "支持 PDF / txt / md / csv，PDF 建议使用可复制文本版简历" }}</span>
+                    <input type="file" name="resume_file" accept=".pdf,.txt,.md,.csv">
+                </label>
+            </div>
+            <input type="hidden" name="top_jobs_per_course" value="{{ input_data.top_jobs_per_course or 5 }}">
+
+            <div class="mapping-actions">
+                <button type="submit">生成课程-岗位映射图</button>
+            </div>
+        </form>
+    </section>
+
+    {% if result %}
+    <section class="tree-card">
+        <div class="tree-head">
+            <h2>课程-岗位-能力匹配树</h2>
+        </div>
+
+        <div class="tree-canvas" id="mappingTree">
+            <svg class="tree-lines" id="treeLines"></svg>
+
+            <section class="tree-column" id="courseColumn">
+                <h3>课程</h3>
+                <div class="tree-list">
+                    {% for course in result.courses %}
+                    <button type="button" class="tree-node course-node" data-course="{{ course.course_name }}">
+                        <strong>{{ course.course_name }}</strong>
+                    </button>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="tree-column is-hidden" id="jobColumn">
+                <h3>匹配岗位</h3>
+                <div class="tree-list" id="jobList"></div>
+            </section>
+
+            <section class="tree-column is-hidden" id="abilityColumn">
+                <h3>对应能力</h3>
+                <div class="tree-list" id="abilityList"></div>
+            </section>
+        </div>
+    </section>
+
+    <script>
+        const graphEdges = {{ result.edges | tojson }};
+        const tree = document.getElementById("mappingTree");
+        const lines = document.getElementById("treeLines");
+        const jobColumn = document.getElementById("jobColumn");
+        const abilityColumn = document.getElementById("abilityColumn");
+        const jobList = document.getElementById("jobList");
+        const abilityList = document.getElementById("abilityList");
+        let selectedCourse = "";
+        let selectedJobIndex = "";
+
+        function unique(values) {
+            return Array.from(new Set((values || []).filter(Boolean)));
+        }
+
+        function escapeHtml(value) {
+            return String(value || "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function getCourseEdges(courseName) {
+            const bestByJobName = new Map();
+            graphEdges
+                .filter(edge => edge.course_name === courseName)
+                .forEach(edge => {
+                    const current = bestByJobName.get(edge.job_name);
+                    if (!current || Number(edge.score || 0) > Number(current.score || 0)) {
+                        bestByJobName.set(edge.job_name, edge);
+                    }
+                });
+            return Array.from(bestByJobName.values()).sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
+        }
+
+        function getEdgeAbilities(edge) {
+            const abilities = unique(edge.matched_abilities || []);
+            if (abilities.length > 0) {
+                return abilities;
+            }
+
+            const terms = unique(edge.matched_job_terms || []);
+            if (terms.length > 0) {
+                return terms;
+            }
+
+            const courses = unique(edge.matched_courses || []);
+            if (courses.length > 0) {
+                return courses.map(course => `推荐课程：${course}`);
+            }
+
+            return ["岗位基础相关能力"];
+        }
+
+        function clearAbilityColumn() {
+            selectedJobIndex = "";
+            abilityColumn.classList.add("is-hidden");
+            abilityList.innerHTML = "";
+            tree.classList.remove("has-abilities");
+        }
+
+        function renderJobs(courseName) {
+            const edges = getCourseEdges(courseName);
+            clearAbilityColumn();
+
+            jobColumn.classList.remove("is-hidden");
+            tree.classList.add("has-jobs");
+
+            if (edges.length === 0) {
+                jobList.innerHTML = '<div class="empty-state">该课程暂未匹配到岗位</div>';
+                drawLines();
+                return;
+            }
+
+            jobList.innerHTML = edges.map((edge, index) => `
+                <button type="button" class="tree-node job-node" data-job-index="${index}">
+                    <span class="job-name">${escapeHtml(edge.job_name)}</span>
+                    <span class="job-score">${Number(edge.score || 0)}%</span>
+                </button>
+            `).join("");
+
+            jobList.querySelectorAll("[data-job-index]").forEach(button => {
+                button.addEventListener("click", () => {
+                    const index = button.dataset.jobIndex;
+                    const edge = edges[Number(index)];
+                    selectedJobIndex = index;
+                    jobList.querySelectorAll(".job-node").forEach(node => node.classList.remove("is-active"));
+                    button.classList.add("is-active");
+                    renderAbilities(edge);
+                });
+            });
+
+            drawLines();
+        }
+
+        function renderAbilities(edge) {
+            const abilities = getEdgeAbilities(edge);
+            abilityColumn.classList.remove("is-hidden");
+            tree.classList.add("has-abilities");
+            abilityList.innerHTML = abilities.map(ability => `
+                <div class="ability-node" data-ability>
+                    <strong>${escapeHtml(ability)}</strong>
+                </div>
+            `).join("");
+            drawLines();
+        }
+
+        function drawCurve(source, target, color, width) {
+            const treeRect = tree.getBoundingClientRect();
+            const sourceRect = source.getBoundingClientRect();
+            const targetRect = target.getBoundingClientRect();
+            const x1 = sourceRect.right - treeRect.left;
+            const y1 = sourceRect.top + sourceRect.height / 2 - treeRect.top;
+            const x2 = targetRect.left - treeRect.left;
+            const y2 = targetRect.top + targetRect.height / 2 - treeRect.top;
+            const bend = Math.max(70, (x2 - x1) * 0.42);
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+
+            path.setAttribute("d", `M ${x1} ${y1} C ${x1 + bend} ${y1}, ${x2 - bend} ${y2}, ${x2} ${y2}`);
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke", color);
+            path.setAttribute("stroke-width", width);
+            path.setAttribute("stroke-opacity", "0.72");
+            lines.appendChild(path);
+        }
+
+        function drawLines() {
+            if (!tree || !lines) {
+                return;
+            }
+
+            const treeRect = tree.getBoundingClientRect();
+            lines.setAttribute("viewBox", `0 0 ${treeRect.width} ${treeRect.height}`);
+            lines.innerHTML = "";
+
+            const courseNode = tree.querySelector(`.course-node[data-course="${CSS.escape(selectedCourse)}"]`);
+            const jobNodes = Array.from(jobList.querySelectorAll(".job-node"));
+            if (!courseNode || jobNodes.length === 0) {
+                return;
+            }
+
+            jobNodes.forEach(jobNode => drawCurve(courseNode, jobNode, "#0f67d8", 2.2));
+
+            const activeJob = jobList.querySelector(".job-node.is-active");
+            const abilityNodes = Array.from(abilityList.querySelectorAll("[data-ability]"));
+            if (activeJob && abilityNodes.length > 0) {
+                abilityNodes.forEach(abilityNode => drawCurve(activeJob, abilityNode, "#16a34a", 2.2));
+            }
+        }
+
+        document.querySelectorAll(".course-node").forEach(button => {
+            button.addEventListener("click", () => {
+                selectedCourse = button.dataset.course;
+                document.querySelectorAll(".course-node").forEach(node => node.classList.remove("is-active"));
+                button.classList.add("is-active");
+                renderJobs(selectedCourse);
+            });
+        });
+
+        window.addEventListener("resize", drawLines);
+    </script>
+    {% endif %}
+</main>
+</body>
+</html>

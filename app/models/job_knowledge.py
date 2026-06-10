@@ -24,6 +24,26 @@ class JobKnowledgeRecord(Base):
         nullable=False
     )
 
+    company_name: Mapped[str] = mapped_column(
+        String(100),
+        default=""
+    )
+
+    hiring_city: Mapped[str] = mapped_column(
+        String(100),
+        default=""
+    )
+
+    educational_requirements: Mapped[str] = mapped_column(
+        String(200),
+        default=""
+    )
+
+    salary_range: Mapped[str] = mapped_column(
+        String(100),
+        default=""
+    )
+
     required_skills_json: Mapped[str] = mapped_column(
         Text,
         nullable=False

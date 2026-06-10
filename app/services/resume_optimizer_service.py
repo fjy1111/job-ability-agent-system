@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+from io import BytesIO
 from pathlib import Path
 
 
 TEXT_EXTENSIONS = {".txt", ".md", ".csv"}
+PDF_EXTENSIONS = {".pdf"}
+MAX_PDF_PAGES = 5
 
 
 def _decode_text(content: bytes) -> str:
@@ -14,6 +17,13 @@ def _decode_text(content: bytes) -> str:
             continue
 
     return content.decode("utf-8", errors="ignore")
+
+
+def _first_pdf_pages(pages):
+    for index, page in enumerate(pages):
+        if index >= MAX_PDF_PAGES:
+            break
+        yield page
 
 
 def extract_resume_text_from_upload(filename: str, file_content: bytes) -> tuple[str, list[str]]:
@@ -27,8 +37,65 @@ def extract_resume_text_from_upload(filename: str, file_content: bytes) -> tuple
     if suffix in TEXT_EXTENSIONS:
         return _decode_text(file_content).strip(), warnings
 
-    warnings.append("当前演示环境优先支持 txt / md / csv 文件解析；Word、PDF 可先复制文本到输入框。")
+    if suffix in PDF_EXTENSIONS:
+        text, parser_warning = _extract_pdf_text(file_content)
+        if text.strip():
+            return text.strip(), warnings
+
+        warnings.append(parser_warning)
+        return "", warnings
+
+    warnings.append("当前演示环境支持 txt / md / csv / pdf 文件解析；Word 可先复制文本到输入框。")
     return "", warnings
+
+
+def _extract_pdf_text(file_content: bytes) -> tuple[str, str]:
+    """
+    多解析器兜底提取 PDF 文本。
+    优先 pypdf，其次 PyPDF2，再其次 pdfplumber。
+    """
+    missing_parsers: list[str] = []
+
+    try:
+        from pypdf import PdfReader
+
+        reader = PdfReader(BytesIO(file_content))
+        text = "\n".join(page.extract_text() or "" for page in _first_pdf_pages(reader.pages))
+        if text.strip():
+            return text, ""
+    except ModuleNotFoundError:
+        missing_parsers.append("pypdf")
+    except Exception as exc:
+        return "", f"PDF 解析失败：{type(exc).__name__}，请复制简历文本到输入框。"
+
+    try:
+        from PyPDF2 import PdfReader
+
+        reader = PdfReader(BytesIO(file_content))
+        text = "\n".join(page.extract_text() or "" for page in _first_pdf_pages(reader.pages))
+        if text.strip():
+            return text, ""
+    except ModuleNotFoundError:
+        missing_parsers.append("PyPDF2")
+    except Exception:
+        pass
+
+    try:
+        import pdfplumber
+
+        with pdfplumber.open(BytesIO(file_content)) as pdf:
+            text = "\n".join(page.extract_text() or "" for page in _first_pdf_pages(pdf.pages))
+        if text.strip():
+            return text, ""
+    except ModuleNotFoundError:
+        missing_parsers.append("pdfplumber")
+    except Exception:
+        pass
+
+    if missing_parsers:
+        return "", "PDF 解析依赖未安装，请在 agent 环境执行：python -m pip install pypdf，然后重启项目。"
+
+    return "", "PDF 未提取到有效文本，可能是扫描件或图片版简历，请复制简历文本到输入框。"
 
 
 def _pick_keywords(text: str, limit: int = 8) -> list[str]:
