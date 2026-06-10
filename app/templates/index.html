@@ -2,33 +2,35 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="/static/css/style.css?v=12">
+    <link rel="stylesheet" href="/static/css/style.css?v=13">
 </head>
-<body class="app-body">
-    <div class="app-shell">
-        <aside class="app-sidebar">
-            <a class="app-brand text-only" href="/">
-                <span class="app-brand-text">
-                    <strong>就业能力匹配工作平台</strong>
+<body class="agent-chat-body">
+    <div class="agent-shell">
+        <aside class="agent-sidebar">
+            <a class="agent-brand" href="/">
+                <span class="agent-brand-mark">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M12 3l8 5v8l-8 5-8-5V8z"></path>
+                        <path d="M12 7v10"></path>
+                        <path d="M8 10l8 4"></path>
+                    </svg>
+                </span>
+                <span>
+                    <strong>就业能力智能体</strong>
+                    <small>Ability Agent</small>
                 </span>
             </a>
 
-            <nav class="app-nav" aria-label="主导航">
+            <nav class="agent-nav" aria-label="主导航">
                 <a class="active" href="/">
                     <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                        <path d="M3 11l9-8 9 8"></path>
-                        <path d="M5 10v10h14V10"></path>
-                        <path d="M9 20v-6h6v6"></path>
+                        <path d="M4 5h16v11H9l-5 4z"></path>
+                        <path d="M9 9h6"></path>
+                        <path d="M9 13h4"></path>
                     </svg>
-                    <span>首页</span>
-                </a>
-                <a href="/student/input">
-                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                        <path d="M12 5v14"></path>
-                        <path d="M5 12h14"></path>
-                    </svg>
-                    <span>能力诊断</span>
+                    <span>智能体聊天</span>
                 </a>
                 <a href="/ability/profile">
                     <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -45,6 +47,15 @@
                     </svg>
                     <span>岗位匹配</span>
                 </a>
+                <a href="/resume/optimize">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M6 3h9l3 3v15H6z"></path>
+                        <path d="M14 3v4h4"></path>
+                        <path d="M9 12h6"></path>
+                        <path d="M9 16h6"></path>
+                    </svg>
+                    <span>简历优化</span>
+                </a>
                 <a href="/interview/mock">
                     <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
                         <path d="M4 6h16v11H9l-5 4z"></path>
@@ -52,13 +63,6 @@
                         <path d="M9 14h4"></path>
                     </svg>
                     <span>模拟面试</span>
-                </a>
-                <a href="/growth/trend">
-                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                        <path d="M4 18h16"></path>
-                        <path d="M7 15l3-4 4 3 4-7"></path>
-                    </svg>
-                    <span>成长轨迹</span>
                 </a>
                 <a href="/history">
                     <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -71,167 +75,319 @@
                 </a>
             </nav>
 
-            <div class="app-sidebar-footer">
+            <div class="agent-sidebar-footer">
                 {% if username %}
-                <span class="sidebar-user">{{ username }}</span>
+                <span class="agent-user">{{ username }}</span>
                 {% endif %}
                 <a href="/logout">退出登录</a>
             </div>
         </aside>
 
-        <main class="app-main">
-            <header class="app-topbar">
-                <label class="app-search">
-                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                        <circle cx="11" cy="11" r="7"></circle>
-                        <path d="M16 16l4 4"></path>
-                    </svg>
-                    <input type="search" value="" placeholder="搜索职业路径、岗位能力、学生画像..." aria-label="搜索职业路径、岗位能力、学生画像">
-                </label>
-
-                {% if username %}
-                <div class="user-pill">
-                    <span>{{ username[:1] | upper }}</span>
-                    <strong>{{ username }}</strong>
+        <main class="agent-chat-main">
+            <header class="agent-chat-header">
+                <div>
+                    <p>Student Growth Agent</p>
+                    <h1>和智能体协作处理简历</h1>
                 </div>
-                {% endif %}
+                <span class="agent-live-status">
+                    <i></i>
+                    LLM 分支执行
+                </span>
             </header>
 
-            <div class="workspace">
-                {% if message %}
-                <p class="success-message">{{ message }}</p>
-                {% endif %}
-
-                <section class="workspace-hero">
-                    <div>
-                        <p class="eyebrow">精准就业智能体系统</p>
-                        <h1>我的能力成长工作台</h1>
-                        <p>围绕学生能力、岗位匹配和成长路径，集中管理每一次就业准备进展。</p>
-                    </div>
-                    <a class="hero-link" href="/student/input">
-                        开始一次新诊断
-                        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                            <path d="M5 12h14"></path>
-                            <path d="M13 6l6 6-6 6"></path>
-                        </svg>
-                    </a>
-                </section>
-
-                <section class="workspace-section">
-                    <div class="section-heading">
-                        <h2>我的核心功能</h2>
-                        <div class="filter-pills" aria-label="功能分类">
-                            <span class="active">全部</span>
-                            <span>诊断</span>
-                            <span>匹配</span>
-                            <span>面试</span>
-                            <span>成长</span>
+            <section class="agent-thread" id="chatThread" aria-live="polite">
+                <article class="agent-message assistant">
+                    <span class="agent-avatar">AI</span>
+                    <div class="agent-bubble">
+                        <p>把简历拖进来，然后告诉我“帮我生成画像”或“帮我优化简历”。我会按对应分支执行，并在过程中显示当前步骤。</p>
+                        <div class="agent-quick-actions">
+                            <button type="button" data-prompt="帮我生成画像">生成画像</button>
+                            <button type="button" data-prompt="帮我优化简历">优化简历</button>
                         </div>
                     </div>
+                </article>
+            </section>
 
-                    <div class="feature-grid main-features">
-                        <a class="feature-card tone-blue" href="/student/input">
-                            <span class="feature-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" focusable="false">
-                                    <path d="M12 5v14"></path>
-                                    <path d="M5 12h14"></path>
-                                </svg>
-                            </span>
-                            <strong>开始能力诊断</strong>
-                            <small>录入学生信息、技能与目标岗位</small>
-                        </a>
+            <form class="agent-composer" id="agentComposer" enctype="multipart/form-data">
+                <label class="agent-dropzone" id="dropZone">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M12 3v12"></path>
+                        <path d="M7 8l5-5 5 5"></path>
+                        <path d="M5 15v4h14v-4"></path>
+                    </svg>
+                    <span id="fileName">拖入简历</span>
+                    <input id="resumeFile" type="file" name="resume_file" accept=".txt,.md,.csv,.pdf,.docx">
+                </label>
 
-                        <a class="feature-card tone-cyan" href="/ability/profile">
-                            <span class="feature-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" focusable="false">
-                                    <path d="M12 3l8 5v8l-8 5-8-5V8z"></path>
-                                    <path d="M12 7v10"></path>
-                                    <path d="M7 10l10 4"></path>
-                                    <path d="M17 10L7 14"></path>
-                                </svg>
-                            </span>
-                            <strong>生成能力雷达图</strong>
-                            <small>查看四维能力画像与诊断总结</small>
-                        </a>
+                <textarea id="agentInput" name="message" rows="1" placeholder="和智能体说：帮我生成画像"></textarea>
 
-                        <a class="feature-card tone-green" href="/job/match">
-                            <span class="feature-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" focusable="false">
-                                    <circle cx="12" cy="12" r="8"></circle>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                            </span>
-                            <strong>岗位匹配分析</strong>
-                            <small>生成 TOP5 推荐岗位与差距清单</small>
-                        </a>
-
-                        <a class="feature-card tone-amber" href="/resume/optimize">
-                            <span class="feature-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" focusable="false">
-                                    <path d="M6 3h9l3 3v15H6z"></path>
-                                    <path d="M14 3v4h4"></path>
-                                    <path d="M9 12h6"></path>
-                                    <path d="M9 16h6"></path>
-                                </svg>
-                            </span>
-                            <strong>AI 优化简历</strong>
-                            <small>围绕目标岗位优化简历表达</small>
-                        </a>
-
-                        <a class="feature-card tone-rose" href="/interview/mock">
-                            <span class="feature-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" focusable="false">
-                                    <path d="M4 6h16v11H9l-5 4z"></path>
-                                    <path d="M9 10h6"></path>
-                                    <path d="M9 14h4"></path>
-                                </svg>
-                            </span>
-                            <strong>AI 模拟面试</strong>
-                            <small>面对面提问、回答和即时建议</small>
-                        </a>
-                    </div>
-                </section>
-
-                <section class="workspace-section">
-                    <div class="section-heading">
-                        <h2>我的成长档案</h2>
-                        <a class="section-more" href="/history">
-                            查看全部记录
-                            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                                <path d="M5 12h14"></path>
-                                <path d="M13 6l6 6-6 6"></path>
-                            </svg>
-                        </a>
-                    </div>
-
-                    <div class="feature-grid archive-features">
-                        <a class="feature-card compact tone-violet" href="/history">
-                            <span class="feature-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" focusable="false">
-                                    <path d="M5 4h14v16H5z"></path>
-                                    <path d="M8 8h8"></path>
-                                    <path d="M8 12h8"></path>
-                                    <path d="M8 16h5"></path>
-                                </svg>
-                            </span>
-                            <strong>历史诊断记录</strong>
-                            <small>回看每一次学生能力画像</small>
-                        </a>
-
-                        <a class="feature-card compact tone-slate" href="/growth/trend">
-                            <span class="feature-icon" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" focusable="false">
-                                    <path d="M4 18h16"></path>
-                                    <path d="M7 15l3-4 4 3 4-7"></path>
-                                </svg>
-                            </span>
-                            <strong>个人成长轨迹</strong>
-                            <small>按时间查看综合能力变化</small>
-                        </a>
-                    </div>
-                </section>
-            </div>
+                <button class="agent-send" type="submit" aria-label="发送">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M22 2L11 13"></path>
+                        <path d="M22 2l-7 20-4-9-9-4z"></path>
+                    </svg>
+                </button>
+            </form>
         </main>
+
+        <aside class="agent-progress-panel">
+            <div class="agent-panel-head">
+                <h2>进度</h2>
+                <span id="progressState">待开始</span>
+            </div>
+            <ol class="agent-progress-list" id="progressList">
+                <li>等待简历和指令</li>
+            </ol>
+            <div class="agent-context-card">
+                <strong>当前文件</strong>
+                <span id="sideFileName">未选择</span>
+            </div>
+            <div class="agent-context-card">
+                <strong>最近结果</strong>
+                <span id="lastResult">暂无</span>
+            </div>
+        </aside>
     </div>
+
+    <script>
+        const composer = document.getElementById("agentComposer");
+        const chatThread = document.getElementById("chatThread");
+        const input = document.getElementById("agentInput");
+        const fileInput = document.getElementById("resumeFile");
+        const fileName = document.getElementById("fileName");
+        const sideFileName = document.getElementById("sideFileName");
+        const lastResult = document.getElementById("lastResult");
+        const dropZone = document.getElementById("dropZone");
+        const progressState = document.getElementById("progressState");
+        const progressList = document.getElementById("progressList");
+        const sendButton = composer.querySelector(".agent-send");
+
+        let selectedFile = null;
+        let progressTimer = null;
+
+        const progressSteps = {
+            profile: [
+                "正在接收简历",
+                "正在解析简历文本",
+                "正在调用能力画像智能体",
+                "正在生成四维能力画像",
+                "正在整理成长建议"
+            ],
+            resume: [
+                "正在接收简历",
+                "正在解析简历文本",
+                "正在调用简历优化智能体",
+                "正在生成改写建议",
+                "正在整理优化结果"
+            ],
+            unknown: [
+                "正在接收指令",
+                "正在识别任务分支",
+                "正在准备调用智能体"
+            ]
+        };
+
+        function escapeHtml(value) {
+            return String(value || "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function detectIntent(message) {
+            if (/优化|改简历|润色|简历优化/.test(message)) {
+                return "resume";
+            }
+            if (/画像|能力|诊断|分析我/.test(message)) {
+                return "profile";
+            }
+            return "unknown";
+        }
+
+        function appendMessage(role, html) {
+            const article = document.createElement("article");
+            article.className = `agent-message ${role}`;
+            article.innerHTML = `
+                <span class="agent-avatar">${role === "user" ? "我" : "AI"}</span>
+                <div class="agent-bubble">${html}</div>
+            `;
+            chatThread.appendChild(article);
+            chatThread.scrollTop = chatThread.scrollHeight;
+            return article.querySelector(".agent-bubble");
+        }
+
+        function setProgress(steps, activeIndex, done = false) {
+            progressList.innerHTML = steps.map((step, index) => {
+                const className = done || index < activeIndex
+                    ? "done"
+                    : index === activeIndex
+                        ? "active"
+                        : "";
+                return `<li class="${className}">${escapeHtml(step)}</li>`;
+            }).join("");
+            progressState.textContent = done ? "已完成" : steps[activeIndex] || "进行中";
+        }
+
+        function startProgress(intent, statusBubble) {
+            const steps = progressSteps[intent] || progressSteps.unknown;
+            let index = 0;
+            setProgress(steps, index);
+            statusBubble.innerHTML = `<p>正在${escapeHtml(steps[index].replace(/^正在/, ""))}</p>`;
+            progressTimer = window.setInterval(() => {
+                index = Math.min(index + 1, steps.length - 1);
+                setProgress(steps, index);
+                statusBubble.innerHTML = `<p>正在${escapeHtml(steps[index].replace(/^正在/, ""))}</p>`;
+            }, 1100);
+            return steps;
+        }
+
+        function stopProgress(steps, success, statusBubble, message = "调用LLM失败") {
+            if (progressTimer) {
+                window.clearInterval(progressTimer);
+                progressTimer = null;
+            }
+            if (success) {
+                setProgress(steps, steps.length, true);
+                statusBubble.innerHTML = "<p>已完成</p>";
+                return;
+            }
+            progressState.textContent = message;
+            const messageNode = statusBubble.closest(".agent-message");
+            if (messageNode) {
+                messageNode.classList.remove("status");
+                messageNode.classList.add("error");
+            }
+            statusBubble.innerHTML = `<p>${escapeHtml(message)}</p>`;
+        }
+
+        function renderResumeResult(result) {
+            const strengths = (result.strengths || []).map((item) => `<span>${escapeHtml(item)}</span>`).join("");
+            const weaknesses = (result.weaknesses || []).map((item) => `<span>${escapeHtml(item)}</span>`).join("");
+            const actions = (result.action_items || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+
+            return `
+                <div class="agent-result">
+                    <div class="agent-score-row">
+                        <div><strong>${Number(result.overall_score || 0)}</strong><span>综合</span></div>
+                        <div><strong>${Number(result.keyword_score || 0)}</strong><span>关键词</span></div>
+                        <div><strong>${Number(result.structure_score || 0)}</strong><span>结构</span></div>
+                    </div>
+                    <p>${escapeHtml(result.summary)}</p>
+                    <pre>${escapeHtml(result.optimized_resume)}</pre>
+                    <div class="agent-result-tags good">${strengths}</div>
+                    <div class="agent-result-tags gap">${weaknesses}</div>
+                    <ul>${actions}</ul>
+                </div>
+            `;
+        }
+
+        function rememberFile(file) {
+            selectedFile = file || null;
+            const name = selectedFile ? selectedFile.name : "拖入简历";
+            fileName.textContent = name;
+            sideFileName.textContent = selectedFile ? name : "未选择";
+            dropZone.classList.toggle("has-file", Boolean(selectedFile));
+        }
+
+        fileInput.addEventListener("change", () => {
+            rememberFile(fileInput.files[0]);
+        });
+
+        ["dragenter", "dragover"].forEach((eventName) => {
+            dropZone.addEventListener(eventName, (event) => {
+                event.preventDefault();
+                dropZone.classList.add("dragging");
+            });
+        });
+
+        ["dragleave", "drop"].forEach((eventName) => {
+            dropZone.addEventListener(eventName, (event) => {
+                event.preventDefault();
+                dropZone.classList.remove("dragging");
+            });
+        });
+
+        dropZone.addEventListener("drop", (event) => {
+            const file = event.dataTransfer.files[0];
+            if (file) {
+                rememberFile(file);
+            }
+        });
+
+        document.querySelectorAll("[data-prompt]").forEach((button) => {
+            button.addEventListener("click", () => {
+                input.value = button.dataset.prompt;
+                input.focus();
+            });
+        });
+
+        input.addEventListener("input", () => {
+            input.style.height = "auto";
+            input.style.height = `${Math.min(input.scrollHeight, 132)}px`;
+        });
+
+        composer.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const message = input.value.trim();
+            if (!message) {
+                input.focus();
+                return;
+            }
+
+            appendMessage("user", `<p>${escapeHtml(message)}</p>`);
+            input.value = "";
+            input.style.height = "auto";
+            sendButton.disabled = true;
+
+            const intent = detectIntent(message);
+            const statusBubble = appendMessage("assistant status", "<p>正在接收指令</p>");
+            const steps = startProgress(intent, statusBubble);
+
+            const formData = new FormData();
+            formData.append("message", message);
+            if (selectedFile) {
+                formData.append("resume_file", selectedFile);
+            }
+
+            try {
+                const response = await fetch("/agent/chat", {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (!data.ok) {
+                    const errorMessage = (data.errors || ["调用LLM失败"])[0];
+                    stopProgress(steps, false, statusBubble, errorMessage);
+                    lastResult.textContent = errorMessage;
+                    return;
+                }
+
+                stopProgress(steps, true, statusBubble);
+                lastResult.textContent = data.intent === "profile" ? "能力画像" : "简历优化";
+
+                if (data.intent === "profile") {
+                    appendMessage("assistant", `
+                        <p>${escapeHtml(data.reply)}</p>
+                        ${data.summary ? `<p>${escapeHtml(data.summary)}</p>` : ""}
+                        <a class="agent-result-link" href="${escapeHtml(data.redirect_url)}">查看本次能力画像</a>
+                    `);
+                    return;
+                }
+
+                appendMessage("assistant", `
+                    <p>${escapeHtml(data.reply)}</p>
+                    ${renderResumeResult(data.result || {})}
+                `);
+            } catch (error) {
+                stopProgress(steps, false, statusBubble, "调用LLM失败");
+                lastResult.textContent = "调用LLM失败";
+            } finally {
+                sendButton.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>

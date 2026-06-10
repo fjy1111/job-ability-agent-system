@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=12">
+</head>
+<body class="interview-page-body">
+    <header class="resume-topbar interview-topbar">
+        <a class="resume-brand" href="/">
+            <span class="interview-brand-mark">
+                <span></span>
+            </span>
+            <span>
+                <strong>AI 模拟面试</strong>
+                <small>面向目标岗位的现场演练</small>
+            </span>
+        </a>
+
+        <nav class="resume-nav">
+            <a href="/">首页</a>
+            <a href="/student/input">能力诊断</a>
+            <a href="/ability/profile">能力画像</a>
+            <a href="/job/match">岗位匹配</a>
+            <a href="/resume/optimize">简历优化</a>
+            <a class="active" href="/interview/mock">模拟面试</a>
+        </nav>
+
+        <div class="resume-account">
+            {% if username %}
+            <span class="resume-user-badge">{{ username[:1] | upper }}</span>
+            {% endif %}
+            <a href="/logout">退出</a>
+        </div>
+    </header>
+
+    <main class="interview-workspace">
+        <section class="interview-setup-grid" id="interviewSetup">
+            <div class="interview-setup-panel">
+                <p class="interview-eyebrow">Mock Interview</p>
+                <h1>进入一场 AI 模拟面试</h1>
+                <p class="interview-lead">
+                    输入目标岗位、岗位描述或简历，AI 面试官会围绕你的求职方向连续提问，并在每次回答后给出改进建议。
+                </p>
+
+                <div class="interview-alerts" id="interviewAlerts" aria-live="polite"></div>
+
+                <form class="interview-form" id="interviewStartForm" enctype="multipart/form-data">
+                    <label class="interview-field">
+                        <span>目标岗位</span>
+                        <input type="text" name="target_role" placeholder="例如：AI 应用开发工程师">
+                    </label>
+
+                    <label class="interview-field">
+                        <span>岗位信息</span>
+                        <textarea name="job_description" rows="6" placeholder="粘贴 JD、岗位职责或任职要求"></textarea>
+                    </label>
+
+                    <label class="interview-upload-field">
+                        <span>
+                            <strong>上传简历</strong>
+                            <small>支持 txt / md / csv / pdf / docx</small>
+                        </span>
+                        <em>选择文件</em>
+                        <input type="file" name="resume_file" accept=".txt,.md,.csv,.pdf,.docx">
+                    </label>
+
+                    <label class="interview-field">
+                        <span>简历文本</span>
+                        <textarea name="resume_text" rows="8" placeholder="粘贴你的简历内容、项目经历或自我介绍"></textarea>
+                    </label>
+
+                    <button class="interview-primary-action" type="submit" id="startInterviewButton">
+                        进入模拟面试
+                    </button>
+                </form>
+            </div>
+
+            <aside class="interview-visual-panel">
+                <img src="/static/images/ai-interviewer.png" alt="AI 模拟面试官坐在面试桌前">
+                <div class="interview-visual-status">
+                    <span>AI 面试官</span>
+                    <strong>等待候选人入场</strong>
+                </div>
+            </aside>
+        </section>
+
+        <section class="interview-room" id="interviewRoom" hidden>
+            <div class="interview-room-header">
+                <div>
+                    <p class="interview-eyebrow">Live Interview</p>
+                    <h1>模拟面试间</h1>
+                </div>
+                <button type="button" class="interview-secondary-action" id="restartInterviewButton">
+                    重新准备
+                </button>
+            </div>
+
+            <div class="interview-room-grid">
+                <section class="interview-stage-panel">
+                    <div class="interview-video-frame">
+                        <img src="/static/images/ai-interviewer.png" alt="AI 面试官正在提问">
+                        <div class="interview-live-badge">在线</div>
+                    </div>
+
+                    <div class="interview-progress">
+                        <div>
+                            <span id="roundLabel">第 1 轮</span>
+                            <strong id="roleLabel">目标岗位</strong>
+                        </div>
+                        <div class="interview-progress-track">
+                            <span id="roundProgress"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="interview-dialogue-panel">
+                    <div class="conversation-list" id="conversationList" aria-live="polite"></div>
+
+                    <form class="interview-answer-form" id="answerForm">
+                        <label for="answerText">我的回答</label>
+                        <textarea id="answerText" rows="7" placeholder="像正式面试一样完整回答这一题"></textarea>
+                        <button class="interview-primary-action" type="submit" id="submitAnswerButton">
+                            提交回答
+                        </button>
+                    </form>
+                </section>
+
+                <aside class="interview-advice-panel">
+                    <h2>即时建议</h2>
+                    <div id="adviceContent" class="interview-empty-advice">
+                        <p>提交第一轮回答后，这里会显示评分、优点和改进建议。</p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const setupPanel = document.getElementById("interviewSetup");
+        const roomPanel = document.getElementById("interviewRoom");
+        const startForm = document.getElementById("interviewStartForm");
+        const answerForm = document.getElementById("answerForm");
+        const answerText = document.getElementById("answerText");
+        const alerts = document.getElementById("interviewAlerts");
+        const conversationList = document.getElementById("conversationList");
+        const adviceContent = document.getElementById("adviceContent");
+        const roundLabel = document.getElementById("roundLabel");
+        const roleLabel = document.getElementById("roleLabel");
+        const roundProgress = document.getElementById("roundProgress");
+        const startButton = document.getElementById("startInterviewButton");
+        const submitButton = document.getElementById("submitAnswerButton");
+        const restartButton = document.getElementById("restartInterviewButton");
+
+        let interviewSession = null;
+        let interviewHistory = [];
+
+        function escapeHtml(value) {
+            return String(value || "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function showAlerts(items, type = "error", append = false) {
+            if (!append) {
+                alerts.innerHTML = "";
+            }
+            (items || []).forEach((item) => {
+                const alert = document.createElement("p");
+                alert.className = `interview-alert ${type}`;
+                alert.textContent = item;
+                alerts.appendChild(alert);
+            });
+        }
+
+        function appendMessage(role, text, label) {
+            const message = document.createElement("article");
+            message.className = `interview-message ${role}`;
+
+            const meta = document.createElement("span");
+            meta.textContent = label;
+
+            const body = document.createElement("p");
+            body.textContent = text;
+
+            message.appendChild(meta);
+            message.appendChild(body);
+            conversationList.appendChild(message);
+            conversationList.scrollTop = conversationList.scrollHeight;
+        }
+
+        function updateRound(round, total) {
+            const safeTotal = Math.max(total || 1, 1);
+            const safeRound = Math.min(Math.max(round || 1, 1), safeTotal);
+            roundLabel.textContent = `第 ${safeRound} / ${safeTotal} 轮`;
+            roundProgress.style.width = `${(safeRound / safeTotal) * 100}%`;
+        }
+
+        function renderAdvice(feedback) {
+            const scores = [
+                ["综合表现", feedback.overall_score],
+                ["结构", feedback.structure_score],
+                ["相关度", feedback.relevance_score],
+                ["证据", feedback.evidence_score],
+                ["表达", feedback.expression_score]
+            ];
+
+            const strengths = (feedback.strengths || [])
+                .map((item) => `<li>${escapeHtml(item)}</li>`)
+                .join("");
+
+            const suggestions = (feedback.suggestions || [])
+                .map((item) => `<li>${escapeHtml(item)}</li>`)
+                .join("");
+
+            adviceContent.className = "";
+            adviceContent.innerHTML = `
+                <p class="interview-feedback-text">${escapeHtml(feedback.feedback_text)}</p>
+                <div class="interview-score-strip">
+                    ${scores.map(([name, value]) => `
+                        <div>
+                            <strong>${Number(value || 0)}</strong>
+                            <span>${escapeHtml(name)}</span>
+                        </div>
+                    `).join("")}
+                </div>
+                <h3>亮点</h3>
+                <ul>${strengths}</ul>
+                <h3>建议</h3>
+                <ul>${suggestions}</ul>
+                <h3>参考补强</h3>
+                <p class="interview-polished">${escapeHtml(feedback.polished_answer)}</p>
+            `;
+        }
+
+        function renderFinalReport(report) {
+            if (!report) {
+                return;
+            }
+
+            const improvements = (report.improvements || [])
+                .map((item) => `<li>${escapeHtml(item)}</li>`)
+                .join("");
+            const nextActions = (report.next_actions || [])
+                .map((item) => `<li>${escapeHtml(item)}</li>`)
+                .join("");
+
+            const finalPanel = document.createElement("article");
+            finalPanel.className = "interview-message interviewer final";
+            finalPanel.innerHTML = `
+                <span>面试总结</span>
+                <p>${escapeHtml(report.summary)} 本次平均表现 ${Number(report.average_score || 0)} 分。</p>
+                <div class="interview-final-lists">
+                    <div>
+                        <strong>继续优化</strong>
+                        <ul>${improvements}</ul>
+                    </div>
+                    <div>
+                        <strong>下一步</strong>
+                        <ul>${nextActions}</ul>
+                    </div>
+                </div>
+            `;
+            conversationList.appendChild(finalPanel);
+            conversationList.scrollTop = conversationList.scrollHeight;
+        }
+
+        startForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            showAlerts([]);
+            startButton.disabled = true;
+            startButton.textContent = "正在进入...";
+
+            try {
+                const response = await fetch("/interview/start", {
+                    method: "POST",
+                    body: new FormData(startForm)
+                });
+                const data = await response.json();
+
+                if (!data.ok) {
+                    showAlerts(data.errors || ["模拟面试创建失败，请稍后重试。"]);
+                    if (data.warnings && data.warnings.length) {
+                        showAlerts(data.warnings, "warning", true);
+                    }
+                    return;
+                }
+
+                interviewSession = data.session;
+                interviewHistory = [];
+                setupPanel.hidden = true;
+                roomPanel.hidden = false;
+                conversationList.innerHTML = "";
+                roleLabel.textContent = interviewSession.target_role || "目标岗位";
+                updateRound(data.round_index, data.total_rounds);
+                appendMessage("interviewer", data.opening_message, interviewSession.interviewer_name);
+                appendMessage("interviewer", data.question, `第 ${data.round_index} 轮问题`);
+                answerText.focus();
+            } catch (error) {
+                showAlerts(["网络请求失败，请检查服务是否正在运行。"]);
+            } finally {
+                startButton.disabled = false;
+                startButton.textContent = "进入模拟面试";
+            }
+        });
+
+        answerForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            if (!interviewSession) {
+                return;
+            }
+
+            const answer = answerText.value.trim();
+            if (!answer) {
+                appendMessage("interviewer", "请先完整回答当前问题，我再给你点评。", "提醒");
+                return;
+            }
+
+            const currentQuestion = interviewSession.current_question;
+            const currentRound = interviewSession.current_round;
+            appendMessage("candidate", answer, "我的回答");
+            answerText.value = "";
+            answerText.disabled = true;
+            submitButton.disabled = true;
+            submitButton.textContent = "点评中...";
+
+            try {
+                const response = await fetch("/interview/answer", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        session: interviewSession,
+                        question: currentQuestion,
+                        answer,
+                        round_index: currentRound,
+                        history: interviewHistory
+                    })
+                });
+                const data = await response.json();
+
+                if (!data.ok) {
+                    appendMessage("interviewer", (data.errors || ["提交失败，请重试。"]).join(" "), "提醒");
+                    answerText.disabled = false;
+                    submitButton.disabled = false;
+                    submitButton.textContent = "提交回答";
+                    return;
+                }
+
+                interviewHistory.push(data.history_item);
+                renderAdvice(data.feedback);
+
+                if (data.finished) {
+                    interviewSession = data.session;
+                    updateRound(data.total_rounds, data.total_rounds);
+                    appendMessage("interviewer", "本次模拟面试结束。下面是你的整体复盘。", interviewSession.interviewer_name);
+                    renderFinalReport(data.final_report);
+                    submitButton.textContent = "面试已完成";
+                    return;
+                }
+
+                interviewSession = data.session;
+                updateRound(data.next_round, data.total_rounds);
+                appendMessage("interviewer", data.next_question, `第 ${data.next_round} 轮问题`);
+                answerText.disabled = false;
+                submitButton.disabled = false;
+                submitButton.textContent = "提交回答";
+                answerText.focus();
+            } catch (error) {
+                appendMessage("interviewer", "提交失败，请检查服务是否正在运行。", "提醒");
+                answerText.disabled = false;
+                submitButton.disabled = false;
+                submitButton.textContent = "提交回答";
+            }
+        });
+
+        restartButton.addEventListener("click", () => {
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>

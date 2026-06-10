@@ -13,6 +13,10 @@
             请填写学生基础信息、技能、项目经历和目标岗位，系统将用于后续能力画像与岗位匹配分析。
         </p>
 
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+
         <div class="card">
             <form action="/student/submit" method="post" class="form">
 
