@@ -22,10 +22,10 @@ from sqlalchemy.orm import (
 from app.agent.diagnosis_agent import run_diagnosis_agent
 from app.services.llm_ability_match_service import calculate_job_match, calculate_ai_job_match, score_four_dimensions_llm
 from app.services.llm_gap_path_agent import generate_top5_gap_paths
-from app.services.mock_interview_service import (
-    build_interview_session,
-    respond_to_interview_answer,
-)
+# from app.services.mock_interview_service import (
+#     build_interview_session,
+#     respond_to_interview_answer,
+# )
 from app.services.resume_optimizer_service import (
     extract_resume_text_from_upload,
     optimize_resume,
