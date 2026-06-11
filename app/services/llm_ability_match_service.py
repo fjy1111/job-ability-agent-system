@@ -30,6 +30,8 @@ except Exception:  # 避免单文件语法检查时因项目路径问题失败
     get_match_cache = None
     set_match_cache = None
 
+from app.services.llm_errors import LLMCallError
+
 load_dotenv()
 
 DIMENSION_KEYS = ["professional", "practice", "tools", "career"]
@@ -134,7 +136,7 @@ def _dedupe(values: Iterable[str]) -> list[str]:
     return result
 
 
-def _create_llm() -> ChatOpenAI | None:
+def _create_llm() -> ChatOpenAI:
     """创建兼容 OpenAI 接口的大模型客户端。
 
     兼容两套 .env 命名：
@@ -142,7 +144,7 @@ def _create_llm() -> ChatOpenAI | None:
     - DeepSeek：DEEPSEEK_API_KEY / DEEPSEEK_BASE_URL / DEEPSEEK_MODEL / ABILITY_MATCH_MODEL
     """
     if os.getenv("USE_LLM", "true").lower() != "true":
-        return None
+        raise LLMCallError()
 
     api_key = (
         os.getenv("LLM_API_KEY")
@@ -151,7 +153,7 @@ def _create_llm() -> ChatOpenAI | None:
         or os.getenv("DASHSCOPE_API_KEY")
     )
     if not api_key:
-        return None
+        raise LLMCallError()
 
     base_url = (
         os.getenv("LLM_BASE_URL")
@@ -171,6 +173,17 @@ def _create_llm() -> ChatOpenAI | None:
     if base_url:
         kwargs["base_url"] = base_url
     return ChatOpenAI(**kwargs)
+
+
+def _ensure_assessment_payload(data: dict[str, Any]) -> None:
+    scores = data.get("ability_scores")
+    evidence = data.get("score_evidence")
+    if not isinstance(scores, dict) or not isinstance(evidence, dict):
+        raise LLMCallError()
+    if any(key not in scores for key in DIMENSION_KEYS):
+        raise LLMCallError()
+    if any(key not in evidence for key in DIMENSION_KEYS):
+        raise LLMCallError()
 
 
 def build_resume_context(student_data: dict[str, Any], resume_text: str | None = None) -> str:
@@ -212,16 +225,6 @@ def score_four_dimensions_llm(student_data: dict[str, Any], resume_text: str | N
     大模型依据简历语义、项目难度、技术深度、岗位目标输出结构化评分。
     """
     llm = _create_llm()
-    if llm is None:
-        return _validate_assessment({
-            "ability_scores": {k: 0 for k in DIMENSION_KEYS},
-            "score_evidence": {k: [] for k in DIMENSION_KEYS},
-            "recognized_skills": [],
-            "target_roles": [],
-            "assessment_summary": "未配置大模型 API，无法进行 AI 语义评分。",
-            "used_llm": False,
-            "agent_warning": "请在 .env 中配置 LLM_API_KEY/DEEPSEEK_API_KEY，并设置 USE_LLM=true。",
-        })
 
     resume_context = build_resume_context(student_data, resume_text)
     prompt = f"""
@@ -265,16 +268,13 @@ def score_four_dimensions_llm(student_data: dict[str, Any], resume_text: str | N
     try:
         response = llm.invoke(prompt)
         parsed = _safe_json_loads(_safe_text(response.content))
+        _ensure_assessment_payload(parsed)
         parsed["used_llm"] = True
         return _validate_assessment(parsed)
-    except Exception as exc:
-        return _validate_assessment({
-            "ability_scores": {k: 0 for k in DIMENSION_KEYS},
-            "score_evidence": {k: [] for k in DIMENSION_KEYS},
-            "assessment_summary": "大模型调用失败，未生成 AI 评分。",
-            "used_llm": False,
-            "agent_warning": f"{type(exc).__name__}: {exc}",
-        })
+    except LLMCallError:
+        raise
+    except Exception:
+        raise LLMCallError()
 
 
 def record_to_job_dict(record: Any) -> dict[str, Any]:
@@ -321,8 +321,27 @@ def _build_bidirectional_summary(
 
 
 def _validate_job_match(item: dict[str, Any], job_map: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    required_fields = [
+        "job_id",
+        "student_to_job_score",
+        "job_to_student_score",
+        "match_score",
+        "matched_skills",
+        "missing_skills",
+        "skill_gaps",
+        "score_components",
+        "growth_components",
+        "growth_path_reason",
+        "bidirectional_summary",
+        "recommend_reason",
+    ]
+    if any(field not in item for field in required_fields):
+        raise LLMCallError()
+
     job_id = _safe_text(item.get("job_id"))
     base = job_map.get(job_id, {})
+    if not base:
+        raise LLMCallError()
     job_name = _safe_text(item.get("job_name") or base.get("job_name") or "未知岗位")
 
     score_components = _normalize_component_scores(
