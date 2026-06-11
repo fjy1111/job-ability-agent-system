@@ -16,6 +16,9 @@ load_dotenv()
 
 
 TEXT_EXTENSIONS = {".txt", ".md", ".csv"}
+DOCX_EXTENSIONS = {".docx"}
+PDF_EXTENSIONS = {".pdf"}
+MAX_PDF_PAGES = 5
 
 
 def _decode_text(content: bytes) -> str:
@@ -25,6 +28,13 @@ def _decode_text(content: bytes) -> str:
         except UnicodeDecodeError:
             continue
     return content.decode("utf-8", errors="ignore")
+
+
+def _first_pdf_pages(pages):
+    for index, page in enumerate(pages):
+        if index >= MAX_PDF_PAGES:
+            break
+        yield page
 
 
 def _extract_docx_text(file_content: bytes) -> str:
@@ -45,15 +55,53 @@ def _extract_docx_text(file_content: bytes) -> str:
     return "\n".join([*paragraphs, *table_cells]).strip()
 
 
-def _extract_pdf_text(file_content: bytes) -> str:
+def _extract_pdf_text(file_content: bytes) -> tuple[str, str]:
+    """
+    多解析器兜底提取 PDF 文本。
+    优先 pypdf，其次 PyPDF2，再其次 pdfplumber；只读取前几页以避免上传后长时间等待。
+    """
+    missing_parsers: list[str] = []
+
     try:
         from pypdf import PdfReader
-    except Exception:
-        return ""
 
-    reader = PdfReader(BytesIO(file_content))
-    pages = [(page.extract_text() or "").strip() for page in reader.pages]
-    return "\n".join(page for page in pages if page).strip()
+        reader = PdfReader(BytesIO(file_content))
+        text = "\n".join(page.extract_text() or "" for page in _first_pdf_pages(reader.pages))
+        if text.strip():
+            return text.strip(), ""
+    except ModuleNotFoundError:
+        missing_parsers.append("pypdf")
+    except Exception as exc:
+        return "", f"PDF 解析失败：{type(exc).__name__}，请粘贴简历文本。"
+
+    try:
+        from PyPDF2 import PdfReader
+
+        reader = PdfReader(BytesIO(file_content))
+        text = "\n".join(page.extract_text() or "" for page in _first_pdf_pages(reader.pages))
+        if text.strip():
+            return text.strip(), ""
+    except ModuleNotFoundError:
+        missing_parsers.append("PyPDF2")
+    except Exception:
+        pass
+
+    try:
+        import pdfplumber
+
+        with pdfplumber.open(BytesIO(file_content)) as pdf:
+            text = "\n".join(page.extract_text() or "" for page in _first_pdf_pages(pdf.pages))
+        if text.strip():
+            return text.strip(), ""
+    except ModuleNotFoundError:
+        missing_parsers.append("pdfplumber")
+    except Exception:
+        pass
+
+    if missing_parsers:
+        return "", "PDF 解析依赖未安装，请在 agent 环境执行：python -m pip install pypdf，然后重启项目。"
+
+    return "", "PDF 未提取到有效文本，可能是扫描件或图片版简历，请粘贴简历文本。"
 
 
 def extract_resume_text_from_upload(filename: str, file_content: bytes) -> tuple[str, list[str]]:
@@ -65,16 +113,23 @@ def extract_resume_text_from_upload(filename: str, file_content: bytes) -> tuple
 
     if suffix in TEXT_EXTENSIONS:
         return _decode_text(file_content).strip(), warnings
-    if suffix == ".docx":
-        text = _extract_docx_text(file_content)
-    elif suffix == ".pdf":
-        text = _extract_pdf_text(file_content)
-    else:
-        text = ""
 
-    if not text:
-        warnings.append("该文件暂时无法解析，请粘贴简历文本。")
-    return text, warnings
+    if suffix in DOCX_EXTENSIONS:
+        text = _extract_docx_text(file_content)
+        if text:
+            return text, warnings
+        warnings.append("Word 文件暂时无法解析，请粘贴简历文本。")
+        return "", warnings
+
+    if suffix in PDF_EXTENSIONS:
+        text, parser_warning = _extract_pdf_text(file_content)
+        if text:
+            return text, warnings
+        warnings.append(parser_warning)
+        return "", warnings
+
+    warnings.append("该文件暂时无法解析，请粘贴简历文本。")
+    return "", warnings
 
 
 def _safe_json_loads(text: str) -> dict[str, Any]:
