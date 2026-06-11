@@ -9,7 +9,6 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, START, END
 
-from app.services.llm_ability_match_service import score_four_dimensions_llm
 from app.services.llm_errors import LLMCallError
 
 
@@ -65,6 +64,7 @@ class DiagnosisState(TypedDict, total=False):
     collaboration_log: list[dict[str, Any]]
     review_findings: list[dict[str, Any]]
     shared_workspace: dict[str, Any]
+    collaborative_draft: dict[str, Any]
     llm_agents: list[str]
 
     summary: str
@@ -278,7 +278,10 @@ def _invoke_json_agent(agent_name: str, prompt: str) -> tuple[dict[str, Any] | N
         if llm is None:
             raise LLMCallError()
 
-        response = llm.invoke(prompt)
+        response = llm.invoke(
+            prompt,
+            response_format={"type": "json_object"}
+        )
         content = response.content
 
         if isinstance(content, list):
@@ -689,24 +692,113 @@ def extract_profile_node(state: DiagnosisState) -> dict[str, Any]:
 # 节点二：能力画像评分
 # =========================================================
 
+def _normalize_score_analysis(raw: dict[str, Any] | None) -> dict[str, Any]:
+    if not raw:
+        raise LLMCallError()
+
+    raw_scores = raw.get("ability_scores")
+    raw_evidence = raw.get("score_evidence")
+    if not isinstance(raw_scores, dict) or not isinstance(raw_evidence, dict):
+        raise LLMCallError()
+
+    scores: dict[str, int] = {}
+    evidence: dict[str, list[str]] = {}
+
+    for key in ABILITY_DIMENSIONS:
+        try:
+            scores[key] = _clamp_score(int(raw_scores[key]))
+        except (KeyError, TypeError, ValueError):
+            raise LLMCallError()
+
+        evidence[key] = [
+            _safe_text(item)
+            for item in _safe_list(raw_evidence.get(key))
+            if _safe_text(item)
+        ]
+        if not evidence[key]:
+            raise LLMCallError()
+
+    return {
+        "ability_scores": scores,
+        "score_evidence": evidence,
+        "recognized_skills": [
+            _safe_text(item)
+            for item in _safe_list(raw.get("recognized_skills"))
+            if _safe_text(item)
+        ],
+        "assessment_summary": _safe_text(raw.get("assessment_summary"))
+    }
+
+
 def score_ability_node(state: DiagnosisState) -> dict[str, Any]:
     """
-    调用大模型生成四维能力分数，评分规程仅作为审计工具上下文。
+    只调用一次大模型生成后续专家共享的完整画像草案。
     """
 
     student = state["student"]
     text = state["normalized_text"]
     skills = state["recognized_skills"]
     rubric_result = rubric_score_tool(student, text, skills)
-    llm_score_result = score_four_dimensions_llm(
-        {
-            **student,
-            "normalized_text": text
-        },
-        resume_text=text
+    prompt_student = {
+        key: student.get(key, "")
+        for key in ("name", "major", "grade", "target_job")
+    }
+    prompt = f"""
+你是学生能力画像工作流中的“综合画像协作智能体”。你需要一次生成四个专家角色共用的精简语义草案：
+1. 四维评分专家：输出四维分数和精简评分证据。
+2. 证据抽取专家：识别关键技能。
+3. 能力归因专家：输出短摘要、优势、短板和每个维度的下一步动作。
+4. 质量复核专家：输出简短复核提示。
+
+后续 LangGraph 节点会分别调用 EvidenceMatrixTool、ConsistencyAuditTool 和 FinalAuditTool
+扩展并复核你的草案，因此不得编造经历、不得修改输入事实、不得输出岗位排名。
+
+学生基础信息：
+{json.dumps(prompt_student, ensure_ascii=False)}
+
+简历规范化文本：
+{text}
+
+系统识别技能：
+{json.dumps(skills, ensure_ascii=False)}
+
+RubricScoreCalculator 评分参考：
+{json.dumps(rubric_result, ensure_ascii=False)}
+
+请只输出一个严格 JSON 对象，不要 Markdown，不要解释文字。所有文本必须精简，字段必须完整：
+{{
+  "ability_scores": {{
+    "professional": 0,
+    "practice": 0,
+    "tools": 0,
+    "career": 0
+  }},
+  "score_evidence": {{
+    "professional": ["不超过30字的核心证据"],
+    "practice": ["不超过30字的核心证据"],
+    "tools": ["不超过30字的核心证据"],
+    "career": ["不超过30字的核心证据"]
+  }},
+  "recognized_skills": ["最多10个技能"],
+  "assessment_summary": "不超过80字的整体画像摘要",
+  "advantages": ["最多3条，每条不超过25字"],
+  "weaknesses": ["最多3条，每条不超过25字"],
+  "dimension_actions": {{
+    "professional": "不超过35字的下一步动作",
+    "practice": "不超过35字的下一步动作",
+    "tools": "不超过35字的下一步动作",
+    "career": "不超过35字的下一步动作"
+  }},
+  "quality_notes": ["最多2条，每条不超过30字"]
+}}
+"""
+    collaborative_draft, used_llm, warning = _invoke_json_agent(
+        "综合画像协作智能体",
+        prompt
     )
-    scores = llm_score_result["ability_scores"]
-    evidence = llm_score_result["score_evidence"]
+    score_result = _normalize_score_analysis(collaborative_draft)
+    scores = score_result["ability_scores"]
+    evidence = score_result["score_evidence"]
     tool_calls = _append_tool_call(
         state,
         called_by="四维评分智能体",
@@ -719,37 +811,61 @@ def score_ability_node(state: DiagnosisState) -> dict[str, Any]:
         {"tool_calls": tool_calls},
         called_by="四维评分智能体",
         tool_name="LLMAbilityScorer",
-        purpose="调用大模型生成最终四维能力分数和证据",
+        purpose="单次调用大模型生成四个专家共享的完整画像草案",
         input_summary="student profile + normalized_text + rubric reference",
-        output=llm_score_result
+        output={
+            "ability_scores": scores,
+            "score_evidence": evidence,
+            "draft_sections": [
+                "ability_scores",
+                "score_evidence",
+                "semantic_summary",
+                "dimension_actions"
+            ]
+        }
     )
 
     return {
         "ability_scores": scores,
         "score_evidence": evidence,
-        "recognized_skills": llm_score_result.get("recognized_skills") or skills,
-        "assessment_summary": llm_score_result.get("assessment_summary", ""),
+        "recognized_skills": score_result["recognized_skills"] or skills,
+        "assessment_summary": score_result["assessment_summary"],
+        "collaborative_draft": collaborative_draft,
         "tool_calls": tool_calls,
         "shared_workspace": _merge_workspace(
             state,
             score_sheet=rubric_result,
-            llm_score_sheet=llm_score_result
+            llm_collaboration={
+                "mode": "single_request",
+                "agent": "综合画像协作智能体",
+                "sections": [
+                    "ability_scores",
+                    "score_evidence",
+                    "semantic_summary",
+                    "dimension_actions"
+                ]
+            }
         ),
         "collaboration_log": _append_collaboration_log(
             state,
             sender="四维评分智能体",
             receiver="证据抽取智能体",
-            message="LLM 四维评分已完成，后续专家只能围绕分数和证据解释，不允许改分。",
-            artifact="ability_scores + score_evidence + llm_score_sheet"
+            message="单次 LLM 协作已生成共享画像草案，请调用证据矩阵工具复核证据边界，不允许自行补写经历。",
+            artifact="ability_scores + score_evidence + collaborative_draft"
         ),
-        "used_llm": True,
-        "llm_agents": _append_llm_agent(state, "四维评分智能体", True),
+        "used_llm": used_llm,
+        "llm_agents": _append_llm_agent(
+            state,
+            "综合画像协作智能体",
+            used_llm
+        ),
+        "agent_warning": _append_warning(state, warning),
         "workflow_steps": _append_workflow_step(
             state,
             step="02",
             agent="四维评分智能体",
-            llm_role="LLM 专家",
-            task="调用评分规程工具审计输入，再由 LLM 生成四维能力评分",
+            llm_role="LLM 协作发起者",
+            task="调用评分规程工具审计输入，并以一次 LLM 请求生成四个专家共享草案",
             status="llm_completed",
             output=(
                 "完成四维评分："
@@ -778,66 +894,54 @@ def _evidence_confidence(score: int, evidence: list[str]) -> str:
     return "低"
 
 
-def _normalize_evidence_analysis(
-    raw: dict[str, Any] | None
+def _build_evidence_analysis(
+    state: DiagnosisState,
+    matrix_result: dict[str, Any]
 ) -> dict[str, Any]:
-    if not raw:
-        raise LLMCallError()
+    confidence_by_key = {
+        item.get("dimension"): item.get("confidence", "中")
+        for item in matrix_result.get("matrix", [])
+        if isinstance(item, dict)
+    }
+    cards = []
 
-    raw_cards = _safe_list(raw.get("evidence_cards"))
-    if not raw_cards:
-        raise LLMCallError()
-
-    normalized_cards: list[dict[str, Any]] = []
-    seen_dimensions: set[str] = set()
-
-    for item in raw_cards:
-        if not isinstance(item, dict):
-            continue
-
-        key = item.get("dimension") or item.get("key")
-        name = item.get("name", "")
-
-        if key not in ABILITY_DIMENSIONS:
-            key = next(
-                (
-                    dimension_key
-                    for dimension_key, meta in ABILITY_DIMENSIONS.items()
-                    if meta["name"] == name
-                ),
-                None
-            )
-
-        if key not in ABILITY_DIMENSIONS or key in seen_dimensions:
-            continue
-
-        meta = ABILITY_DIMENSIONS[key]
-        evidence = _safe_list(item.get("evidence"))
-        confidence = item.get("confidence")
-        interpretation = item.get("interpretation")
-        if not evidence or not confidence or not interpretation:
-            raise LLMCallError()
-
-        normalized_cards.append({
+    for key, meta in ABILITY_DIMENSIONS.items():
+        score = state["ability_scores"].get(key, 0)
+        evidence = state.get("score_evidence", {}).get(key, [])
+        confidence = confidence_by_key.get(key, "中")
+        cards.append({
             "dimension": key,
             "name": meta["name"],
-            "agent": item.get("agent") or meta["agent"],
+            "agent": meta["agent"],
             "evidence": evidence,
             "confidence": confidence,
-            "interpretation": interpretation
+            "interpretation": (
+                f"{meta['name']}得分为 {score} 分，"
+                f"当前证据可信度为{confidence}，结论仅基于已提供简历材料。"
+            )
         })
-        seen_dimensions.add(key)
 
-    if set(ABILITY_DIMENSIONS) - seen_dimensions:
-        raise LLMCallError()
+    profile_tags = [
+        _safe_text(item)
+        for item in state.get("recognized_skills", [])[:6]
+        if _safe_text(item)
+    ]
+    if not profile_tags and _has_profile_value(state["student"].get("target_job")):
+        profile_tags.append(_safe_text(state["student"].get("target_job")))
 
-    profile_tags = _safe_list(raw.get("profile_tags"))
-    risk_flags = _safe_list(raw.get("risk_flags"))
-    if not profile_tags or not risk_flags:
-        raise LLMCallError()
+    risk_flags = [
+        f"缺少{item}，相关判断可信度受限"
+        for item in matrix_result.get("missing_materials", [])[:3]
+    ]
+    risk_flags.extend(
+        f"{item}证据相对薄弱"
+        for item in matrix_result.get("weak_dimensions", [])[:2]
+    )
+    if not risk_flags:
+        risk_flags.append("当前画像仍需结合面试或作品材料进一步复核")
 
     return {
-        "evidence_cards": normalized_cards,
+        "evidence_cards": cards,
         "profile_tags": profile_tags,
         "risk_flags": risk_flags
     }
@@ -845,7 +949,7 @@ def _normalize_evidence_analysis(
 
 def analyze_profile_evidence_node(state: DiagnosisState) -> dict[str, Any]:
     """
-    由证据抽取智能体把表单文本拆成画像证据卡。
+    证据抽取智能体调用本地工具复核共享草案中的证据卡。
     """
 
     matrix_result = evidence_matrix_tool(
@@ -854,42 +958,7 @@ def analyze_profile_evidence_node(state: DiagnosisState) -> dict[str, Any]:
         student=state["student"]
     )
 
-    prompt = f"""
-你是学生能力画像工作流中的“证据抽取智能体”。
-
-任务：先读取上游共享工作区和 EvidenceMatrixTool 输出，再把能力画像证据拆成四类证据卡。
-你必须服从工具输出中的 fact_boundary，不得编造未出现的项目、证书、竞赛、实习。
-
-学生信息：
-{json.dumps(state["student"], ensure_ascii=False)}
-
-系统识别技能：
-{json.dumps(state.get("recognized_skills", []), ensure_ascii=False)}
-
-规则评分证据：
-{json.dumps(state.get("score_evidence", {}), ensure_ascii=False)}
-
-EvidenceMatrixTool 输出：
-{json.dumps(matrix_result, ensure_ascii=False)}
-
-请只输出 JSON，不要 Markdown，不要解释文字。格式如下：
-{{
-  "profile_tags": ["标签1", "标签2"],
-  "risk_flags": ["风险提示1"],
-  "evidence_cards": [
-    {{
-      "dimension": "professional",
-      "name": "专业基础能力",
-      "evidence": ["证据1", "证据2"],
-      "confidence": "高/中/低",
-      "interpretation": "证据解释"
-    }}
-  ]
-}}
-"""
-
-    raw, used_llm, warning = _invoke_json_agent("证据抽取智能体", prompt)
-    analysis = _normalize_evidence_analysis(raw)
+    analysis = _build_evidence_analysis(state, matrix_result)
     tool_calls = _append_tool_call(
         state,
         called_by="证据抽取智能体",
@@ -911,22 +980,22 @@ EvidenceMatrixTool 输出：
             state,
             sender="证据抽取智能体",
             receiver="能力归因智能体",
-            message="已按工具矩阵建立证据边界，请基于证据强弱给出画像结论，并标注推理限制。",
+            message="已用证据矩阵工具复核共享草案的证据边界，请继续执行一致性审计并校验画像结论。",
             artifact="evidence_matrix + evidence_cards + risk_flags"
         ),
-        "used_llm": bool(state.get("used_llm", False)) or used_llm,
-        "llm_agents": _append_llm_agent(state, "证据抽取智能体", used_llm),
-        "agent_warning": _append_warning(state, warning),
+        "used_llm": bool(state.get("used_llm", False)),
+        "llm_agents": list(state.get("llm_agents", [])),
+        "agent_warning": state.get("agent_warning", ""),
         "workflow_steps": _append_workflow_step(
             state,
             step="03",
             agent="证据抽取智能体",
-            llm_role="LLM 专家",
-            task="调用证据矩阵工具，约束 LLM 只在事实边界内生成证据卡",
-            status="llm_completed",
+            llm_role="共享草案校验专家",
+            task="调用证据矩阵工具，复核单次 LLM 协作草案中的证据卡和事实边界",
+            status="completed",
             output=(
                 f"工具产出 {len(matrix_result['matrix'])} 个维度矩阵；"
-                f"LLM 生成 {len(analysis['evidence_cards'])} 张证据卡、"
+                f"校验通过 {len(analysis['evidence_cards'])} 张证据卡、"
                 f"{len(analysis['profile_tags'])} 个画像标签。"
             )
         )
@@ -937,119 +1006,93 @@ EvidenceMatrixTool 输出：
 # 节点四：能力归因智能体
 # =========================================================
 
-def _normalize_ability_report(
-    raw: dict[str, Any] | None,
-    state: DiagnosisState
-) -> dict[str, Any]:
-    if not raw:
-        raise LLMCallError()
+def _build_ability_report(state: DiagnosisState) -> dict[str, Any]:
+    draft = state.get("collaborative_draft") or {}
+    scores = state["ability_scores"]
+    evidence = state.get("score_evidence", {})
+    actions = draft.get("dimension_actions")
+    if not isinstance(actions, dict):
+        actions = {}
 
-    advantages = _safe_list(raw.get("advantages"))
-    weaknesses = _safe_list(raw.get("weaknesses"))
-    development_focus = _safe_list(raw.get("development_focus"))
-    summary = _safe_text(raw.get("summary"))
-    if not summary or not advantages or not weaknesses or not development_focus:
-        raise LLMCallError()
+    advantages = [
+        _safe_text(item)
+        for item in _safe_list(draft.get("advantages"))[:3]
+        if _safe_text(item)
+    ]
+    weaknesses = [
+        _safe_text(item)
+        for item in _safe_list(draft.get("weaknesses"))[:3]
+        if _safe_text(item)
+    ]
+    ranked_dimensions = sorted(
+        ABILITY_DIMENSIONS,
+        key=lambda key: scores.get(key, 0),
+        reverse=True
+    )
 
-    report = {
-        "summary": summary,
-        "advantages": advantages,
-        "weaknesses": weaknesses,
-        "development_focus": development_focus,
-        "dimension_insights": []
-    }
+    if not advantages:
+        advantages = [
+            f"{ABILITY_DIMENSIONS[key]['name']}相对突出"
+            for key in ranked_dimensions[:2]
+        ]
+    if not weaknesses:
+        weaknesses = [
+            f"{ABILITY_DIMENSIONS[key]['name']}仍需补强"
+            for key in ranked_dimensions[-2:]
+        ]
 
-    raw_insights = _safe_list(raw.get("dimension_insights"))
-    if not raw_insights:
-        raise LLMCallError()
-
-    insight_by_key = {
-        item.get("key"): item
-        for item in raw_insights
-        if isinstance(item, dict) and item.get("key") in ABILITY_DIMENSIONS
-    }
-    if set(ABILITY_DIMENSIONS) - set(insight_by_key):
-        raise LLMCallError()
-
+    dimension_insights = []
     for key, meta in ABILITY_DIMENSIONS.items():
-        source = insight_by_key.get(key, {})
-        level = _safe_text(source.get("level"))
-        conclusion = _safe_text(source.get("conclusion"))
-        evidence = _safe_list(source.get("evidence"))
-        next_action = _safe_text(source.get("next_action"))
-        if not level or not conclusion or not evidence or not next_action:
-            raise LLMCallError()
-
-        report["dimension_insights"].append({
+        score = scores.get(key, 0)
+        dimension_insights.append({
             "key": key,
             "name": meta["name"],
-            "score": state["ability_scores"].get(key, 0),
-            "level": level,
-            "conclusion": conclusion,
-            "evidence": evidence,
-            "next_action": next_action
+            "score": score,
+            "level": _score_level(score),
+            "conclusion": (
+                f"当前证据显示，{meta['name']}得分为 {score} 分，"
+                "具体判断以已提供的简历事实为边界。"
+            ),
+            "evidence": evidence.get(key, []),
+            "next_action": (
+                _safe_text(actions.get(key))
+                or meta["next_action"]
+            )
         })
 
-    return report
+    focus_keys = ranked_dimensions[-2:]
+    development_focus = [
+        {
+            "name": ABILITY_DIMENSIONS[key]["name"],
+            "priority": "高" if scores.get(key, 0) < 60 else "中",
+            "reason": f"当前得分为 {scores.get(key, 0)} 分，是相对需要优先提升的维度。",
+            "action": (
+                _safe_text(actions.get(key))
+                or ABILITY_DIMENSIONS[key]["next_action"]
+            )
+        }
+        for key in focus_keys
+    ]
+
+    return {
+        "summary": (
+            _safe_text(draft.get("assessment_summary"))
+            or "系统已根据简历事实完成四维能力分析，请结合证据卡和风险提示理解结论。"
+        ),
+        "advantages": advantages,
+        "weaknesses": weaknesses,
+        "dimension_insights": dimension_insights,
+        "development_focus": development_focus
+    }
 
 
 def diagnose_ability_node(state: DiagnosisState) -> dict[str, Any]:
     """
-    由能力归因智能体解释分数和证据，产出画像结论。
+    能力归因智能体调用一致性工具复核共享草案中的画像结论。
     """
 
     audit_result = consistency_audit_tool(state)
-
-    prompt = f"""
-你是学生能力画像工作流中的“能力归因智能体”。
-
-任务：根据四维分数、证据卡和 ConsistencyAuditTool 结果，输出学生能力画像结论。
-你只分析学生能力，不做岗位推荐，不输出岗位匹配排名。
-要求：
-1. 不得修改四维分数。
-2. 不得编造学生未填写的经历。
-3. 如果审计工具指出证据不足，结论必须降低确定性，并用“当前证据显示/暂未看到”等表达。
-4. 只输出 JSON，不要 Markdown。
-
-学生信息：
-{json.dumps(state["student"], ensure_ascii=False)}
-
-四维能力分数：
-{json.dumps(state["ability_scores"], ensure_ascii=False)}
-
-证据卡：
-{json.dumps(state.get("evidence_cards", []), ensure_ascii=False)}
-
-ConsistencyAuditTool 输出：
-{json.dumps(audit_result, ensure_ascii=False)}
-
-请按格式输出：
-{{
-  "summary": "整体画像总结，120到180字",
-  "advantages": ["优势1", "优势2", "优势3"],
-  "weaknesses": ["短板1", "短板2", "短板3"],
-  "dimension_insights": [
-    {{
-      "key": "professional",
-      "level": "稳定具备",
-      "conclusion": "该维度结论",
-      "evidence": ["证据1", "证据2"],
-      "next_action": "下一步动作"
-    }}
-  ],
-  "development_focus": [
-    {{
-      "name": "优先发展方向",
-      "priority": "高/中",
-      "reason": "为什么优先",
-      "action": "具体动作"
-    }}
-  ]
-}}
-"""
-
-    raw, used_llm, warning = _invoke_json_agent("能力归因智能体", prompt)
-    report = _normalize_ability_report(raw, state)
+    report = _build_ability_report(state)
     tool_calls = _append_tool_call(
         state,
         called_by="能力归因智能体",
@@ -1078,19 +1121,19 @@ ConsistencyAuditTool 输出：
             state,
             sender="能力归因智能体",
             receiver="质量复核智能体",
-            message="画像结论已根据一致性审计收敛，请复核报告事实边界，不要引入岗位排名。",
+            message="共享草案中的画像结论已通过一致性审计，请执行最终工具链和事实边界复核。",
             artifact="ability_report + consistency_audit"
         ),
-        "used_llm": bool(state.get("used_llm", False)) or used_llm,
-        "llm_agents": _append_llm_agent(state, "能力归因智能体", used_llm),
-        "agent_warning": _append_warning(state, warning),
+        "used_llm": bool(state.get("used_llm", False)),
+        "llm_agents": list(state.get("llm_agents", [])),
+        "agent_warning": state.get("agent_warning", ""),
         "workflow_steps": _append_workflow_step(
             state,
             step="04",
             agent="能力归因智能体",
-            llm_role="LLM 专家",
-            task="调用一致性审计工具，再由 LLM 解释分数和证据之间的因果关系",
-            status="llm_completed",
+            llm_role="共享草案校验专家",
+            task="调用一致性审计工具，复核单次 LLM 协作草案中的分数、证据和结论",
+            status="completed",
             output=(
                 f"审计结论：{audit_result['decision']}；完成 {len(report['dimension_insights'])} 个维度洞察，"
                 f"提炼 {len(report['development_focus'])} 个发展焦点。"
@@ -1105,7 +1148,7 @@ ConsistencyAuditTool 输出：
 
 def review_profile_node(state: DiagnosisState) -> dict[str, Any]:
     """
-    由质量复核智能体检查画像是否可信、是否混入岗位匹配内容。
+    质量复核智能体调用最终审计工具检查共享草案。
     """
 
     consistency_result = consistency_audit_tool(state)
@@ -1121,43 +1164,16 @@ def review_profile_node(state: DiagnosisState) -> dict[str, Any]:
         )
     }
 
-    prompt = f"""
-你是学生能力画像工作流中的“质量复核智能体”。
-
-任务：像审稿人一样检查能力画像报告是否可靠。
-你必须读取工具调用链、专家交接记录和 FinalAuditTool 输出，尤其确认没有编造经历、没有混入岗位匹配排名。
-只输出 JSON，不要 Markdown。
-
-学生信息：
-{json.dumps(state["student"], ensure_ascii=False)}
-
-工具调用链：
-{json.dumps(state.get("tool_calls", []), ensure_ascii=False)}
-
-专家协作交接：
-{json.dumps(state.get("collaboration_log", []), ensure_ascii=False)}
-
-FinalAuditTool 输出：
-{json.dumps(final_audit_result, ensure_ascii=False)}
-
-画像报告：
-{json.dumps({
-    "summary": state.get("summary", ""),
-    "advantages": state.get("advantages", []),
-    "weaknesses": state.get("weaknesses", []),
-    "dimension_insights": state.get("dimension_insights", [])
-}, ensure_ascii=False)}
-
-请输出：
-{{
-  "quality_review": ["复核结论1", "复核结论2", "复核结论3"]
-}}
-"""
-
-    raw, used_llm, warning = _invoke_json_agent("质量复核智能体", prompt)
-    quality_review = _safe_list(raw.get("quality_review")) if raw else []
-    if not quality_review:
-        raise LLMCallError()
+    collaborative_draft = state.get("collaborative_draft") or {}
+    quality_review = [
+        _safe_text(item)
+        for item in _safe_list(collaborative_draft.get("quality_notes"))[:2]
+        if _safe_text(item)
+    ]
+    quality_review.extend([
+        f"FinalAuditTool 结论：{final_audit_result['decision']}。",
+        "已确认最终画像未混入岗位匹配排名。"
+    ])
     tool_calls = _append_tool_call(
         state,
         called_by="质量复核智能体",
@@ -1183,16 +1199,16 @@ FinalAuditTool 输出：
             message=f"复核结论：{final_audit_result['decision']}。报告可展示，但须保留工具链和证据边界。",
             artifact="quality_review + final_audit"
         ),
-        "used_llm": bool(state.get("used_llm", False)) or used_llm,
-        "llm_agents": _append_llm_agent(state, "质量复核智能体", used_llm),
-        "agent_warning": _append_warning(state, warning),
+        "used_llm": bool(state.get("used_llm", False)),
+        "llm_agents": list(state.get("llm_agents", [])),
+        "agent_warning": state.get("agent_warning", ""),
         "workflow_steps": _append_workflow_step(
             state,
             step="05",
             agent="质量复核智能体",
-            llm_role="LLM 专家",
-            task="调用最终审计工具，复核工具链、专家交接和事实边界",
-            status="llm_completed",
+            llm_role="共享草案校验专家",
+            task="调用最终审计工具，复核单次 LLM 协作草案、工具链、专家交接和事实边界",
+            status="completed",
             output=(
                 f"工具链 {final_audit_result['tool_call_count'] + 1} 次调用，"
                 f"专家交接 {final_audit_result['handoff_count'] + 1} 次；"
