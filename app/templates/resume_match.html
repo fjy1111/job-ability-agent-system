@@ -223,6 +223,26 @@
             padding: 14px 16px;
         }
 
+        .course-node-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .source-badge {
+            display: inline-flex;
+            align-items: center;
+            min-height: 22px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: #fff7ed;
+            color: #9a3412;
+            border: 1px solid #fed7aa;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
         .course-node strong,
         .job-name,
         .ability-node strong {
@@ -349,7 +369,12 @@
                 <div class="tree-list">
                     {% for course in result.courses %}
                     <button type="button" class="tree-node course-node" data-course="{{ course.course_name }}">
-                        <strong>{{ course.course_name }}</strong>
+                        <span class="course-node-title">
+                            <strong>{{ course.course_name }}</strong>
+                            {% if course.ability_source == "ai_inference" %}
+                            <span class="source-badge">AI推理</span>
+                            {% endif %}
+                        </span>
                     </button>
                     {% endfor %}
                 </div>

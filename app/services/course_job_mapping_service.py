@@ -170,6 +170,34 @@ def _split_items(value: Any) -> list[str]:
     return _dedupe([part.strip(" []【】()（）\"'") for part in parts if part.strip()])
 
 
+def _normalize_inferred_ability_map(
+    inferred_ability_map: dict[str, Any] | None,
+) -> dict[str, dict[str, Any]]:
+    normalized: dict[str, dict[str, Any]] = {}
+    if not inferred_ability_map:
+        return normalized
+
+    for course_name, payload in inferred_ability_map.items():
+        standard_name = normalize_course_name(course_name)
+        if isinstance(payload, dict):
+            abilities = _split_items(payload.get("abilities", []))
+            normalized[standard_name] = {
+                "abilities": abilities,
+                "confidence": payload.get("confidence", payload.get("confidence_score", 0.0)),
+                "reason": _safe_text(payload.get("reason", "")),
+                "source_label": _safe_text(payload.get("source_label", "AI推理")) or "AI推理",
+            }
+        else:
+            normalized[standard_name] = {
+                "abilities": _split_items(payload),
+                "confidence": 0.0,
+                "reason": "",
+                "source_label": "AI推理",
+            }
+
+    return normalized
+
+
 def _is_ascii_token(keyword: str) -> bool:
     return re.fullmatch(r"[A-Za-z0-9#+./-]{1,30}", keyword) is not None
 
@@ -210,7 +238,10 @@ def normalize_course_name(course_name: str) -> str:
     return text
 
 
-def extract_courses_from_resume(resume_text: str) -> list[dict[str, Any]]:
+def extract_courses_from_resume(
+    resume_text: str,
+    inferred_ability_map: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
     """
     从简历文本中提取课程，并归一到标准课程名。
     """
@@ -225,6 +256,7 @@ def extract_courses_from_resume(resume_text: str) -> list[dict[str, Any]]:
         if any(_contains(text, alias) for alias in aliases):
             raw_courses.append(standard_name)
 
+    inferred_abilities = _normalize_inferred_ability_map(inferred_ability_map)
     courses = []
     for raw_course in _dedupe(raw_courses):
         standard_name = normalize_course_name(raw_course)
@@ -232,11 +264,26 @@ def extract_courses_from_resume(resume_text: str) -> list[dict[str, Any]]:
             continue
         aliases = COURSE_ALIASES.get(standard_name, [standard_name])
         abilities = COURSE_ABILITY_MAP.get(standard_name, [])
+        ability_source = "local_rule"
+        ability_confidence = 1.0 if abilities else 0.0
+        ability_reason = ""
+        source_label = "本地知识库"
+        if not abilities and standard_name in inferred_abilities:
+            inferred = inferred_abilities[standard_name]
+            abilities = inferred.get("abilities", [])
+            ability_source = "ai_inference"
+            ability_confidence = inferred.get("confidence", 0.0)
+            ability_reason = inferred.get("reason", "")
+            source_label = inferred.get("source_label", "AI推理")
         courses.append({
             "raw_name": raw_course,
             "course_name": standard_name,
             "aliases": aliases,
             "abilities": abilities,
+            "ability_source": ability_source,
+            "ability_confidence": ability_confidence,
+            "ability_reason": ability_reason,
+            "source_label": source_label,
             "evidence": f"简历中识别到课程：{raw_course}",
         })
 
@@ -420,6 +467,9 @@ def score_course_to_job(course: dict[str, Any], job_record: Any) -> dict[str, An
         "matched_abilities": _dedupe(matched_abilities),
         "matched_job_terms": _dedupe(matched_job_terms),
         "matched_courses": _dedupe(matched_courses),
+        "ability_source": course.get("ability_source", "local_rule"),
+        "ability_confidence": course.get("ability_confidence", 1.0),
+        "source_label": course.get("source_label", "本地知识库"),
         "reason": "；".join(reason_parts),
     }
 
@@ -428,8 +478,12 @@ def build_course_job_mapping_graph(
     resume_text: str,
     job_records: list[Any],
     top_jobs_per_course: int = 5,
+    inferred_ability_map: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    courses = extract_courses_from_resume(resume_text)
+    courses = extract_courses_from_resume(
+        resume_text,
+        inferred_ability_map=inferred_ability_map,
+    )
     prepared_jobs = _prepare_job_records(job_records)
     edges: list[dict[str, Any]] = []
 

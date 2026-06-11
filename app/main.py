@@ -31,7 +31,14 @@ from app.services.resume_optimizer_service import (
     extract_resume_text_from_upload,
     optimize_resume,
 )
-from app.services.course_job_mapping_service import build_course_job_mapping_graph
+from app.services.course_job_mapping_service import (
+    build_course_job_mapping_graph,
+    extract_courses_from_resume,
+)
+from app.services.course_ability_inference_service import (
+    COURSE_ABILITY_PROMPT_VERSION,
+    infer_course_abilities_with_llm,
+)
 from app.services.resume_profile_extractor_service import (
     extract_student_profile_from_resume,
 )
@@ -450,6 +457,76 @@ class CourseAbilityRelation(Base):
         Integer,
         ForeignKey("data_sources.id"),
         nullable=True
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.now,
+        nullable=False
+    )
+
+
+class CourseAbilityInferenceRecord(Base):
+    """
+    AI 推理课程能力待审核表。
+    只保存本地课程知识库未命中时的大模型推理结果，不混入真实课程-能力关系表。
+    """
+    __tablename__ = "course_ability_inference_records"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+    user_id: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True
+    )
+    course_name: Mapped[str] = mapped_column(
+        String(120),
+        index=True,
+        nullable=False
+    )
+    abilities_json: Mapped[str] = mapped_column(
+        Text,
+        default="[]",
+        nullable=False
+    )
+    confidence_score: Mapped[float] = mapped_column(
+        Float,
+        default=0.0,
+        nullable=False
+    )
+    reason: Mapped[str] = mapped_column(
+        Text,
+        default=""
+    )
+    prompt_version: Mapped[str] = mapped_column(
+        String(60),
+        default=COURSE_ABILITY_PROMPT_VERSION,
+        nullable=False
+    )
+    model_name: Mapped[str] = mapped_column(
+        String(120),
+        default=""
+    )
+    source_type: Mapped[str] = mapped_column(
+        String(50),
+        default="llm_inference",
+        nullable=False
+    )
+    source_label: Mapped[str] = mapped_column(
+        String(30),
+        default="AI推理",
+        nullable=False
+    )
+    review_status: Mapped[str] = mapped_column(
+        String(30),
+        default="pending_review",
+        nullable=False
+    )
+    raw_response_json: Mapped[str] = mapped_column(
+        Text,
+        default="{}"
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
@@ -1258,6 +1335,107 @@ def get_login_redirect(request: Request):
 # =========================================================
 # 业务辅助函数
 # =========================================================
+
+def _load_inferred_abilities_from_record(
+    record: CourseAbilityInferenceRecord,
+) -> dict:
+    try:
+        abilities = json.loads(record.abilities_json or "[]")
+    except json.JSONDecodeError:
+        abilities = []
+    if not isinstance(abilities, list):
+        abilities = []
+
+    return {
+        "abilities": [str(item).strip() for item in abilities if str(item).strip()],
+        "confidence": record.confidence_score,
+        "reason": record.reason,
+        "source_label": record.source_label,
+        "source_type": record.source_type,
+        "review_status": record.review_status,
+    }
+
+
+def _find_existing_course_ability_inference(
+    db: Session,
+    course_name: str,
+) -> CourseAbilityInferenceRecord | None:
+    for status in ("accepted", "pending_review"):
+        record = (
+            db.query(CourseAbilityInferenceRecord)
+            .filter(CourseAbilityInferenceRecord.course_name == course_name)
+            .filter(CourseAbilityInferenceRecord.review_status == status)
+            .order_by(CourseAbilityInferenceRecord.created_at.desc())
+            .first()
+        )
+        if record:
+            return record
+    return None
+
+
+def build_course_inferred_ability_map(
+    resume_text: str,
+    db: Session,
+    user_id: int | None = None,
+) -> tuple[dict[str, dict], list[str]]:
+    inferred_ability_map: dict[str, dict] = {}
+    warnings: list[str] = []
+    courses = extract_courses_from_resume(resume_text)
+    try:
+        max_inferences = int(os.getenv("MAX_COURSE_AI_INFERENCES_PER_REQUEST", "5"))
+    except ValueError:
+        max_inferences = 5
+    max_inferences = max(1, max_inferences)
+    inference_count = 0
+
+    for course in courses:
+        course_name = str(course.get("course_name", "")).strip()
+        if not course_name or course.get("abilities"):
+            continue
+
+        existing_record = _find_existing_course_ability_inference(db, course_name)
+        if existing_record:
+            payload = _load_inferred_abilities_from_record(existing_record)
+            if payload["abilities"]:
+                inferred_ability_map[course_name] = payload
+                warnings.append(f"{course_name} 使用已保存的 AI 推理能力标签，状态：{existing_record.review_status}。")
+                continue
+
+        if inference_count >= max_inferences:
+            warnings.append(f"{course_name} 未在本地课程库命中，本次已达到 AI 推理上限，暂未生成能力标签。")
+            continue
+
+        try:
+            inference = infer_course_abilities_with_llm(
+                course_name=course_name,
+                resume_text=resume_text,
+            )
+        except LLMCallError:
+            warnings.append(f"{course_name} 未在本地课程库命中，AI 推理失败，请检查 LLM 配置后重试。")
+            continue
+
+        record = CourseAbilityInferenceRecord(
+            user_id=user_id,
+            course_name=course_name,
+            abilities_json=json.dumps(inference["abilities"], ensure_ascii=False),
+            confidence_score=float(inference.get("confidence", 0.0)),
+            reason=str(inference.get("reason", "")),
+            prompt_version=str(inference.get("prompt_version", COURSE_ABILITY_PROMPT_VERSION)),
+            model_name=str(inference.get("model_name", "")),
+            source_type="llm_inference",
+            source_label="AI推理",
+            review_status="pending_review",
+            raw_response_json=json.dumps(inference, ensure_ascii=False),
+        )
+        db.add(record)
+        db.commit()
+
+        inference_count += 1
+        inferred_ability_map[course_name] = inference
+        warnings.append(f"{course_name} 未在本地课程库命中，已由大模型推理能力标签并写入待审核表。")
+
+    return inferred_ability_map, warnings
+
 
 def build_student_data(record: DiagnosisRecord) -> dict:
     """
@@ -2109,12 +2287,20 @@ def resume_course_job_match_submit(
         "top_jobs_per_course": top_jobs_per_course,
     }
 
+    warnings = list(upload_warnings)
     result = None
     if not errors:
+        inferred_ability_map, inference_warnings = build_course_inferred_ability_map(
+            resume_text=final_resume_text,
+            db=db,
+            user_id=request.session.get("user_id"),
+        )
+        warnings.extend(inference_warnings)
         result = build_course_job_mapping_graph(
             resume_text=final_resume_text,
             job_records=job_records,
             top_jobs_per_course=top_jobs_per_course,
+            inferred_ability_map=inferred_ability_map,
         )
         if not result["courses"]:
             errors.append("未从简历中识别到明确课程，请确认简历中包含“主要课程/相关课程”等内容，或在文本框补充课程。")
@@ -2129,7 +2315,7 @@ def resume_course_job_match_submit(
             "username": request.session.get("username"),
             "result": result,
             "errors": errors,
-            "warnings": upload_warnings,
+            "warnings": warnings,
             "input_data": input_data
         }
     )
