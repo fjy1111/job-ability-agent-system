@@ -1837,6 +1837,10 @@ async def agent_chat(
                 "normalized_text": resume_text,
             }
             agent_result = run_diagnosis_agent(student_context)
+            agent_result["student_profile"] = {
+                key: student_data[key]
+                for key in ("name", "major", "grade", "target_job")
+            }
             ability_scores = agent_result["ability_scores"]
 
             record = DiagnosisRecord(
@@ -2409,8 +2413,10 @@ def ability_profile(
     if redirect_response:
         return redirect_response
 
+    user_id = request.session.get("user_id")
     latest_record = db.scalar(
         select(DiagnosisRecord)
+        .where(DiagnosisRecord.user_id == user_id)
         .order_by(
             DiagnosisRecord.created_at.desc(),
             DiagnosisRecord.id.desc()
@@ -2436,7 +2442,13 @@ def ability_profile_detail(
     if redirect_response:
         return redirect_response
 
-    record = db.get(DiagnosisRecord, record_id)
+    record = db.scalar(
+        select(DiagnosisRecord)
+        .where(
+            DiagnosisRecord.id == record_id,
+            DiagnosisRecord.user_id == request.session.get("user_id"),
+        )
+    )
 
     if record is None:
         raise HTTPException(status_code=404, detail="该诊断记录不存在")
