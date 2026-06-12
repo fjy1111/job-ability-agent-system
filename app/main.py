@@ -1,7 +1,12 @@
 import json
 import os
 import hashlib
+import re
+import subprocess
+import tempfile
+from html import escape as html_escape
 from pathlib import Path
+from urllib.parse import urlencode
 from dotenv import load_dotenv
 from datetime import datetime
 
@@ -23,6 +28,10 @@ from sqlalchemy.orm import (
 from app.services.llm_ability_match_service import (
     calculate_job_match,
     refine_job_matches_with_llm,
+)
+from app.services.ability_match_service import (
+    match_profile_to_job as match_profile_to_job_local,
+    score_four_dimensions as score_four_dimensions_local,
 )
 from app.agent.diagnosis_agent import AGENT_ROSTER, run_diagnosis_agent
 from app.services.llm_errors import LLMCallError
@@ -203,6 +212,32 @@ class JobKnowledgeRecord(Base):
     recommended_courses_json: Mapped[str] = mapped_column(Text, default="[]")
     recommended_certificates_json: Mapped[str] = mapped_column(Text, default="[]")
 
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.now,
+        nullable=False
+    )
+
+
+class EmploymentGuidanceRecord(Base):
+    """
+    精准就业指导生成记录。
+    """
+    __tablename__ = "employment_guidance_records"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+    user_id: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+        index=True
+    )
+    message: Mapped[str] = mapped_column(Text, default="")
+    uploaded_filename: Mapped[str] = mapped_column(String(255), default="")
+    result_json: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default=datetime.now,
@@ -1645,6 +1680,479 @@ def attach_cached_gap_paths(
     return job_matches
 
 
+def get_desktop_dir() -> Path:
+    """返回当前 Windows 用户桌面目录；不存在时创建 Desktop 目录。"""
+    candidates: list[Path] = []
+    user_profile = os.getenv("USERPROFILE")
+    if user_profile:
+        candidates.extend([
+            Path(user_profile) / "Desktop",
+            Path(user_profile) / "桌面",
+        ])
+    candidates.extend([
+        Path.home() / "Desktop",
+        Path.home() / "桌面",
+    ])
+
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+
+    fallback = candidates[0] if candidates else Path.cwd()
+    fallback.mkdir(parents=True, exist_ok=True)
+    return fallback
+
+
+def safe_filename_part(value: str | None, default: str) -> str:
+    text = str(value or default).strip() or default
+    text = re.sub(r'[<>:"/\\|?*\x00-\x1f]+', "_", text)
+    text = re.sub(r"\s+", "_", text)
+    return text[:48].strip("._ ") or default
+
+
+def build_export_redirect(path: str, message: str = "", error: str = "") -> RedirectResponse:
+    query = urlencode({"export_error": error} if error else {"export_message": message})
+    separator = "&" if "?" in path else "?"
+    return RedirectResponse(f"{path}{separator}{query}", status_code=303)
+
+
+def get_job_matches_for_record(
+    db: Session,
+    student_record: DiagnosisRecord,
+    top_n: int = 10,
+) -> tuple[list[dict], str, bool]:
+    """
+    复用 TOP5 页面同一套岗位匹配流程：优先读 AI 精排缓存，其次本地缓存，
+    最后调用项目中的岗位匹配算法并写入缓存。
+    """
+    student_data = build_student_data(student_record)
+    assessment = build_match_assessment(student_record)
+    job_records = db.query(JobKnowledgeRecord).all()
+    job_version = build_job_version(job_records)
+
+    job_matches = load_persistent_match_cache(
+        db,
+        student_record.id,
+        job_version,
+        "llm",
+    )
+    match_source = "llm"
+    match_cached = job_matches is not None
+
+    if job_matches is None:
+        job_matches = load_persistent_match_cache(
+            db,
+            student_record.id,
+            job_version,
+            "local",
+        )
+        match_source = "local"
+        match_cached = job_matches is not None
+
+    if job_matches is None:
+        job_matches = calculate_job_match(
+            student_data,
+            job_records,
+            assessment=assessment,
+            top_n=top_n,
+        )
+        save_persistent_match_cache(
+            db,
+            student_record.id,
+            job_version,
+            "local",
+            job_matches,
+        )
+        match_source = "local"
+        match_cached = False
+
+    return attach_cached_gap_paths(student_record, job_matches), match_source, match_cached
+
+
+def ensure_gap_paths_for_job_matches(
+    db: Session,
+    student_record: DiagnosisRecord,
+    job_matches: list[dict],
+) -> list[dict]:
+    """
+    PDF 导出前补齐 TOP5 的岗位差距和路径规划。
+    这里默认走本地路径规划，避免导出按钮因为 LLM 网络波动卡住。
+    """
+    top_jobs = job_matches[:5]
+    if not top_jobs:
+        return []
+
+    agent_result = load_agent_result(student_record)
+    cached_paths = agent_result.get("top5_gap_paths", [])
+    if isinstance(cached_paths, dict):
+        cached_paths = cached_paths.get("top5_gap_paths", [])
+    if not isinstance(cached_paths, list):
+        cached_paths = []
+
+    cached_by_name = {
+        item.get("job_name"): item
+        for item in cached_paths
+        if isinstance(item, dict) and item.get("job_name")
+    }
+    missing_jobs = [
+        job for job in top_jobs
+        if job.get("job_name") and job.get("job_name") not in cached_by_name
+    ]
+
+    if missing_jobs:
+        path_result = generate_top5_gap_paths(
+            student_data=build_student_data(student_record),
+            job_recommendations=missing_jobs,
+            use_llm=False,
+        )
+        generated_paths = path_result.get("top5_gap_paths", [])
+        for path in generated_paths:
+            if isinstance(path, dict) and path.get("job_name"):
+                path["used_llm"] = bool(path_result.get("used_llm"))
+                cached_by_name[path["job_name"]] = path
+
+        kept_other_paths = [
+            item for item in cached_paths
+            if isinstance(item, dict) and item.get("job_name") not in cached_by_name
+        ]
+        agent_result["top5_gap_paths"] = kept_other_paths + list(cached_by_name.values())
+        if path_result.get("agent_warning"):
+            agent_result["path_agent_warning"] = path_result.get("agent_warning", "")
+        student_record.agent_result_json = json.dumps(agent_result, ensure_ascii=False)
+        db.add(student_record)
+        db.commit()
+
+    return attach_cached_gap_paths(student_record, top_jobs)
+
+
+def build_ability_profile_export_payload(
+    db: Session,
+    record: DiagnosisRecord,
+) -> dict:
+    student_data = build_student_data(record)
+    ability_scores = build_ability_scores(record)
+    raw_agent_result = load_agent_result(record)
+    agent_result = normalize_ability_profile_result(
+        student_data=student_data,
+        ability_scores=ability_scores,
+        agent_result=raw_agent_result,
+    )
+    agent_result = sanitize_ability_profile_display(agent_result)
+
+    top5_matches, match_source, match_cached = get_job_matches_for_record(
+        db,
+        record,
+        top_n=10,
+    )
+    radar_data = [
+        {"key": "professional", "name": "专业基础能力", "score": ability_scores.get("professional", 0)},
+        {"key": "practice", "name": "技术实践能力", "score": ability_scores.get("practice", 0)},
+        {"key": "tools", "name": "工具技能能力", "score": ability_scores.get("tools", 0)},
+        {"key": "career", "name": "职业发展能力", "score": ability_scores.get("career", 0)},
+    ]
+
+    return {
+        "export_type": "ability_profile",
+        "exported_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "record_id": record.id,
+        "student": student_data,
+        "ability_scores": ability_scores,
+        "radar_data": radar_data,
+        "profile": {
+            "summary": agent_result.get("summary", ""),
+            "profile_tags": agent_result.get("profile_tags", []),
+            "advantages": agent_result.get("advantages", []),
+            "weaknesses": agent_result.get("weaknesses", []),
+            "dimension_insights": agent_result.get("dimension_insights", []),
+            "evidence_cards": agent_result.get("evidence_cards", []),
+            "development_focus": agent_result.get("development_focus", []),
+            "risk_flags": agent_result.get("risk_flags", []),
+            "quality_review": agent_result.get("quality_review", []),
+        },
+        "top5_job_matches": top5_matches[:5],
+        "top5_match_meta": {
+            "source": match_source,
+            "cached": match_cached,
+            "algorithm_version": MATCH_CACHE_ALGORITHM_VERSION,
+        },
+        "agent_collaboration": {
+            "agent_roster": agent_result.get("agent_roster", []),
+            "workflow_steps": agent_result.get("workflow_steps", []),
+            "tool_calls": agent_result.get("tool_calls", []),
+            "collaboration_log": agent_result.get("collaboration_log", []),
+            "review_findings": agent_result.get("review_findings", []),
+        },
+    }
+
+
+def write_ability_profile_json_to_desktop(payload: dict, student_name: str | None) -> Path:
+    desktop = get_desktop_dir()
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    name_part = safe_filename_part(student_name, "student")
+    file_path = desktop / f"ability_profile_{name_part}_{timestamp}.json"
+    file_path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2, default=str),
+        encoding="utf-8",
+    )
+    return file_path
+
+
+def find_browser_pdf_executable() -> str | None:
+    candidates = [
+        os.getenv("PDF_BROWSER_PATH", ""),
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+    ]
+    for candidate in candidates:
+        if candidate and Path(candidate).exists():
+            return candidate
+    return None
+
+
+def render_html_to_pdf(html: str, output_path: Path) -> None:
+    browser = find_browser_pdf_executable()
+    if not browser:
+        raise RuntimeError("未找到 Chrome 或 Edge，无法生成 PDF。")
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="job_match_pdf_") as temp_dir:
+        html_path = Path(temp_dir) / "top5_job_match_report.html"
+        html_path.write_text(html, encoding="utf-8")
+        command = [
+            browser,
+            "--headless",
+            "--disable-gpu",
+            "--no-first-run",
+            "--disable-extensions",
+            f"--print-to-pdf={str(output_path)}",
+            html_path.resolve().as_uri(),
+        ]
+        completed = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="ignore",
+            timeout=60,
+        )
+        if completed.returncode != 0 or not output_path.exists():
+            detail = (completed.stderr or completed.stdout or "").strip()
+            raise RuntimeError(f"PDF 生成失败：{detail or '浏览器未成功输出文件'}")
+
+
+def _html(value) -> str:
+    return html_escape(str(value or ""), quote=True)
+
+
+def _render_pdf_list(items, empty_text: str = "暂无") -> str:
+    if items is None:
+        values = []
+    elif isinstance(items, (list, tuple, set)):
+        values = list(items)
+    else:
+        values = [items]
+
+    cleaned = []
+    for item in values:
+        if isinstance(item, dict):
+            text = "；".join(
+                f"{key}：{value}" for key, value in item.items()
+                if value not in (None, "", [])
+            )
+        else:
+            text = str(item or "").strip()
+        if text:
+            cleaned.append(text)
+
+    if not cleaned:
+        return f"<p class=\"muted\">{_html(empty_text)}</p>"
+    return "<ul>" + "".join(f"<li>{_html(item)}</li>" for item in cleaned) + "</ul>"
+
+
+def _pdf_text_items(value) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple, set)):
+        return [str(item).strip() for item in value if str(item or "").strip()]
+    return _as_text_list(value)
+
+
+def build_job_match_pdf_html(
+    student_data: dict,
+    job_matches: list[dict],
+) -> str:
+    generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    student_rows = [
+        ("姓名", student_data.get("name")),
+        ("专业", student_data.get("major")),
+        ("年级", student_data.get("grade")),
+        ("目标岗位", student_data.get("target_job")),
+        ("掌握技能", student_data.get("skills")),
+    ]
+    summary_rows = []
+    path_sections = []
+
+    for index, job in enumerate(job_matches[:5], start=1):
+        gap_skills = _pdf_text_items(
+            job.get("missing_skills") if "missing_skills" in job else job.get("skill_gaps")
+        )
+        matched_skills = _pdf_text_items(job.get("matched_skills"))
+        detail = job.get("gap_detail") or {}
+        summary_rows.append(f"""
+            <tr>
+                <td>{index}</td>
+                <td>{_html(job.get("job_name"))}</td>
+                <td>{_html(job.get("match_score"))}%</td>
+                <td>{_html("、".join(matched_skills) or "暂无明显匹配技能")}</td>
+                <td>{_html("、".join(gap_skills or []) or "暂无明显短板")}</td>
+                <td>{_html(job.get("recommend_reason") or job.get("description") or "当前岗位与学生已有能力存在一定匹配度。")}</td>
+            </tr>
+        """)
+
+        stage_cards = []
+        for stage in detail.get("learning_stages") or []:
+            actions = stage.get("actions") or stage.get("tasks") or []
+            deliverables = stage.get("deliverables")
+            if not deliverables and stage.get("deliverable"):
+                deliverables = [stage.get("deliverable")]
+            stage_cards.append(f"""
+                <div class="stage-card">
+                    <h4>{_html(stage.get("stage") or "学习阶段")}</h4>
+                    <p class="duration">{_html(stage.get("duration"))}</p>
+                    <p><strong>目标：</strong>{_html(stage.get("goal"))}</p>
+                    <div><strong>行动任务：</strong>{_render_pdf_list(actions)}</div>
+                    <div><strong>阶段成果：</strong>{_render_pdf_list(deliverables)}</div>
+                </div>
+            """)
+
+        path_sections.append(f"""
+            <section class="job-section">
+                <h3>{index}. {_html(job.get("job_name"))}：岗位差距与路径规划</h3>
+                <p class="path-summary">{_html(detail.get("path_summary") or "已根据当前岗位匹配结果生成补齐建议。")}</p>
+
+                <div class="block">
+                    <h4>当前差距清单</h4>
+                    {_render_pdf_list(detail.get("gap_list"))}
+                </div>
+
+                <div class="block">
+                    <h4>推荐项目</h4>
+                    {_render_pdf_list(detail.get("recommended_projects"))}
+                </div>
+
+                <div class="block">
+                    <h4>学习阶段</h4>
+                    <div class="stage-grid">
+                        {''.join(stage_cards) if stage_cards else '<p class="muted">暂无学习阶段规划。</p>'}
+                    </div>
+                </div>
+            </section>
+        """)
+
+    student_table_rows = "".join(
+        f"<tr><th>{_html(label)}</th><td>{_html(value)}</td></tr>"
+        for label, value in student_rows
+    )
+
+    return f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>TOP5 岗位匹配与路径规划报告</title>
+    <style>
+        @page {{ size: A4; margin: 18mm 16mm; }}
+        body {{
+            margin: 0;
+            color: #111827;
+            font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.7;
+        }}
+        h1 {{ margin: 0 0 8px; font-size: 24px; }}
+        h2 {{ margin: 26px 0 12px; font-size: 18px; color: #0f3768; }}
+        h3 {{ margin: 0 0 10px; font-size: 16px; color: #0f3768; }}
+        h4 {{ margin: 0 0 8px; font-size: 14px; color: #111827; }}
+        table {{ width: 100%; border-collapse: collapse; table-layout: fixed; }}
+        th, td {{ border: 1px solid #d8e0eb; padding: 8px 10px; vertical-align: top; word-break: break-word; }}
+        th {{ background: #f1f5f9; text-align: left; }}
+        ul {{ margin: 4px 0 0; padding-left: 18px; }}
+        li {{ margin-bottom: 4px; }}
+        .meta {{ color: #64748b; margin-bottom: 18px; }}
+        .student-table th {{ width: 96px; }}
+        .job-section {{
+            page-break-inside: avoid;
+            margin-top: 18px;
+            padding: 14px 16px;
+            border: 1px solid #d8e0eb;
+            border-radius: 8px;
+            background: #fbfdff;
+        }}
+        .path-summary {{
+            margin: 0 0 12px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            background: #eef6ff;
+            color: #1e3a8a;
+        }}
+        .block {{ margin-top: 12px; }}
+        .stage-grid {{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }}
+        .stage-card {{
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: #ffffff;
+        }}
+        .duration {{ margin: 0 0 6px; color: #64748b; }}
+        .muted {{ color: #64748b; margin: 0; }}
+    </style>
+</head>
+<body>
+    <h1>TOP5 岗位匹配与路径规划报告</h1>
+    <p class="meta">生成时间：{_html(generated_at)}；报告内容来自系统岗位数据表相似度匹配结果及对应路径规划。</p>
+
+    <h2>学生信息</h2>
+    <table class="student-table">{student_table_rows}</table>
+
+    <h2>TOP5 推荐岗位</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 36px;">序号</th>
+                <th style="width: 110px;">岗位</th>
+                <th style="width: 62px;">匹配度</th>
+                <th>已匹配技能</th>
+                <th>待补齐技能</th>
+                <th>推荐理由</th>
+            </tr>
+        </thead>
+        <tbody>{''.join(summary_rows)}</tbody>
+    </table>
+
+    <h2>岗位差距明细与补齐路径</h2>
+    {''.join(path_sections)}
+</body>
+</html>"""
+
+
+def write_job_match_pdf_to_desktop(
+    student_data: dict,
+    job_matches: list[dict],
+) -> Path:
+    desktop = get_desktop_dir()
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    name_part = safe_filename_part(student_data.get("name"), "student")
+    file_path = desktop / f"top5_job_match_path_{name_part}_{timestamp}.pdf"
+    html = build_job_match_pdf_html(student_data, job_matches)
+    render_html_to_pdf(html, file_path)
+    return file_path
+
+
 def normalize_ability_profile_result(
     student_data: dict,
     ability_scores: dict,
@@ -1713,8 +2221,410 @@ def sanitize_ability_profile_display(agent_result: dict) -> dict:
     return sanitized
 
 
+COMMON_RESUME_SKILLS = [
+    "Java", "Spring Boot", "Spring Cloud", "MyBatis", "MySQL", "Redis", "Linux",
+    "Git", "Maven", "Docker", "Nginx", "RabbitMQ", "Kafka", "Python", "FastAPI",
+    "Django", "Flask", "Vue", "React", "JavaScript", "TypeScript", "HTML", "CSS",
+    "SQL", "数据结构", "算法", "操作系统", "计算机网络", "数据库", "设计模式",
+    "性能优化", "缓存", "微服务", "分布式", "高并发", "机器学习", "深度学习", "大模型",
+]
+
+
+def _as_text_list(value) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        text = value.strip()
+        if not text:
+            return []
+        try:
+            loaded = json.loads(text)
+        except Exception:
+            for separator in [",", "，", ";", "；", "\n", "\r", "|", "/"]:
+                text = text.replace(separator, "、")
+            return [item.strip() for item in text.split("、") if item.strip()]
+        return _as_text_list(loaded)
+    if isinstance(value, dict):
+        values = []
+        for item in value.values():
+            values.extend(_as_text_list(item))
+        return values
+    if isinstance(value, (list, tuple, set)):
+        result = []
+        for item in value:
+            result.extend(_as_text_list(item))
+        return [item for index, item in enumerate(result) if item and item not in result[:index]]
+    text = str(value).strip()
+    return [text] if text else []
+
+
+def _first_regex_group(text: str, patterns: list[str], default: str = "无") -> str:
+    for pattern in patterns:
+        match = re.search(pattern, text, flags=re.IGNORECASE | re.MULTILINE)
+        if match:
+            value = re.sub(r"\s+", " ", match.group(1)).strip(" ：:，,；;|")
+            if value:
+                return value[:120]
+    return default
+
+
+def _infer_target_job_from_text(text: str) -> str:
+    explicit = _first_regex_group(
+        text,
+        [
+            r"(?:求职意向|目标岗位|应聘岗位|意向岗位|期望岗位)\s*[：:]\s*([^\n\r]{2,80})",
+            r"(?:岗位)\s*[：:]\s*([^\n\r]{2,80})",
+        ],
+        ""
+    )
+    if explicit:
+        return explicit
+
+    lower_text = text.lower()
+    if ("java" in lower_text or "spring" in lower_text) and ("后端" in text or "开发" in text):
+        return "Java 后端工程师"
+    if any(keyword in lower_text for keyword in ["python", "fastapi", "django", "flask"]):
+        return "Python 后端工程师"
+    if any(keyword in lower_text for keyword in ["vue", "react", "javascript", "typescript"]) or "前端" in text:
+        return "前端开发工程师"
+    if any(keyword in text for keyword in ["算法", "机器学习", "深度学习", "大模型"]):
+        return "算法工程师"
+    return "软件开发工程师"
+
+
+def extract_student_profile_locally(message: str, resume_text: str) -> dict[str, str]:
+    text = re.sub(r"\r\n?", "\n", resume_text or "")
+    compact_text = re.sub(r"[ \t]+", " ", text)
+    name = _first_regex_group(
+        compact_text,
+        [
+            r"(?:姓名|Name)\s*[：:]\s*([^\n\r]{2,20})",
+            r"^\s*([一-龥]{2,4})\s*$",
+        ],
+        "无"
+    )
+    major = _first_regex_group(
+        compact_text,
+        [
+            r"(?:专业|所学专业)\s*[：:]\s*([^\n\r]{2,60})",
+            r"([一-龥A-Za-z0-9]{2,40}(?:工程|科学与技术|软件|计算机|人工智能|数据科学)[一-龥A-Za-z0-9]*)",
+        ],
+        "无"
+    )
+    grade = _first_regex_group(
+        compact_text,
+        [
+            r"(?:年级|学历|教育背景)\s*[：:]\s*([^\n\r]{2,40})",
+            r"(本科|硕士|研究生|博士|大一|大二|大三|大四|应届生)",
+        ],
+        "本科" if "本科" in compact_text else "无"
+    )
+    skills = [
+        skill for skill in COMMON_RESUME_SKILLS
+        if re.search(re.escape(skill), compact_text, flags=re.IGNORECASE)
+    ]
+    project_lines = [
+        line.strip()
+        for line in text.splitlines()
+        if any(keyword in line for keyword in ["项目", "系统", "平台", "实习", "开发", "比赛", "竞赛"])
+    ]
+    certificate_lines = [
+        line.strip()
+        for line in text.splitlines()
+        if any(keyword in line for keyword in ["证书", "认证", "英语", "CET", "四级", "六级", "软考"])
+    ]
+    competition_lines = [
+        line.strip()
+        for line in text.splitlines()
+        if any(keyword in line for keyword in ["竞赛", "比赛", "获奖", "蓝桥杯", "ACM"])
+    ]
+
+    return {
+        "name": name[:50],
+        "major": major[:100],
+        "grade": grade[:30],
+        "target_job": _infer_target_job_from_text(f"{message}\n{text}")[:100],
+        "skills": "、".join(skills) if skills else "无",
+        "projects": "\n".join(project_lines[:8])[:1200] or "无",
+        "competitions": "\n".join(competition_lines[:5])[:600] or "无",
+        "certificates": "\n".join(certificate_lines[:5])[:600] or "无",
+        "self_intro": compact_text[:800] if compact_text else "无",
+    }
+
+
+def _score_level_label(score: int) -> str:
+    if score >= 85:
+        return "优势明显"
+    if score >= 70:
+        return "基础较稳"
+    if score >= 55:
+        return "已有基础"
+    if score >= 40:
+        return "需要补强"
+    return "证据不足"
+
+
+def _trim_list(values: list[str], limit: int, fallback: str) -> list[str]:
+    cleaned = [str(item).strip() for item in values if str(item or "").strip() and str(item).strip() != "无"]
+    return cleaned[:limit] if cleaned else [fallback]
+
+
+def _career_stage_titles(job_name: str) -> list[str]:
+    normalized = str(job_name or "").lower()
+    if "java" in normalized and "后端" in job_name:
+        return ["初级Java后端工程师", "Java后端工程师", "高级Java后端工程师", "后端技术专家", "系统架构师", "技术负责人"]
+    if "python" in normalized and "后端" in job_name:
+        return ["初级Python后端工程师", "Python后端工程师", "高级Python后端工程师", "后端技术专家", "平台架构师", "技术负责人"]
+    if "前端" in job_name or "vue" in normalized or "react" in normalized:
+        return ["初级前端工程师", "前端开发工程师", "高级前端工程师", "前端技术专家", "前端架构师", "技术负责人"]
+    if "算法" in job_name or "机器学习" in job_name or "大模型" in job_name:
+        return ["初级算法工程师", "算法工程师", "高级算法工程师", "算法专家", "算法架构师", "算法负责人"]
+    base_job = job_name or "目标岗位"
+    return [f"初级{base_job}", base_job, f"高级{base_job}", "核心骨干", "领域专家", "团队负责人"]
+
+
+def select_top1_guidance_job(student_data: dict, assessment: dict, job_records: list | None) -> dict:
+    if job_records:
+        matches = []
+        for record in job_records:
+            match = match_profile_to_job_local(student_data, record, assessment)
+            matches.append(match)
+        matches.sort(key=lambda item: item.get("match_score", 0), reverse=True)
+        if matches:
+            top_job = matches[0]
+            return {
+                "job_name": top_job.get("job_name") or student_data.get("target_job") or "目标岗位",
+                "match_score": top_job.get("match_score", 0),
+                "matched_skills": _as_text_list(top_job.get("matched_skills"))[:8],
+                "skill_gaps": _as_text_list(top_job.get("skill_gaps") or top_job.get("missing_skills"))[:8],
+                "recommend_reason": top_job.get("recommend_reason") or top_job.get("reason") or "",
+            }
+
+    ability_scores = assessment.get("ability_scores", {})
+    fallback_score = round(sum(ability_scores.values()) / max(len(ability_scores), 1))
+    return {
+        "job_name": student_data.get("target_job") or "目标岗位",
+        "match_score": fallback_score,
+        "matched_skills": _as_text_list(assessment.get("recognized_skills"))[:8],
+        "skill_gaps": [],
+        "recommend_reason": "岗位库暂无可用匹配结果，系统使用简历中的求职意向作为发展趋势锚点。",
+    }
+
+
+def _career_projection_values(start: int, end: int = 95) -> list[int]:
+    start = max(15, min(82, int(start or 0)))
+    end = max(start + 10, min(100, end))
+    ratios = [0, 0.16, 0.38, 0.62, 0.82, 1]
+    return [round(start + (end - start) * ratio) for ratio in ratios]
+
+
+def build_development_projection(ability_scores: dict, top1_job: dict) -> dict:
+    labels = ["入职", "第1年", "第3年", "第5年", "第7年", "第10年"]
+    job_name = top1_job.get("job_name") or "目标岗位"
+    match_score = int(top1_job.get("match_score") or 0)
+    professional = int(ability_scores.get("professional", 0) or 0)
+    practice = int(ability_scores.get("practice", 0) or 0)
+    tools = int(ability_scores.get("tools", 0) or 0)
+    career = int(ability_scores.get("career", 0) or 0)
+    current_average = round((professional + practice + tools + career) / 4)
+    position_titles = _career_stage_titles(job_name)
+    stage_years = ["0-1年", "1年", "3年", "5年", "7年", "10年"]
+    stage_notes = [
+        "完成岗位入门，能在指导下交付清晰模块。",
+        "独立负责常规需求，形成稳定编码、联调和问题排查能力。",
+        "负责核心模块，能处理性能、稳定性和复杂业务问题。",
+        "主导子系统或关键项目，开始承担技术方案设计。",
+        "沉淀平台能力和工程规范，影响多个项目或小团队。",
+        "具备路线规划、架构决策和团队带教能力。",
+    ]
+
+    return {
+        "labels": labels,
+        "anchor_job": {
+            "job_name": job_name,
+            "match_score": match_score,
+            "matched_skills": top1_job.get("matched_skills", []),
+            "skill_gaps": top1_job.get("skill_gaps", []),
+            "recommend_reason": top1_job.get("recommend_reason", ""),
+        },
+        "position_path": [
+            {
+                "label": labels[index],
+                "year": stage_years[index],
+                "title": position_titles[index],
+                "note": stage_notes[index],
+                "level_score": [20, 34, 50, 66, 82, 94][index],
+            }
+            for index in range(len(labels))
+        ],
+        "series": [
+            {"key": "career_level", "name": "职位层级", "values": [20, 34, 50, 66, 82, 94], "color": "#2563eb"},
+            {"key": "job_competence", "name": "岗位胜任力", "values": _career_projection_values(max(match_score, current_average), 96), "color": "#0f766e"},
+            {"key": "technical_depth", "name": "技术深度", "values": _career_projection_values(round((professional + tools) / 2), 94), "color": "#f97316"},
+            {"key": "project_influence", "name": "项目影响力", "values": _career_projection_values(practice, 92), "color": "#7c3aed"},
+            {"key": "career_readiness", "name": "职业成熟度", "values": _career_projection_values(career, 95), "color": "#dc2626"},
+        ],
+    }
+
+
+def build_employment_guidance_from_resume_text(
+    message: str,
+    resume_text: str,
+    job_records: list | None = None
+) -> dict:
+    student_data = extract_student_profile_locally(message, resume_text)
+    student_data["resume_text"] = resume_text
+    assessment = score_four_dimensions_local(student_data)
+    ability_scores = assessment["ability_scores"]
+    score_evidence = assessment.get("score_evidence", {})
+    top1_job = select_top1_guidance_job(student_data, assessment, job_records)
+    student_data["target_job"] = top1_job.get("job_name") or student_data.get("target_job")
+    career_projection = build_development_projection(ability_scores, top1_job)
+
+    recognized_skills = _as_text_list(assessment.get("recognized_skills")) or _as_text_list(student_data.get("skills"))
+    top1_matched_skills = _as_text_list(top1_job.get("matched_skills")) or recognized_skills
+    top1_skill_gaps = _as_text_list(top1_job.get("skill_gaps"))
+    project_evidence = _trim_list(
+        [line.strip() for line in str(student_data.get("projects", "")).splitlines()],
+        5,
+        "简历中项目经历证据不足，需要补充项目名称、职责、技术栈和成果。"
+    )
+    certificate_evidence = _trim_list(
+        [line.strip() for line in str(student_data.get("certificates", "")).splitlines()],
+        4,
+        "简历中证书或认证信息较少，可补充语言等级、专业认证或课程证书。"
+    )
+    competition_evidence = _trim_list(
+        [line.strip() for line in str(student_data.get("competitions", "")).splitlines()],
+        4,
+        "简历中竞赛/获奖信息较少，如有课程设计、比赛或训练营成果建议补充。"
+    )
+    dimensions = [
+        {"key": "professional", "name": "专业基础", "score": ability_scores.get("professional", 0)},
+        {"key": "practice", "name": "技术实践", "score": ability_scores.get("practice", 0)},
+        {"key": "tools", "name": "工具技能", "score": ability_scores.get("tools", 0)},
+        {"key": "career", "name": "职业发展", "score": ability_scores.get("career", 0)},
+    ]
+    weakest = sorted(dimensions, key=lambda item: item["score"])[:2]
+    strongest = sorted(dimensions, key=lambda item: item["score"], reverse=True)[:2]
+    target_job = student_data.get("target_job") or "目标岗位"
+    ten_year_target = career_projection.get("position_path", [{}])[-1].get("title", "技术负责人")
+    skills_text = "、".join(recognized_skills[:8]) if recognized_skills else "简历中可识别技能较少"
+    top1_matched_text = "、".join(top1_matched_skills[:8]) if top1_matched_skills else skills_text
+    top1_gap_text = "、".join(top1_skill_gaps[:6]) if top1_skill_gaps else "暂无明显岗位技能缺口，重点提升项目复杂度和业务影响力"
+    weakest_text = "、".join(item["name"] for item in weakest)
+    strongest_text = "、".join(item["name"] for item in strongest)
+
+    evidence_basis = [
+        {
+            "title": "TOP1岗位锚点依据",
+            "conclusion": f"长期发展趋势以推荐TOP1“{target_job}”为锚点，当前匹配度为 {top1_job.get('match_score', 0)}%。",
+            "items": [
+                f"TOP1岗位：{target_job}",
+                f"已匹配岗位技能：{top1_matched_text}",
+                f"后续关键补强：{top1_gap_text}",
+                f"四维能力中相对优势为：{strongest_text}；优先补强：{weakest_text}。",
+            ]
+        },
+        {
+            "title": "项目证据依据",
+            "conclusion": "就业指导优先看可验证项目证据：是否有业务场景、个人职责、技术难点、量化结果和可展示产物。",
+            "items": project_evidence,
+        },
+        {
+            "title": "能力评分依据",
+            "conclusion": "四维分数来自简历中的技能、项目、证书、目标岗位和表达完整度。",
+            "items": [
+                f"专业基础：{ability_scores.get('professional', 0)} 分，{_score_level_label(ability_scores.get('professional', 0))}，证据：{'、'.join(_as_text_list(score_evidence.get('professional'))[:6]) or '课程/基础知识证据不足'}。",
+                f"技术实践：{ability_scores.get('practice', 0)} 分，{_score_level_label(ability_scores.get('practice', 0))}，证据：{'、'.join(_as_text_list(score_evidence.get('practice'))[:6]) or '项目深度和成果证据不足'}。",
+                f"工具技能：{ability_scores.get('tools', 0)} 分，{_score_level_label(ability_scores.get('tools', 0))}，证据：{'、'.join(_as_text_list(score_evidence.get('tools'))[:6]) or '工程工具链证据不足'}。",
+                f"职业发展：{ability_scores.get('career', 0)} 分，{_score_level_label(ability_scores.get('career', 0))}，证据：{'、'.join(_as_text_list(score_evidence.get('career'))[:6]) or '目标表达和面试准备证据不足'}。",
+            ]
+        },
+        {
+            "title": "补充材料依据",
+            "conclusion": "证书、竞赛和训练经历可以增强可信度，但必须和就业方向有关。",
+            "items": certificate_evidence + competition_evidence,
+        },
+    ]
+
+    precision_guidance = [
+        {
+            "title": "就业主线定位",
+            "basis": [f"TOP1岗位锚点：{target_job}", f"当前可用岗位技能证据：{top1_matched_text}", f"优势能力：{strongest_text}"],
+            "advice": f"把求职主线收束为“{target_job}方向的可交付型候选人”，先达成入职胜任，再逐步向“{ten_year_target}”发展。",
+            "actions": ["简历开头写清目标方向、核心技能和最强项目。", "每个项目补齐业务目标、个人负责模块、技术难点和最终结果。", "删除和目标方向弱相关的泛泛表述，把空间留给岗位关键词和可验证成果。"]
+        },
+        {
+            "title": "简历证据强化",
+            "basis": project_evidence,
+            "advice": "当前就业竞争力的关键不在继续堆技能，而在把已有项目写成能证明岗位能力的证据链。",
+            "actions": ["为核心项目补充 2-3 个量化指标。", "把“参与/负责”改成具体动作。", "补一段项目复盘：问题、排查、取舍和改进方案。"]
+        },
+        {
+            "title": "短板补齐顺序",
+            "basis": [f"{weakest[0]['name']}当前为 {weakest[0]['score']} 分。", f"{weakest[1]['name']}当前为 {weakest[1]['score']} 分。"],
+            "advice": f"优先补齐{weakest_text}，先补能直接写进简历、能在面试中讲清楚的内容。",
+            "actions": ["每天固定一个短板主题，学习后产出笔记或代码提交。", "每周选择一个岗位 JD，对照检查简历证据。", "把补齐结果沉淀到项目 README、博客或作品集。"]
+        },
+        {
+            "title": "面试准备策略",
+            "basis": ["职业发展能力由目标清晰度、表达完整度、简历材料和面试准备共同决定。", f"当前职业发展分：{ability_scores.get('career', 0)} 分。"],
+            "advice": "面试准备要围绕项目证据展开，避免只背技术点。",
+            "actions": ["准备 1 分钟自我介绍。", "准备 3 个 STAR 项目故事。", "准备常见追问：为什么这样设计、还有什么优化空间、数据量扩大如何处理。"]
+        },
+    ]
+
+    development_suggestions = [
+        {
+            "title": "0-1年：岗位入门与稳定交付",
+            "basis": f"TOP1岗位为{target_job}，当前匹配度 {top1_job.get('match_score', 0)}%。",
+            "advice": "第一年重点是做到需求理解清楚、代码质量稳定、问题能闭环。",
+            "milestones": ["入职前补齐核心技能缺口：" + top1_gap_text + "。", "完成一版围绕TOP1岗位的简历和作品集。", "形成代码规范、接口文档、问题复盘三类交付习惯。"]
+        },
+        {
+            "title": "1-3年：独立负责核心模块",
+            "basis": "职位提升来自可独立承担模块，而不是只完成零散任务。",
+            "advice": f"围绕{target_job}的核心业务场景，承担一个可持续迭代的模块或子系统。",
+            "milestones": ["独立完成需求评审、技术方案、开发联调和上线复盘。", "积累 2-3 个能讲清楚难点、取舍和结果的项目案例。", "开始关注性能、稳定性、可维护性和团队协作成本。"]
+        },
+        {
+            "title": "3-5年：高级岗位与技术深度",
+            "basis": f"当前短板集中在{weakest_text}，中期晋升需要把短板转成可证明的技术深度。",
+            "advice": "从“会做功能”提升到“能设计方案、控制风险、提升系统质量”。",
+            "milestones": ["主导一次复杂需求或系统优化。", "建立技术专题能力，如性能优化、架构设计或稳定性治理。", "开始承担新人带教、代码评审和方案评审。"]
+        },
+        {
+            "title": "5-10年：专家/负责人路径",
+            "basis": f"十年趋势目标为{ten_year_target}，需要同时提升技术判断、业务理解和团队影响力。",
+            "advice": "长期晋升不只看技术点数量，更看能否定义问题、组织资源并交付结果。",
+            "milestones": ["沉淀负责领域的方法论和技术规范。", "推动跨模块或跨团队项目，证明影响力扩大。", "形成架构决策、团队培养和业务目标对齐能力。"]
+        },
+    ]
+
+    return {
+        "student": student_data,
+        "ability_scores": ability_scores,
+        "summary": f"本次只执行就业指导分支。系统以推荐TOP1岗位“{target_job}”作为长期发展锚点；当前匹配度为 {top1_job.get('match_score', 0)}%，十年内建议从岗位入门逐步提升到“{ten_year_target}”。",
+        "top1_job": top1_job,
+        "evidence_basis": evidence_basis,
+        "precision_guidance": precision_guidance,
+        "development_suggestions": development_suggestions,
+        "trend": {
+            "latest_score": round(sum(ability_scores.values()) / 4, 2),
+            "weakest_dimension": weakest[0],
+            "best_dimension": strongest[0],
+            "anchor_job": target_job,
+            "ten_year_target": ten_year_target,
+        },
+        "trend_chart": career_projection,
+    }
+
+
 def detect_agent_intent(message: str) -> str:
     text = (message or "").strip()
+    if any(keyword in text for keyword in ["就业", "就业指导", "精准就业", "指导一下我的就业", "指导我的就业", "求职", "求职指导", "职业发展", "发展建议", "智能发展"]):
+        return "employment"
     if any(keyword in text for keyword in ["优化", "改简历", "润色", "简历优化"]):
         return "resume"
     if any(keyword in text for keyword in ["画像", "能力", "诊断", "分析我"]):
@@ -1815,7 +2725,9 @@ def render_ability_profile(
             "agent_roster": agent_result.get("agent_roster", []),
             "llm_agents": agent_result.get("llm_agents", []),
             "used_llm": agent_result.get("used_llm", False),
-            "agent_warning": agent_result.get("agent_warning", "")
+            "agent_warning": agent_result.get("agent_warning", ""),
+            "export_message": request.query_params.get("export_message", ""),
+            "export_error": request.query_params.get("export_error", ""),
         }
     )
 def build_growth_trend(records: list[DiagnosisRecord]) -> dict:
@@ -2133,7 +3045,7 @@ async def agent_chat(
     db: Session = Depends(get_db)
 ):
     """
-    首页聊天式智能体入口：根据用户指令分支到能力画像或简历优化。
+    首页聊天式智能体入口：根据用户指令分支到能力画像、简历优化或就业指导。
     """
     if not request.session.get("user_id"):
         return {
@@ -2161,7 +3073,7 @@ async def agent_chat(
     if not intent:
         return {
             "ok": False,
-            "errors": ["请告诉智能体要生成画像还是优化简历。"],
+            "errors": ["请告诉智能体要生成画像、优化简历还是指导就业。"],
             "warnings": upload_warnings
         }
 
@@ -2219,6 +3131,31 @@ async def agent_chat(
                 "summary": agent_result.get("summary", "")
             }
 
+        if intent == "employment":
+            job_records = db.query(JobKnowledgeRecord).all()
+            result = build_employment_guidance_from_resume_text(
+                message=message,
+                resume_text=resume_text,
+                job_records=job_records
+            )
+            record = EmploymentGuidanceRecord(
+                user_id=request.session.get("user_id"),
+                message=message,
+                uploaded_filename=uploaded_filename,
+                result_json=json.dumps(result, ensure_ascii=False)
+            )
+            db.add(record)
+            db.commit()
+            db.refresh(record)
+            return {
+                "ok": True,
+                "intent": "employment",
+                "warnings": upload_warnings,
+                "uploaded_filename": uploaded_filename,
+                "reply": "就业指导已生成。",
+                "redirect_url": f"/employment/guidance?record_id={record.id}"
+            }
+
         result = optimize_resume(
             resume_text=resume_text,
             job_description=message,
@@ -2240,6 +3177,151 @@ async def agent_chat(
             "errors": ["调用LLM失败"],
             "warnings": upload_warnings
         }
+
+
+@app.get("/employment/guidance")
+def employment_guidance_page(
+    request: Request,
+    record_id: int | None = None,
+    db: Session = Depends(get_db)
+):
+    """
+    精准就业指导与智能发展建议页面。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    result = None
+    errors = []
+    if record_id is not None:
+        record = (
+            db.query(EmploymentGuidanceRecord)
+            .filter(
+                EmploymentGuidanceRecord.id == record_id,
+                EmploymentGuidanceRecord.user_id == request.session.get("user_id")
+            )
+            .first()
+        )
+        if record is None:
+            errors.append("未找到本次就业指导结果，请重新生成。")
+        else:
+            try:
+                result = json.loads(record.result_json)
+            except json.JSONDecodeError:
+                errors.append("本次就业指导结果读取失败，请重新生成。")
+
+    return templates.TemplateResponse(
+        request,
+        "employment_guidance.html",
+        {
+            "title": "精准就业指导",
+            "username": request.session.get("username"),
+            "result": result,
+            "errors": errors,
+            "warnings": [],
+            "input_data": {
+                "message": "指导一下我的就业",
+                "resume_text": "",
+                "uploaded_filename": ""
+            }
+        }
+    )
+
+
+@app.post("/employment/guidance")
+def employment_guidance_submit(
+    request: Request,
+    message: str = Form("指导一下我的就业"),
+    resume_text: str = Form(""),
+    resume_file: UploadFile | None = File(None),
+    db: Session = Depends(get_db)
+):
+    """
+    接收简历文本/文件，生成精准就业指导与智能发展建议。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    upload_warnings = []
+    uploaded_filename = ""
+    uploaded_resume_text = ""
+
+    if resume_file is not None and resume_file.filename:
+        uploaded_filename = resume_file.filename
+        file_content = resume_file.file.read()
+        uploaded_resume_text, upload_warnings = extract_resume_text_from_upload(
+            uploaded_filename,
+            file_content
+        )
+
+    final_message = message.strip() or "指导一下我的就业"
+    final_resume_text = resume_text.strip() or uploaded_resume_text.strip()
+    input_data = {
+        "message": final_message,
+        "resume_text": final_resume_text,
+        "uploaded_filename": uploaded_filename
+    }
+
+    if not final_resume_text:
+        return templates.TemplateResponse(
+            request,
+            "employment_guidance.html",
+            {
+                "title": "精准就业指导",
+                "username": request.session.get("username"),
+                "result": None,
+                "errors": ["请上传可解析的简历文件，或直接粘贴简历文本。"],
+                "warnings": upload_warnings,
+                "input_data": input_data
+            }
+        )
+
+    try:
+        job_records = db.query(JobKnowledgeRecord).all()
+        result = build_employment_guidance_from_resume_text(
+            message=final_message,
+            resume_text=final_resume_text,
+            job_records=job_records
+        )
+        record = EmploymentGuidanceRecord(
+            user_id=request.session.get("user_id"),
+            message=final_message,
+            uploaded_filename=uploaded_filename,
+            result_json=json.dumps(result, ensure_ascii=False)
+        )
+        db.add(record)
+        db.commit()
+        db.refresh(record)
+    except Exception as exc:
+        return templates.TemplateResponse(
+            request,
+            "employment_guidance.html",
+            {
+                "title": "精准就业指导",
+                "username": request.session.get("username"),
+                "result": None,
+                "errors": [f"生成就业指导失败：{exc}"],
+                "warnings": upload_warnings,
+                "input_data": input_data
+            }
+        )
+
+    return templates.TemplateResponse(
+        request,
+        "employment_guidance.html",
+        {
+            "title": "精准就业指导",
+            "username": request.session.get("username"),
+            "result": result,
+            "errors": [],
+            "warnings": upload_warnings,
+            "input_data": input_data
+        }
+    )
 
 
 @app.get("/resume/optimize")
@@ -2808,6 +3890,49 @@ def ability_profile_detail(
     return render_ability_profile(request, record)
 
 
+@app.post("/ability/profile/{record_id}/export-json")
+def ability_profile_export_json(
+    record_id: int,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """
+    将本次能力画像按结构化 JSON 输出到当前用户桌面。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    record = db.scalar(
+        select(DiagnosisRecord)
+        .where(
+            DiagnosisRecord.id == record_id,
+            DiagnosisRecord.user_id == request.session.get("user_id"),
+        )
+    )
+    if record is None:
+        raise HTTPException(status_code=404, detail="该诊断记录不存在")
+
+    page_path = f"/ability/profile/{record.id}"
+    try:
+        payload = build_ability_profile_export_payload(db, record)
+        file_path = write_ability_profile_json_to_desktop(
+            payload,
+            record.name,
+        )
+    except Exception as exc:
+        return build_export_redirect(
+            page_path,
+            error=f"JSON 导出失败：{exc}",
+        )
+
+    return build_export_redirect(
+        page_path,
+        message=f"JSON 文件已输出到桌面：{file_path.name}",
+    )
+
+
 @app.get("/history")
 def history_records(
     request: Request,
@@ -2889,46 +4014,11 @@ def job_match(
 
     else:
         student_data = build_student_data(student_record)
-        assessment = build_match_assessment(student_record)
-        job_records = db.query(JobKnowledgeRecord).all()
-        job_version = build_job_version(job_records)
-
-        job_matches = load_persistent_match_cache(
+        job_matches, match_source, match_cached = get_job_matches_for_record(
             db,
-            student_record.id,
-            job_version,
-            "llm",
+            student_record,
+            top_n=10,
         )
-        match_source = "llm"
-        match_cached = job_matches is not None
-
-        if job_matches is None:
-            job_matches = load_persistent_match_cache(
-                db,
-                student_record.id,
-                job_version,
-                "local",
-            )
-            match_source = "local"
-            match_cached = job_matches is not None
-
-        if job_matches is None:
-            job_matches = calculate_job_match(
-                student_data,
-                job_records,
-                assessment=assessment,
-                top_n=10,
-            )
-            save_persistent_match_cache(
-                db,
-                student_record.id,
-                job_version,
-                "local",
-                job_matches,
-            )
-            match_cached = False
-
-        job_matches = attach_cached_gap_paths(student_record, job_matches)
 
     return templates.TemplateResponse(
         request,
@@ -2940,8 +4030,69 @@ def job_match(
             "match_source": match_source,
             "match_cached": match_cached,
             "username": request.session.get("username"),
-            "error": ""
+            "error": "",
+            "export_message": request.query_params.get("export_message", ""),
+            "export_error": request.query_params.get("export_error", ""),
         }
+    )
+
+
+@app.post("/job/match/export-pdf")
+def job_match_export_pdf(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """
+    将 TOP5 岗位匹配结果和对应路径规划输出为 PDF 到桌面。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    user_id = request.session.get("user_id")
+    student_record = (
+        db.query(DiagnosisRecord)
+        .filter(DiagnosisRecord.user_id == user_id)
+        .order_by(DiagnosisRecord.created_at.desc(), DiagnosisRecord.id.desc())
+        .first()
+    )
+    if student_record is None:
+        return build_export_redirect(
+            "/job/match",
+            error="请先完成学生能力诊断，再导出 TOP5 岗位报告。",
+        )
+
+    try:
+        student_data = build_student_data(student_record)
+        job_matches, _, _ = get_job_matches_for_record(
+            db,
+            student_record,
+            top_n=10,
+        )
+        top5_matches = ensure_gap_paths_for_job_matches(
+            db,
+            student_record,
+            job_matches[:5],
+        )
+        if not top5_matches:
+            return build_export_redirect(
+                "/job/match",
+                error="暂无 TOP5 岗位推荐，请先生成岗位匹配结果。",
+            )
+        file_path = write_job_match_pdf_to_desktop(
+            student_data,
+            top5_matches,
+        )
+    except Exception as exc:
+        return build_export_redirect(
+            "/job/match",
+            error=f"PDF 导出失败：{exc}",
+        )
+
+    return build_export_redirect(
+        "/job/match",
+        message=f"PDF 文件已输出到桌面：{file_path.name}",
     )
 
 

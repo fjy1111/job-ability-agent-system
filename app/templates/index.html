@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="/static/css/style.css?v=13">
+    <link rel="stylesheet" href="/static/css/style.css?v=15">
 </head>
 <body class="agent-chat-body">
     <div class="agent-shell">
@@ -45,7 +45,16 @@
                         <circle cx="12" cy="12" r="8"></circle>
                         <circle cx="12" cy="12" r="3"></circle>
                     </svg>
-                    <span>岗位匹配</span>
+                    <span>TOP5岗位匹配</span>
+                </a>
+                <a href="/employment/guidance">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M4 19V5"></path>
+                        <path d="M4 19h16"></path>
+                        <path d="M7 15l3-3 3 2 5-7"></path>
+                        <path d="M16 7h2v2"></path>
+                    </svg>
+                    <span>就业指导</span>
                 </a>
                 <a href="/resume/match">
                     <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -110,10 +119,12 @@
                 <article class="agent-message assistant">
                     <span class="agent-avatar">AI</span>
                     <div class="agent-bubble">
-                        <p>把简历拖进来，然后告诉我“帮我生成画像”或“帮我优化简历”。我会按对应分支执行，并在过程中显示当前步骤。</p>
+                        <p>把简历拖进来，然后告诉我“帮我生成画像”“帮我优化简历”“帮我推荐岗位”或“指导一下我的就业”。我会按对应分支执行，并在过程中显示当前步骤。</p>
                         <div class="agent-quick-actions">
                             <button type="button" data-prompt="帮我生成画像">生成画像</button>
                             <button type="button" data-prompt="帮我优化简历">优化简历</button>
+                            <button type="button" data-prompt="帮我推荐岗位">推荐岗位</button>
+                            <button type="button" data-prompt="指导一下我的就业">就业指导</button>
                         </div>
                     </div>
                 </article>
@@ -130,7 +141,7 @@
                     <input id="resumeFile" type="file" name="resume_file" accept=".txt,.md,.csv,.pdf,.docx">
                 </label>
 
-                <textarea id="agentInput" name="message" rows="1" placeholder="和智能体说：帮我生成画像"></textarea>
+                <textarea id="agentInput" name="message" rows="1" placeholder="和智能体说：指导一下我的就业"></textarea>
 
                 <button class="agent-send" type="submit" aria-label="发送">
                     <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -175,6 +186,9 @@
 
         let selectedFile = null;
         let progressTimer = null;
+        const CHAT_CACHE_KEY = "jobAbilityAgentChatCache:" + {{ (username or "guest") | tojson }};
+        const CHAT_CACHE_VERSION = 2;
+        const EMPTY_PROGRESS_HTML = "<li>等待简历和指令</li>";
 
         const progressSteps = {
             profile: [
@@ -190,6 +204,20 @@
                 "正在调用简历优化智能体",
                 "正在生成改写建议",
                 "正在整理优化结果"
+            ],
+            job_match: [
+                "正在接收简历",
+                "正在解析求职画像",
+                "正在读取岗位数据表",
+                "正在计算岗位相似度",
+                "正在生成TOP5岗位推荐"
+            ],
+            employment: [
+                "正在接收简历",
+                "正在快速解析求职画像",
+                "正在分析就业依据",
+                "正在生成就业指导建议",
+                "正在绘制发展趋势"
             ],
             unknown: [
                 "正在接收指令",
@@ -208,6 +236,12 @@
         }
 
         function detectIntent(message) {
+            if (/帮我推荐岗位|推荐岗位|岗位推荐|岗位匹配|匹配岗位|TOP5|top5|Top5|适合什么岗位|推荐一下岗位/.test(message)) {
+                return "job_match";
+            }
+            if (/就业|就业指导|精准就业|求职指导|发展建议|职业发展|智能发展/.test(message)) {
+                return "employment";
+            }
             if (/优化|改简历|润色|简历优化/.test(message)) {
                 return "resume";
             }
@@ -226,6 +260,7 @@
             `;
             chatThread.appendChild(article);
             chatThread.scrollTop = chatThread.scrollHeight;
+            saveChatCache();
             return article.querySelector(".agent-bubble");
         }
 
@@ -262,6 +297,7 @@
             if (success) {
                 setProgress(steps, steps.length, true);
                 statusBubble.innerHTML = "<p>已完成</p>";
+                saveChatCache();
                 return;
             }
             progressState.textContent = message;
@@ -271,6 +307,7 @@
                 messageNode.classList.add("error");
             }
             statusBubble.innerHTML = `<p>${escapeHtml(message)}</p>`;
+            saveChatCache();
         }
 
         function renderResumeResult(result) {
@@ -294,6 +331,256 @@
             `;
         }
 
+        function renderInlineList(items, fallback) {
+            const values = Array.isArray(items) ? items.filter(Boolean) : [];
+            return values.length ? values.map(escapeHtml).join("、") : fallback;
+        }
+
+        function renderJobMatchResult(result) {
+            const jobs = (result.job_matches || []).map((job, index) => `
+                <div class="agent-guidance-job">
+                    <div>
+                        <span>TOP ${index + 1}</span>
+                        <strong>${escapeHtml(job.job_name || "未知岗位")}</strong>
+                    </div>
+                    <b>${escapeHtml(job.similarity_score ?? job.match_score ?? 0)}%</b>
+                    <p><em>岗位表相似度</em></p>
+                    <p><strong>已匹配技能：</strong>${renderInlineList(job.matched_skills || [], "暂无明显匹配技能")}</p>
+                    <p><strong>待补齐技能：</strong>${renderInlineList(job.skill_gaps || job.missing_skills || [], "暂无明显短板")}</p>
+                    <p>${escapeHtml(job.recommend_reason || "系统已根据岗位数据表相似度生成该岗位推荐。")}</p>
+                </div>
+            `).join("");
+
+            return `
+                <div class="agent-guidance-result">
+                    <section class="agent-guidance-summary">
+                        <strong>TOP5岗位推荐</strong>
+                        <p>${escapeHtml(result.summary || "已根据岗位数据表相似度生成TOP5岗位推荐。")}</p>
+                    </section>
+                    <section class="agent-guidance-section">
+                        <h3>TOP5推荐岗位</h3>
+                        <div class="agent-guidance-jobs">${jobs}</div>
+                    </section>
+                    <a class="agent-result-link" href="/job/match">查看TOP5岗位匹配详情</a>
+                </div>
+            `;
+        }
+
+        function renderEmploymentResult(result) {
+            const evidence = (result.evidence_basis || []).map((group) => `
+                <div class="agent-evidence-card">
+                    <strong>${escapeHtml(group.title)}</strong>
+                    <p>${escapeHtml(group.conclusion)}</p>
+                    <ul>${(group.items || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+                </div>
+            `).join("");
+            const guidance = (result.precision_guidance || []).map((item) => `
+                <div class="agent-guidance-detail">
+                    <strong>${escapeHtml(item.title)}</strong>
+                    <p>${escapeHtml(item.advice || item.text)}</p>
+                    ${(item.basis || []).length ? `<em>依据：${(item.basis || []).map(escapeHtml).join("；")}</em>` : ""}
+                    <ul>${(item.actions || []).map((action) => `<li>${escapeHtml(action)}</li>`).join("")}</ul>
+                </div>
+            `).join("");
+            const suggestions = (result.development_suggestions || []).map((item) => `
+                <div class="agent-development-card">
+                    <strong>${escapeHtml(item.title)}</strong>
+                    <p>${escapeHtml(item.advice)}</p>
+                    <em>依据：${escapeHtml(item.basis)}</em>
+                    <ul>${(item.milestones || []).map((milestone) => `<li>${escapeHtml(milestone)}</li>`).join("")}</ul>
+                </div>
+            `).join("");
+            const trendChart = result.trend_chart || {};
+            const anchorJob = trendChart.anchor_job || result.top1_job || {};
+            const positionPath = (trendChart.position_path || []).map((stage) => `
+                <article class="agent-career-stage">
+                    <span>${escapeHtml(stage.label || "")}</span>
+                    <strong>${escapeHtml(stage.title || "")}</strong>
+                    <p>${escapeHtml(stage.note || "")}</p>
+                </article>
+            `).join("");
+            const legend = ((trendChart.series) || []).map((series) => `
+                <span><i style="background:${escapeHtml(series.color)}"></i>${escapeHtml(series.name)}</span>
+            `).join("");
+
+            return `
+                <div class="agent-guidance-result">
+                    <section class="agent-guidance-summary">
+                        <strong>${escapeHtml((result.student || {}).name || "求职者")} 的就业行动方案</strong>
+                        <p>${escapeHtml(result.summary)}</p>
+                    </section>
+                    <section class="agent-guidance-section">
+                        <h3>依据说明</h3>
+                        <div class="agent-evidence-grid">${evidence}</div>
+                    </section>
+                    <section class="agent-guidance-grid">
+                        <div class="agent-guidance-section">
+                            <h3>精准就业指导</h3>
+                            <div class="agent-guidance-list">${guidance}</div>
+                        </div>
+                        <div class="agent-guidance-section">
+                            <h3>智能发展建议</h3>
+                            <div class="agent-development-list">${suggestions}</div>
+                        </div>
+                    </section>
+                    <section class="agent-guidance-section">
+                        <h3>十年发展趋势</h3>
+                        <div class="agent-career-anchor">
+                            <span>TOP1岗位锚点</span>
+                            <strong>${escapeHtml(anchorJob.job_name || (result.trend || {}).anchor_job || "目标岗位")}</strong>
+                            <em>当前匹配度 ${escapeHtml(anchorJob.match_score ?? "-")}% · 十年目标 ${(result.trend || {}).ten_year_target ? escapeHtml((result.trend || {}).ten_year_target) : "专家/负责人"}</em>
+                        </div>
+                        <canvas class="agent-trend-canvas"></canvas>
+                        <div class="agent-chart-legend">${legend}</div>
+                        <div class="agent-career-path">${positionPath}</div>
+                    </section>
+                    <a class="agent-result-link" href="/employment/guidance">打开就业指导界面</a>
+                </div>
+            `;
+        }
+
+        function drawAgentTrendChart(canvas, chart) {
+            if (!canvas || !chart || !Array.isArray(chart.labels) || !Array.isArray(chart.series)) {
+                return;
+            }
+
+            const width = canvas.clientWidth || 680;
+            const height = canvas.clientHeight || 280;
+            const ratio = window.devicePixelRatio || 1;
+            canvas.width = width * ratio;
+            canvas.height = height * ratio;
+
+            const ctx = canvas.getContext("2d");
+            ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+            ctx.clearRect(0, 0, width, height);
+
+            const pad = { top: 22, right: 18, bottom: 44, left: 42 };
+            const plotWidth = width - pad.left - pad.right;
+            const plotHeight = height - pad.top - pad.bottom;
+            const count = Math.max(chart.labels.length, 1);
+
+            ctx.font = "12px Microsoft YaHei, Arial, sans-serif";
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#e5e7eb";
+            ctx.fillStyle = "#64748b";
+
+            for (let value = 0; value <= 100; value += 25) {
+                const y = pad.top + plotHeight - (value / 100) * plotHeight;
+                ctx.beginPath();
+                ctx.moveTo(pad.left, y);
+                ctx.lineTo(width - pad.right, y);
+                ctx.stroke();
+                ctx.fillText(String(value), 10, y + 4);
+            }
+
+            chart.labels.forEach((label, index) => {
+                const x = count === 1 ? pad.left + plotWidth / 2 : pad.left + (index / (count - 1)) * plotWidth;
+                const parts = String(label).split(" ");
+                ctx.fillText(parts[0] || "", Math.max(6, x - 24), height - 24);
+                ctx.fillText(parts[1] || "", Math.max(6, x - 18), height - 9);
+            });
+
+            chart.series.forEach((series) => {
+                const values = Array.isArray(series.values) ? series.values : [];
+                ctx.strokeStyle = series.color || "#2563eb";
+                ctx.fillStyle = series.color || "#2563eb";
+                ctx.lineWidth = series.key === "career_level" ? 3 : 2;
+                ctx.beginPath();
+                values.forEach((value, index) => {
+                    const x = count === 1 ? pad.left + plotWidth / 2 : pad.left + (index / (count - 1)) * plotWidth;
+                    const y = pad.top + plotHeight - (Math.max(0, Math.min(100, Number(value) || 0)) / 100) * plotHeight;
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+                ctx.stroke();
+
+                values.forEach((value, index) => {
+                    const x = count === 1 ? pad.left + plotWidth / 2 : pad.left + (index / (count - 1)) * plotWidth;
+                    const y = pad.top + plotHeight - (Math.max(0, Math.min(100, Number(value) || 0)) / 100) * plotHeight;
+                    ctx.beginPath();
+                    ctx.arc(x, y, series.key === "career_level" ? 4 : 3, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            });
+        }
+
+        function redrawCachedTrendCharts(scope = chatThread) {
+            scope.querySelectorAll(".agent-guidance-result[data-trend-chart]").forEach((resultNode) => {
+                const canvas = resultNode.querySelector(".agent-trend-canvas");
+                if (!canvas) {
+                    return;
+                }
+
+                try {
+                    const chart = JSON.parse(resultNode.dataset.trendChart || "{}");
+                    drawAgentTrendChart(canvas, chart);
+                } catch (error) {
+                    resultNode.removeAttribute("data-trend-chart");
+                }
+            });
+        }
+
+        function saveChatCache() {
+            try {
+                window.localStorage.setItem(CHAT_CACHE_KEY, JSON.stringify({
+                    version: CHAT_CACHE_VERSION,
+                    chatHtml: chatThread.innerHTML,
+                    inputValue: input.value,
+                    progressState: progressState.textContent,
+                    progressHtml: progressList.innerHTML,
+                    lastResult: lastResult.textContent,
+                    savedAt: Date.now()
+                }));
+            } catch (error) {
+                // 缓存失败不影响智能体主流程。
+            }
+        }
+
+        function restoreChatCache() {
+            try {
+                const rawCache = window.localStorage.getItem(CHAT_CACHE_KEY);
+                if (!rawCache) {
+                    return;
+                }
+
+                const cache = JSON.parse(rawCache);
+                if (!cache || cache.version !== CHAT_CACHE_VERSION || !cache.chatHtml) {
+                    return;
+                }
+
+                chatThread.innerHTML = cache.chatHtml;
+                input.value = cache.inputValue || "";
+                progressState.textContent = cache.progressState || "待开始";
+                progressList.innerHTML = cache.progressHtml || EMPTY_PROGRESS_HTML;
+                lastResult.textContent = cache.lastResult || "暂无";
+                input.style.height = "auto";
+                input.style.height = input.value ? `${Math.min(input.scrollHeight, 132)}px` : "auto";
+                redrawCachedTrendCharts(chatThread);
+                chatThread.scrollTop = chatThread.scrollHeight;
+            } catch (error) {
+                window.localStorage.removeItem(CHAT_CACHE_KEY);
+            }
+        }
+
+        function bindQuickActions(root = document) {
+            root.querySelectorAll("[data-prompt]").forEach((button) => {
+                if (button._agentPromptBound) {
+                    return;
+                }
+                button._agentPromptBound = true;
+                button.addEventListener("click", () => {
+                    input.value = button.dataset.prompt;
+                    input.focus();
+                    input.style.height = "auto";
+                    input.style.height = `${Math.min(input.scrollHeight, 132)}px`;
+                    saveChatCache();
+                });
+            });
+        }
+
         function rememberFile(file) {
             selectedFile = file || null;
             const name = selectedFile ? selectedFile.name : "拖入简历";
@@ -301,6 +588,8 @@
             sideFileName.textContent = selectedFile ? name : "未选择";
             dropZone.classList.toggle("has-file", Boolean(selectedFile));
         }
+
+        restoreChatCache();
 
         fileInput.addEventListener("change", () => {
             rememberFile(fileInput.files[0]);
@@ -327,16 +616,12 @@
             }
         });
 
-        document.querySelectorAll("[data-prompt]").forEach((button) => {
-            button.addEventListener("click", () => {
-                input.value = button.dataset.prompt;
-                input.focus();
-            });
-        });
+        bindQuickActions(document);
 
         input.addEventListener("input", () => {
             input.style.height = "auto";
             input.style.height = `${Math.min(input.scrollHeight, 132)}px`;
+            saveChatCache();
         });
 
         composer.addEventListener("submit", async (event) => {
@@ -373,17 +658,41 @@
                     const errorMessage = (data.errors || ["调用LLM失败"])[0];
                     stopProgress(steps, false, statusBubble, errorMessage);
                     lastResult.textContent = errorMessage;
+                    saveChatCache();
                     return;
                 }
 
                 stopProgress(steps, true, statusBubble);
-                lastResult.textContent = data.intent === "profile" ? "能力画像" : "简历优化";
+                const resultLabels = {
+                    profile: "能力画像",
+                    resume: "简历优化",
+                    job_match: "TOP5岗位推荐",
+                    employment: "就业指导"
+                };
+                lastResult.textContent = resultLabels[data.intent] || "已完成";
+                saveChatCache();
 
                 if (data.intent === "profile") {
                     appendMessage("assistant", `
                         <p>${escapeHtml(data.reply)}</p>
                         ${data.summary ? `<p>${escapeHtml(data.summary)}</p>` : ""}
                         <a class="agent-result-link" href="${escapeHtml(data.redirect_url)}">查看本次能力画像</a>
+                    `);
+                    return;
+                }
+
+                if (data.intent === "job_match") {
+                    appendMessage("assistant", `
+                        <p>${escapeHtml(data.reply)}</p>
+                        ${renderJobMatchResult(data.result || {})}
+                    `);
+                    return;
+                }
+
+                if (data.intent === "employment") {
+                    appendMessage("assistant", `
+                        <p>${escapeHtml(data.reply)}</p>
+                        <a class="agent-result-link" href="${escapeHtml(data.redirect_url || "/employment/guidance")}">查看本次就业指导</a>
                     `);
                     return;
                 }
@@ -395,6 +704,7 @@
             } catch (error) {
                 stopProgress(steps, false, statusBubble, "调用LLM失败");
                 lastResult.textContent = "调用LLM失败";
+                saveChatCache();
             } finally {
                 sendButton.disabled = false;
             }

@@ -7,7 +7,7 @@
 
     <style>
         .profile-page {
-            width: min(1180px, calc(100% - 40px));
+            width: min(1440px, calc(100% - 56px));
             margin: 42px auto 64px;
             text-align: left;
         }
@@ -49,6 +49,10 @@
             justify-content: flex-end;
         }
 
+        .profile-export-form {
+            margin: 0;
+        }
+
         .profile-btn,
         .profile-link-btn {
             min-height: 42px;
@@ -61,6 +65,11 @@
             font-weight: 800;
             text-decoration: none;
             box-sizing: border-box;
+        }
+
+        .profile-export-form .profile-link-btn {
+            cursor: pointer;
+            font-family: inherit;
         }
 
         .profile-btn {
@@ -83,10 +92,22 @@
         }
 
         .profile-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
-            gap: 20px;
-            align-items: start;
+            display: block;
+            columns: 2 560px;
+            column-gap: 24px;
+            column-fill: balance;
+        }
+
+        .profile-grid > .profile-column,
+        .profile-grid > aside {
+            display: contents;
+        }
+
+        .profile-grid .profile-panel,
+        .profile-split-panel {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            margin: 0 0 24px;
         }
 
         .profile-panel {
@@ -253,7 +274,7 @@
 
         .collab-summary {
             display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 12px;
             margin-bottom: 16px;
         }
@@ -354,6 +375,12 @@
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 16px;
+            align-items: stretch;
+        }
+
+        .split-columns .profile-panel {
+            height: 100%;
+            margin: 0;
         }
 
         .analysis-list {
@@ -372,7 +399,7 @@
         .focus-grid,
         .task-grid {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 14px;
         }
 
@@ -528,6 +555,18 @@
             line-height: 1.7;
         }
 
+        .profile-alert.success {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .profile-alert.error {
+            border-color: #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
         .route-split {
             display: flex;
             justify-content: space-between;
@@ -616,10 +655,12 @@
 
         @media screen and (max-width: 980px) {
             .profile-header,
-            .profile-grid,
-            .split-columns,
             .stage-content {
                 grid-template-columns: 1fr;
+            }
+
+            .profile-grid {
+                columns: 1;
             }
 
             .profile-actions {
@@ -629,12 +670,13 @@
 
         @media screen and (max-width: 720px) {
             .profile-page {
-                width: min(100% - 28px, 1180px);
+                width: min(100% - 28px, 1440px);
                 margin: 28px auto 48px;
             }
 
             .student-meta,
             .collab-summary,
+            .split-columns,
             .dimension-grid,
             .evidence-grid,
             .focus-grid,
@@ -668,10 +710,28 @@
 
             <nav class="profile-actions" aria-label="页面操作">
                 <a href="/job/match" class="profile-btn">岗位匹配分析</a>
+                <a href="/employment/guidance" class="profile-btn">精准就业指导</a>
+                {% if record %}
+                <form action="/ability/profile/{{ record.id }}/export-json" method="post" class="profile-export-form">
+                    <button type="submit" class="profile-link-btn">输出 JSON 文件</button>
+                </form>
+                {% endif %}
                 <a href="/student/input" class="profile-link-btn">重新诊断</a>
                 <a href="/" class="profile-link-btn">返回首页</a>
             </nav>
         </header>
+
+        {% if export_message %}
+        <div class="profile-alert success">
+            {{ export_message }}
+        </div>
+        {% endif %}
+
+        {% if export_error %}
+        <div class="profile-alert error">
+            {{ export_error }}
+        </div>
+        {% endif %}
 
         {% if agent_warning %}
         <div class="profile-alert">
@@ -682,11 +742,12 @@
         <section class="route-split">
             <p>当前页面只呈现学生基础信息、能力雷达图、画像总结、证据归因和风险提示；岗位匹配放在独立分析页。</p>
             <a href="/job/match" class="profile-btn">进入岗位匹配</a>
+            <a href="/employment/guidance" class="profile-link-btn">进入就业指导</a>
         </section>
 
         <div class="profile-grid" style="margin-top: 20px;">
-            <div>
-                <section class="profile-panel">
+            <div class="profile-column">
+                <section class="profile-panel profile-student-panel">
                     <h2>学生基础信息</h2>
                     <div class="student-meta">
                         <div>
@@ -708,7 +769,7 @@
                     </div>
                 </section>
 
-                <section class="profile-panel">
+                <section class="profile-panel profile-collab-panel">
                     <h2>LLM 协作与工具调用链</h2>
                     <div class="collab-summary">
                         <div class="collab-metric">
@@ -779,7 +840,7 @@
                 </section>
 
                 {% if agent_result %}
-                <section class="profile-panel">
+                <section class="profile-panel profile-summary-panel">
                     <h2>画像总结</h2>
                     {% if profile_tags %}
                     <div class="tag-list" style="margin-bottom: 14px;">
@@ -791,7 +852,7 @@
                     <p class="summary-text">{{ summary }}</p>
                 </section>
 
-                <section class="split-columns">
+                <section class="split-columns profile-split-panel">
                     <div class="profile-panel">
                         <h2>当前优势</h2>
                         {% if advantages %}
@@ -819,7 +880,7 @@
                     </div>
                 </section>
 
-                <section class="profile-panel">
+                <section class="profile-panel profile-dimensions-panel">
                     <h2>四维能力洞察</h2>
                     {% if dimension_insights %}
                     <div class="dimension-grid">
@@ -851,7 +912,7 @@
                     {% endif %}
                 </section>
 
-                <section class="profile-panel">
+                <section class="profile-panel profile-evidence-panel">
                     <h2>证据抽取卡</h2>
                     {% if evidence_cards %}
                     <div class="evidence-grid">
@@ -885,7 +946,7 @@
             </div>
 
             <aside>
-                <section class="profile-panel">
+                <section class="profile-panel profile-radar-panel">
                     <h2>能力雷达图</h2>
                     <div
                         id="radarChart"
@@ -947,7 +1008,7 @@
                     </div>
                 </section>
 
-                <section class="profile-panel">
+                <section class="profile-panel profile-focus-panel">
                     <h2>发展焦点</h2>
                     {% if development_focus %}
                     <div class="focus-grid">
@@ -973,7 +1034,7 @@
                     {% endif %}
                 </section>
 
-                <section class="profile-panel">
+                <section class="profile-panel profile-risk-panel">
                     <h2>风险提示</h2>
                     {% if risk_flags %}
                     <ul class="risk-list">
@@ -986,7 +1047,7 @@
                     {% endif %}
                 </section>
 
-                <section class="profile-panel">
+                <section class="profile-panel profile-review-panel">
                     <h2>质量复核</h2>
                     {% if quality_review %}
                     <ul class="review-list">

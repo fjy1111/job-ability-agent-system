@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=15">
+</head>
+<body class="employment-page-body">
+    <header class="resume-topbar employment-topbar">
+        <a class="resume-brand" href="/">
+            <span class="employment-brand-mark">
+                <span></span>
+            </span>
+            <span>
+                <strong>精准就业指导</strong>
+                <small>就业路径与发展趋势</small>
+            </span>
+        </a>
+
+        <nav class="resume-nav">
+            <a href="/">首页</a>
+            <a href="/ability/profile">能力画像</a>
+            <a href="/resume/optimize">简历优化</a>
+            <a href="/interview/mock">模拟面试</a>
+            <a href="/job/match">TOP5 岗位匹配</a>
+            <a class="active" href="/employment/guidance">就业指导</a>
+        </nav>
+
+        <div class="resume-account">
+            {% if username %}
+            <span class="resume-user-badge">{{ username[:1] | upper }}</span>
+            {% endif %}
+            <a href="/logout">退出</a>
+        </div>
+    </header>
+
+    <main class="employment-workspace">
+        {% if not result %}
+        <section class="employment-layout">
+            <form action="/employment/guidance" method="post" enctype="multipart/form-data" class="employment-form-panel">
+                <div class="employment-form-head">
+                    <p>Employment Agent</p>
+                    <h1>就业指导与智能发展建议</h1>
+                </div>
+
+                {% for error in errors %}
+                <div class="resume-alert error">
+                    <p>{{ error }}</p>
+                </div>
+                {% endfor %}
+
+                {% for warning in warnings %}
+                <div class="resume-alert warning">
+                    <p>{{ warning }}</p>
+                </div>
+                {% endfor %}
+
+                <label class="employment-upload-zone">
+                    <span class="employment-upload-icon"></span>
+                    <span>
+                        <strong>上传简历</strong>
+                        <small>{{ input_data.uploaded_filename or "支持 txt / md / csv / pdf / docx" }}</small>
+                    </span>
+                    <em>选择文件</em>
+                    <input type="file" name="resume_file" accept=".txt,.md,.csv,.pdf,.docx">
+                </label>
+
+                <label class="employment-field">
+                    <span>智能体指令</span>
+                    <input type="text" name="message" value="{{ input_data.message }}" placeholder="指导一下我的就业">
+                </label>
+
+                <label class="employment-field">
+                    <span>简历文本</span>
+                    <textarea name="resume_text" rows="10" placeholder="粘贴你的简历内容">{{ input_data.resume_text }}</textarea>
+                </label>
+
+                <button type="submit" class="employment-primary-action">生成就业指导</button>
+            </form>
+
+            <aside class="employment-side-panel">
+                <h2>同层级能力</h2>
+                <a href="/ability/profile">生成画像</a>
+                <a href="/resume/optimize">AI 简历优化</a>
+                <a href="/interview/mock">AI 模拟面试</a>
+                <a href="/job/match">TOP5 岗位匹配分析</a>
+                <a class="active" href="/employment/guidance">精准就业指导</a>
+            </aside>
+        </section>
+        {% endif %}
+
+        {% if result %}
+        <section class="employment-result-shell">
+            <section class="employment-summary-panel">
+                <div>
+                    <p class="employment-eyebrow">精准就业指导</p>
+                    <h2>{{ result.student.name }} 的就业行动方案</h2>
+                    <p>{{ result.summary }}</p>
+                </div>
+
+                <div class="employment-score-strip">
+                    <div>
+                        <strong>{{ result.top1_job.match_score }}%</strong>
+                        <span>TOP1岗位匹配度</span>
+                    </div>
+                    <div>
+                        <strong>{{ result.trend.anchor_job }}</strong>
+                        <span>发展锚点</span>
+                    </div>
+                    <div>
+                        <strong>{{ result.trend.ten_year_target }}</strong>
+                        <span>十年目标</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="employment-grid">
+                <div class="employment-panel employment-evidence-panel">
+                    <h2>依据说明</h2>
+                    <div class="employment-evidence-grid">
+                        {% for group in result.evidence_basis %}
+                        <article class="employment-evidence-card">
+                            <strong>{{ group.title }}</strong>
+                            <p>{{ group.conclusion }}</p>
+                            <ul>
+                                {% for item in group["items"] %}
+                                <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="employment-panel">
+                    <h2>精准就业指导</h2>
+                    <div class="employment-guidance-list">
+                        {% for item in result.precision_guidance %}
+                        <div>
+                            <strong>{{ item.title }}</strong>
+                            <p>{{ item.advice }}</p>
+                            {% if item.basis %}
+                            <em>依据：{{ item.basis | join("；") }}</em>
+                            {% endif %}
+                            {% if item.actions %}
+                            <ul>
+                                {% for action in item.actions %}
+                                <li>{{ action }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="employment-panel">
+                    <h2>智能发展建议</h2>
+                    <div class="employment-development-list">
+                        {% for item in result.development_suggestions %}
+                        <article>
+                            <strong>{{ item.title }}</strong>
+                            <p>{{ item.advice }}</p>
+                            <em>依据：{{ item.basis }}</em>
+                            <ul>
+                                {% for milestone in item.milestones %}
+                                <li>{{ milestone }}</li>
+                                {% endfor %}
+                            </ul>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="employment-panel employment-chart-panel">
+                    <div class="employment-panel-head">
+                        <h2>十年发展趋势</h2>
+                        <span>基于推荐TOP1岗位“{{ result.trend.anchor_job }}”生成长期职业路径，体现从入职到专家/负责人阶段的职位提升。</span>
+                    </div>
+                    <div class="employment-career-anchor">
+                        <span>TOP1岗位锚点</span>
+                        <strong>{{ result.top1_job.job_name }}</strong>
+                        <em>当前匹配度 {{ result.top1_job.match_score }}% · 十年目标 {{ result.trend.ten_year_target }}</em>
+                    </div>
+                    <canvas id="employmentTrendChart" class="employment-chart-canvas"></canvas>
+                    <div class="employment-chart-legend">
+                        {% for series in result.trend_chart.series %}
+                        <span><i style="background: {{ series.color }}"></i>{{ series.name }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="employment-career-path">
+                        {% for stage in result.trend_chart.position_path %}
+                        <article>
+                            <span>{{ stage.label }}</span>
+                            <strong>{{ stage.title }}</strong>
+                            <p>{{ stage.note }}</p>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <script type="application/json" id="employmentTrendData">{{ result.trend_chart | tojson }}</script>
+        <script>
+            function drawEmploymentTrendChart(canvas, chart) {
+                if (!canvas || !chart || !chart.labels || !chart.series) {
+                    return;
+                }
+
+                const width = canvas.clientWidth || 720;
+                const height = canvas.clientHeight || 320;
+                const ratio = window.devicePixelRatio || 1;
+                canvas.width = width * ratio;
+                canvas.height = height * ratio;
+
+                const ctx = canvas.getContext("2d");
+                ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+                ctx.clearRect(0, 0, width, height);
+
+                const pad = { top: 24, right: 24, bottom: 48, left: 46 };
+                const plotWidth = width - pad.left - pad.right;
+                const plotHeight = height - pad.top - pad.bottom;
+                const count = Math.max(chart.labels.length, 1);
+
+                ctx.font = "12px Microsoft YaHei, Arial, sans-serif";
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = "#e5e7eb";
+                ctx.fillStyle = "#64748b";
+
+                for (let value = 0; value <= 100; value += 20) {
+                    const y = pad.top + plotHeight - (value / 100) * plotHeight;
+                    ctx.beginPath();
+                    ctx.moveTo(pad.left, y);
+                    ctx.lineTo(width - pad.right, y);
+                    ctx.stroke();
+                    ctx.fillText(String(value), 12, y + 4);
+                }
+
+                chart.labels.forEach((label, index) => {
+                    const x = count === 1 ? pad.left + plotWidth / 2 : pad.left + (index / (count - 1)) * plotWidth;
+                    ctx.fillStyle = "#64748b";
+                    ctx.fillText(label.replace(" ", "\n").split("\n")[0], Math.max(6, x - 28), height - 24);
+                    ctx.fillText(label.replace(" ", "\n").split("\n")[1] || "", Math.max(6, x - 20), height - 9);
+                });
+
+                chart.series.forEach((series) => {
+                    const values = series.values || [];
+                    ctx.strokeStyle = series.color || "#2563eb";
+                    ctx.fillStyle = series.color || "#2563eb";
+                    ctx.lineWidth = series.key === "career_level" ? 3 : 2;
+                    ctx.beginPath();
+
+                    values.forEach((value, index) => {
+                        const x = count === 1 ? pad.left + plotWidth / 2 : pad.left + (index / (count - 1)) * plotWidth;
+                        const y = pad.top + plotHeight - (Math.max(0, Math.min(100, Number(value) || 0)) / 100) * plotHeight;
+                        if (index === 0) {
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    });
+
+                    ctx.stroke();
+
+                    values.forEach((value, index) => {
+                        const x = count === 1 ? pad.left + plotWidth / 2 : pad.left + (index / (count - 1)) * plotWidth;
+                        const y = pad.top + plotHeight - (Math.max(0, Math.min(100, Number(value) || 0)) / 100) * plotHeight;
+                        ctx.beginPath();
+                        ctx.arc(x, y, series.key === "career_level" ? 4 : 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+                });
+            }
+
+            const chartDataNode = document.getElementById("employmentTrendData");
+            const trendCanvas = document.getElementById("employmentTrendChart");
+            if (chartDataNode && trendCanvas) {
+                const chartData = JSON.parse(chartDataNode.textContent);
+                drawEmploymentTrendChart(trendCanvas, chartData);
+                window.addEventListener("resize", () => drawEmploymentTrendChart(trendCanvas, chartData));
+            }
+        </script>
+        {% endif %}
+    </main>
+</body>
+</html>
