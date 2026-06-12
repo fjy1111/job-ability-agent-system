@@ -99,6 +99,68 @@
             line-height: 1.8;
         }
 
+        .match-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 16px 18px;
+            border: 1px solid #dbe7f7;
+            border-radius: 14px;
+            background: #f8fbff;
+        }
+
+        .match-source {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #475569;
+            line-height: 1.7;
+        }
+
+        .source-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 11px;
+            border-radius: 999px;
+            background: #dcfce7;
+            color: #166534;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .source-badge.ai {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .refine-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 18px;
+            background: #2563eb;
+            color: #ffffff;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .refine-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
+        .match-status {
+            margin: 0 0 16px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .match-status.warning {
+            color: #b45309;
+        }
 
         .job-actions {
             margin-top: 16px;
@@ -138,6 +200,11 @@
             .stage-list {
                 grid-template-columns: 1fr;
             }
+
+            .match-toolbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -162,6 +229,31 @@
 
     <div class="card">
         <h2>TOP5 推荐岗位</h2>
+
+        {% if job_matches %}
+        <div class="match-toolbar">
+            <div class="match-source">
+                {% if match_source == "llm" %}
+                <span class="source-badge ai">AI 精排结果</span>
+                <span>已对本地 TOP10 完成一次 AI 精排，结果已持久化缓存。</span>
+                {% else %}
+                <span class="source-badge">本地即时匹配</span>
+                <span>基于已保存画像、技能覆盖和岗位相似度生成，无需等待 LLM。</span>
+                {% endif %}
+            </div>
+            <button
+                type="button"
+                id="refine-button"
+                class="refine-btn"
+                {% if match_source == "llm" %}disabled{% endif %}
+            >
+                {% if match_source == "llm" %}AI 精排已完成{% else %}使用 AI 精排 TOP10{% endif %}
+            </button>
+        </div>
+        <p id="match-status" class="match-status">
+            {% if match_cached %}本次结果来自 MySQL 缓存。{% else %}本次已完成新的本地匹配计算。{% endif %}
+        </p>
+        {% endif %}
 
         {% if job_matches %}
         {% for job in job_matches[:5] %}
@@ -208,7 +300,9 @@
                 <button
                     type="button"
                     class="path-toggle-btn"
-                    onclick="togglePathDetail('{{ loop.index }}', this)"
+                    data-job-name="{{ job.job_name }}"
+                    data-loaded="{% if detail %}true{% else %}false{% endif %}"
+                    onclick="loadOrTogglePath('{{ loop.index }}', this)"
                 >
                     查看个性化路径
                 </button>
@@ -314,9 +408,7 @@
                 </div>
 
                 {% else %}
-                <p class="empty-tip">
-                    暂无该岗位的差距分析结果。请确认 main.py 中已经为每个 TOP5 岗位添加 job["gap_detail"]。
-                </p>
+                <p class="empty-tip">点击“查看个性化路径”后，系统才会为当前岗位生成成长方案。</p>
                 {% endif %}
             </div>
         </div>
@@ -332,6 +424,15 @@
 </div>
 
 <script>
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
     function togglePathDetail(index, btn) {
         const box = document.getElementById("path-detail-" + index);
         if (!box) {
@@ -350,6 +451,119 @@
                 block: "nearest"
             });
         }
+    }
+
+    function renderPathDetail(box, path, warning) {
+        const gaps = (path.gap_list || [])
+            .map((item) => `<li>${escapeHtml(typeof item === "string" ? item : (item.skill || item.name || ""))}</li>`)
+            .join("");
+        const projects = (path.recommended_projects || [])
+            .map((item) => `<li>${escapeHtml(item)}</li>`)
+            .join("");
+        const stages = (path.learning_stages || []).map((stage) => {
+            const actions = (stage.actions || stage.tasks || [])
+                .map((item) => `<li>${escapeHtml(item)}</li>`)
+                .join("");
+            const deliverables = (stage.deliverables || [])
+                .map((item) => `<li>${escapeHtml(item)}</li>`)
+                .join("");
+            return `
+                <div class="stage-card">
+                    <h5>${escapeHtml(stage.stage)}</h5>
+                    <p class="stage-duration">${escapeHtml(stage.duration)}</p>
+                    <p><strong>目标：</strong>${escapeHtml(stage.goal || "")}</p>
+                    <ul>${actions}</ul>
+                    <div class="deliverable">阶段成果：<ul>${deliverables}</ul></div>
+                </div>
+            `;
+        }).join("");
+
+        box.innerHTML = `
+            <h3 class="gap-detail-title">岗位差距清单 + 补齐路径</h3>
+            ${warning ? `<p class="match-status warning">${escapeHtml(warning)}</p>` : ""}
+            <p class="path-summary">${escapeHtml(path.path_summary || "已根据当前岗位匹配结果生成补齐建议。")}</p>
+            <div class="detail-block">
+                <h4>一、当前差距清单</h4>
+                <ul>${gaps}</ul>
+            </div>
+            <div class="detail-block">
+                <h4>二、推荐项目</h4>
+                <ul>${projects}</ul>
+            </div>
+            <div class="detail-block">
+                <h4>三、学习阶段</h4>
+                <div class="stage-list">${stages}</div>
+            </div>
+        `;
+    }
+
+    async function loadOrTogglePath(index, btn) {
+        if (btn.dataset.loaded === "true") {
+            togglePathDetail(index, btn);
+            return;
+        }
+
+        const box = document.getElementById("path-detail-" + index);
+        if (!box) {
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "正在生成路径...";
+        try {
+            const response = await fetch("/job/match/path", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({job_name: btn.dataset.jobName})
+            });
+            const data = await response.json();
+            if (!data.ok) {
+                throw new Error(data.error || "成长路径生成失败");
+            }
+            renderPathDetail(box, data.path || {}, data.warning || "");
+            btn.dataset.loaded = "true";
+            box.classList.add("show");
+            btn.textContent = "收起个性化路径";
+            box.scrollIntoView({behavior: "smooth", block: "nearest"});
+        } catch (error) {
+            box.innerHTML = `<p class="empty-tip">${escapeHtml(error.message || "成长路径生成失败，请稍后重试。")}</p>`;
+            box.classList.add("show");
+            btn.textContent = "重新生成个性化路径";
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    const refineButton = document.getElementById("refine-button");
+    if (refineButton && !refineButton.disabled) {
+        refineButton.addEventListener("click", async () => {
+            const status = document.getElementById("match-status");
+            refineButton.disabled = true;
+            refineButton.textContent = "AI 正在精排...";
+            status.classList.remove("warning");
+            status.textContent = "正在对本地 TOP10 进行 AI 精排，网络波动时系统会自动重试，请稍候。";
+
+            try {
+                const response = await fetch("/job/match/refine", {
+                    method: "POST"
+                });
+                const data = await response.json();
+                if (!data.ok) {
+                    status.classList.add("warning");
+                    status.textContent = data.warning || data.error || "AI 精排失败，已保留本地结果。";
+                    refineButton.disabled = false;
+                    refineButton.textContent = "重新使用 AI 精排";
+                    return;
+                }
+                status.textContent = data.cached ? "已读取 AI 精排缓存。" : "AI 精排完成，正在刷新结果。";
+                window.location.reload();
+            } catch (error) {
+                status.classList.add("warning");
+                status.textContent = "网络连接异常，请点击按钮继续精排，当前本地结果不会丢失。";
+                refineButton.disabled = false;
+                refineButton.textContent = "继续 AI 精排";
+            }
+        });
     }
 </script>
 

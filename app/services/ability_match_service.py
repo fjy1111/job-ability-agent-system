@@ -190,6 +190,12 @@ def _contains(text: str, keyword: str) -> bool:
     if not text or not keyword:
         return False
 
+    # PDF 文本层经常把英文技术词拆成 "J a v a"、"M y S Q L"。
+    text = re.sub(
+        r"(?<![A-Za-z])(?:[A-Za-z]\s+){1,}[A-Za-z](?![A-Za-z])",
+        lambda match: re.sub(r"\s+", "", match.group(0)),
+        text,
+    )
     candidates = [keyword, *KEYWORD_ALIASES.get(keyword, [])]
     for token in candidates:
         token = _safe_text(token).strip()
@@ -397,9 +403,18 @@ def match_profile_to_job(
     student_text = build_profile_text(student_data)
 
     job_name = _safe_text(_get_attr(record, "job_name") or _get_attr(record, "name") or "未知岗位")
-    category = _safe_text(_get_attr(record, "category") or infer_target_role(student_data, job_name))
+    job_id = _get_attr(record, "id") or _get_attr(record, "job_id")
+    category = _safe_text(
+        _get_attr(record, "job_category")
+        or _get_attr(record, "category")
+        or infer_target_role(student_data, job_name)
+    )
     description = _safe_text(_get_attr(record, "description") or _get_attr(record, "job_description"))
-    education_requirement = _safe_text(_get_attr(record, "education_requirement") or _get_attr(record, "education"))
+    education_requirement = _safe_text(
+        _get_attr(record, "educational_requirements")
+        or _get_attr(record, "education_requirement")
+        or _get_attr(record, "education")
+    )
 
     required_skills, related_projects, recommended_certificates = _extract_job_keywords(record)
     if not required_skills:
@@ -434,8 +449,16 @@ def match_profile_to_job(
     )
 
     return {
+        "job_id": job_id,
         "job_name": job_name,
         "category": category,
+        "company_name": _safe_text(_get_attr(record, "company_name")),
+        "hiring_city": _safe_text(_get_attr(record, "hiring_city")),
+        "salary_range": _safe_text(_get_attr(record, "salary_range")),
+        "education_requirement": education_requirement,
+        "required_skills": required_skills,
+        "related_projects": related_projects,
+        "recommended_certificates": recommended_certificates,
         "match_score": match_score,
         "matched_skills": matched_skills,
         "missing_skills": missing_skills,

@@ -1,5 +1,6 @@
 import json
 import os
+import hashlib
 from pathlib import Path
 from dotenv import load_dotenv
 from datetime import datetime
@@ -19,10 +20,17 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 
-from app.services.llm_ability_match_service import calculate_job_match
+from app.services.llm_ability_match_service import (
+    calculate_job_match,
+    refine_job_matches_with_llm,
+)
 from app.agent.diagnosis_agent import AGENT_ROSTER, run_diagnosis_agent
 from app.services.llm_errors import LLMCallError
 from app.services.llm_gap_path_agent import generate_top5_gap_paths
+from app.services.match_cache_service import (
+    MATCH_CACHE_ALGORITHM_VERSION,
+    build_job_version,
+)
 # from app.services.mock_interview_service import (
 #     build_interview_session,
 #     respond_to_interview_answer,
@@ -198,6 +206,48 @@ class JobKnowledgeRecord(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default=datetime.now,
+        nullable=False
+    )
+
+
+class JobMatchCacheRecord(Base):
+    """
+    岗位匹配持久化缓存。
+
+    同一诊断记录、岗位库版本和算法版本可分别保存本地排序与 LLM 精排结果。
+    """
+    __tablename__ = "job_match_cache_records"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+    cache_key: Mapped[str] = mapped_column(
+        String(64),
+        unique=True,
+        nullable=False,
+        index=True
+    )
+    diagnosis_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("diagnosis_records.id"),
+        nullable=False,
+        index=True
+    )
+    job_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    algorithm_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    result_type: Mapped[str] = mapped_column(String(20), nullable=False)
+    result_json: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.now,
+        nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.now,
+        onupdate=datetime.now,
         nullable=False
     )
 
@@ -1479,6 +1529,122 @@ def load_agent_result(record: DiagnosisRecord | None) -> dict:
         return {}
 
 
+def build_match_assessment(record: DiagnosisRecord) -> dict:
+    """复用诊断时已经写入数据库的四维画像分数。"""
+    agent_result = load_agent_result(record)
+    evidence = agent_result.get("score_evidence")
+    if not isinstance(evidence, dict):
+        evidence = {}
+    return {
+        "ability_scores": build_ability_scores(record),
+        "score_evidence": evidence,
+        "recognized_skills": agent_result.get("recognized_skills", []),
+        "target_roles": agent_result.get("target_roles", []),
+    }
+
+
+def build_persistent_match_cache_key(
+    diagnosis_id: int,
+    job_version: str,
+    result_type: str,
+) -> str:
+    raw = ":".join([
+        str(diagnosis_id),
+        job_version,
+        MATCH_CACHE_ALGORITHM_VERSION,
+        result_type,
+    ])
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def load_persistent_match_cache(
+    db: Session,
+    diagnosis_id: int,
+    job_version: str,
+    result_type: str,
+) -> list[dict] | None:
+    cache_key = build_persistent_match_cache_key(
+        diagnosis_id,
+        job_version,
+        result_type,
+    )
+    record = (
+        db.query(JobMatchCacheRecord)
+        .filter(JobMatchCacheRecord.cache_key == cache_key)
+        .first()
+    )
+    if record is None:
+        return None
+    try:
+        value = json.loads(record.result_json)
+    except json.JSONDecodeError:
+        return None
+    return value if isinstance(value, list) else None
+
+
+def save_persistent_match_cache(
+    db: Session,
+    diagnosis_id: int,
+    job_version: str,
+    result_type: str,
+    results: list[dict],
+) -> None:
+    cache_key = build_persistent_match_cache_key(
+        diagnosis_id,
+        job_version,
+        result_type,
+    )
+    (
+        db.query(JobMatchCacheRecord)
+        .filter(
+            JobMatchCacheRecord.diagnosis_id == diagnosis_id,
+            JobMatchCacheRecord.result_type == result_type,
+            JobMatchCacheRecord.cache_key != cache_key,
+        )
+        .delete(synchronize_session=False)
+    )
+    record = (
+        db.query(JobMatchCacheRecord)
+        .filter(JobMatchCacheRecord.cache_key == cache_key)
+        .first()
+    )
+    if record is None:
+        record = JobMatchCacheRecord(
+            cache_key=cache_key,
+            diagnosis_id=diagnosis_id,
+            job_version=job_version,
+            algorithm_version=MATCH_CACHE_ALGORITHM_VERSION,
+            result_type=result_type,
+            result_json="[]",
+        )
+    record.result_json = json.dumps(results, ensure_ascii=False, default=str)
+    record.updated_at = datetime.now()
+    db.add(record)
+    db.commit()
+
+
+def attach_cached_gap_paths(
+    student_record: DiagnosisRecord,
+    job_matches: list[dict],
+) -> list[dict]:
+    """只挂载已经生成过的路径，不在页面入口调用 LLM。"""
+    agent_result = load_agent_result(student_record)
+    top5_gap_paths = agent_result.get("top5_gap_paths", [])
+    if isinstance(top5_gap_paths, dict):
+        top5_gap_paths = top5_gap_paths.get("top5_gap_paths", [])
+    if not isinstance(top5_gap_paths, list):
+        top5_gap_paths = []
+
+    gap_map = {
+        item.get("job_name"): item
+        for item in top5_gap_paths
+        if isinstance(item, dict) and item.get("job_name")
+    }
+    for job in job_matches:
+        job["gap_detail"] = gap_map.get(job.get("job_name")) or {}
+    return job_matches
+
+
 def normalize_ability_profile_result(
     student_data: dict,
     ability_scores: dict,
@@ -2681,10 +2847,10 @@ def job_match(
     db: Session = Depends(get_db)
 ):
     """
-    岗位匹配页面：
-    学生信息从 diagnosis_records 表读取；
-    岗位知识图谱从 job_knowledge_records 表读取。
-    同时为 TOP5 岗位生成差距清单、补齐路径、推荐项目和学习阶段。
+    岗位匹配页面快速入口。
+
+    只读取已保存画像并执行/读取本地匹配，不在页面入口调用任何 LLM。
+    如果用户此前完成过 AI 精排，则优先显示持久化的精排缓存。
     """
 
     redirect_response = get_login_redirect(request)
@@ -2718,95 +2884,51 @@ def job_match(
         }
 
         job_matches = []
+        match_source = "local"
+        match_cached = False
 
     else:
-        student_data = {
-            "name": student_record.name,
-            "major": student_record.major,
-            "grade": student_record.grade,
-            "target_job": student_record.target_job,
-            "skills": student_record.skills,
-            "projects": student_record.projects,
-            "competitions": student_record.competitions,
-            "certificates": student_record.certificates,
-            "self_intro": student_record.self_intro
-        }
-
+        student_data = build_student_data(student_record)
+        assessment = build_match_assessment(student_record)
         job_records = db.query(JobKnowledgeRecord).all()
+        job_version = build_job_version(job_records)
 
-        try:
-            job_matches = calculate_job_match(student_data, job_records)
-        except LLMCallError:
-            return templates.TemplateResponse(
-                request,
-                "job_match.html",
-                {
-                    "title": "岗位匹配结果",
-                    "student": student_data,
-                    "job_matches": [],
-                    "username": request.session.get("username"),
-                    "error": "调用LLM失败"
-                }
+        job_matches = load_persistent_match_cache(
+            db,
+            student_record.id,
+            job_version,
+            "llm",
+        )
+        match_source = "llm"
+        match_cached = job_matches is not None
+
+        if job_matches is None:
+            job_matches = load_persistent_match_cache(
+                db,
+                student_record.id,
+                job_version,
+                "local",
             )
+            match_source = "local"
+            match_cached = job_matches is not None
 
-        # 只分析 TOP5
-        top5_jobs = job_matches[:5]
-
-        # 读取原来的 agent_result_json，避免覆盖能力诊断结果
-        agent_result = load_agent_result(student_record)
-
-        # 如果之前没有生成过 TOP5 差距路径，就调用大模型生成一次
-        top5_gap_paths = agent_result.get("top5_gap_paths", [])
-        if isinstance(top5_gap_paths, dict):
-            top5_gap_paths = top5_gap_paths.get("top5_gap_paths", [])
-        if not isinstance(top5_gap_paths, list):
-            top5_gap_paths = []
-
-        if not top5_gap_paths and top5_jobs:
-            try:
-                gap_path_result = generate_top5_gap_paths(
-                    student_data=student_data,
-                    job_recommendations=top5_jobs
-                )
-            except LLMCallError:
-                return templates.TemplateResponse(
-                    request,
-                    "job_match.html",
-                    {
-                        "title": "岗位匹配结果",
-                        "student": student_data,
-                        "job_matches": [],
-                        "username": request.session.get("username"),
-                        "error": "调用LLM失败"
-                    }
-                )
-
-            top5_gap_paths = gap_path_result.get("top5_gap_paths", [])
-            agent_result["top5_gap_paths"] = top5_gap_paths
-            agent_result["used_llm"] = gap_path_result.get("used_llm", False)
-            agent_result["agent_warning"] = gap_path_result.get("agent_warning", "")
-
-            student_record.agent_result_json = json.dumps(
-                agent_result,
-                ensure_ascii=False
+        if job_matches is None:
+            job_matches = calculate_job_match(
+                student_data,
+                job_records,
+                assessment=assessment,
+                top_n=10,
             )
+            save_persistent_match_cache(
+                db,
+                student_record.id,
+                job_version,
+                "local",
+                job_matches,
+            )
+            match_cached = False
 
-            db.add(student_record)
-            db.commit()
-            db.refresh(student_record)
-
-        # 把每个岗位的差距路径挂到对应 job_match 上
-        gap_map = {
-            item.get("job_name"): item
-            for item in top5_gap_paths
-            if isinstance(item, dict)
-        }
-
-        for index, job in enumerate(job_matches):
-            if index < 5:
-                job["gap_detail"] = gap_map.get(job.get("job_name")) or {}
-            else:
-                job["gap_detail"] = {}
+        job_matches = attach_cached_gap_paths(student_record, job_matches)
 
     return templates.TemplateResponse(
         request,
@@ -2815,10 +2937,201 @@ def job_match(
             "title": "岗位匹配结果",
             "student": student_data,
             "job_matches": job_matches,
+            "match_source": match_source,
+            "match_cached": match_cached,
             "username": request.session.get("username"),
             "error": ""
         }
     )
+
+
+@app.post("/job/match/refine")
+def job_match_refine(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """按需使用一次 LLM 对本地 TOP10 精排，失败时保留本地结果。"""
+    redirect_response = get_login_redirect(request)
+    if redirect_response:
+        return {"ok": False, "error": "请先登录。"}
+
+    user_id = request.session.get("user_id")
+    student_record = (
+        db.query(DiagnosisRecord)
+        .filter(DiagnosisRecord.user_id == user_id)
+        .order_by(DiagnosisRecord.created_at.desc(), DiagnosisRecord.id.desc())
+        .first()
+    )
+    if student_record is None:
+        return {"ok": False, "error": "请先完成学生能力诊断。"}
+
+    student_data = build_student_data(student_record)
+    assessment = build_match_assessment(student_record)
+    job_records = db.query(JobKnowledgeRecord).all()
+    job_version = build_job_version(job_records)
+
+    cached = load_persistent_match_cache(
+        db,
+        student_record.id,
+        job_version,
+        "llm",
+    )
+    if cached is not None:
+        return {
+            "ok": True,
+            "cached": True,
+            "source": "llm",
+            "job_matches": cached[:5],
+        }
+
+    local_matches = load_persistent_match_cache(
+        db,
+        student_record.id,
+        job_version,
+        "local",
+    )
+    if local_matches is None:
+        local_matches = calculate_job_match(
+            student_data,
+            job_records,
+            assessment=assessment,
+            top_n=10,
+        )
+        save_persistent_match_cache(
+            db,
+            student_record.id,
+            job_version,
+            "local",
+            local_matches,
+        )
+
+    try:
+        refined = refine_job_matches_with_llm(
+            student_data=student_data,
+            local_matches=local_matches,
+            assessment=assessment,
+            top_n=10,
+        )
+    except Exception:
+        refined = local_matches
+
+    used_llm = any(bool(item.get("used_llm")) for item in refined)
+    if used_llm:
+        save_persistent_match_cache(
+            db,
+            student_record.id,
+            job_version,
+            "llm",
+            refined,
+        )
+
+    return {
+        "ok": used_llm,
+        "cached": False,
+        "source": "llm" if used_llm else "local",
+        "job_matches": refined[:5],
+        "warning": "" if used_llm else "AI 精排超时或失败，已保留本地匹配结果。",
+    }
+
+
+@app.post("/job/match/path")
+async def job_match_path(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """用户点击岗位后，才为该单个岗位生成并持久化成长路径。"""
+    if not request.session.get("user_id"):
+        return {"ok": False, "error": "请先登录。"}
+
+    try:
+        payload = await request.json()
+    except Exception:
+        return {"ok": False, "error": "请求数据格式不正确。"}
+
+    job_name = str(payload.get("job_name") or "").strip()
+    if not job_name:
+        return {"ok": False, "error": "岗位名称不能为空。"}
+
+    user_id = request.session.get("user_id")
+    student_record = (
+        db.query(DiagnosisRecord)
+        .filter(DiagnosisRecord.user_id == user_id)
+        .order_by(DiagnosisRecord.created_at.desc(), DiagnosisRecord.id.desc())
+        .first()
+    )
+    if student_record is None:
+        return {"ok": False, "error": "请先完成学生能力诊断。"}
+
+    agent_result = load_agent_result(student_record)
+    cached_paths = agent_result.get("top5_gap_paths", [])
+    if isinstance(cached_paths, dict):
+        cached_paths = cached_paths.get("top5_gap_paths", [])
+    if not isinstance(cached_paths, list):
+        cached_paths = []
+
+    for item in cached_paths:
+        if isinstance(item, dict) and item.get("job_name") == job_name:
+            return {
+                "ok": True,
+                "cached": True,
+                "used_llm": bool(item.get("used_llm")),
+                "path": item,
+            }
+
+    student_data = build_student_data(student_record)
+    job_records = db.query(JobKnowledgeRecord).all()
+    job_version = build_job_version(job_records)
+    matches = (
+        load_persistent_match_cache(db, student_record.id, job_version, "llm")
+        or load_persistent_match_cache(db, student_record.id, job_version, "local")
+    )
+    if matches is None:
+        matches = calculate_job_match(
+            student_data,
+            job_records,
+            assessment=build_match_assessment(student_record),
+            top_n=10,
+        )
+        save_persistent_match_cache(
+            db,
+            student_record.id,
+            job_version,
+            "local",
+            matches,
+        )
+
+    selected_job = next(
+        (item for item in matches if item.get("job_name") == job_name),
+        None,
+    )
+    if selected_job is None:
+        return {"ok": False, "error": "当前匹配结果中未找到该岗位。"}
+
+    path_result = generate_top5_gap_paths(
+        student_data=student_data,
+        job_recommendations=[selected_job],
+        use_llm=True,
+    )
+    generated = path_result.get("top5_gap_paths", [])
+    if not generated:
+        return {"ok": False, "error": "成长路径生成失败，请稍后重试。"}
+
+    path = generated[0]
+    path["used_llm"] = bool(path_result.get("used_llm"))
+    cached_paths.append(path)
+    agent_result["top5_gap_paths"] = cached_paths
+    agent_result["path_agent_warning"] = path_result.get("agent_warning", "")
+    student_record.agent_result_json = json.dumps(agent_result, ensure_ascii=False)
+    db.add(student_record)
+    db.commit()
+
+    return {
+        "ok": True,
+        "cached": False,
+        "used_llm": bool(path_result.get("used_llm")),
+        "warning": path_result.get("agent_warning", ""),
+        "path": path,
+    }
 
 
 @app.get("/health")

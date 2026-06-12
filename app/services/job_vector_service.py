@@ -198,7 +198,15 @@ def build_job_vector_index(job_records: list[Any]) -> list[dict[str, Any]]:
     signature = _jobs_signature(job_records)
     cached = _VECTOR_INDEX_CACHE.get(signature)
     if cached is not None:
-        return cached
+        # 向量和文本可以跨请求复用，但 record 必须绑定本次请求读取的对象。
+        return [
+            {
+                "record": record,
+                "text": item.get("text", ""),
+                "vector": item.get("vector", {}),
+            }
+            for item, record in zip(cached, job_records)
+        ]
 
     index: list[dict[str, Any]] = []
     for record in job_records:

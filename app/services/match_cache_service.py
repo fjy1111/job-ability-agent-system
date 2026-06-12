@@ -23,7 +23,7 @@ from typing import Any
 """
 
 # 缓存版本号：当 prompt、评分公式、候选岗位召回策略发生变化时，手动改这个值即可让旧缓存失效。
-MATCH_CACHE_ALGORITHM_VERSION = "match_cache_v1"
+MATCH_CACHE_ALGORITHM_VERSION = "match_cache_v7_reliable_ai_refine"
 
 # 默认缓存有效期：30 分钟。比赛演示时，重复刷新页面基本都会命中缓存。
 DEFAULT_TTL_SECONDS = 30 * 60
@@ -68,11 +68,15 @@ def _record_to_cache_dict(record: Any) -> dict[str, str]:
         "job_name",
         "job_category",
         "required_skills",
+        "required_skills_json",
         "required_abilities",
         "related_courses",
         "recommended_courses",
+        "recommended_courses_json",
         "related_projects",
+        "related_projects_json",
         "recommended_certificates",
+        "recommended_certificates_json",
         "educational_requirements",
         "experience_requirements",
         "career_path",

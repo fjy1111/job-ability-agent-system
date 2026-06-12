@@ -3,7 +3,10 @@ import unittest
 from unittest.mock import patch
 
 from app.services.ability_match_service import keyword_hits
-from app.services.llm_ability_match_service import calculate_job_match
+from app.services.llm_ability_match_service import (
+    calculate_job_match,
+    refine_job_matches_with_llm,
+)
 from app.services.llm_gap_path_agent import generate_top5_gap_paths
 from app.services.job_vector_service import (
     build_job_vector_index,
@@ -101,6 +104,53 @@ class JobMatchFastPathTests(unittest.TestCase):
             hits,
             ["Java", "MySQL", "Redis", "Spring Boot"],
         )
+
+    def test_refine_sends_local_top10_in_one_batch(self):
+        local_matches = calculate_job_match(STUDENT, JOBS)
+        assessment = {
+            "ability_scores": {
+                "professional": 80,
+                "practice": 75,
+                "tools": 82,
+                "career": 78,
+            },
+            "score_evidence": {},
+        }
+
+        with patch(
+            "app.services.llm_ability_match_service.calculate_ai_job_match",
+            return_value=[{**local_matches[0], "used_llm": True}],
+        ) as calculate_ai:
+            result = refine_job_matches_with_llm(
+                STUDENT,
+                local_matches,
+                assessment,
+                top_n=10,
+            )
+
+        calculate_ai.assert_called_once()
+        self.assertEqual(
+            calculate_ai.call_args.kwargs["batch_size"],
+            len(local_matches),
+        )
+        self.assertEqual(result[0]["match_source"], "llm")
+
+    def test_llm_gap_path_failure_falls_back_to_local_path(self):
+        matches = calculate_job_match(STUDENT, JOBS)
+
+        with patch(
+            "app.services.llm_gap_path_agent._create_llm",
+            side_effect=RuntimeError("timeout"),
+        ):
+            result = generate_top5_gap_paths(
+                STUDENT,
+                matches[:1],
+                use_llm=True,
+            )
+
+        self.assertFalse(result["used_llm"])
+        self.assertIn("超时或失败", result["agent_warning"])
+        self.assertEqual(len(result["top5_gap_paths"]), 1)
 
 
 if __name__ == "__main__":
