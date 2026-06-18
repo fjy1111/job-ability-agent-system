@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+    <meta name="referrer" content="no-referrer">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="/static/css/style.css?v=16">
 </head>
@@ -54,7 +56,9 @@
                 {% endif %}
             </div>
 
+            {% if allow_role_switch %}
             <form action="/collaboration/role" method="post" class="tri-party-role-switch">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <label for="user_role">切换身份</label>
                 <select id="user_role" name="user_role">
                     {% for option in role_options %}
@@ -63,6 +67,7 @@
                     </option>
                     {% endfor %}
                 </select>
+                <input type="password" name="role_access_code" placeholder="机构访问码" autocomplete="off">
                 <button type="submit">
                     <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
                         <path d="M4 7h11"></path>
@@ -73,6 +78,21 @@
                     <span>切换</span>
                 </button>
             </form>
+            {% else %}
+            <div class="tri-party-role-locked">
+                <strong>身份已锁定</strong>
+                <span>机构身份需退出后使用访问码重新登录</span>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="tri-party-privacy-banner" aria-label="隐私保护说明">
+            <div class="tri-party-privacy-icon" aria-hidden="true">✓</div>
+            <div>
+                <strong>隐私保护已启用</strong>
+                <p>页面禁止搜索引擎索引与浏览器缓存；简历正文按需授权查看。学校核验原始材料，企业仅接收去除姓名、手机号、邮箱、身份证号和地址后的脱敏版本。</p>
+            </div>
+            <span>最小披露 · 身份隔离 · 操作限流</span>
         </section>
 
         {% if message %}
@@ -108,6 +128,7 @@
         {% if role == "student" %}
         <section class="tri-party-grid">
             <form action="/collaboration/student/submit" method="post" class="tri-party-panel tri-party-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <div class="tri-party-panel-head">
                     <p>Student</p>
                     <h2>投递简历给企业</h2>
@@ -136,6 +157,11 @@
                 <label>
                     <span>简历内容</span>
                     <textarea name="resume_text" rows="10" required>{{ input_data.get('resume_text', '') }}</textarea>
+                </label>
+
+                <label class="tri-party-consent">
+                    <input type="checkbox" name="privacy_consent" value="accepted" required>
+                    <span>我同意学校为真实性核验查看原始材料，并仅向目标企业转交自动脱敏后的简历。请勿在简历中填写与求职无关的身份证、家庭住址等信息。</span>
                 </label>
 
                 <button type="submit" class="tri-party-primary-btn">
@@ -234,13 +260,15 @@
                         <div><dt>简历哈希</dt><dd>{{ application.resume_hash[:12] }}</dd></div>
                     </dl>
 
-                    <details class="tri-party-resume-preview">
-                        <summary>查看简历内容</summary>
-                        <pre>{{ application.resume_text }}</pre>
-                    </details>
+                    <form action="/collaboration/{{ application.id }}/resume" method="post" class="tri-party-secure-view-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button type="submit">安全查看原始简历</button>
+                        <span>简历正文不会随列表页下发，查看操作受身份校验和频率限制。</span>
+                    </form>
 
                     {% if application.status == "school_review" %}
                     <form action="/collaboration/school/{{ application.id }}/review" method="post" class="tri-party-review-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <div class="tri-party-radio-row">
                             <label>
                                 <input type="radio" name="review_result" value="passed" checked>
@@ -300,7 +328,7 @@
                             <span class="tri-party-record-time">
                                 {{ (application.forwarded_at or application.created_at).strftime("%Y-%m-%d %H:%M") }}
                             </span>
-                            <h3>{{ application.student_name }} · {{ application.target_company }} · {{ application.target_job }}</h3>
+                            <h3>{{ candidate_privacy_label(application) }} · {{ application.target_company }} · {{ application.target_job }}</h3>
                         </div>
                         <b class="tri-party-status status-{{ application.status }}">
                             {{ status_labels.get(application.status, application.status) }}
@@ -313,13 +341,15 @@
                         <div><dt>审核结果</dt><dd>{{ application.school_feedback or "学校已审核通过" }}</dd></div>
                     </dl>
 
-                    <details class="tri-party-resume-preview">
-                        <summary>查看学校转交的简历</summary>
-                        <pre>{{ application.resume_text }}</pre>
-                    </details>
+                    <form action="/collaboration/{{ application.id }}/resume" method="post" class="tri-party-secure-view-form enterprise">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button type="submit">安全查看脱敏简历</button>
+                        <span>企业端不显示学生账号和真实姓名，联系方式等直接身份标识会自动移除。</span>
+                    </form>
 
                     {% if application.status == "enterprise_review" %}
                     <form action="/collaboration/enterprise/{{ application.id }}/decision" method="post" class="tri-party-review-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <div class="tri-party-radio-row">
                             <label>
                                 <input type="radio" name="decision" value="hire" checked>

@@ -1,0 +1,1212 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/devxte",
+    "id": "devxte",
+    "slide": 8,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "Noto Sans SC"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/36hcrmhk",
+      "id": "16",
+      "name": "Picture 2",
+      "bbox": [
+        0,
+        0,
+        1260,
+        714.67
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00033,
+        "top": 0,
+        "right": 0.00033,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/eloj2t83",
+      "id": "3",
+      "name": "AutoShape 3",
+      "bbox": [
+        0,
+        53.33,
+        1260,
+        80
+      ],
+      "geometry": "rect",
+      "text": "01 总体技术路线",
+      "textPreview": "01 总体技术路线",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "01 总体技术路线"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "01 总体技术路线",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "01 总体技术路线",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#104862",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/l0rqd4vm",
+      "id": "4",
+      "name": "AutoShape 4",
+      "bbox": [
+        56,
+        160,
+        1148,
+        93.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.85)",
+      "lineColor": "rgba(16, 54, 141, 0.4)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wfyxobm5",
+      "id": "5",
+      "name": "AutoShape 5",
+      "bbox": [
+        69.33,
+        173.33,
+        1121.33,
+        66.67
+      ],
+      "geometry": "rect",
+      "text": "核心思想：围绕“算法建模 → 泛化优化 → 量化压缩 → 端侧推理”的全链路展开",
+      "textPreview": "核心思想：围绕“算法建模 → 泛化优化 → 量化压缩 → 端侧推理”的全链路展开",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "核心思想：围绕“算法建模 → 泛化优化 → 量化压缩 → 端侧推理”的全链路展开"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "核心思想：围绕“算法建模 → 泛化优化 → 量化压缩 → 端侧推理”的全链路展开",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "核心思想：",
+              "fontSize": 21.33,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2329",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "围绕“算法建模 → 泛化优化 → 量化压缩 → 端侧推理”的全链路展开",
+              "fontSize": 21.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7u54zido",
+      "id": "6",
+      "name": "AutoShape 6",
+      "bbox": [
+        46.67,
+        293.33,
+        220,
+        360
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineWidth": 2.67
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ed8bat47",
+      "id": "7",
+      "name": "AutoShape 7",
+      "bbox": [
+        60,
+        320,
+        193.33,
+        306.67
+      ],
+      "geometry": "rect",
+      "text": "01\n数据处理\n读取多频带EEG特征，通过滑动窗口算法构建统一维度的输入样本，确保数据输入一致性。",
+      "textPreview": "01 | 数据处理 | 读取多频带EEG特征，通过滑动窗口算法构建统一维度的输入样本，确保数据输入一致性。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 8,
+        "lines": [
+          {
+            "index": 1,
+            "text": "01"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "数据处理"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "读取多频带EEG特征，通"
+          },
+          {
+            "index": 6,
+            "text": "过滑动窗口算法构建统一"
+          },
+          {
+            "index": 7,
+            "text": "维度的输入样本，确保数"
+          },
+          {
+            "index": 8,
+            "text": "据输入一致性。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "01",
+          "indent": 0,
+          "lineSpacingPercent": 92000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "01",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#D97706",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "数据处理",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 1000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "数据处理",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#111827",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "读取多频带EEG特征，通过滑动窗口算法构建统一维度的输入样本，确保数据输入一致性。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "读取多频带EEG特征，通过滑动窗口算法构建统一维度的输入样本，确保数据输入一致性。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/psfil0rq",
+      "id": "8",
+      "name": "AutoShape 8",
+      "bbox": [
+        293.33,
+        293.33,
+        220,
+        360
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineWidth": 2.67
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/w7mp0bi9",
+      "id": "9",
+      "name": "AutoShape 9",
+      "bbox": [
+        306.67,
+        320,
+        193.33,
+        306.67
+      ],
+      "geometry": "rect",
+      "text": "02\n核心建模\n以MRGCN为核心算法，将电极视为图神经网络节点，构建脑功能网络，精准提取脑区拓扑特征。",
+      "textPreview": "02 | 核心建模 | 以MRGCN为核心算法，将电极视为图神经网络节点，构建脑功能网络，精准提取脑区拓扑特征。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 8,
+        "lines": [
+          {
+            "index": 1,
+            "text": "02"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "核心建模"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "以MRGCN为核心算法，将"
+          },
+          {
+            "index": 6,
+            "text": "电极视为图神经网络节点"
+          },
+          {
+            "index": 7,
+            "text": "，构建脑功能网络，精准"
+          },
+          {
+            "index": 8,
+            "text": "提取脑区拓扑特征。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "02",
+          "indent": 0,
+          "lineSpacingPercent": 92000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "02",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#10B981",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "核心建模",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 1000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "核心建模",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#111827",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "以MRGCN为核心算法，将电极视为图神经网络节点，构建脑功能网络，精准提取脑区拓扑特征。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "以MRGCN为核心算法，将电极视为图神经网络节点，构建脑功能网络，精准提取脑区拓扑特征。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/eloj2t83",
+      "id": "10",
+      "name": "AutoShape 10",
+      "bbox": [
+        540,
+        293.33,
+        220,
+        360
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineWidth": 2.67
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/36hcrmhk",
+      "id": "11",
+      "name": "AutoShape 11",
+      "bbox": [
+        553.33,
+        320,
+        193.33,
+        306.67
+      ],
+      "geometry": "rect",
+      "text": "03\n模型优化\n融合多种异构脑网络特征，并引入DANN领域对抗训练机制，有效降低个体差异影响，增强模型泛化能力。",
+      "textPreview": "03 | 模型优化 | 融合多种异构脑网络特征，并引入DANN领域对抗训练机制，有效降低个体差异影响，增强模型泛化能力。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 9,
+        "lines": [
+          {
+            "index": 1,
+            "text": "03"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "模型优化"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "融合多种异构脑网络特征"
+          },
+          {
+            "index": 6,
+            "text": "，并引入DANN领域对抗训"
+          },
+          {
+            "index": 7,
+            "text": "练机制，有效降低个体差"
+          },
+          {
+            "index": 8,
+            "text": "异影响，增强模型泛化能"
+          },
+          {
+            "index": 9,
+            "text": "力。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "03",
+          "indent": 0,
+          "lineSpacingPercent": 92000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "03",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#3B82F6",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "模型优化",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 1000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "模型优化",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#111827",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "融合多种异构脑网络特征，并引入DANN领域对抗训练机制，有效降低个体差异影响，增强模型泛化能力。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "融合多种异构脑网络特征，并引入DANN领域对抗训练机制，有效降低个体差异影响，增强模型泛化能力。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wra5gbq1",
+      "id": "12",
+      "name": "AutoShape 12",
+      "bbox": [
+        786.67,
+        293.33,
+        220,
+        360
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineWidth": 2.67
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lc7u54zi",
+      "id": "13",
+      "name": "AutoShape 13",
+      "bbox": [
+        800,
+        320,
+        193.33,
+        306.67
+      ],
+      "geometry": "rect",
+      "text": "04\n工程部署\n对训练好的模型进行ONNX与NCNN格式转换，并实施INT8量化压缩，大幅降低模型体积与算力需求。",
+      "textPreview": "04 | 工程部署 | 对训练好的模型进行ONNX与NCNN格式转换，并实施INT8量化压缩，大幅降低模型体积与算力需求。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 8,
+        "lines": [
+          {
+            "index": 1,
+            "text": "04"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "工程部署"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "对训练好的模型进行ONNX"
+          },
+          {
+            "index": 6,
+            "text": "与NCNN格式转换，并实施"
+          },
+          {
+            "index": 7,
+            "text": "INT8量化压缩，大幅降低"
+          },
+          {
+            "index": 8,
+            "text": "模型体积与算力需求。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "04",
+          "indent": 0,
+          "lineSpacingPercent": 92000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "04",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#8B5CF6",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "工程部署",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 1000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "工程部署",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#111827",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "对训练好的模型进行ONNX与NCNN格式转换，并实施INT8量化压缩，大幅降低模型体积与算力需求。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "对训练好的模型进行ONNX与NCNN格式转换，并实施INT8量化压缩，大幅降低模型体积与算力需求。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ed8bat47",
+      "id": "14",
+      "name": "AutoShape 14",
+      "bbox": [
+        1033.33,
+        293.33,
+        220,
+        360
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineWidth": 2.67
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7u54zido",
+      "id": "15",
+      "name": "AutoShape 15",
+      "bbox": [
+        1046.67,
+        320,
+        193.33,
+        306.67
+      ],
+      "geometry": "rect",
+      "text": "05\n端侧验证\n在ARM64架构的嵌入式CPU平台上，通过C++程序进行推理性能与准确率双重评测，形成完整闭环。",
+      "textPreview": "05 | 端侧验证 | 在ARM64架构的嵌入式CPU平台上，通过C++程序进行推理性能与准确率双重评测，形成完整闭环。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 8,
+        "lines": [
+          {
+            "index": 1,
+            "text": "05"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "端侧验证"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "在ARM64架构的嵌入式CP"
+          },
+          {
+            "index": 6,
+            "text": "U平台上，通过C++程序进"
+          },
+          {
+            "index": 7,
+            "text": "行推理性能与准确率双重"
+          },
+          {
+            "index": 8,
+            "text": "评测，形成完整闭环。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "05",
+          "indent": 0,
+          "lineSpacingPercent": 92000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "05",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#EC4899",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "端侧验证",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 1000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "端侧验证",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#111827",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "在ARM64架构的嵌入式CPU平台上，通过C++程序进行推理性能与准确率双重评测，形成完整闭环。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "在ARM64架构的嵌入式CPU平台上，通过C++程序进行推理性能与准确率双重评测，形成完整闭环。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    }
+  ],
+  "composeRuns": []
+}

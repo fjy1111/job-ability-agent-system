@@ -1,0 +1,934 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/7y1kre1w",
+    "id": "7y1kre1w",
+    "slide": 16,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "Noto Sans SC",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/bulwval8",
+      "id": "15",
+      "name": "Picture 2",
+      "bbox": [
+        0,
+        0,
+        1260,
+        714.67
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00033,
+        "top": 0,
+        "right": 0.00033,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rytsvu9k",
+      "id": "3",
+      "name": "AutoShape 3",
+      "bbox": [
+        0,
+        40,
+        1260,
+        80
+      ],
+      "geometry": "rect",
+      "text": "02 本地召回与可解释评分",
+      "textPreview": "02 本地召回与可解释评分",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "02 本地召回与可解释评分"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "02 本地召回与可解释评分",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "02 本地召回与可解释评分",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#104862",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/g7adsji5",
+      "id": "4",
+      "name": "AutoShape 4",
+      "bbox": [
+        53.33,
+        146.67,
+        1153.33,
+        120
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.9)",
+      "lineColor": "rgba(16, 58, 110, 0.2)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9s36hcrm",
+      "id": "5",
+      "name": "AutoShape 5",
+      "bbox": [
+        73.33,
+        160,
+        1113.33,
+        93.33
+      ],
+      "geometry": "rect",
+      "text": "基本思想：先用稀疏词袋向量快速缩小候选集，再用技能覆盖率、项目证据和四维画像完成规则精排。",
+      "textPreview": "基本思想：先用稀疏词袋向量快速缩小候选集，再用技能覆盖率、项目证据和四维画像完成规则精排。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "基本思想：先用稀疏词袋向量快速缩小候选集，再用技能覆盖率、项目证据和四维画像完成规则精排。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "基本思想：先用稀疏词袋向量快速缩小候选集，再用技能覆盖率、项目证据和四维画像完成规则精排。",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "基本思想：先用稀疏词袋向量快速缩小候选集，再用技能覆盖率、项目证据和四维画像完成规则精排。",
+              "fontSize": 24,
+              "typeface": "微软雅黑",
+              "color": "#103A6E",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/y1kre1w7",
+      "id": "6",
+      "name": "AutoShape 6",
+      "bbox": [
+        55.33,
+        280.87,
+        776.53,
+        231.53
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(248, 250, 252, 0.95)",
+      "lineColor": "rgba(226, 232, 240, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rmhk3q5o",
+      "id": "7",
+      "name": "AutoShape 7",
+      "bbox": [
+        73.33,
+        293.33,
+        756.53,
+        180
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "lineWidth": 1.31
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5o7qpg3e",
+      "id": "9",
+      "name": "AutoShape 9",
+      "bbox": [
+        473.33,
+        341.53,
+        340,
+        180
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "lineWidth": 1.31
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5gbq1ory",
+      "id": "10",
+      "name": "AutoShape 10",
+      "bbox": [
+        836.07,
+        281,
+        366.67,
+        231.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(248, 250, 252, 0.95)",
+      "lineColor": "rgba(226, 232, 240, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cvixczed",
+      "id": "11",
+      "name": "AutoShape 11",
+      "bbox": [
+        857.27,
+        285.8,
+        340,
+        234.73
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "lineWidth": 1.31
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/nap4r65w",
+      "id": "12",
+      "name": "AutoShape 12",
+      "bbox": [
+        53.33,
+        540,
+        1153.33,
+        133.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(236, 253, 245, 0.95)",
+      "lineColor": "rgba(16, 185, 129, 0.3)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/upwb2hwf",
+      "id": "13",
+      "name": "AutoShape 13",
+      "bbox": [
+        73.33,
+        540,
+        1113.33,
+        120
+      ],
+      "geometry": "rect",
+      "text": "端到端流程\n岗位清洗 → 稀疏向量索引 → TOP30 召回 → 本地规则评分 → TOP10 候选",
+      "textPreview": "端到端流程 | 岗位清洗 → 稀疏向量索引 → TOP30 召回 → 本地规则评分 → TOP10 候选",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "端到端流程"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "岗位清洗 → 稀疏向量索引 → TOP30 召回 → 本地规则评分 → TOP10 候选"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "端到端流程",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "端到端流程",
+              "fontSize": 22.67,
+              "typeface": "微软雅黑",
+              "color": "#047857",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "岗位清洗 → 稀疏向量索引 → TOP30 召回 → 本地规则评分 → TOP10 候选",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "spaceBefore": 1000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "岗位清洗 → 稀疏向量索引 → TOP30 召回 → 本地规则评分 → TOP10 候选",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2937",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/54zidony",
+      "id": "14",
+      "name": "文本框 13",
+      "bbox": [
+        55.33,
+        285.8,
+        758,
+        243.33
+      ],
+      "geometry": "rect",
+      "text": "稀疏向量召回\n• 英文技术词直接保留，中文使用 n-gram 与关键词补强。\n• 词频权重 w(t)=1+ln(tf)，通过余弦相似度筛选候选岗位。\n• 索引只在岗位库变化时重建，避免每次请求重复计算。",
+      "textPreview": "稀疏向量召回 | • 英文技术词直接保留，中文使用 n-gram 与关键词补强。 | • 词频权重 w(t)=1+ln(tf)，通过余弦相似度筛选候选岗位。 | • 索引只在岗位库变化时重建，避免每次请求重复计算。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 4,
+        "lines": [
+          {
+            "index": 1,
+            "text": "稀疏向量召回"
+          },
+          {
+            "index": 2,
+            "text": "• 英文技术词直接保留，中文使用 n-gram 与关键词补强。"
+          },
+          {
+            "index": 3,
+            "text": "• 词频权重 w(t)=1+ln(tf)，通过余弦相似度筛选候选岗位。"
+          },
+          {
+            "index": 4,
+            "text": "• 索引只在岗位库变化时重建，避免每次请求重复计算。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "稀疏向量召回",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "稀疏向量召回",
+              "typeface": "微软雅黑",
+              "color": "#103A6E",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "• 英文技术词直接保留，中文使用 n-gram 与关键词补强。",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 英文技术词直接保留，中文使用 n-gram 与关键词补强。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": ""
+        },
+        {
+          "index": 3,
+          "text": "• 词频权重 w(t)=1+ln(tf)，通过余弦相似度筛选候选岗位。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 词频权重 w(t)=1+ln(tf)，通过余弦相似度筛选候选岗位。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        },
+        {
+          "index": 4,
+          "text": "• 索引只在岗位库变化时重建，避免每次请求重复计算。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 索引只在岗位库变化时重建，避免每次请求重复计算。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        }
+      ]
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/g3ex0nux",
+      "id": "8",
+      "name": "文本框 7",
+      "bbox": [
+        841.87,
+        285.8,
+        344.8,
+        203.47
+      ],
+      "geometry": "rect",
+      "text": "可解释规则评分\n• 技能覆盖 55%，项目证据 15%，四维画像 15%。\n• 目标方向 10%，学历适配 3%，证书适配 2%。\n• 每一项均可追溯到学生材料或岗位字段，便于解释和调参。",
+      "textPreview": "可解释规则评分 | • 技能覆盖 55%，项目证据 15%，四维画像 15%。 | • 目标方向 10%，学历适配 3%，证书适配 2%。 | • 每一项均可追溯到学生材料或岗位字段，便于解释和调参。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 8,
+        "lines": [
+          {
+            "index": 1,
+            "text": "可解释规则评分"
+          },
+          {
+            "index": 2,
+            "text": "• 技能覆盖 55%，项目证据"
+          },
+          {
+            "index": 3,
+            "text": "15%，四维画像 15%。"
+          },
+          {
+            "index": 4,
+            "text": "• 目标方向 10%，学历适配"
+          },
+          {
+            "index": 5,
+            "text": "3%，证书适配 2%。"
+          },
+          {
+            "index": 6,
+            "text": "•"
+          },
+          {
+            "index": 7,
+            "text": "每一项均可追溯到学生材料或岗位字段，"
+          },
+          {
+            "index": 8,
+            "text": "便于解释和调参。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "可解释规则评分",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "可解释规则评分",
+              "typeface": "微软雅黑",
+              "color": "#103A6E",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "• 技能覆盖 55%，项目证据 15%，四维画像 15%。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 技能覆盖 55%，项目证据 15%，四维画像 15%。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        },
+        {
+          "index": 3,
+          "text": "• 目标方向 10%，学历适配 3%，证书适配 2%。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 目标方向 10%，学历适配 3%，证书适配 2%。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        },
+        {
+          "index": 4,
+          "text": "• 每一项均可追溯到学生材料或岗位字段，便于解释和调参。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 每一项均可追溯到学生材料或岗位字段，便于解释和调参。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        }
+      ]
+    }
+  ],
+  "composeRuns": []
+}

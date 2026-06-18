@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1260" viewBox="0 0 1800 1260">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eef7ff"/>
+      <stop offset="52%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#ecfdf5"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fed7aa"/>
+      <stop offset="100%" stop-color="#fb923c"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.13"/>
+    </filter>
+    <marker id="arrowBlue" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L12,7 L2,12 Z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L12,7 L2,12 Z" fill="#059669"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L12,7 L2,12 Z" fill="#dc2626"/>
+    </marker>
+    <style>
+      .title { font: 800 38px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill:#0b2f63; }
+      .subtitle { font: 500 18px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill:#475569; }
+      .section { font: 800 24px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill:#0f172a; }
+      .label { font: 700 18px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill:#10233f; }
+      .small { font: 500 15px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill:#334155; }
+      .tiny { font: 500 13px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill:#475569; }
+      .white { fill:#fff; }
+      .mono { font: 700 14px "SFMono-Regular", Consolas, monospace; fill:#1e293b; }
+      .card { fill:#fff; stroke:#cbd5e1; stroke-width:2; rx:24; filter:url(#shadow); }
+      .soft { fill:#f8fafc; stroke:#dbeafe; stroke-width:2; rx:18; }
+      .arrow { fill:none; stroke:#2563eb; stroke-width:4; marker-end:url(#arrowBlue); }
+      .arrow-green { fill:none; stroke:#059669; stroke-width:4; marker-end:url(#arrowGreen); }
+      .arrow-red { fill:none; stroke:#dc2626; stroke-width:3; stroke-dasharray:8 8; marker-end:url(#arrowRed); }
+    </style>
+  </defs>
+
+  <rect width="1800" height="1260" fill="url(#bg)"/>
+  <circle cx="250" cy="160" r="135" fill="#dbeafe" opacity="0.55"/>
+  <circle cx="1510" cy="245" r="170" fill="#dcfce7" opacity="0.55"/>
+  <circle cx="880" cy="1120" r="190" fill="#ede9fe" opacity="0.40"/>
+
+  <text x="900" y="62" text-anchor="middle" class="title">AI 精排是怎么实现的：从本地 TOP10 到最终 TOP5</text>
+  <text x="900" y="98" text-anchor="middle" class="subtitle">代码主线：/job/match/refine → refine_job_matches_with_llm → calculate_ai_job_match → MySQL 持久化缓存 → 页面展示</text>
+
+  <!-- Left lane -->
+  <rect x="54" y="142" width="480" height="878" rx="28" fill="#ffffff" stroke="#93c5fd" stroke-width="3" filter="url(#shadow)"/>
+  <rect x="54" y="142" width="480" height="70" rx="28" fill="#dbeafe" stroke="#93c5fd" stroke-width="3"/>
+  <text x="294" y="187" text-anchor="middle" class="section">① 本地先算：快、稳、不卡页面</text>
+
+  <rect x="90" y="244" width="190" height="112" rx="18" fill="#ecfdf5" stroke="#86efac" stroke-width="2"/>
+  <text x="185" y="278" text-anchor="middle" class="label">学生画像</text>
+  <text x="185" y="305" text-anchor="middle" class="small">四维分数</text>
+  <text x="185" y="330" text-anchor="middle" class="small">技能 / 项目 / 目标岗位</text>
+
+  <g transform="translate(332 236)">
+    <rect x="0" y="30" width="140" height="86" rx="16" fill="#eff6ff" stroke="#60a5fa" stroke-width="2"/>
+    <ellipse cx="70" cy="30" rx="70" ry="18" fill="#dbeafe" stroke="#60a5fa" stroke-width="2"/>
+    <path d="M0 30 v86 c0 10 31 18 70 18 s70 -8 70 -18 V30" fill="none" stroke="#60a5fa" stroke-width="2"/>
+    <text x="70" y="67" text-anchor="middle" class="label">岗位库</text>
+    <text x="70" y="95" text-anchor="middle" class="small">679 条</text>
+  </g>
+
+  <path d="M185 358 C185 390 245 397 292 397 C350 397 402 383 402 372" class="arrow"/>
+  <text x="294" y="410" text-anchor="middle" class="tiny">输入给本地召回与初排</text>
+
+  <g transform="translate(112 450)">
+    <path d="M0 0 H364 L304 95 H60 Z" fill="#eff6ff" stroke="#60a5fa" stroke-width="3"/>
+    <path d="M78 120 H286 L250 178 H114 Z" fill="#dbeafe" stroke="#60a5fa" stroke-width="3"/>
+    <path d="M132 205 H232 L212 250 H152 Z" fill="#bfdbfe" stroke="#60a5fa" stroke-width="3"/>
+    <text x="182" y="38" text-anchor="middle" class="label">向量召回 TOP300</text>
+    <text x="182" y="72" text-anchor="middle" class="tiny">retrieve_jobs_by_vector</text>
+    <text x="182" y="153" text-anchor="middle" class="label">岗位族去重 TOP30</text>
+    <text x="182" y="188" text-anchor="middle" class="tiny">diversify_candidate_records</text>
+    <text x="182" y="236" text-anchor="middle" class="label">本地初排 TOP10</text>
+  </g>
+
+  <rect x="92" y="732" width="404" height="220" rx="22" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+  <text x="294" y="770" text-anchor="middle" class="label">本地分数 LocalScore</text>
+  <text x="122" y="810" class="small">技能覆盖：SkillRatio × 55</text>
+  <text x="122" y="842" class="small">项目证据：ProjectRatio × 15</text>
+  <text x="122" y="874" class="small">画像均值：AbilityAvg × 15</text>
+  <text x="122" y="906" class="small">目标方向：Direction × 10</text>
+  <text x="122" y="938" class="small">学历 + 证书：3 + ≤2</text>
+
+  <!-- Middle lane -->
+  <rect x="650" y="142" width="520" height="878" rx="28" fill="#ffffff" stroke="#c4b5fd" stroke-width="3" filter="url(#shadow)"/>
+  <rect x="650" y="142" width="520" height="70" rx="28" fill="#ede9fe" stroke="#c4b5fd" stroke-width="3"/>
+  <text x="910" y="187" text-anchor="middle" class="section">② 用户点击后，才进入 AI 精排</text>
+
+  <rect x="698" y="246" width="424" height="78" rx="20" fill="url(#purple)" stroke="#6d28d9" stroke-width="2"/>
+  <text x="910" y="294" text-anchor="middle" class="label white">按钮：使用 AI 精排 TOP10</text>
+  <text x="910" y="346" text-anchor="middle" class="mono">POST /job/match/refine</text>
+
+  <rect x="708" y="380" width="404" height="118" rx="20" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="910" y="416" text-anchor="middle" class="label">精排前先查缓存</text>
+  <text x="736" y="452" class="small">1. 先查 MySQL LLM 缓存：result_type = "llm"</text>
+  <text x="736" y="480" class="small">2. 未命中再拿本地 TOP10：result_type = "local"</text>
+
+  <path d="M910 500 L910 546" class="arrow"/>
+  <rect x="708" y="546" width="404" height="128" rx="20" fill="#fefce8" stroke="#fde047" stroke-width="2"/>
+  <text x="910" y="582" text-anchor="middle" class="label">一次性打包 TOP10</text>
+  <text x="736" y="620" class="small">candidates = local_matches[:10]</text>
+  <text x="736" y="648" class="small">batch_size = len(candidates)</text>
+  <text x="736" y="676" class="tiny">不是 679 个全发给 LLM，也不是分很多批慢慢问</text>
+
+  <path d="M910 674 L910 724" class="arrow"/>
+  <rect x="692" y="724" width="436" height="224" rx="28" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="4"/>
+  <text x="910" y="762" text-anchor="middle" class="section">AI 评审台：岗位精排专家</text>
+  <text x="724" y="806" class="small">输入：学生简历语义 + 四维画像 + 本地岗位证据 + TOP10 岗位列表</text>
+  <text x="724" y="840" class="small">每个岗位同时打两个分：</text>
+  <text x="752" y="875" class="small">A. student_to_job_score：学生当前能力是否满足岗位</text>
+  <text x="752" y="905" class="small">B. job_to_student_score：岗位是否适合作为成长目标</text>
+  <text x="724" y="934" class="mono">match_score = A × 0.6 + B × 0.4</text>
+
+  <!-- Right lane -->
+  <rect x="1288" y="142" width="458" height="878" rx="28" fill="#ffffff" stroke="#86efac" stroke-width="3" filter="url(#shadow)"/>
+  <rect x="1288" y="142" width="458" height="70" rx="28" fill="#dcfce7" stroke="#86efac" stroke-width="3"/>
+  <text x="1517" y="187" text-anchor="middle" class="section">③ 校验、去重、缓存、展示</text>
+
+  <rect x="1328" y="244" width="378" height="132" rx="20" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="1517" y="281" text-anchor="middle" class="label">校验 LLM 返回 JSON</text>
+  <text x="1358" y="318" class="small">_validate_job_match：</text>
+  <text x="1358" y="346" class="small">补回岗位库字段、匹配技能、缺口技能、推荐理由</text>
+  <text x="1358" y="372" class="tiny">LLM 只需给少量核心字段，事实字段仍以本地数据库为准</text>
+
+  <path d="M1517 378 L1517 424" class="arrow-green"/>
+  <rect x="1328" y="424" width="378" height="132" rx="20" fill="#ecfeff" stroke="#67e8f9" stroke-width="2"/>
+  <text x="1517" y="460" text-anchor="middle" class="label">补齐缺失候选 + 多样化排序</text>
+  <text x="1358" y="497" class="small">若 LLM 少返回某岗位 → local_fallback 补回</text>
+  <text x="1358" y="525" class="small">diversify_job_matches：标题归一化、岗位族控制</text>
+  <text x="1358" y="551" class="tiny">避免 TOP5 都是“Java后端工程师”的近似变体</text>
+
+  <path d="M1517 558 L1517 604" class="arrow-green"/>
+  <g transform="translate(1352 604)">
+    <rect x="0" y="26" width="330" height="104" rx="16" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    <ellipse cx="165" cy="26" rx="165" ry="24" fill="#bbf7d0" stroke="#22c55e" stroke-width="2"/>
+    <path d="M0 26 v104 c0 14 74 24 165 24 s165 -10 165 -24 V26" fill="none" stroke="#22c55e" stroke-width="2"/>
+    <text x="165" y="58" text-anchor="middle" class="label">MySQL 持久化缓存</text>
+    <text x="165" y="88" text-anchor="middle" class="small">JobMatchCacheRecord</text>
+    <text x="165" y="116" text-anchor="middle" class="tiny">diagnosis_id + job_version + result_type="llm"</text>
+  </g>
+
+  <path d="M1517 760 L1517 808" class="arrow-green"/>
+  <rect x="1328" y="808" width="378" height="150" rx="22" fill="#eff6ff" stroke="#60a5fa" stroke-width="3"/>
+  <text x="1517" y="846" text-anchor="middle" class="label">页面刷新后展示 TOP5</text>
+  <text x="1358" y="884" class="small">/job/match 优先读取 LLM 缓存</text>
+  <text x="1358" y="914" class="small">页面显示「AI 精排结果」徽标</text>
+  <text x="1358" y="944" class="small">每张卡片：分数、已匹配技能、待补齐技能、推荐理由</text>
+
+  <!-- Cross arrows -->
+  <path d="M496 842 C575 842 600 285 696 285" class="arrow"/>
+  <text x="580" y="404" text-anchor="middle" class="tiny">本地 TOP10 送入按钮流程</text>
+  <path d="M1128 836 C1212 836 1238 310 1324 310" class="arrow-green"/>
+  <text x="1238" y="460" text-anchor="middle" class="tiny">LLM JSON 进入校验</text>
+
+  <!-- Failure path -->
+  <rect x="658" y="1060" width="494" height="128" rx="22" fill="#fef2f2" stroke="#f87171" stroke-width="3"/>
+  <text x="905" y="1098" text-anchor="middle" class="label">失败/超时怎么办？不会把页面拖死</text>
+  <text x="690" y="1138" class="small">• refine_job_matches_with_llm 失败 → 路由捕获异常 → refined = local_matches</text>
+  <text x="690" y="1168" class="small">• 返回 warning：“AI 精排超时或失败，已保留本地匹配结果。”</text>
+  <path d="M910 948 C910 1000 905 1010 905 1058" class="arrow-red"/>
+
+  <!-- Bottom explanation -->
+  <rect x="54" y="1060" width="520" height="128" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="314" y="1098" text-anchor="middle" class="label">一句话理解</text>
+  <text x="86" y="1138" class="small">本地算法像“海选漏斗”：先从 679 个岗位里快速筛出靠谱 TOP10。</text>
+  <text x="86" y="1168" class="small">AI 精排像“专家评审台”：只看这 10 个，按语义、成长价值和双向适配重新排序。</text>
+
+  <rect x="1226" y="1060" width="520" height="128" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="1486" y="1098" text-anchor="middle" class="label">代码依据</text>
+  <text x="1258" y="1138" class="tiny">app/services/llm_ability_match_service.py：本地初排、AI精排、双向评分、岗位族去重</text>
+  <text x="1258" y="1166" class="tiny">app/main.py：/job/match/refine、MySQL JobMatchCacheRecord 持久化读写</text>
+
+  <!-- Mini badges -->
+  <g transform="translate(68 1210)">
+    <rect x="0" y="0" width="1664" height="34" rx="17" fill="#e0f2fe" stroke="#7dd3fc"/>
+    <text x="832" y="23" text-anchor="middle" class="tiny">关键点：进入岗位匹配页不直接调用 LLM；只有点击“使用 AI 精排 TOP10”才调用。已有 LLM 缓存时，刷新页面直接读取 MySQL，不重复精排。</text>
+  </g>
+</svg>

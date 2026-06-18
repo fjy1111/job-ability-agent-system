@@ -1,7 +1,9 @@
 import json
 import os
 import hashlib
+import logging
 import re
+import secrets
 import subprocess
 import tempfile
 from html import escape as html_escape
@@ -13,7 +15,7 @@ from datetime import datetime
 from fastapi import FastAPI, Request, Form, Depends, HTTPException, UploadFile, File
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
+from fastapi.responses import PlainTextResponse, RedirectResponse
 from starlette.middleware.sessions import SessionMiddleware
 
 from sqlalchemy import Boolean, Float, ForeignKey, create_engine, String, Text, Integer, DateTime, or_, select
@@ -59,6 +61,17 @@ from app.services.course_ability_inference_service import (
 from app.services.resume_profile_extractor_service import (
     extract_student_profile_from_resume,
 )
+from app.services.privacy_service import (
+    candidate_privacy_label,
+    enforce_collaboration_rate_limit,
+    env_flag,
+    get_or_create_csrf_token,
+    hash_password,
+    institution_role_access_error,
+    redact_sensitive_resume_text,
+    require_valid_csrf,
+    verify_password,
+)
 
 # =========================================================
 # 项目路径配置
@@ -74,6 +87,8 @@ LATEST_STUDENT_FILE = DATA_DIR / "latest_student.json"
 
 # 读取项目根目录下的 .env 文件
 load_dotenv(BASE_DIR / ".env")
+
+logger = logging.getLogger(__name__)
 
 
 # =========================================================
@@ -112,7 +127,7 @@ class Base(DeclarativeBase):
 class User(Base):
     """
     用户表：用于注册和登录。
-    注意：当前密码为明文保存，仅适合比赛本地演示。
+    新注册密码使用 PBKDF2-SHA256 保存；旧明文账号首次成功登录后自动升级。
     """
     __tablename__ = "users"
 
@@ -1485,12 +1500,55 @@ app = FastAPI(
     version="0.1.0"
 )
 
-# Session 中间件：用于保存登录状态
-# 如果后续想更规范，可以把 SESSION_SECRET_KEY 放到 .env 中
+# 未配置固定密钥时使用不可预测的临时密钥，避免继续使用公开默认值。
+# 生产环境必须在 .env 配置 SESSION_SECRET_KEY，否则重启后现有登录会话失效。
+SESSION_SECRET_KEY = os.getenv("SESSION_SECRET_KEY", "").strip()
+if not SESSION_SECRET_KEY:
+    SESSION_SECRET_KEY = secrets.token_urlsafe(48)
+    logger.warning("SESSION_SECRET_KEY 未配置，已使用本次进程临时密钥。")
+
+SESSION_HTTPS_ONLY = env_flag("SESSION_HTTPS_ONLY", False)
+ENFORCE_HTTPS = env_flag("ENFORCE_HTTPS", False)
+
+# Session 中间件：严格同站 Cookie，生产环境可通过 SESSION_HTTPS_ONLY 只允许 HTTPS 传输。
 app.add_middleware(
     SessionMiddleware,
-    secret_key=os.getenv("SESSION_SECRET_KEY", "job-ability-agent-system-secret-key")
+    secret_key=SESSION_SECRET_KEY,
+    same_site="strict",
+    https_only=SESSION_HTTPS_ONLY,
+    max_age=60 * 60 * 2,
 )
+
+
+@app.middleware("http")
+async def add_privacy_security_headers(request: Request, call_next):
+    """保护登录和三方协同页面，降低缓存泄露、嵌入劫持与被索引风险。"""
+    forwarded_proto = request.headers.get("x-forwarded-proto", "").split(",")[0].strip()
+    is_https = request.url.scheme == "https" or forwarded_proto == "https"
+    if ENFORCE_HTTPS and not is_https:
+        return RedirectResponse(str(request.url.replace(scheme="https")), status_code=307)
+
+    response = await call_next(request)
+    protected_path = request.url.path.startswith(("/collaboration", "/login", "/register"))
+    if protected_path:
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, private, max-age=0"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+        response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+        response.headers["Cross-Origin-Resource-Policy"] = "same-origin"
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; style-src 'self'; img-src 'self' data:; "
+            "script-src 'self'; form-action 'self'; frame-ancestors 'none'; "
+            "base-uri 'self'; object-src 'none'"
+        )
+    if is_https:
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    return response
 
 app.mount(
     "/static",
@@ -1499,6 +1557,19 @@ app.mount(
 )
 
 templates = Jinja2Templates(directory=str(TEMPLATE_DIR))
+
+
+@app.get("/robots.txt", include_in_schema=False)
+def robots_txt():
+    return PlainTextResponse(
+        "User-agent: *\n"
+        "Disallow: /collaboration\n"
+        "Disallow: /ability\n"
+        "Disallow: /job/match\n"
+        "Disallow: /history\n"
+        "Disallow: /login\n"
+        "Disallow: /register\n"
+    )
 
 
 TRIPARTY_ROLE_OPTIONS = (
@@ -1535,6 +1606,8 @@ TRIPARTY_DECISION_LABELS = {
     "reject": "拒录",
 }
 
+ALLOW_TRIPARTY_ROLE_SWITCH = env_flag("ALLOW_TRIPARTY_ROLE_SWITCH", False)
+
 
 # =========================================================
 # 登录状态工具函数
@@ -1567,6 +1640,7 @@ def build_login_context(
         "message": message,
         "role_options": TRIPARTY_ROLE_OPTIONS,
         "selected_role": normalize_triparty_role(selected_role),
+        "institution_code_required": True,
     }
 
 
@@ -1664,7 +1738,6 @@ def build_collaboration_context(
             .all()
         )
 
-    all_records = db.query(TriPartyResumeApplicationRecord).all()
     counts = {
         "school_review": 0,
         "warning_to_student": 0,
@@ -1672,7 +1745,8 @@ def build_collaboration_context(
         "hired": 0,
         "rejected": 0,
     }
-    for record in all_records:
+    # 统计范围也遵循最小权限：学生只看自己的，企业只看已转交企业的记录。
+    for record in applications:
         if record.status in counts:
             counts[record.status] += 1
 
@@ -1682,6 +1756,9 @@ def build_collaboration_context(
         "role": role,
         "role_label": TRIPARTY_ROLE_LABELS[role],
         "role_options": TRIPARTY_ROLE_OPTIONS,
+        "allow_role_switch": ALLOW_TRIPARTY_ROLE_SWITCH,
+        "csrf_token": get_or_create_csrf_token(request),
+        "candidate_privacy_label": candidate_privacy_label,
         "status_labels": TRIPARTY_STATUS_LABELS,
         "decision_labels": TRIPARTY_DECISION_LABELS,
         "applications": applications,
@@ -3363,8 +3440,7 @@ def register_submit(
     db: Session = Depends(get_db)
 ):
     """
-    处理用户注册。
-    当前使用明文密码，仅适合本地比赛演示。
+    处理用户注册，密码仅保存 PBKDF2 哈希。
     """
 
     username = username.strip()
@@ -3377,6 +3453,17 @@ def register_submit(
             {
                 "title": "用户注册",
                 "error": "用户名和密码不能为空",
+                "message": ""
+            }
+        )
+
+    if len(password) < 8:
+        return templates.TemplateResponse(
+            request,
+            "register.html",
+            {
+                "title": "用户注册",
+                "error": "密码至少需要 8 位。",
                 "message": ""
             }
         )
@@ -3398,7 +3485,7 @@ def register_submit(
 
     user = User(
         username=username,
-        password=password
+        password=hash_password(password)
     )
 
     db.add(user)
@@ -3437,6 +3524,7 @@ def login_submit(
     username: str = Form(...),
     password: str = Form(...),
     user_role: str = Form("student"),
+    role_access_code: str = Form(""),
     db: Session = Depends(get_db)
 ):
     """
@@ -3471,7 +3559,8 @@ def login_submit(
             )
         )
 
-    if user.password != password:
+    password_valid, needs_upgrade = verify_password(password, user.password)
+    if not password_valid:
         return templates.TemplateResponse(
             request,
             "login.html",
@@ -3480,6 +3569,22 @@ def login_submit(
                 selected_role=selected_role,
             )
         )
+
+    role_error = institution_role_access_error(selected_role, role_access_code)
+    if role_error:
+        return templates.TemplateResponse(
+            request,
+            "login.html",
+            build_login_context(
+                error=role_error,
+                selected_role=selected_role,
+            )
+        )
+
+    if needs_upgrade:
+        user.password = hash_password(password)
+        db.add(user)
+        db.commit()
 
     # 登录成功：保存登录状态
     request.session["user_id"] = user.id
@@ -3547,6 +3652,8 @@ def triparty_collaboration_dashboard(
     if redirect_response:
         return redirect_response
 
+    enforce_collaboration_rate_limit(request, "dashboard", limit=90)
+
     return templates.TemplateResponse(
         request,
         "triparty_collaboration.html",
@@ -3563,6 +3670,8 @@ def triparty_collaboration_dashboard(
 def triparty_role_switch(
     request: Request,
     user_role: str = Form("student"),
+    role_access_code: str = Form(""),
+    csrf_token: str = Form(""),
 ):
     """
     演示场景下允许已登录用户快速切换三方身份。
@@ -3572,7 +3681,18 @@ def triparty_role_switch(
     if redirect_response:
         return redirect_response
 
+    require_valid_csrf(request, csrf_token)
+    enforce_collaboration_rate_limit(request, "role-switch", limit=8)
+
+    if not ALLOW_TRIPARTY_ROLE_SWITCH:
+        return build_collaboration_redirect(
+            error="隐私保护模式已禁止页面内切换身份，请退出后以授权身份重新登录。"
+        )
+
     selected_role = normalize_triparty_role(user_role)
+    role_error = institution_role_access_error(selected_role, role_access_code)
+    if role_error:
+        return build_collaboration_redirect(error=role_error)
     request.session["user_role"] = selected_role
     request.session["role_label"] = TRIPARTY_ROLE_LABELS[selected_role]
 
@@ -3589,6 +3709,8 @@ def triparty_student_submit(
     target_company: str = Form(...),
     target_job: str = Form(...),
     resume_text: str = Form(...),
+    privacy_consent: str = Form(""),
+    csrf_token: str = Form(""),
     db: Session = Depends(get_db)
 ):
     """
@@ -3602,6 +3724,9 @@ def triparty_student_submit(
     role_error = ensure_triparty_role(request, "student")
     if role_error:
         return role_error
+
+    require_valid_csrf(request, csrf_token)
+    enforce_collaboration_rate_limit(request, "student-submit", limit=5, window_seconds=600)
 
     student_name = student_name.strip()
     major = major.strip()
@@ -3628,6 +3753,38 @@ def triparty_student_submit(
             )
         )
 
+    if privacy_consent != "accepted":
+        return templates.TemplateResponse(
+            request,
+            "triparty_collaboration.html",
+            build_collaboration_context(
+                request,
+                db,
+                error="请先确认隐私授权：学校可核验原始材料，企业仅接收脱敏简历。",
+                input_data=input_data,
+            )
+        )
+
+    field_limits = {
+        "姓名": (student_name, 100),
+        "专业": (major, 120),
+        "目标企业": (target_company, 160),
+        "目标岗位": (target_job, 160),
+        "简历内容": (resume_text, 50_000),
+    }
+    oversized = [label for label, (value, limit) in field_limits.items() if len(value) > limit]
+    if oversized:
+        return templates.TemplateResponse(
+            request,
+            "triparty_collaboration.html",
+            build_collaboration_context(
+                request,
+                db,
+                error=f"以下字段内容过长：{'、'.join(oversized)}。",
+                input_data=input_data,
+            )
+        )
+
     record = TriPartyResumeApplicationRecord(
         student_user_id=request.session.get("user_id"),
         student_username=request.session.get("username", ""),
@@ -3648,6 +3805,61 @@ def triparty_student_submit(
     )
 
 
+@app.post("/collaboration/{application_id}/resume")
+def triparty_secure_resume_view(
+    application_id: int,
+    request: Request,
+    csrf_token: str = Form(""),
+    db: Session = Depends(get_db),
+):
+    """按需返回简历；企业只能看到去除直接身份标识后的版本。"""
+    redirect_response = get_login_redirect(request)
+    if redirect_response:
+        return redirect_response
+
+    require_valid_csrf(request, csrf_token)
+    enforce_collaboration_rate_limit(request, "resume-view", limit=12)
+
+    record = db.get(TriPartyResumeApplicationRecord, application_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="协同记录不存在")
+
+    role = get_session_role(request)
+    user_id = request.session.get("user_id")
+    if role == "student" and record.student_user_id != user_id:
+        raise HTTPException(status_code=403, detail="无权查看其他学生的简历。")
+    if role == "enterprise" and record.status not in {"enterprise_review", "hired", "rejected"}:
+        raise HTTPException(status_code=403, detail="该材料尚未由学校转交企业。")
+
+    redacted = role == "enterprise"
+    display_name = candidate_privacy_label(record) if redacted else record.student_name
+    resume_text = (
+        redact_sensitive_resume_text(record.resume_text, record.student_name)
+        if redacted
+        else record.resume_text
+    )
+    logger.info(
+        "collaboration resume viewed role=%s user_id=%s application_id=%s redacted=%s",
+        role,
+        user_id,
+        application_id,
+        redacted,
+    )
+    return templates.TemplateResponse(
+        request,
+        "triparty_resume_view.html",
+        {
+            "title": "安全查看简历",
+            "role_label": get_session_role_label(request),
+            "display_name": display_name,
+            "target_company": record.target_company,
+            "target_job": record.target_job,
+            "resume_text": resume_text,
+            "redacted": redacted,
+        },
+    )
+
+
 @app.post("/collaboration/school/{application_id}/review")
 def triparty_school_review(
     application_id: int,
@@ -3655,6 +3867,7 @@ def triparty_school_review(
     review_result: str = Form(...),
     school_feedback: str = Form(""),
     warning_message: str = Form(""),
+    csrf_token: str = Form(""),
     db: Session = Depends(get_db)
 ):
     """
@@ -3668,6 +3881,9 @@ def triparty_school_review(
     role_error = ensure_triparty_role(request, "school")
     if role_error:
         return role_error
+
+    require_valid_csrf(request, csrf_token)
+    enforce_collaboration_rate_limit(request, "school-review", limit=30)
 
     record = db.get(TriPartyResumeApplicationRecord, application_id)
     if record is None:
@@ -3715,6 +3931,7 @@ def triparty_enterprise_decision(
     decision: str = Form(...),
     advice_to_student: str = Form(...),
     advice_to_school: str = Form(...),
+    csrf_token: str = Form(""),
     db: Session = Depends(get_db)
 ):
     """
@@ -3728,6 +3945,9 @@ def triparty_enterprise_decision(
     role_error = ensure_triparty_role(request, "enterprise")
     if role_error:
         return role_error
+
+    require_valid_csrf(request, csrf_token)
+    enforce_collaboration_rate_limit(request, "enterprise-decision", limit=30)
 
     record = db.get(TriPartyResumeApplicationRecord, application_id)
     if record is None:
@@ -4757,6 +4977,7 @@ def job_match(
             "match_source": match_source,
             "match_cached": match_cached,
             "username": request.session.get("username"),
+            "csrf_token": get_or_create_csrf_token(request),
             "error": "",
             "export_message": request.query_params.get("export_message", ""),
             "export_error": request.query_params.get("export_error", ""),
@@ -4812,6 +5033,8 @@ async def job_match_company_apply(
     job_record_id: int = Form(...),
     company_name: str = Form(...),
     job_name: str = Form(...),
+    privacy_consent: str = Form(""),
+    csrf_token: str = Form(""),
     resume_file: UploadFile | None = File(None),
     db: Session = Depends(get_db)
 ):
@@ -4824,6 +5047,15 @@ async def job_match_company_apply(
 
     if get_session_role(request) != "student":
         return {"ok": False, "errors": ["请以学生身份登录后再投递简历。"]}
+
+    try:
+        require_valid_csrf(request, csrf_token)
+        enforce_collaboration_rate_limit(request, "company-apply", limit=5, window_seconds=600)
+    except HTTPException as exc:
+        return {"ok": False, "errors": [str(exc.detail)]}
+
+    if privacy_consent != "accepted":
+        return {"ok": False, "errors": ["请先同意学校核验原始材料并向目标企业转交脱敏简历。"]}
 
     if resume_file is None or not resume_file.filename:
         return {"ok": False, "errors": ["请先拖入 PDF 简历。"]}
@@ -4842,6 +5074,8 @@ async def job_match_company_apply(
         return {"ok": False, "errors": ["请先完成学生能力诊断，再投递简历。"]}
 
     file_content = await resume_file.read()
+    if len(file_content) > 5 * 1024 * 1024:
+        return {"ok": False, "errors": ["PDF 简历不能超过 5MB。"]}
     resume_text, upload_warnings = extract_resume_text_from_upload(
         resume_file.filename,
         file_content,

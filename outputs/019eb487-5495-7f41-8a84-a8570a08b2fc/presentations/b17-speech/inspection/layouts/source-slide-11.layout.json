@@ -1,0 +1,1152 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/re1w7mp0",
+    "id": "re1w7mp0",
+    "slide": 12,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "backgroundImage": {
+      "assetId": "/ppt/media/image2.png",
+      "contentType": "image/png",
+      "byteLength": 1067739
+    },
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Calibri Light",
+        "eastAsianTypeface": "Calibri Light",
+        "complexScriptTypeface": "Calibri Light"
+      },
+      "minorFont": {
+        "latinTypeface": "Calibri",
+        "eastAsianTypeface": "Calibri",
+        "complexScriptTypeface": "Calibri"
+      }
+    },
+    "typefaces": [
+      "Calibri",
+      "Calibri Light",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vahoza1g",
+      "id": "3",
+      "name": "矩形 2",
+      "bbox": [
+        121,
+        53.33,
+        980,
+        54.67
+      ],
+      "geometry": "rect",
+      "text": "   01 四维能力画像评分(一)",
+      "textPreview": "01 四维能力画像评分(一)",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "   01 四维能力画像评分(一)"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "   01 四维能力画像评分(一)",
+          "resolvedTextStyle": {
+            "fontSize": 31,
+            "typeface": "微软雅黑",
+            "color": "#0B2F63",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "   01 ",
+              "fontSize": 37.33,
+              "typeface": "微软雅黑",
+              "color": "#0B2F63",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "四维能力画像评分",
+              "fontSize": 37.33,
+              "typeface": "微软雅黑",
+              "color": "#0B2F63",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": "(",
+              "fontSize": 37.33,
+              "typeface": "微软雅黑",
+              "color": "#0B2F63",
+              "bold": true
+            },
+            {
+              "index": 4,
+              "text": "一",
+              "fontSize": 37.33,
+              "typeface": "微软雅黑",
+              "color": "#0B2F63",
+              "bold": true
+            },
+            {
+              "index": 5,
+              "text": ")",
+              "fontSize": 37.33,
+              "typeface": "微软雅黑",
+              "color": "#0B2F63",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/onyd0z61",
+      "id": "4",
+      "name": "矩形 3",
+      "bbox": [
+        97.47,
+        128.8,
+        962.07,
+        21
+      ],
+      "geometry": "rect",
+      "text": "把简历、课程、项目、证书等非结构化材料映射为 4 个可解释分数",
+      "textPreview": "把简历、课程、项目、证书等非结构化材料映射为 4 个可解释分数",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "把简历、课程、项目、证书等非结构化材料映射为 4 个可解释分数"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "把简历、课程、项目、证书等非结构化材料映射为 4 个可解释分数",
+          "resolvedTextStyle": {
+            "fontSize": 31,
+            "typeface": "微软雅黑",
+            "color": "#0B2F63",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "把简历、课程、项目、证书等",
+              "fontSize": 24,
+              "typeface": "微软雅黑"
+            },
+            {
+              "index": 2,
+              "text": "非",
+              "fontSize": 24,
+              "typeface": "微软雅黑",
+              "color": "#0B2F63",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": "结构化材料映射为 4 个可解释分数",
+              "fontSize": 24,
+              "typeface": "微软雅黑"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6hcrmhk3",
+      "id": "6",
+      "name": "圆角矩形 5",
+      "bbox": [
+        90,
+        165,
+        500,
+        150
+      ],
+      "geometry": "roundRect",
+      "fillColor": "rgba(255, 255, 255, 0.91765)",
+      "lineColor": "#BFD3F8",
+      "lineWidth": 1
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/z25kb6xk",
+      "id": "7",
+      "name": "矩形 6",
+      "bbox": [
+        116,
+        187,
+        240,
+        30
+      ],
+      "geometry": "rect",
+      "text": "专业基础能力",
+      "textPreview": "专业基础能力",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "专业基础能力"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "专业基础能力",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "typeface": "微软雅黑",
+            "color": "#0B2F63",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "专业基础能力",
+              "fontSize": 23,
+              "typeface": "微软雅黑",
+              "color": "#0B2F63",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/oj2t83it",
+      "id": "8",
+      "name": "矩形 7",
+      "bbox": [
+        116,
+        227,
+        440,
+        38
+      ],
+      "geometry": "rect",
+      "text": "核心技能覆盖 + 计算机基础覆盖 + 学历/证书证据",
+      "textPreview": "核心技能覆盖 + 计算机基础覆盖 + 学历/证书证据",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "核心技能覆盖 + 计算机基础覆盖 + 学历/证书证据"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "核心技能覆盖 + 计算机基础覆盖 + 学历/证书证据",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "微软雅黑",
+            "color": "#0F172A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "核心技能覆盖 + 计算机基础覆盖 + 学历/证书证据",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑",
+              "color": "#0F172A"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/d4vmtwra",
+      "id": "9",
+      "name": "矩形 8",
+      "bbox": [
+        116,
+        277,
+        430,
+        24
+      ],
+      "geometry": "rect",
+      "text": "回答：基础是否扎实",
+      "textPreview": "回答：基础是否扎实",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "回答：基础是否扎实"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "回答：基础是否扎实",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "微软雅黑",
+            "color": "#2563EB",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "回答：基础是否扎实",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑",
+              "color": "#2563EB",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/h4byhgn2",
+      "id": "10",
+      "name": "圆角矩形 9",
+      "bbox": [
+        635,
+        165,
+        500,
+        150
+      ],
+      "geometry": "roundRect",
+      "fillColor": "rgba(255, 255, 255, 0.91765)",
+      "lineColor": "#BFD3F8",
+      "lineWidth": 1
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sji5snel",
+      "id": "11",
+      "name": "矩形 10",
+      "bbox": [
+        661,
+        187,
+        240,
+        30
+      ],
+      "geometry": "rect",
+      "text": "技术实践能力",
+      "textPreview": "技术实践能力",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "技术实践能力"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "技术实践能力",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "typeface": "微软雅黑",
+            "color": "#0B2F63",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "技术实践能力",
+              "fontSize": 23,
+              "typeface": "微软雅黑",
+              "color": "#0B2F63",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3ylc7u54",
+      "id": "12",
+      "name": "矩形 11",
+      "bbox": [
+        661,
+        227,
+        440,
+        38
+      ],
+      "geometry": "rect",
+      "text": "项目经历 + 实习/竞赛 + 高阶技术 + 量化成果",
+      "textPreview": "项目经历 + 实习/竞赛 + 高阶技术 + 量化成果",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "项目经历 + 实习/竞赛 + 高阶技术 + 量化成果"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "项目经历 + 实习/竞赛 + 高阶技术 + 量化成果",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "微软雅黑",
+            "color": "#0F172A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "项目经历 + 实习/竞赛 + 高阶技术 + 量化成果",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑",
+              "color": "#0F172A"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/adsji5sn",
+      "id": "13",
+      "name": "矩形 12",
+      "bbox": [
+        661,
+        277,
+        430,
+        24
+      ],
+      "geometry": "rect",
+      "text": "回答：有没有做过",
+      "textPreview": "回答：有没有做过",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "回答：有没有做过"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "回答：有没有做过",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "微软雅黑",
+            "color": "#0F9F6E",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "回答：有没有做过",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑",
+              "color": "#0F9F6E",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lszqtcj6",
+      "id": "14",
+      "name": "圆角矩形 13",
+      "bbox": [
+        90,
+        360,
+        500,
+        150
+      ],
+      "geometry": "roundRect",
+      "fillColor": "rgba(255, 255, 255, 0.91765)",
+      "lineColor": "#BFE8D7",
+      "lineWidth": 1
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/s72x4nap",
+      "id": "15",
+      "name": "矩形 14",
+      "bbox": [
+        116,
+        382,
+        240,
+        30
+      ],
+      "geometry": "rect",
+      "text": "工具技能能力",
+      "textPreview": "工具技能能力",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "工具技能能力"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "工具技能能力",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "typeface": "微软雅黑",
+            "color": "#0B2F63",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "工具技能能力",
+              "fontSize": 23,
+              "typeface": "微软雅黑",
+              "color": "#0B2F63",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3m94fu18",
+      "id": "16",
+      "name": "矩形 15",
+      "bbox": [
+        116,
+        422,
+        440,
+        38
+      ],
+      "geometry": "rect",
+      "text": "工具链覆盖 + 核心技能复用 + 高阶工程工具",
+      "textPreview": "工具链覆盖 + 核心技能复用 + 高阶工程工具",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "工具链覆盖 + 核心技能复用 + 高阶工程工具"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "工具链覆盖 + 核心技能复用 + 高阶工程工具",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "微软雅黑",
+            "color": "#0F172A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "工具链覆盖 + 核心技能复用 + 高阶工程工具",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑",
+              "color": "#0F172A"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/a5gbq1or",
+      "id": "17",
+      "name": "矩形 16",
+      "bbox": [
+        116,
+        472,
+        430,
+        24
+      ],
+      "geometry": "rect",
+      "text": "回答：能否工程落地",
+      "textPreview": "回答：能否工程落地",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "回答：能否工程落地"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "回答：能否工程落地",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "微软雅黑",
+            "color": "#2563EB",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "回答：能否工程落地",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑",
+              "color": "#2563EB",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hoza1gvy",
+      "id": "18",
+      "name": "圆角矩形 17",
+      "bbox": [
+        635,
+        360,
+        500,
+        150
+      ],
+      "geometry": "roundRect",
+      "fillColor": "rgba(255, 255, 255, 0.91765)",
+      "lineColor": "#BFE8D7",
+      "lineWidth": 1
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/s36hcrmh",
+      "id": "19",
+      "name": "矩形 18",
+      "bbox": [
+        661,
+        382,
+        240,
+        30
+      ],
+      "geometry": "rect",
+      "text": "职业发展能力",
+      "textPreview": "职业发展能力",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "职业发展能力"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "职业发展能力",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "typeface": "微软雅黑",
+            "color": "#0B2F63",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "职业发展能力",
+              "fontSize": 23,
+              "typeface": "微软雅黑",
+              "color": "#0B2F63",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4zidonyd",
+      "id": "20",
+      "name": "矩形 19",
+      "bbox": [
+        661,
+        422,
+        440,
+        38
+      ],
+      "geometry": "rect",
+      "text": "目标岗位明确度 + 简历完整度 + 自我表达 + 软技能",
+      "textPreview": "目标岗位明确度 + 简历完整度 + 自我表达 + 软技能",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "目标岗位明确度 + 简历完整度 + 自我表达 + 软技能"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "目标岗位明确度 + 简历完整度 + 自我表达 + 软技能",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "微软雅黑",
+            "color": "#0F172A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "目标岗位明确度 + 简历完整度 + 自我表达 + 软技能",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑",
+              "color": "#0F172A"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xkf6dcbu",
+      "id": "21",
+      "name": "矩形 20",
+      "bbox": [
+        651.33,
+        470,
+        430,
+        24
+      ],
+      "geometry": "rect",
+      "text": "回答：方向是否清晰",
+      "textPreview": "回答：方向是否清晰",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "回答：方向是否清晰"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "回答：方向是否清晰",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "微软雅黑",
+            "color": "#0F9F6E",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "回答：方向是否清晰",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑",
+              "color": "#0F9F6E",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

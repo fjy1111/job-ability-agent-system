@@ -1,0 +1,1104 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/4fu18jqh",
+    "id": "4fu18jqh",
+    "slide": 13,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "Noto Sans SC"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/ulwval87",
+      "id": "12",
+      "name": "Picture 2",
+      "bbox": [
+        0,
+        0,
+        1260,
+        714.67
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00033,
+        "top": 0,
+        "right": 0.00033,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lszqtcj6",
+      "id": "3",
+      "name": "AutoShape 3",
+      "bbox": [
+        0,
+        73.33,
+        1260,
+        80
+      ],
+      "geometry": "rect",
+      "text": "03 核心技术原理 (4) - 模型量化与端侧推理",
+      "textPreview": "03 核心技术原理 (4) - 模型量化与端侧推理",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "03 核心技术原理 (4) - 模型量化与端侧推理"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "03 核心技术原理 (4) - 模型量化与端侧推理",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "03 核心技术原理 (4) - 模型量化与端侧推理",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#104862",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/adsji5sn",
+      "id": "4",
+      "name": "AutoShape 4",
+      "bbox": [
+        64,
+        166.67,
+        1132,
+        100
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(239, 246, 255, 0.95)",
+      "lineColor": "rgba(191, 219, 254, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3ylc7u54",
+      "id": "5",
+      "name": "AutoShape 5",
+      "bbox": [
+        90.67,
+        162.67,
+        1078.67,
+        80
+      ],
+      "geometry": "rect",
+      "text": "🎯 核心目标：在严格保证模型预测准确率的前提下，最大化降低计算量与存储空间开销，实现模型在无GPU的ARM64架构CPU端侧设备上的高效推理。",
+      "textPreview": "🎯 核心目标：在严格保证模型预测准确率的前提下，最大化降低计算量与存储空间开销，实现模型在无GPU的ARM64架构CPU端侧设备上的高效推理。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "🎯 核心目标："
+          },
+          {
+            "index": 2,
+            "text": "在严格保证模型预测准确率的前提下，最大化降低计算量与存储空间开销，实现模型在无GPU的ARM64架构CPU端侧设"
+          },
+          {
+            "index": 3,
+            "text": "备上的高效推理。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "🎯 核心目标：在严格保证模型预测准确率的前提下，最大化降低计算量与存储空间开销，实现模型在无GPU的ARM64架构CPU端侧设备上的高效推理。",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "🎯 核心目标：",
+              "fontSize": 21.33,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2937",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "在严格保证模型预测准确率的前提下，最大化降低计算量与存储空间开销，实现模型在无GPU的ARM64架构CPU端侧设备上的高效推理。",
+              "fontSize": 20,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sji5snel",
+      "id": "6",
+      "name": "AutoShape 6",
+      "bbox": [
+        64,
+        280,
+        360,
+        386.67
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.92)",
+      "lineColor": "rgba(229, 231, 235, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/h4byhgn2",
+      "id": "7",
+      "name": "AutoShape 7",
+      "bbox": [
+        73.33,
+        300,
+        333.33,
+        346.67
+      ],
+      "geometry": "rect",
+      "text": "⚙ 量化技术选型\n• 训练后量化 (PTQ)\n在 MRGCN-DANN 训练完成后，ONNX/NCNN自带量化本质上是PTQ工具实现，该方法无需重新训练，流程简单，适合端侧快速部署，并可通过 FP32/INT8 对比评估精度、模型体积和 ARM64 推理延迟。\n• 量化感知训练 (QAT)\nQAT 在训练阶段模拟低精度误差，通常能减小量化精度损失，但会增加训练和调参复杂度。考虑到本项目已通过低秩可学习邻接矩阵和轻量化结构降低模型开销，PTQ 已满足端侧部署需求，因此最终未采用 QAT。",
+      "textPreview": "⚙ 量化技术选型 | • 训练后量化 (PTQ) | 在 MRGCN-DANN 训练完成后，ONNX/NCNN自带量化本质上是PTQ工具实现，该方法无需重新训练，流程简单，适合端侧快速部署，并可通过 FP32/INT8 对比评估精度、模型体积和 ARM64 推理延迟。 | ...",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 10.67,
+          "bottom": 0,
+          "left": 10.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 17,
+        "lines": [
+          {
+            "index": 1,
+            "text": "⚙ 量化技术选型"
+          },
+          {
+            "index": 2,
+            "text": "• 训练后量化 (PTQ)"
+          },
+          {
+            "index": 3,
+            "text": "在 MRGCN-DANN 训练完成后，"
+          },
+          {
+            "index": 4,
+            "text": "ONNX/NCNN自带量化本质上是PTQ工具实"
+          },
+          {
+            "index": 5,
+            "text": "现，"
+          },
+          {
+            "index": 6,
+            "text": "该方法无需重新训练，流程简单，适合端侧"
+          },
+          {
+            "index": 7,
+            "text": "快速部署，并可通过 FP32/INT8"
+          },
+          {
+            "index": 8,
+            "text": "对比评估精度、模型体积和 ARM64"
+          },
+          {
+            "index": 9,
+            "text": "推理延迟。"
+          },
+          {
+            "index": 10,
+            "text": "• 量化感知训练 (QAT)"
+          },
+          {
+            "index": 11,
+            "text": "QAT"
+          },
+          {
+            "index": 12,
+            "text": "在训练阶段模拟低精度误差，通常能减小量"
+          },
+          {
+            "index": 13,
+            "text": "化精度损失，但会增加训练和调参复杂度。"
+          },
+          {
+            "index": 14,
+            "text": "考虑到本项目已通过低秩可学习邻接矩阵和"
+          },
+          {
+            "index": 15,
+            "text": "轻量化结构降低模型开销，PTQ"
+          },
+          {
+            "index": 16,
+            "text": "已满足端侧部署需求，因此最终未采用"
+          },
+          {
+            "index": 17,
+            "text": "QAT。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "⚙ 量化技术选型",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "spaceAfter": 1000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "⚙ 量化技术选型",
+              "fontSize": 25.33,
+              "typeface": "Noto Sans SC",
+              "color": "#2563EB",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0
+        },
+        {
+          "index": 2,
+          "text": "• 训练后量化 (PTQ)\n在 MRGCN-DANN 训练完成后，ONNX/NCNN自带量化本质上是PTQ工具实现，该方法无需重新训练，流程简单，适合端侧快速部署，并可通过 FP32/INT8 对比评估精度、模型体积和 ARM64 推理延迟。",
+          "marginLeft": 0,
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceAfter": 800,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 训练后量化 (PTQ)",
+              "typeface": "Noto Sans SC",
+              "color": "#FFC000",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "\n",
+              "alignment": "left"
+            },
+            {
+              "index": 3,
+              "text": "在 MRGCN-DANN 训练完成后，",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            },
+            {
+              "index": 4,
+              "text": "ONNX/NCNN自带量化本质上是PTQ工具实现",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            },
+            {
+              "index": 5,
+              "text": "，",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            },
+            {
+              "index": 6,
+              "text": "该方法无需重新训练，流程简单，适合端侧快速部署，并可通过 FP32/INT8 对比评估精度、模型体积和 ARM64 推理延迟。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0
+        },
+        {
+          "index": 3,
+          "text": "• 量化感知训练 (QAT)\nQAT 在训练阶段模拟低精度误差，通常能减小量化精度损失，但会增加训练和调参复杂度。考虑到本项目已通过低秩可学习邻接矩阵和轻量化结构降低模型开销，PTQ 已满足端侧部署需求，因此最终未采用 QAT。",
+          "marginLeft": 0,
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceAfter": 800,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 量化感知训练 (QAT)",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#111827",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "\n",
+              "alignment": "left"
+            },
+            {
+              "index": 3,
+              "text": "QAT ",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            },
+            {
+              "index": 4,
+              "text": "在训练阶段模拟低精度误差，通常能减小量化精度损失，但会增加训练和调参复杂度。考虑到本项目已通过低秩可学习邻接矩阵和轻量化结构降低模型开销，",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            },
+            {
+              "index": 5,
+              "text": "PTQ ",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            },
+            {
+              "index": 6,
+              "text": "已满足端侧部署需求，因此最终未采用 ",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            },
+            {
+              "index": 7,
+              "text": "QAT。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ap4r65wj",
+      "id": "8",
+      "name": "AutoShape 8",
+      "bbox": [
+        450.67,
+        280,
+        360,
+        386.67
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.92)",
+      "lineColor": "rgba(229, 231, 235, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/za1gvy90",
+      "id": "9",
+      "name": "AutoShape 9",
+      "bbox": [
+        464,
+        300,
+        333.33,
+        346.67
+      ],
+      "geometry": "rect",
+      "text": "🧩 端侧推理框架\n• ONNX (Open Neural Network Exchange)\n作为标准的中间表示格式(IR)，有效实现了模型从PyTorch训练框架到推理框架的解耦与灵活转换。\n• NCNN (Tencent)\n专为移动端和嵌入式设备优化的高性能推理框架，通过极致内存复用与多核并行计算优化，显著提升ARM CPU的推理吞吐量。",
+      "textPreview": "🧩 端侧推理框架 | • ONNX (Open Neural Network Exchange) | 作为标准的中间表示格式(IR)，有效实现了模型从PyTorch训练框架到推理框架的解耦与灵活转换。 | • NCNN (Tencent) | 专为移动端和嵌入式设备优化的...",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 10.67,
+          "bottom": 0,
+          "left": 10.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 10,
+        "lines": [
+          {
+            "index": 1,
+            "text": "🧩 端侧推理框架"
+          },
+          {
+            "index": 2,
+            "text": "• ONNX (Open Neural Network"
+          },
+          {
+            "index": 3,
+            "text": "Exchange)"
+          },
+          {
+            "index": 4,
+            "text": "作为标准的中间表示格式(IR)，有效实现了"
+          },
+          {
+            "index": 5,
+            "text": "模型从PyTorch训练框架到推理框架的解耦"
+          },
+          {
+            "index": 6,
+            "text": "与灵活转换。"
+          },
+          {
+            "index": 7,
+            "text": "• NCNN (Tencent)"
+          },
+          {
+            "index": 8,
+            "text": "专为移动端和嵌入式设备优化的高性能推理"
+          },
+          {
+            "index": 9,
+            "text": "框架，通过极致内存复用与多核并行计算优"
+          },
+          {
+            "index": 10,
+            "text": "化，显著提升ARM CPU的推理吞吐量。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "🧩 端侧推理框架",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "spaceAfter": 1000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "🧩 端侧推理框架",
+              "fontSize": 25.33,
+              "typeface": "Noto Sans SC",
+              "color": "#2563EB",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0
+        },
+        {
+          "index": 2,
+          "text": "• ONNX (Open Neural Network Exchange)\n作为标准的中间表示格式(IR)，有效实现了模型从PyTorch训练框架到推理框架的解耦与灵活转换。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceAfter": 800,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• ONNX (Open Neural Network Exchange)",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#111827",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "\n",
+              "alignment": "left"
+            },
+            {
+              "index": 3,
+              "text": "作为标准的中间表示格式(IR)，有效实现了模型从PyTorch训练框架到推理框架的解耦与灵活转换。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0
+        },
+        {
+          "index": 3,
+          "text": "• NCNN (Tencent)\n专为移动端和嵌入式设备优化的高性能推理框架，通过极致内存复用与多核并行计算优化，显著提升ARM CPU的推理吞吐量。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• NCNN (Tencent)",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#111827",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "\n",
+              "alignment": "left"
+            },
+            {
+              "index": 3,
+              "text": "专为移动端和嵌入式设备优化的高性能推理框架，通过极致内存复用与多核并行计算优化，显著提升ARM CPU的推理吞吐量。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#4B5563"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/z61032ls",
+      "id": "10",
+      "name": "AutoShape 10",
+      "bbox": [
+        836,
+        280,
+        360,
+        386.67
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.92)",
+      "lineColor": "rgba(229, 231, 235, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/al87ed8b",
+      "id": "11",
+      "name": "AutoShape 11",
+      "bbox": [
+        849.33,
+        300,
+        333.33,
+        346.67
+      ],
+      "geometry": "rect",
+      "text": "📋 标准化部署链路\n1. PyTorch 训练模型\n↓ (导出中间格式)\n2. 转换为 ONNX 模型\n↓ (端侧框架转换)\n     3. NCNN 转换与量化压缩\n↓ (落地验证)\n4. C++ 端侧推理测试",
+      "textPreview": "📋 标准化部署链路 | 1. PyTorch 训练模型 | ↓ (导出中间格式) | 2. 转换为 ONNX 模型 | ↓ (端侧框架转换) |      3. NCNN 转换与量化压缩 | ↓ (落地验证) | 4. C++ 端侧推理测试",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 10.67,
+          "bottom": 0,
+          "left": 10.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 8,
+        "lines": [
+          {
+            "index": 1,
+            "text": "📋 标准化部署链路"
+          },
+          {
+            "index": 2,
+            "text": "1. PyTorch 训练模型"
+          },
+          {
+            "index": 3,
+            "text": "↓ (导出中间格式)"
+          },
+          {
+            "index": 4,
+            "text": "2. 转换为 ONNX 模型"
+          },
+          {
+            "index": 5,
+            "text": "↓ (端侧框架转换)"
+          },
+          {
+            "index": 6,
+            "text": "     3. NCNN 转换与量化压缩"
+          },
+          {
+            "index": 7,
+            "text": "↓ (落地验证)"
+          },
+          {
+            "index": 8,
+            "text": "4. C++ 端侧推理测试"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "📋 标准化部署链路",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "spaceAfter": 1500,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "📋 标准化部署链路",
+              "fontSize": 25.33,
+              "typeface": "Noto Sans SC",
+              "color": "#2563EB",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0
+        },
+        {
+          "index": 2,
+          "text": "1. PyTorch 训练模型",
+          "indent": 0,
+          "lineSpacingPercent": 133000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "1. PyTorch 训练模型",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2937",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "↓ (导出中间格式)",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "↓ (导出中间格式)",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#9CA3AF"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 4,
+          "text": "2. 转换为 ONNX 模型",
+          "indent": 0,
+          "lineSpacingPercent": 133000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "2. 转换为 ONNX 模型",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2937",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 5,
+          "text": "↓ (端侧框架转换)",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "↓ (端侧框架转换)",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#9CA3AF"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 6,
+          "text": "     3. NCNN 转换与量化压缩",
+          "indent": 0,
+          "lineSpacingPercent": 133000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "     3. NCNN 转换与量化压缩",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2937",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 7,
+          "text": "↓ (落地验证)",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "↓ (落地验证)",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#9CA3AF"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 8,
+          "text": "4. C++ 端侧推理测试",
+          "indent": 0,
+          "lineSpacingPercent": 133000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "4. C++ 端侧推理测试",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2937",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    }
+  ],
+  "composeRuns": []
+}

@@ -1,0 +1,1376 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/29gr2p8n",
+    "id": "29gr2p8n",
+    "slide": 11,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "Noto Sans SC"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/36hcrmhk",
+      "id": "21",
+      "name": "Picture 2",
+      "bbox": [
+        0,
+        0,
+        1260,
+        714.67
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00033,
+        "top": 0,
+        "right": 0.00033,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/r2p8nqxs",
+      "id": "4",
+      "name": "AutoShape 4",
+      "bbox": [
+        53.33,
+        53.33,
+        1153.33,
+        80
+      ],
+      "geometry": "rect",
+      "text": "03 核心技术原理 (2) - DANN领域对抗",
+      "textPreview": "03 核心技术原理 (2) - DANN领域对抗",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "03 核心技术原理 (2) - DANN领域对抗"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "03 核心技术原理 (2) - DANN领域对抗",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "03 核心技术原理 (2) - DANN领域对抗",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#104862",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2hwfyxob",
+      "id": "5",
+      "name": "AutoShape 5",
+      "bbox": [
+        53.33,
+        173.33,
+        280,
+        480
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(239, 246, 255, 1)",
+      "lineColor": "rgba(191, 219, 254, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 4,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/wra5gbq1",
+      "id": "22",
+      "name": "Picture 6",
+      "bbox": [
+        73.33,
+        200,
+        37.33,
+        37.33
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image15.png",
+        "contentType": "image/png",
+        "byteLength": 1470
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image15.png",
+        "contentType": "image/png",
+        "byteLength": 1470
+      }
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kjm1cfa9",
+      "id": "7",
+      "name": "AutoShape 7",
+      "bbox": [
+        120,
+        197.33,
+        193.33,
+        42.67
+      ],
+      "geometry": "rect",
+      "text": "核心问题",
+      "textPreview": "核心问题",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "核心问题"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "核心问题",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "核心问题",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#1E40AF",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rqd4vmtw",
+      "id": "8",
+      "name": "AutoShape 8",
+      "bbox": [
+        73.33,
+        280,
+        240,
+        320
+      ],
+      "geometry": "rect",
+      "text": "EEG数据中普遍存在“域偏移”挑战：不同试次、不同时间段的采集环境差异，会导致数据分布产生显著不同。\n如果不解决该问题，模型在训练集表现优异，但在测试集上泛化能力会大幅下降。",
+      "textPreview": "EEG数据中普遍存在“域偏移”挑战：不同试次、不同时间段的采集环境差异，会导致数据分布产生显著不同。 | 如果不解决该问题，模型在训练集表现优异，但在测试集上泛化能力会大幅下降。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 8,
+        "lines": [
+          {
+            "index": 1,
+            "text": "EEG数据中普遍存在“域偏移”"
+          },
+          {
+            "index": 2,
+            "text": "挑战：不同试次、不同时间段"
+          },
+          {
+            "index": 3,
+            "text": "的采集环境差异，会导致数据"
+          },
+          {
+            "index": 4,
+            "text": "分布产生显著不同。"
+          },
+          {
+            "index": 5,
+            "text": ""
+          },
+          {
+            "index": 6,
+            "text": "如果不解决该问题，模型在训"
+          },
+          {
+            "index": 7,
+            "text": "练集表现优异，但在测试集上"
+          },
+          {
+            "index": 8,
+            "text": "泛化能力会大幅下降。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "EEG数据中普遍存在“域偏移”挑战：不同试次、不同时间段的采集环境差异，会导致数据分布产生显著不同。",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "EEG数据中普遍存在",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            },
+            {
+              "index": 2,
+              "text": "“域偏移”",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": "挑战：不同试次、不同时间段的采集环境差异，会导致数据分布产生显著不同。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "如果不解决该问题，模型在训练集表现优异，但在测试集上泛化能力会大幅下降。",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "如果不解决该问题，模型在训练集表现优异，但在测试集上泛化能力会大幅下降。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/25kb6xkf",
+      "id": "9",
+      "name": "AutoShape 9",
+      "bbox": [
+        360,
+        173.33,
+        280,
+        480
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(240, 253, 244, 1)",
+      "lineColor": "rgba(187, 247, 208, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 8,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/lc7u54zi",
+      "id": "23",
+      "name": "Picture 10",
+      "bbox": [
+        380,
+        200,
+        37.33,
+        37.33
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image16.png",
+        "contentType": "image/png",
+        "byteLength": 1004
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image16.png",
+        "contentType": "image/png",
+        "byteLength": 1004
+      }
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/x0nuxc3y",
+      "id": "11",
+      "name": "AutoShape 11",
+      "bbox": [
+        426.67,
+        197.33,
+        193.33,
+        42.67
+      ],
+      "geometry": "rect",
+      "text": "核心结构",
+      "textPreview": "核心结构",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "核心结构"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "核心结构",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "核心结构",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#14532D",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m94fu18j",
+      "id": "12",
+      "name": "AutoShape 12",
+      "bbox": [
+        380,
+        280,
+        240,
+        320
+      ],
+      "geometry": "rect",
+      "text": "在MRGCN特征提取器后，并联两个分支：\n1. 情绪分类器：预测样本的情绪标签（如负性、中性、正性）。\n2. 域分类器：判别样本来源，区分是来自“源域”(训练集)还是“目标域”(测试集)。",
+      "textPreview": "在MRGCN特征提取器后，并联两个分支： | 1. 情绪分类器：预测样本的情绪标签（如负性、中性、正性）。 | 2. 域分类器：判别样本来源，区分是来自“源域”(训练集)还是“目标域”(测试集)。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 11,
+        "lines": [
+          {
+            "index": 1,
+            "text": "在MRGCN特征提取器后，并"
+          },
+          {
+            "index": 2,
+            "text": "联两个分支："
+          },
+          {
+            "index": 3,
+            "text": ""
+          },
+          {
+            "index": 4,
+            "text": "1. 情绪分类器："
+          },
+          {
+            "index": 5,
+            "text": "预测样本的情绪标签（如负性"
+          },
+          {
+            "index": 6,
+            "text": "、中性、正性）。"
+          },
+          {
+            "index": 7,
+            "text": ""
+          },
+          {
+            "index": 8,
+            "text": "2. 域分类器："
+          },
+          {
+            "index": 9,
+            "text": "判别样本来源，区分是来自“源"
+          },
+          {
+            "index": 10,
+            "text": "域”(训练集)还是“目标域”(测试"
+          },
+          {
+            "index": 11,
+            "text": "集)。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "在MRGCN特征提取器后，并联两个分支：",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "在MRGCN特征提取器后，并联两个分支：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "1. 情绪分类器：预测样本的情绪标签（如负性、中性、正性）。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "spaceBefore": 800,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "1. 情绪分类器：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#15803D",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "预测样本的情绪标签（如负性、中性、正性）。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "2. 域分类器：判别样本来源，区分是来自“源域”(训练集)还是“目标域”(测试集)。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "2. 域分类器：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#15803D",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "判别样本来源，区分是来自“源域”(训练集)还是“目标域”(测试集)。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fu18jqh0",
+      "id": "13",
+      "name": "AutoShape 13",
+      "bbox": [
+        666.67,
+        173.33,
+        280,
+        480
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 251, 235, 1)",
+      "lineColor": "rgba(253, 230, 138, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 12,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/ed8bat47",
+      "id": "24",
+      "name": "Picture 14",
+      "bbox": [
+        686.67,
+        200,
+        37.33,
+        37.33
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image17.png",
+        "contentType": "image/png",
+        "byteLength": 1156
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image17.png",
+        "contentType": "image/png",
+        "byteLength": 1156
+      }
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xobm58z2",
+      "id": "15",
+      "name": "AutoShape 15",
+      "bbox": [
+        733.33,
+        197.33,
+        193.33,
+        42.67
+      ],
+      "geometry": "rect",
+      "text": "关键机制 (GRL)",
+      "textPreview": "关键机制 (GRL)",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "关键机制 (GRL)"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "关键机制 (GRL)",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "关键机制 (GRL)",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#92400E",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/qxs72x4n",
+      "id": "16",
+      "name": "AutoShape 16",
+      "bbox": [
+        686.67,
+        280,
+        240,
+        320
+      ],
+      "geometry": "rect",
+      "text": "核心组件：梯度反转层 (GRL)，它在不同传播阶段扮演不同角色：\n• 前向传播：“透明”状态，不对特征做任何变换。\n• 反向传播：对域分类器的反馈梯度乘上一个负系数，实现梯度方向反转。",
+      "textPreview": "核心组件：梯度反转层 (GRL)，它在不同传播阶段扮演不同角色： | • 前向传播：“透明”状态，不对特征做任何变换。 | • 反向传播：对域分类器的反馈梯度乘上一个负系数，实现梯度方向反转。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 12,
+        "lines": [
+          {
+            "index": 1,
+            "text": "核心组件：梯度反转层 (GRL)"
+          },
+          {
+            "index": 2,
+            "text": "，它在不同传播阶段扮演不同"
+          },
+          {
+            "index": 3,
+            "text": "角色："
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "• 前向传播："
+          },
+          {
+            "index": 6,
+            "text": "“透明”状态，不对特征做任何"
+          },
+          {
+            "index": 7,
+            "text": "变换。"
+          },
+          {
+            "index": 8,
+            "text": ""
+          },
+          {
+            "index": 9,
+            "text": "• 反向传播："
+          },
+          {
+            "index": 10,
+            "text": "对域分类器的反馈梯度乘上一"
+          },
+          {
+            "index": 11,
+            "text": "个负系数，实现梯度方向反转"
+          },
+          {
+            "index": 12,
+            "text": "。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "核心组件：梯度反转层 (GRL)，它在不同传播阶段扮演不同角色：",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "核心组件：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            },
+            {
+              "index": 2,
+              "text": "梯度反转层 (GRL)",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": "，它在不同传播阶段扮演不同角色：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "• 前向传播：“透明”状态，不对特征做任何变换。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "spaceBefore": 800,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 前向传播：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#B45309",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "“透明”状态，不对特征做任何变换。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "• 反向传播：对域分类器的反馈梯度乘上一个负系数，实现梯度方向反转。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 反向传播：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#B45309",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "对域分类器的反馈梯度乘上一个负系数，实现梯度方向反转。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fil0rqd4",
+      "id": "17",
+      "name": "AutoShape 17",
+      "bbox": [
+        966.67,
+        173.33,
+        280,
+        480
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(254, 242, 242, 1)",
+      "lineColor": "rgba(254, 202, 202, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 16,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/7u54zido",
+      "id": "25",
+      "name": "Picture 18",
+      "bbox": [
+        986.67,
+        200,
+        37.33,
+        37.33
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image18.png",
+        "contentType": "image/png",
+        "byteLength": 1768
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image18.png",
+        "contentType": "image/png",
+        "byteLength": 1768
+      }
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xkf6dcbu",
+      "id": "19",
+      "name": "AutoShape 19",
+      "bbox": [
+        1033.33,
+        197.33,
+        200,
+        42.67
+      ],
+      "geometry": "rect",
+      "text": "训练目标",
+      "textPreview": "训练目标",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "训练目标"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "训练目标",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "训练目标",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#991B1B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xczed8v6",
+      "id": "20",
+      "name": "AutoShape 20",
+      "bbox": [
+        986.67,
+        280,
+        240,
+        320
+      ],
+      "geometry": "rect",
+      "text": "通过构建“情绪分类”与“域分类”的对抗关系，引导特征提取器：\n→ 保留情绪信息：让情绪分类器可以准确预测类别。\n→ 剔除域差异：让域分类器无法分辨来源，最终学到“域不变特征”，大幅提升泛化能力。",
+      "textPreview": "通过构建“情绪分类”与“域分类”的对抗关系，引导特征提取器： | → 保留情绪信息：让情绪分类器可以准确预测类别。 | → 剔除域差异：让域分类器无法分辨来源，最终学到“域不变特征”，大幅提升泛化能力。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 12,
+        "lines": [
+          {
+            "index": 1,
+            "text": "通过构建“情绪分类”与“域分类"
+          },
+          {
+            "index": 2,
+            "text": "”的对抗关系，引导特征提取器"
+          },
+          {
+            "index": 3,
+            "text": "："
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "→ 保留情绪信息："
+          },
+          {
+            "index": 6,
+            "text": "让情绪分类器可以准确预测类"
+          },
+          {
+            "index": 7,
+            "text": "别。"
+          },
+          {
+            "index": 8,
+            "text": ""
+          },
+          {
+            "index": 9,
+            "text": "→ 剔除域差异："
+          },
+          {
+            "index": 10,
+            "text": "让域分类器无法分辨来源，最"
+          },
+          {
+            "index": 11,
+            "text": "终学到“域不变特征”，大幅提"
+          },
+          {
+            "index": 12,
+            "text": "升泛化能力。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "通过构建“情绪分类”与“域分类”的对抗关系，引导特征提取器：",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "通过构建“情绪分类”与“域分类”的对抗关系，引导特征提取器：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "→ 保留情绪信息：让情绪分类器可以准确预测类别。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "→ 保留情绪信息：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#B91C1C",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "让情绪分类器可以准确预测类别。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "→ 剔除域差异：让域分类器无法分辨来源，最终学到“域不变特征”，大幅提升泛化能力。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "→ 剔除域差异：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#B91C1C",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "让域分类器无法分辨来源，最终学到“域不变特征”，大幅提升泛化能力。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    }
+  ],
+  "composeRuns": []
+}

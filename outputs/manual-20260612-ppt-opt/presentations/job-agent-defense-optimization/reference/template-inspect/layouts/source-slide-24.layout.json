@@ -1,0 +1,617 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/bq1oryts",
+    "id": "bq1oryts",
+    "slide": 25,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/e1w7mp0b",
+      "id": "18",
+      "name": "Picture 2",
+      "bbox": [
+        3.93,
+        0,
+        1260,
+        714.67
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00033,
+        "top": 0,
+        "right": 0.00033,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rmhk3q5o",
+      "id": "3",
+      "name": "AutoShape 3",
+      "bbox": [
+        70.6,
+        62.47,
+        1126.67,
+        93.33
+      ],
+      "geometry": "rect",
+      "text": "04 多线程端侧推理性能对比",
+      "textPreview": "04 多线程端侧推理性能对比",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "04 多线程端侧推理性能对比"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "04 多线程端侧推理性能对比",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "0",
+              "fontSize": 42.67,
+              "typeface": "微软雅黑",
+              "color": "#0C3671",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "4",
+              "fontSize": 42.67,
+              "typeface": "微软雅黑",
+              "color": "#0C3671",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": " 多线程端侧推理性能对比",
+              "fontSize": 42.67,
+              "typeface": "微软雅黑",
+              "color": "#0C3671",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tovahoza",
+      "id": "10",
+      "name": "AutoShape 10",
+      "bbox": [
+        529.33,
+        210.67,
+        253.33,
+        53.33
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "lineWidth": 1.31
+    },
+    {
+      "order": 4,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/7mp0bi9s",
+      "id": "19",
+      "name": "图片 5",
+      "bbox": [
+        45,
+        150,
+        370,
+        230
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image28.png",
+        "contentType": "image/png",
+        "byteLength": 215098
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image28.png",
+        "contentType": "image/png",
+        "byteLength": 215098
+      }
+    },
+    {
+      "order": 5,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/zed8v6ps",
+      "id": "20",
+      "name": "图片 6",
+      "bbox": [
+        425,
+        150,
+        370,
+        230
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image29.png",
+        "contentType": "image/png",
+        "byteLength": 236440
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image29.png",
+        "contentType": "image/png",
+        "byteLength": 236440
+      }
+    },
+    {
+      "order": 6,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/6xkf6dcb",
+      "id": "21",
+      "name": "图片 7",
+      "bbox": [
+        205,
+        395,
+        460,
+        285
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image30.png",
+        "contentType": "image/png",
+        "byteLength": 241246
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image30.png",
+        "contentType": "image/png",
+        "byteLength": 241246
+      }
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0fepkzup",
+      "id": "15",
+      "name": "矩形 14",
+      "bbox": [
+        820,
+        169.87,
+        370,
+        431.33
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 1
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/bulwval8",
+      "id": "16",
+      "name": "矩形 15",
+      "bbox": [
+        845,
+        180,
+        320,
+        42
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/i9s36hcr",
+      "id": "17",
+      "name": "矩形 16",
+      "bbox": [
+        820,
+        169.87,
+        370,
+        436.33
+      ],
+      "geometry": "rect",
+      "text": "评价指标：平均延迟 \n最终保留两类端侧方案：\n① CNN + NCNN_FP32 +2W×1T\n平均延迟为0.0266ms，CNN组最快。CNN规模小，INT8转换开销抵消收益，因此选NCNN_FP32浮点路径延迟更低且稳定。\n\n② MLP + ONNX_INT8 + 2W×1T\n平均延迟为0.0308ms，MLP组最佳。MLP以Linear/MatMul为主，更匹配ONNX_INT8量化与ONNX Runtime图优化。\n并行依据：两种方案均采用2W×1T，通过Worker级样本并行和动态抢单提升CPU利用率，同时减少线程竞争与Cache开销。\n",
+      "textPreview": "评价指标：平均延迟  | 最终保留两类端侧方案： | ① CNN + NCNN_FP32 +2W×1T | 平均延迟为0.0266ms，CNN组最快。CNN规模小，INT8转换开销抵消收益，因此选NCNN_FP32浮点路径延迟更低且稳定。 |  | ② MLP + ONNX...",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 17,
+        "lines": [
+          {
+            "index": 1,
+            "text": "评价指标：平均延迟"
+          },
+          {
+            "index": 2,
+            "text": "最终保留两类端侧方案："
+          },
+          {
+            "index": 3,
+            "text": "① CNN + NCNN_FP32 +2W×1T"
+          },
+          {
+            "index": 4,
+            "text": "平均延迟为0.0266ms，"
+          },
+          {
+            "index": 5,
+            "text": "CNN组最快。CNN规模小，INT8转换开销抵"
+          },
+          {
+            "index": 6,
+            "text": "消收益，因此选NCNN_FP32浮点路径延迟"
+          },
+          {
+            "index": 7,
+            "text": "更低且稳定。"
+          },
+          {
+            "index": 8,
+            "text": ""
+          },
+          {
+            "index": 9,
+            "text": "② MLP + ONNX_INT8 + 2W×1T"
+          },
+          {
+            "index": 10,
+            "text": "平均延迟为"
+          },
+          {
+            "index": 11,
+            "text": "0.0308ms，MLP组最佳。MLP以Linear/Mat"
+          },
+          {
+            "index": 12,
+            "text": "Mul为主，更匹配ONNX_INT8量化与ONNX"
+          },
+          {
+            "index": 13,
+            "text": "Runtime图优化。"
+          },
+          {
+            "index": 14,
+            "text": "并行依据：两种方案均采用2W×1T，通过W"
+          },
+          {
+            "index": 15,
+            "text": "orker级样本并行和动态抢单提升CPU利用率"
+          },
+          {
+            "index": 16,
+            "text": "，同时减少线程竞争与Cache开销。"
+          },
+          {
+            "index": 17,
+            "text": ""
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "评价指标：平均延迟 ",
+          "runs": [
+            {
+              "index": 1,
+              "text": "评价指标：平均延迟 ",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "最终保留两类端侧方案：",
+          "runs": [
+            {
+              "index": 1,
+              "text": "最终保留两类端侧方案：",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "① CNN + NCNN_FP32 +2W×1T",
+          "runs": [
+            {
+              "index": 1,
+              "text": "① CNN + NCNN_FP32 +2W×1T",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 4,
+          "text": "平均延迟为0.0266ms，CNN组最快。CNN规模小，INT8转换开销抵消收益，因此选NCNN_FP32浮点路径延迟更低且稳定。",
+          "runs": [
+            {
+              "index": 1,
+              "text": "平均延迟为",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑"
+            },
+            {
+              "index": 2,
+              "text": "0.0266ms",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑"
+            },
+            {
+              "index": 3,
+              "text": "，",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑"
+            },
+            {
+              "index": 4,
+              "text": "CNN组最快。CNN规模小，INT8转换开销抵消收益，因此选NCNN_FP32浮点路径延迟更低且稳定。",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 6,
+          "text": "② MLP + ONNX_INT8 + 2W×1T",
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "② MLP + ONNX_INT8 + 2W×1T",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 7,
+          "text": "平均延迟为0.0308ms，MLP组最佳。MLP以Linear/MatMul为主，更匹配ONNX_INT8量化与ONNX Runtime图优化。",
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "平均延迟为",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑"
+            },
+            {
+              "index": 2,
+              "text": "0.0308ms，MLP组最佳。MLP以Linear/MatMul为主，更匹配ONNX_INT8量化与ONNX Runtime图优化。",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 8,
+          "text": "并行依据：两种方案均采用2W×1T，通过Worker级样本并行和动态抢单提升CPU利用率，同时减少线程竞争与Cache开销。",
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "并行依据：两种方案均采用2W×1T，通过Worker级样本并行和动态抢单提升CPU利用率，同时减少线程竞争与Cache开销。",
+              "fontSize": 18.67,
+              "typeface": "微软雅黑"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "fillColor": {
+        "type": "theme",
+        "value": "accent5",
+        "transform": {
+          "lighten": 0.8
+        }
+      },
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

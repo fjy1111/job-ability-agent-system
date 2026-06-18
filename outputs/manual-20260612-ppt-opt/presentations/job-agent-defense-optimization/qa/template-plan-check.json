@@ -1,0 +1,10 @@
+{
+  "status": "pass",
+  "checkedAt": "2026-06-12T15:43:51.378Z",
+  "workspace": "/Users/monkey/job-ability-agent-system/outputs/manual-20260612-ppt-opt/presentations/job-agent-defense-optimization",
+  "mapPath": "/Users/monkey/job-ability-agent-system/outputs/manual-20260612-ppt-opt/presentations/job-agent-defense-optimization/template-frame-map.json",
+  "inspectPath": "/Users/monkey/job-ability-agent-system/outputs/manual-20260612-ppt-opt/presentations/job-agent-defense-optimization/template-inspect-normalized.ndjson",
+  "sourceSlideCount": 28,
+  "issueCount": 0,
+  "issues": []
+}

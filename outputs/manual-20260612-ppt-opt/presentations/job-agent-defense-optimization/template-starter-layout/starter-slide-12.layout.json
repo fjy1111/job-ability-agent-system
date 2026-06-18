@@ -1,0 +1,872 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/9phumr",
+    "id": "9phumr",
+    "slide": 12,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/sneloj2t",
+      "id": "12",
+      "name": "Picture 2",
+      "bbox": [
+        0,
+        0,
+        1260,
+        714.67
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00033,
+        "top": 0,
+        "right": 0.00033,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/c3ylc7u5",
+      "id": "4",
+      "name": "AutoShape 4",
+      "bbox": [
+        53.33,
+        53.33,
+        1153.33,
+        80
+      ],
+      "geometry": "rect",
+      "text": "03 核心技术原理 (3) - 知识蒸馏",
+      "textPreview": "03 核心技术原理 (3) - 知识蒸馏",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "03 核心技术原理 (3) - 知识蒸馏"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "03 核心技术原理 (3) - 知识蒸馏",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "03 核心技术原理 (3) - 知识蒸馏",
+              "fontSize": 41.33,
+              "typeface": "微软雅黑",
+              "color": "#093A5A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1kre1w7m",
+      "id": "5",
+      "name": "TextBox 4",
+      "bbox": [
+        81.6,
+        126.72,
+        1104,
+        33.6
+      ],
+      "geometry": "rect",
+      "text": "核心思想：用高精度教师模型指导轻量学生模型，在保留识别能力的同时降低端侧推理开销。",
+      "textPreview": "核心思想：用高精度教师模型指导轻量学生模型，在保留识别能力的同时降低端侧推理开销。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "none",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 3.84,
+          "right": 0,
+          "bottom": 3.84,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "核心思想：用高精度教师模型指导轻量学生模型，在保留识别能力的同时降低端侧推理开销。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "核心思想：用高精度教师模型指导轻量学生模型，在保留识别能力的同时降低端侧推理开销。",
+          "lineSpacingPercent": 110000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "核心思想：用高精度教师模型指导轻量学生模型，在保留识别能力的同时降低端侧推理开销。",
+              "fontSize": 20.67,
+              "typeface": "微软雅黑",
+              "color": "#2C3E50"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/uxc3ylc7",
+      "id": "6",
+      "name": "Rounded Rectangle 5",
+      "bbox": [
+        69.12,
+        174.72,
+        561.6,
+        168.96
+      ],
+      "geometry": "roundRect",
+      "text": "一、蒸馏动机\n教师 MRGCN-DANN 图结构表达强，但端侧推理开销较高。\n学生采用 MLP / CNN1D，去除复杂图卷积，更适合 ARM64 与 NCNN 部署。",
+      "textPreview": "一、蒸馏动机 | 教师 MRGCN-DANN 图结构表达强，但端侧推理开销较高。 | 学生采用 MLP / CNN1D，去除复杂图卷积，更适合 ARM64 与 NCNN 部署。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "textTransform": "none",
+        "insets": {
+          "top": 11.52,
+          "right": 15.36,
+          "bottom": 9.6,
+          "left": 17.28
+        }
+      },
+      "textLayout": {
+        "lineCount": 6,
+        "lines": [
+          {
+            "index": 1,
+            "text": "一、蒸馏动机"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "教师 MRGCN-DANN 图结构表达强，但端侧推理开销较高。"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "学生采用 MLP / CNN1D，去除复杂图卷积，更适合 ARM64 与"
+          },
+          {
+            "index": 6,
+            "text": "NCNN 部署。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "一、蒸馏动机",
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "一、蒸馏动机",
+              "fontSize": 28,
+              "typeface": "微软雅黑",
+              "color": "#093A5A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "教师 MRGCN-DANN 图结构表达强，但端侧推理开销较高。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "教师 MRGCN-DANN 图结构表达强，但端侧推理开销较高。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "学生采用 MLP / CNN1D，去除复杂图卷积，更适合 ARM64 与 NCNN 部署。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "学生采用 MLP / CNN1D，去除复杂图卷积，更适合 ARM64 与 NCNN 部署。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "fillColor": "#F3F8FF",
+      "lineColor": "#96C0F4",
+      "lineWidth": 2
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ji5snelo",
+      "id": "7",
+      "name": "Rounded Rectangle 6",
+      "bbox": [
+        650.88,
+        174.72,
+        561.6,
+        168.96
+      ],
+      "geometry": "roundRect",
+      "text": "二、训练设计\n冻结教师模型，以 soft logits 作为知识指导。\n学生同时学习硬标签 CE 与软标签 KL，兼顾分类正确性和知识迁移。",
+      "textPreview": "二、训练设计 | 冻结教师模型，以 soft logits 作为知识指导。 | 学生同时学习硬标签 CE 与软标签 KL，兼顾分类正确性和知识迁移。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "textTransform": "none",
+        "insets": {
+          "top": 11.52,
+          "right": 15.36,
+          "bottom": 9.6,
+          "left": 17.28
+        }
+      },
+      "textLayout": {
+        "lineCount": 6,
+        "lines": [
+          {
+            "index": 1,
+            "text": "二、训练设计"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "冻结教师模型，以 soft logits 作为知识指导。"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "学生同时学习硬标签 CE 与软标签"
+          },
+          {
+            "index": 6,
+            "text": "KL，兼顾分类正确性和知识迁移。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "二、训练设计",
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "二、训练设计",
+              "fontSize": 28,
+              "typeface": "微软雅黑",
+              "color": "#007682",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "冻结教师模型，以 soft logits 作为知识指导。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "冻结教师模型，以 soft logits 作为知识指导。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "学生同时学习硬标签 CE 与软标签 KL，兼顾分类正确性和知识迁移。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "学生同时学习硬标签 CE 与软标签 KL，兼顾分类正确性和知识迁移。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "fillColor": "#F0FBFB",
+      "lineColor": "#68C9C9",
+      "lineWidth": 2
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8bat47y1",
+      "id": "8",
+      "name": "Rounded Rectangle 7",
+      "bbox": [
+        69.12,
+        370.56,
+        561.6,
+        163.2
+      ],
+      "geometry": "roundRect",
+      "text": "三、核心优势\n继承教师模型的类别边界与泛化知识，降低轻量化精度损失。\n学生模型参数更少、计算更轻，便于 ONNX / NCNN / INT8 部署。",
+      "textPreview": "三、核心优势 | 继承教师模型的类别边界与泛化知识，降低轻量化精度损失。 | 学生模型参数更少、计算更轻，便于 ONNX / NCNN / INT8 部署。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "textTransform": "none",
+        "insets": {
+          "top": 11.52,
+          "right": 15.36,
+          "bottom": 9.6,
+          "left": 17.28
+        }
+      },
+      "textLayout": {
+        "lineCount": 5,
+        "lines": [
+          {
+            "index": 1,
+            "text": "三、核心优势"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "继承教师模型的类别边界与泛化知识，降低轻量化精度损失。"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "学生模型参数更少、计算更轻，便于 ONNX / NCNN / INT8 部署。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "三、核心优势",
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "三、核心优势",
+              "fontSize": 28,
+              "typeface": "微软雅黑",
+              "color": "#093A5A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "继承教师模型的类别边界与泛化知识，降低轻量化精度损失。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "继承教师模型的类别边界与泛化知识，降低轻量化精度损失。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "学生模型参数更少、计算更轻，便于 ONNX / NCNN / INT8 部署。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "学生模型参数更少、计算更轻，便于 ONNX / NCNN / INT8 部署。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "fillColor": "#FAFCFF",
+      "lineColor": "#96C0F4",
+      "lineWidth": 2
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1w7mp0bi",
+      "id": "9",
+      "name": "Rounded Rectangle 8",
+      "bbox": [
+        650.88,
+        370.56,
+        561.6,
+        163.2
+      ],
+      "geometry": "roundRect",
+      "text": "四、创新点与端侧价值\n将知识蒸馏与 DANN 域自适应结合，同时关注情绪判别与域偏移抑制。\n在识别精度、跨 trial 泛化能力和端侧效率之间建立平衡。",
+      "textPreview": "四、创新点与端侧价值 | 将知识蒸馏与 DANN 域自适应结合，同时关注情绪判别与域偏移抑制。 | 在识别精度、跨 trial 泛化能力和端侧效率之间建立平衡。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "textTransform": "none",
+        "insets": {
+          "top": 11.52,
+          "right": 15.36,
+          "bottom": 9.6,
+          "left": 17.28
+        }
+      },
+      "textLayout": {
+        "lineCount": 6,
+        "lines": [
+          {
+            "index": 1,
+            "text": "四、创新点与端侧价值"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "将知识蒸馏与 DANN"
+          },
+          {
+            "index": 4,
+            "text": "域自适应结合，同时关注情绪判别与域偏移抑制。"
+          },
+          {
+            "index": 5,
+            "text": ""
+          },
+          {
+            "index": 6,
+            "text": "在识别精度、跨 trial 泛化能力和端侧效率之间建立平衡。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "四、创新点与端侧价值",
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "四、创新点与端侧价值",
+              "fontSize": 28,
+              "typeface": "微软雅黑",
+              "color": "#E95D0C",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "将知识蒸馏与 DANN 域自适应结合，同时关注情绪判别与域偏移抑制。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "将知识蒸馏与 DANN 域自适应结合，同时关注情绪判别与域偏移抑制。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "在识别精度、跨 trial 泛化能力和端侧效率之间建立平衡。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "在识别精度、跨 trial 泛化能力和端侧效率之间建立平衡。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "fillColor": "#FFF6EF",
+      "lineColor": "#F29A61",
+      "lineWidth": 2
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/d0z61032",
+      "id": "10",
+      "name": "TextBox 9",
+      "bbox": [
+        91.2,
+        541.44,
+        1094.4,
+        24
+      ],
+      "geometry": "rect",
+      "text": "联合损失：L = CE(y, p_s) + α·KL(p_t / T, p_s / T) + λ·L_domain",
+      "textPreview": "联合损失：L = CE(y, p_s) + α·KL(p_t / T, p_s / T) + λ·L_domain",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "wrap": "none",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "联合损失：L = CE(y, p_s) + α·KL(p_t / T, p_s / T) + λ·L_domain"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "联合损失：L = CE(y, p_s) + α·KL(p_t / T, p_s / T) + λ·L_domain",
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "联合损失：L = CE(y, p_s) + α·KL(p_t / T, p_s / T) + λ·L_domain",
+              "fontSize": 18,
+              "typeface": "微软雅黑",
+              "color": "#235078"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ]
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kf6dcbul",
+      "id": "11",
+      "name": "Rounded Rectangle 10",
+      "bbox": [
+        81.6,
+        580.8,
+        1118.4,
+        48
+      ],
+      "geometry": "roundRect",
+      "text": "最终目标：以“高精度教师 + 轻量学生 + 域约束蒸馏”实现精度、泛化能力与端侧效率的平衡。",
+      "textPreview": "最终目标：以“高精度教师 + 轻量学生 + 域约束蒸馏”实现精度、泛化能力与端侧效率的平衡。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "insets": {
+          "top": 3.84,
+          "right": 17.28,
+          "bottom": 3.84,
+          "left": 17.28
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "最终目标：以“高精度教师 + 轻量学生 + 域约束蒸馏”实现精度、泛化能力与端侧效率的平衡。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "最终目标：以“高精度教师 + 轻量学生 + 域约束蒸馏”实现精度、泛化能力与端侧效率的平衡。",
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "最终目标：以“高精度教师 + 轻量学生 + 域约束蒸馏”实现精度、泛化能力与端侧效率的平衡。",
+              "fontSize": 19.33,
+              "typeface": "微软雅黑",
+              "color": "#002F5E",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "fillColor": "#EEFAFF",
+      "lineColor": "#62B6D8",
+      "lineWidth": 1.6
+    }
+  ],
+  "composeRuns": []
+}

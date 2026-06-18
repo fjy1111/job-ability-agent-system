@@ -1,0 +1,1495 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/pg3ex0nu",
+    "id": "pg3ex0nu",
+    "slide": 3,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "backgroundImage": {
+      "assetId": "/ppt/media/image2.png",
+      "contentType": "image/png",
+      "byteLength": 1097511
+    },
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "Noto Sans SC"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5o7qpg3e",
+      "id": "2",
+      "name": "AutoShape 2",
+      "bbox": [
+        0,
+        53.33,
+        1260,
+        80
+      ],
+      "geometry": "rect",
+      "text": "目 录 CONTENTS",
+      "textPreview": "目 录 CONTENTS",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "目 录 CONTENTS"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "目 录 CONTENTS",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "目 录 ",
+              "fontSize": 48,
+              "typeface": "Noto Sans SC",
+              "color": "#0F172A",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "CONTENTS",
+              "fontSize": 32,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/g3ex0nux",
+      "id": "3",
+      "name": "AutoShape 3",
+      "bbox": [
+        55.2,
+        151.87,
+        373.33,
+        256.2
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.92)",
+      "lineColor": "rgba(226, 232, 240, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/r65wjudg",
+      "id": "4",
+      "name": "AutoShape 4",
+      "bbox": [
+        75.2,
+        165.2,
+        333.33,
+        129.47
+      ],
+      "geometry": "rect",
+      "text": "01. 项目概述与背景\n• 研究背景与意义 \n• 技术难点与主要创新",
+      "textPreview": "01. 项目概述与背景 | • 研究背景与意义  | • 技术难点与主要创新",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 5,
+        "lines": [
+          {
+            "index": 1,
+            "text": "01. 项目概述与背景"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "• 研究背景与意义"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "• 技术难点与主要创新"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "01. 项目概述与背景",
+          "indent": 0,
+          "lineSpacingPercent": 92000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "01. ",
+              "fontSize": 37.33,
+              "typeface": "Noto Sans SC",
+              "color": "#D97706",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "项目概述与背景",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#0F172A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "• 研究背景与意义 ",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• ",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 2,
+              "text": "研究背景与意义",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 3,
+              "text": " ",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "• 技术难点与主要创新",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• ",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 2,
+              "text": "技术难点与",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 3,
+              "text": "主要创新",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ylc7u54z",
+      "id": "5",
+      "name": "AutoShape 5",
+      "bbox": [
+        444.27,
+        143.53,
+        373.33,
+        263.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.92)",
+      "lineColor": "rgba(226, 232, 240, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9cvixcze",
+      "id": "6",
+      "name": "AutoShape 6",
+      "bbox": [
+        464.27,
+        165.2,
+        333.33,
+        201.6
+      ],
+      "geometry": "rect",
+      "text": "02. 方案设计与技术原理\n• 总体技术路线 \n• 基线模型选择与论证\n• 核心原理：MRGCN、DANN、知识蒸馏、                       模型量化",
+      "textPreview": "02. 方案设计与技术原理 | • 总体技术路线  | • 基线模型选择与论证 | • 核心原理：MRGCN、DANN、知识蒸馏、                       模型量化",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 8,
+        "lines": [
+          {
+            "index": 1,
+            "text": "02. 方案设计与技术原理"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "• 总体技术路线"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "• 基线模型选择与论证"
+          },
+          {
+            "index": 6,
+            "text": ""
+          },
+          {
+            "index": 7,
+            "text": "• 核心原理：MRGCN、DANN、知识蒸馏"
+          },
+          {
+            "index": 8,
+            "text": "、                       模型量化"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "02. 方案设计与技术原理",
+          "indent": 0,
+          "lineSpacingPercent": 92000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "02.",
+              "fontSize": 37.33,
+              "typeface": "Noto Sans SC",
+              "color": "#D97706",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": " ",
+              "fontSize": 37.33,
+              "typeface": "Noto Sans SC",
+              "color": "#2563EB",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": "方案设计与技术原理",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#0F172A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "• 总体技术路线 ",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 总体技术路线 ",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "• 基线模型选择与论证",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• ",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 2,
+              "text": "基线模型选择与论证",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 4,
+          "text": "• 核心原理：MRGCN、DANN、知识蒸馏、                       模型量化",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 核心原理：MRGCN、DANN、",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 2,
+              "text": "知识蒸馏",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 3,
+              "text": "、",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 4,
+              "text": "                       ",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 5,
+              "text": "模型量化",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gr2p8nqx",
+      "id": "7",
+      "name": "AutoShape 7",
+      "bbox": [
+        833.33,
+        143.6,
+        373.33,
+        281.87
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.92)",
+      "lineColor": "rgba(226, 232, 240, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rytsvu9k",
+      "id": "8",
+      "name": "AutoShape 8",
+      "bbox": [
+        853.33,
+        203.33,
+        333.33,
+        193.33
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          },
+          {
+            "index": 2,
+            "text": ""
+          }
+        ]
+      },
+      "lineWidth": 1.31
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yd0z6103",
+      "id": "9",
+      "name": "AutoShape 9",
+      "bbox": [
+        186.67,
+        421.8,
+        440,
+        252.67
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.92)",
+      "lineColor": "rgba(226, 232, 240, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wb2hwfyx",
+      "id": "10",
+      "name": "AutoShape 10",
+      "bbox": [
+        213.33,
+        466.67,
+        386.67,
+        173.33
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          },
+          {
+            "index": 2,
+            "text": ""
+          }
+        ]
+      },
+      "lineWidth": 1.31
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lwval87e",
+      "id": "11",
+      "name": "AutoShape 11",
+      "bbox": [
+        662,
+        425.4,
+        440,
+        249
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.92)",
+      "lineColor": "rgba(226, 232, 240, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/e9cvixcz",
+      "id": "12",
+      "name": "AutoShape 12",
+      "bbox": [
+        680,
+        433.33,
+        386.67,
+        128.73
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "lineWidth": 1.31
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3q5o7qpg",
+      "id": "13",
+      "name": "文本框 12",
+      "bbox": [
+        853.33,
+        143.6,
+        326,
+        244.6
+      ],
+      "geometry": "rect",
+      "text": "03. 软件模块划分\n• 软件模块划分\n• 数据读取与样本构建流程\n• MRGCN训练流程\n• DANN扩展与自适应调参\n• 知识蒸馏与轻量模型训练\n• 量化与推理\n\n",
+      "textPreview": "03. 软件模块划分 | • 软件模块划分 | • 数据读取与样本构建流程 | • MRGCN训练流程 | • DANN扩展与自适应调参 | • 知识蒸馏与轻量模型训练 | • 量化与推理 |  |",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 15,
+        "lines": [
+          {
+            "index": 1,
+            "text": "03. 软件模块划分"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "• 软件模块划分"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "• 数据读取与样本构建流程"
+          },
+          {
+            "index": 6,
+            "text": ""
+          },
+          {
+            "index": 7,
+            "text": "• MRGCN训练流程"
+          },
+          {
+            "index": 8,
+            "text": ""
+          },
+          {
+            "index": 9,
+            "text": "• DANN扩展与自适应调参"
+          },
+          {
+            "index": 10,
+            "text": ""
+          },
+          {
+            "index": 11,
+            "text": "• 知识蒸馏与轻量模型训练"
+          },
+          {
+            "index": 12,
+            "text": ""
+          },
+          {
+            "index": 13,
+            "text": "• 量化与推理"
+          },
+          {
+            "index": 14,
+            "text": ""
+          },
+          {
+            "index": 15,
+            "text": ""
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "03. 软件模块划分",
+          "runs": [
+            {
+              "index": 1,
+              "text": "03.",
+              "fontSize": 37.33,
+              "typeface": "Noto Sans SC",
+              "color": "#D97706",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": " ",
+              "fontSize": 37.33,
+              "typeface": "Noto Sans SC",
+              "color": "#2563EB",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": "软件模块划分",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#0F172A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "• 软件模块划分",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 软件模块划分",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "• 数据读取与样本构建流程",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 数据读取与样本构建流程",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 4,
+          "text": "• MRGCN训练流程",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• MRGCN训练流程",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 5,
+          "text": "• DANN扩展与自适应调参",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• DANN扩展与自适应调参",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 6,
+          "text": "• 知识蒸馏与轻量模型训练",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 知识蒸馏与轻量模型训练",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 7,
+          "text": "• 量化与推理",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 量化与推理",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ]
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/w3m94fu1",
+      "id": "14",
+      "name": "文本框 13",
+      "bbox": [
+        199.93,
+        426.67,
+        418.47,
+        235.4
+      ],
+      "geometry": "rect",
+      "text": "04. 系统测试与结果分析\n• 测试内容与评价指标\n• 模型轻量化\n• 项目候选模型对比与端侧部署方案选择\n• 多线程端侧推理性能对比\n• 优化效果与误差分析",
+      "textPreview": "04. 系统测试与结果分析 | • 测试内容与评价指标 | • 模型轻量化 | • 项目候选模型对比与端侧部署方案选择 | • 多线程端侧推理性能对比 | • 优化效果与误差分析",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 11,
+        "lines": [
+          {
+            "index": 1,
+            "text": "04. 系统测试与结果分析"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "• 测试内容与评价指标"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "• 模型轻量化"
+          },
+          {
+            "index": 6,
+            "text": ""
+          },
+          {
+            "index": 7,
+            "text": "• 项目候选模型对比与端侧部署方案选择"
+          },
+          {
+            "index": 8,
+            "text": ""
+          },
+          {
+            "index": 9,
+            "text": "• 多线程端侧推理性能对比"
+          },
+          {
+            "index": 10,
+            "text": ""
+          },
+          {
+            "index": 11,
+            "text": "• 优化效果与误差分析"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "04. 系统测试与结果分析",
+          "runs": [
+            {
+              "index": 1,
+              "text": "04. ",
+              "fontSize": 37.33,
+              "typeface": "Noto Sans SC",
+              "color": "#D97706",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "系统测试与结果分析",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#0F172A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "• 测试内容与评价指标",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 测试内容与评价指标",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "• 模型轻量化",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• ",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 2,
+              "text": "模型轻量化",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 4,
+          "text": "• 项目候选模型对比与端侧部署方案选择",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• ",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 2,
+              "text": "项目候选模型对比与端侧部署方案选择",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 5,
+          "text": "• 多线程端侧推理性能对比",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• ",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            },
+            {
+              "index": 2,
+              "text": "多线程端侧推理性能对比",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 6,
+          "text": "• 优化效果与误差分析",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 优化效果与误差分析",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ]
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/loj2t83i",
+      "id": "15",
+      "name": "文本框 14",
+      "bbox": [
+        680,
+        428.67,
+        406.67,
+        214.4
+      ],
+      "geometry": "rect",
+      "text": "05. 总结与展望\n•项目总结\n•未来展望",
+      "textPreview": "05. 总结与展望 | •项目总结 | •未来展望",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 5,
+        "lines": [
+          {
+            "index": 1,
+            "text": "05. 总结与展望"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "•项目总结"
+          },
+          {
+            "index": 4,
+            "text": ""
+          },
+          {
+            "index": 5,
+            "text": "•未来展望"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "05. 总结与展望",
+          "runs": [
+            {
+              "index": 1,
+              "text": "05. ",
+              "fontSize": 37.33,
+              "typeface": "Noto Sans SC",
+              "color": "#D97706",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "总结与展望",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#0F172A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "•项目总结",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "•项目总结",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "•未来展望",
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 1200,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "•未来展望",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#475569"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ]
+    }
+  ],
+  "composeRuns": []
+}

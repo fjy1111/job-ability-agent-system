@@ -1,0 +1,448 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/fu18jqh0",
+    "id": "fu18jqh0",
+    "slide": 9,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "backgroundImage": {
+      "assetId": "/ppt/media/image2.png",
+      "contentType": "image/png",
+      "byteLength": 1067739
+    },
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Calibri Light",
+        "eastAsianTypeface": "Calibri Light",
+        "complexScriptTypeface": "Calibri Light"
+      },
+      "minorFont": {
+        "latinTypeface": "Calibri",
+        "eastAsianTypeface": "Calibri",
+        "complexScriptTypeface": "Calibri"
+      }
+    },
+    "typefaces": [
+      "Calibri",
+      "Calibri Light",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/judg7ads",
+      "id": "3",
+      "name": "矩形 2",
+      "bbox": [
+        155.87,
+        40.07,
+        920,
+        52
+      ],
+      "geometry": "rect",
+      "text": "01 系统总体架构",
+      "textPreview": "01 系统总体架构",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "01 系统总体架构"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "01 系统总体架构",
+          "resolvedTextStyle": {
+            "fontSize": 31,
+            "typeface": "微软雅黑",
+            "color": "#0B2F63",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "01 系统总体架构",
+              "fontSize": 37.33,
+              "typeface": "微软雅黑",
+              "color": "#0B2F63",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/c7u54zid",
+      "id": "4",
+      "name": "矩形 3",
+      "bbox": [
+        78.53,
+        131.6,
+        1123,
+        30
+      ],
+      "geometry": "rect",
+      "text": "分层支撑完整就业指导闭环，输入数据、业务功能、算法服务、智能与数据底座、结果输出逐层衔接",
+      "textPreview": "分层支撑完整就业指导闭环，输入数据、业务功能、算法服务、智能与数据底座、结果输出逐层衔接",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "分层支撑完整就业指导闭环，输入数据、业务功能、算法服务、智能与数据底座、结果输出逐层衔接"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "分层支撑完整就业指导闭环，输入数据、业务功能、算法服务、智能与数据底座、结果输出逐层衔接",
+          "resolvedTextStyle": {
+            "fontSize": 31,
+            "typeface": "微软雅黑",
+            "color": "#0B2F63",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "分层支撑完整就业指导闭环",
+              "fontSize": 24
+            },
+            {
+              "index": 2,
+              "text": "，",
+              "fontSize": 24
+            },
+            {
+              "index": 3,
+              "text": "输入数据、业务功能、算法服务、智能与数据底座、结果输出逐层衔接",
+              "fontSize": 24,
+              "typeface": "微软雅黑"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/u18jqh0f",
+      "id": "6",
+      "name": "圆角矩形 5",
+      "bbox": [
+        72,
+        189,
+        826,
+        471
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#D8E4F4",
+      "lineWidth": 1.2
+    },
+    {
+      "order": 4,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/fil0rqd4",
+      "id": "11",
+      "name": "图片 6",
+      "bbox": [
+        72,
+        189,
+        815.27,
+        480.33
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0.10535
+      },
+      "asset": {
+        "assetId": "/ppt/media/image3.png",
+        "contentType": "image/png",
+        "byteLength": 192577
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image3.png",
+        "contentType": "image/png",
+        "byteLength": 192577
+      }
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cvixczed",
+      "id": "8",
+      "name": "圆角矩形 7",
+      "bbox": [
+        925,
+        170,
+        270,
+        345
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#D8E4F4",
+      "lineWidth": 1.2
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/18jqh0fe",
+      "id": "10",
+      "name": "矩形 9",
+      "bbox": [
+        945,
+        240,
+        220,
+        245
+      ],
+      "geometry": "rect",
+      "text": "• 输入统一：简历、岗位、课程和审核数据进入同一处理链路。\n• 业务聚合：画像、匹配、映射、优化、面试和指导形成闭环。\n• 底座可追溯：MySQL 保存输入、结果、来源、版本与审核状态。",
+      "textPreview": "• 输入统一：简历、岗位、课程和审核数据进入同一处理链路。 | • 业务聚合：画像、匹配、映射、优化、面试和指导形成闭环。 | • 底座可追溯：MySQL 保存输入、结果、来源、版本与审核状态。",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 8,
+          "right": 8,
+          "bottom": 8,
+          "left": 10
+        }
+      },
+      "textLayout": {
+        "lineCount": 13,
+        "lines": [
+          {
+            "index": 1,
+            "text": "•"
+          },
+          {
+            "index": 2,
+            "text": "输入统一：简历、岗"
+          },
+          {
+            "index": 3,
+            "text": "位、课程和审核数据"
+          },
+          {
+            "index": 4,
+            "text": "进入同一处理链路。"
+          },
+          {
+            "index": 5,
+            "text": "•"
+          },
+          {
+            "index": 6,
+            "text": "业务聚合：画像、匹"
+          },
+          {
+            "index": 7,
+            "text": "配、映射、优化、面"
+          },
+          {
+            "index": 8,
+            "text": "试和指导形成闭环。"
+          },
+          {
+            "index": 9,
+            "text": "•"
+          },
+          {
+            "index": 10,
+            "text": "底座可追溯：MySQL"
+          },
+          {
+            "index": 11,
+            "text": "保存输入、结果、来"
+          },
+          {
+            "index": 12,
+            "text": "源、版本与审核状态"
+          },
+          {
+            "index": 13,
+            "text": "。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• 输入统一：简历、岗位、课程和审核数据进入同一处理链路。",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "微软雅黑",
+            "color": "#0F172A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 输入统一：简历、岗位、课程和审核数据进入同一处理链路。",
+              "fontSize": 21.33,
+              "typeface": "微软雅黑",
+              "color": "#0F172A"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "• 业务聚合：画像、匹配、映射、优化、面试和指导形成闭环。",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "微软雅黑",
+            "color": "#0F172A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 业务聚合：画像、匹配、映射、优化、面试和指导形成闭环。",
+              "fontSize": 21.33,
+              "typeface": "微软雅黑",
+              "color": "#0F172A"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "• 底座可追溯：MySQL 保存输入、结果、来源、版本与审核状态。",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "微软雅黑",
+            "color": "#0F172A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 底座可追溯：MySQL 保存输入、结果、来源、版本与审核状态。",
+              "fontSize": 21.33,
+              "typeface": "微软雅黑",
+              "color": "#0F172A"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "rgba(0, 0, 0, 0)",
+      "lineColor": "rgba(0, 0, 0, 0)",
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

@@ -1,0 +1,1443 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/fu18jqh0",
+    "id": "fu18jqh0",
+    "slide": 9,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "Noto Sans SC"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/f6dcbulw",
+      "id": "19",
+      "name": "Picture 2",
+      "bbox": [
+        0,
+        0,
+        1260,
+        714.67
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00033,
+        "top": 0,
+        "right": 0.00033,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/c7u54zid",
+      "id": "4",
+      "name": "AutoShape 4",
+      "bbox": [
+        53.33,
+        49.27,
+        1153.33,
+        80
+      ],
+      "geometry": "rect",
+      "text": "02 基线模型选择与论证",
+      "textPreview": "02 基线模型选择与论证",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "02 基线模型选择与论证"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "02 基线模型选择与论证",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "02 基线模型选择与论证",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#104862",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1orytsvu",
+      "id": "5",
+      "name": "AutoShape 5",
+      "bbox": [
+        53.33,
+        146.67,
+        573.33,
+        213.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineColor": "rgba(222, 224, 227, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/u18jqh0f",
+      "id": "6",
+      "name": "AutoShape 6",
+      "bbox": [
+        53.33,
+        146.67,
+        8,
+        213.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(59, 130, 246, 1)",
+      "lineWidth": 2.67
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jm1cfa9w",
+      "id": "7",
+      "name": "AutoShape 7",
+      "bbox": [
+        80,
+        160,
+        520,
+        186.67
+      ],
+      "geometry": "rect",
+      "text": "DNN (全连接网络)\n特点：特征展平后输入全连接网络，结构简单直接。\n优势：结构简单，计算速度快，易于实现与部署。\n局限：无法建模电极间的空间拓扑关系，丢失关键信息。\n作用：作为最基础的传统模型进行对照分析。",
+      "textPreview": "DNN (全连接网络) | 特点：特征展平后输入全连接网络，结构简单直接。 | 优势：结构简单，计算速度快，易于实现与部署。 | 局限：无法建模电极间的空间拓扑关系，丢失关键信息。 | 作用：作为最基础的传统模型进行对照分析。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 6,
+        "lines": [
+          {
+            "index": 1,
+            "text": "DNN (全连接网络)"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "特点：特征展平后输入全连接网络，结构简单直接。"
+          },
+          {
+            "index": 4,
+            "text": "优势：结构简单，计算速度快，易于实现与部署。"
+          },
+          {
+            "index": 5,
+            "text": "局限：无法建模电极间的空间拓扑关系，丢失关键信息。"
+          },
+          {
+            "index": 6,
+            "text": "作用：作为最基础的传统模型进行对照分析。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "DNN (全连接网络)",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "DNN (全连接网络)",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2329",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "特点：特征展平后输入全连接网络，结构简单直接。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 800,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "特点：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#646A73",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "特征展平后输入全连接网络，结构简单直接。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "优势：结构简单，计算速度快，易于实现与部署。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "优势：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#10B981",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "结构简单，计算速度快，易于实现与部署。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 4,
+          "text": "局限：无法建模电极间的空间拓扑关系，丢失关键信息。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "局限：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#EF4444",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "无法建模电极间的空间拓扑关系，丢失关键信息。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 5,
+          "text": "作用：作为最基础的传统模型进行对照分析。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "作用：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#3B82F6",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "作为最基础的传统模型进行对照分析。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cvixczed",
+      "id": "8",
+      "name": "AutoShape 8",
+      "bbox": [
+        653.33,
+        146.67,
+        573.33,
+        213.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineColor": "rgba(222, 224, 227, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5gbq1ory",
+      "id": "9",
+      "name": "AutoShape 9",
+      "bbox": [
+        653.33,
+        146.67,
+        8,
+        213.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(16, 185, 129, 1)",
+      "lineWidth": 2.67
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/18jqh0fe",
+      "id": "10",
+      "name": "AutoShape 10",
+      "bbox": [
+        680,
+        160,
+        520,
+        186.67
+      ],
+      "geometry": "rect",
+      "text": "CNN-LSTM (混合时序模型)\n特点：结合卷积特征提取与LSTM时序建模能力。\n优势：能有效利用脑电信号的时间动态信息。\n局限：对非规则排列的电极空间拓扑结构表达不足。\n作用：用于验证时序建模在任务中的有效性对比。",
+      "textPreview": "CNN-LSTM (混合时序模型) | 特点：结合卷积特征提取与LSTM时序建模能力。 | 优势：能有效利用脑电信号的时间动态信息。 | 局限：对非规则排列的电极空间拓扑结构表达不足。 | 作用：用于验证时序建模在任务中的有效性对比。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 6,
+        "lines": [
+          {
+            "index": 1,
+            "text": "CNN-LSTM (混合时序模型)"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "特点：结合卷积特征提取与LSTM时序建模能力。"
+          },
+          {
+            "index": 4,
+            "text": "优势：能有效利用脑电信号的时间动态信息。"
+          },
+          {
+            "index": 5,
+            "text": "局限：对非规则排列的电极空间拓扑结构表达不足。"
+          },
+          {
+            "index": 6,
+            "text": "作用：用于验证时序建模在任务中的有效性对比。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "CNN-LSTM (混合时序模型)",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "CNN-LSTM (混合时序模型)",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2329",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "特点：结合卷积特征提取与LSTM时序建模能力。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 800,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "特点：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#646A73",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "结合卷积特征提取与LSTM时序建模能力。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "优势：能有效利用脑电信号的时间动态信息。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "优势：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#10B981",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "能有效利用脑电信号的时间动态信息。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 4,
+          "text": "局限：对非规则排列的电极空间拓扑结构表达不足。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "局限：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#EF4444",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "对非规则排列的电极空间拓扑结构表达不足。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 5,
+          "text": "作用：用于验证时序建模在任务中的有效性对比。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "作用：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#3B82F6",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "用于验证时序建模在任务中的有效性对比。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8nqxs72x",
+      "id": "11",
+      "name": "AutoShape 11",
+      "bbox": [
+        53.33,
+        386.67,
+        573.33,
+        213.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineColor": "rgba(222, 224, 227, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/j2t83itg",
+      "id": "12",
+      "name": "AutoShape 12",
+      "bbox": [
+        53.33,
+        386.67,
+        8,
+        213.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(245, 158, 11, 1)",
+      "lineWidth": 2.67
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/qh0fepkz",
+      "id": "13",
+      "name": "AutoShape 13",
+      "bbox": [
+        80,
+        400,
+        520,
+        186.67
+      ],
+      "geometry": "rect",
+      "text": "普通 GCN (图卷积网络)\n特点：将电极建模为图节点，引入基础图结构。\n优势：能够表达不同通道间的简单空间关系。\n局限：图结构单一，特征提取与表达能力受限。\n作用：作为图神经网络的基础对照组。",
+      "textPreview": "普通 GCN (图卷积网络) | 特点：将电极建模为图节点，引入基础图结构。 | 优势：能够表达不同通道间的简单空间关系。 | 局限：图结构单一，特征提取与表达能力受限。 | 作用：作为图神经网络的基础对照组。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 6,
+        "lines": [
+          {
+            "index": 1,
+            "text": "普通 GCN (图卷积网络)"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "特点：将电极建模为图节点，引入基础图结构。"
+          },
+          {
+            "index": 4,
+            "text": "优势：能够表达不同通道间的简单空间关系。"
+          },
+          {
+            "index": 5,
+            "text": "局限：图结构单一，特征提取与表达能力受限。"
+          },
+          {
+            "index": 6,
+            "text": "作用：作为图神经网络的基础对照组。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "普通 GCN (图卷积网络)",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "普通 GCN (图卷积网络)",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2329",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "特点：将电极建模为图节点，引入基础图结构。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 800,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "特点：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#646A73",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "将电极建模为图节点，引入基础图结构。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "优势：能够表达不同通道间的简单空间关系。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "优势：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#10B981",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "能够表达不同通道间的简单空间关系。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 4,
+          "text": "局限：图结构单一，特征提取与表达能力受限。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "局限：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#EF4444",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "图结构单一，特征提取与表达能力受限。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 5,
+          "text": "作用：作为图神经网络的基础对照组。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "作用：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#3B82F6",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "作为图神经网络的基础对照组。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#434343"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1w7mp0bi",
+      "id": "14",
+      "name": "AutoShape 14",
+      "bbox": [
+        653.33,
+        386.67,
+        573.33,
+        213.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(239, 246, 255, 1)",
+      "lineColor": "rgba(59, 130, 246, 1)",
+      "lineWidth": 2.67
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8bat47y1",
+      "id": "15",
+      "name": "AutoShape 15",
+      "bbox": [
+        680,
+        400,
+        520,
+        186.67
+      ],
+      "geometry": "rect",
+      "text": "MRGCN (多头残差图卷积网络)\n特点：融合多头图卷积与残差连接机制，结构更先进。\n优势：兼顾复杂拓扑关系建模、训练稳定性与强表达能力。\n局限：网络结构相对复杂，端侧部署需优化。\n作用：本作品的核心基线模型。",
+      "textPreview": "MRGCN (多头残差图卷积网络) | 特点：融合多头图卷积与残差连接机制，结构更先进。 | 优势：兼顾复杂拓扑关系建模、训练稳定性与强表达能力。 | 局限：网络结构相对复杂，端侧部署需优化。 | 作用：本作品的核心基线模型。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 6,
+        "lines": [
+          {
+            "index": 1,
+            "text": "MRGCN (多头残差图卷积网络)"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "特点：融合多头图卷积与残差连接机制，结构更先进。"
+          },
+          {
+            "index": 4,
+            "text": "优势：兼顾复杂拓扑关系建模、训练稳定性与强表达能力。"
+          },
+          {
+            "index": 5,
+            "text": "局限：网络结构相对复杂，端侧部署需优化。"
+          },
+          {
+            "index": 6,
+            "text": "作用：本作品的核心基线模型。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "MRGCN (多头残差图卷积网络)",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "MRGCN (多头残差图卷积网络)",
+              "fontSize": 24,
+              "typeface": "Noto Sans SC",
+              "color": "#103A7E",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "特点：融合多头图卷积与残差连接机制，结构更先进。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "spaceBefore": 800,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "特点：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#646A73",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "融合多头图卷积与残差连接机制，结构更先进。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2329"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        },
+        {
+          "index": 3,
+          "text": "优势：兼顾复杂拓扑关系建模、训练稳定性与强表达能力。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "优势：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#10B981",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "兼顾复杂拓扑关系建模、训练稳定性与强表达能力。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2329"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 4,
+          "text": "局限：网络结构相对复杂，端侧部署需优化。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "局限：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#EF4444",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "网络结构相对复杂，端侧部署需优化。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2329"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 5,
+          "text": "作用：本作品的核心基线模型。",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "作用：",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#D97706",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "本作品的核心基线模型。",
+              "fontSize": 16,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2329",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jqh0fepk",
+      "id": "16",
+      "name": "AutoShape 16",
+      "bbox": [
+        61.33,
+        608.6,
+        1159.6,
+        66.6
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(16, 58, 126, 1)",
+      "lineWidth": 2.67
+    },
+    {
+      "order": 15,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/36hcrmhk",
+      "id": "20",
+      "name": "Picture 17",
+      "bbox": [
+        80,
+        621.87,
+        53.33,
+        53.33
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image14.png",
+        "contentType": "image/png",
+        "byteLength": 1230
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image14.png",
+        "contentType": "image/png",
+        "byteLength": 1230
+      }
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1kre1w7m",
+      "id": "18",
+      "name": "AutoShape 18",
+      "bbox": [
+        147.13,
+        608.6,
+        1040,
+        66.67
+      ],
+      "geometry": "rect",
+      "text": "最终决策：选择 MRGCN 作为基线模型，因其在脑区拓扑建模、训练稳定性与特征表达能力上取得了最佳平衡。",
+      "textPreview": "最终决策：选择 MRGCN 作为基线模型，因其在脑区拓扑建模、训练稳定性与特征表达能力上取得了最佳平衡。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "最终决策：选择 MRGCN"
+          },
+          {
+            "index": 2,
+            "text": "作为基线模型，因其在脑区拓扑建模、训练稳定性与特征表达能力上取得了最佳平衡。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "最终决策：选择 MRGCN 作为基线模型，因其在脑区拓扑建模、训练稳定性与特征表达能力上取得了最佳平衡。",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "最终决策：选择 MRGCN 作为基线模型，因其在脑区拓扑建模、训练稳定性与特征表达能力上取得了最佳平衡。",
+              "fontSize": 21.33,
+              "typeface": "Noto Sans SC",
+              "color": "#FFFFFF",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    }
+  ],
+  "composeRuns": []
+}

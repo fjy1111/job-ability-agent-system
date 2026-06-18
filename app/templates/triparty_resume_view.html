@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+    <meta name="referrer" content="no-referrer">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=17">
+</head>
+<body class="tri-party-body">
+    <main class="tri-party-resume-page">
+        <header class="tri-party-resume-page-head">
+            <div>
+                <p>{{ role_label }}授权视图</p>
+                <h1>{{ display_name }} · {{ target_job }}</h1>
+                <span>目标企业：{{ target_company }}</span>
+            </div>
+            <a href="/collaboration">关闭并返回工作台</a>
+        </header>
+
+        <section class="tri-party-privacy-banner compact">
+            <div class="tri-party-privacy-icon" aria-hidden="true">✓</div>
+            <div>
+                {% if redacted %}
+                <strong>当前为企业脱敏视图</strong>
+                <p>姓名、手机号、邮箱、身份证号、地址及常见即时通信账号已被隐藏。请勿尝试重新识别或向无关人员传播候选人信息。</p>
+                {% else %}
+                <strong>当前为授权原始材料视图</strong>
+                <p>该页面禁止缓存和搜索引擎索引。材料仅用于本次审核，请勿下载、复制或转发至无关渠道。</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="tri-party-panel tri-party-resume-document">
+            <pre>{{ resume_text }}</pre>
+        </section>
+    </main>
+</body>
+</html>

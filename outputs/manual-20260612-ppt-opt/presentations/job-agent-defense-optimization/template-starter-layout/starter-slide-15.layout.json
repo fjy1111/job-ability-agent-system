@@ -1,0 +1,1061 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/q960tv",
+    "id": "q960tv",
+    "slide": 15,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "Noto Sans SC",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/w7mp0bi9",
+      "id": "15",
+      "name": "Picture 2",
+      "bbox": [
+        0,
+        0,
+        1260,
+        714.67
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00033,
+        "top": 0,
+        "right": 0.00033,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ih4byhgn",
+      "id": "3",
+      "name": "AutoShape 3",
+      "bbox": [
+        0,
+        40,
+        1260,
+        80
+      ],
+      "geometry": "rect",
+      "text": "03 核心技术原理 (1) - MRGCN模型",
+      "textPreview": "03 核心技术原理 (1) - MRGCN模型",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "03 核心技术原理 (1) - MRGCN模型"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "03 核心技术原理 (1) - MRGCN模型",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "03 核心技术原理 (1) - MRGCN模型",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#104862",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/pkzupwb2",
+      "id": "4",
+      "name": "AutoShape 4",
+      "bbox": [
+        53.33,
+        146.67,
+        1153.33,
+        120
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.9)",
+      "lineColor": "rgba(16, 58, 110, 0.2)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0z61032l",
+      "id": "5",
+      "name": "AutoShape 5",
+      "bbox": [
+        73.33,
+        160,
+        1113.33,
+        93.33
+      ],
+      "geometry": "rect",
+      "text": "💡 基本思想：将EEG电极抽象为图节点，电极间的连接关系抽象为图边，利用图卷积网络(GCN)强大的拓扑学习能力，精准提取脑区间复杂的拓扑交互特征。",
+      "textPreview": "💡 基本思想：将EEG电极抽象为图节点，电极间的连接关系抽象为图边，利用图卷积网络(GCN)强大的拓扑学习能力，精准提取脑区间复杂的拓扑交互特征。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "💡 基本思想：将EEG电极抽象为图节点，电极间的连接关系抽象为图边"
+          },
+          {
+            "index": 2,
+            "text": "，利用图卷积网络(GCN)强大的拓扑学习能力，精准提取脑区间复杂的拓扑交互特征。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "💡 基本思想：将EEG电极抽象为图节点，电极间的连接关系抽象为图边，利用图卷积网络(GCN)强大的拓扑学习能力，精准提取脑区间复杂的拓扑交互特征。",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "💡 基本思想：",
+              "fontSize": 24,
+              "typeface": "微软雅黑",
+              "color": "#103A6E",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "将EEG电极抽象为",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            },
+            {
+              "index": 3,
+              "text": "图节点",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#D97706",
+              "bold": true
+            },
+            {
+              "index": 4,
+              "text": "，电极间的连接关系抽象为",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            },
+            {
+              "index": 5,
+              "text": "图边",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#D97706",
+              "bold": true
+            },
+            {
+              "index": 6,
+              "text": "，利用图卷积网络(GCN)强大的拓扑学习能力，精准提取脑区间复杂的拓扑交互特征。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7ed8bat4",
+      "id": "6",
+      "name": "AutoShape 6",
+      "bbox": [
+        55.33,
+        280.87,
+        776.53,
+        231.53
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(248, 250, 252, 0.95)",
+      "lineColor": "rgba(226, 232, 240, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/itgfmlkj",
+      "id": "7",
+      "name": "AutoShape 7",
+      "bbox": [
+        73.33,
+        293.33,
+        756.53,
+        180
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "lineWidth": 1.31
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0bi9s36h",
+      "id": "9",
+      "name": "AutoShape 9",
+      "bbox": [
+        473.33,
+        341.53,
+        340,
+        180
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "lineWidth": 1.31
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/u18jqh0f",
+      "id": "10",
+      "name": "AutoShape 10",
+      "bbox": [
+        836.07,
+        281,
+        366.67,
+        231.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(248, 250, 252, 0.95)",
+      "lineColor": "rgba(226, 232, 240, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jm1cfa9w",
+      "id": "11",
+      "name": "AutoShape 11",
+      "bbox": [
+        857.27,
+        285.8,
+        340,
+        234.73
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "lineWidth": 1.31
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/c7u54zid",
+      "id": "12",
+      "name": "AutoShape 12",
+      "bbox": [
+        53.33,
+        540,
+        1153.33,
+        133.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(236, 253, 245, 0.95)",
+      "lineColor": "rgba(16, 185, 129, 0.3)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1orytsvu",
+      "id": "13",
+      "name": "AutoShape 13",
+      "bbox": [
+        73.33,
+        540,
+        1113.33,
+        120
+      ],
+      "geometry": "rect",
+      "text": "🚀 端到端工作流程\n脑网络构建 → 图卷积聚合 → 残差保留 → 多头融合 → 情绪特征输出",
+      "textPreview": "🚀 端到端工作流程 | 脑网络构建 → 图卷积聚合 → 残差保留 → 多头融合 → 情绪特征输出",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "🚀 端到端工作流程"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "脑网络构建 → 图卷积聚合 → 残差保留 → 多头融合 → 情绪特征输出"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "🚀 端到端工作流程",
+          "indent": 0,
+          "lineSpacingPercent": 108000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "🚀 端到端工作流程",
+              "fontSize": 22.67,
+              "typeface": "微软雅黑",
+              "color": "#047857",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "脑网络构建 → 图卷积聚合 → 残差保留 → 多头融合 → 情绪特征输出",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "spaceBefore": 1000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "脑网络构建 → 图卷积聚合 → 残差保留 → 多头融合 → 情绪特征输出",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#1F2937",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/u9knih4b",
+      "id": "14",
+      "name": "文本框 13",
+      "bbox": [
+        55.33,
+        285.8,
+        758,
+        243.33
+      ],
+      "geometry": "rect",
+      "text": "🧠 低秩多头图卷积 (Low-rank Multi-head)\n• 以 62 个 EEG 电极为图节点，采用低秩可学习邻接矩阵建模通道连接，降低参数量与存储开销。\n• “多头”表示同一层中包含多个并行图卷积分支，每个 Head 学习不同的邻接模式和特征变换。\n• 第一层 MRGCN 采用 4个 Head，每个 Head 学习不同连接模式，提取多视角脑区拓扑特征。\n• 第二层 MRGCN 采用 1 个 Head，对多头特征进行压缩融合，得到紧凑共享特征。\n• 特征经 BatchNorm 和 Flatten 后，分别用于情绪分类与域对抗训练。",
+      "textPreview": "🧠 低秩多头图卷积 (Low-rank Multi-head) | • 以 62 个 EEG 电极为图节点，采用低秩可学习邻接矩阵建模通道连接，降低参数量与存储开销。 | • “多头”表示同一层中包含多个并行图卷积分支，每个 Head 学习不同的邻接模式和特征变换。 | ...",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 9,
+        "lines": [
+          {
+            "index": 1,
+            "text": "🧠 低秩多头图卷积 (Low-rank Multi-head)"
+          },
+          {
+            "index": 2,
+            "text": "• 以 62 个 EEG"
+          },
+          {
+            "index": 3,
+            "text": "电极为图节点，采用低秩可学习邻接矩阵建模通道连接，降低参数量与存储开销。"
+          },
+          {
+            "index": 4,
+            "text": "• “多头”表示同一层中包含多个并行图卷积分支，每个 Head"
+          },
+          {
+            "index": 5,
+            "text": "学习不同的邻接模式和特征变换。"
+          },
+          {
+            "index": 6,
+            "text": "• 第一层 MRGCN 采用 4个 Head，每个 Head"
+          },
+          {
+            "index": 7,
+            "text": "学习不同连接模式，提取多视角脑区拓扑特征。"
+          },
+          {
+            "index": 8,
+            "text": "• 第二层 MRGCN 采用 1 个 Head，对多头特征进行压缩融合，得到紧凑共享特征。"
+          },
+          {
+            "index": 9,
+            "text": "• 特征经 BatchNorm 和 Flatten 后，分别用于情绪分类与域对抗训练。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "🧠 低秩多头图卷积 (Low-rank Multi-head)",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "🧠 ",
+              "typeface": "微软雅黑",
+              "color": "#103A6E",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "低秩多头图卷积",
+              "typeface": "微软雅黑",
+              "color": "#103A6E",
+              "bold": true
+            },
+            {
+              "index": 3,
+              "text": " (Low-rank Multi-head)",
+              "typeface": "微软雅黑",
+              "color": "#103A6E",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "• 以 62 个 EEG 电极为图节点，采用低秩可学习邻接矩阵建模通道连接，降低参数量与存储开销。",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 以 62 个 EEG 电极为图节点，采用低秩可学习邻接矩阵建模通道连接，降低参数量与存储开销。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": ""
+        },
+        {
+          "index": 3,
+          "text": "• “多头”表示同一层中包含多个并行图卷积分支，每个 Head 学习不同的邻接模式和特征变换。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• “多头”表示同一层中包含多个并行图卷积分支，每个 Head 学习不同的邻接模式和特征变换。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        },
+        {
+          "index": 4,
+          "text": "• 第一层 MRGCN 采用 4个 Head，每个 Head 学习不同连接模式，提取多视角脑区拓扑特征。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 第一层 MRGCN 采用 4个 Head，每个 Head 学习不同连接模式，提取多视角脑区拓扑特征。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        },
+        {
+          "index": 5,
+          "text": "• 第二层 MRGCN 采用 1 个 Head，对多头特征进行压缩融合，得到紧凑共享特征。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 第二层 MRGCN 采用 1 个 Head，对多头特征进行压缩融合，得到紧凑共享特征。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        },
+        {
+          "index": 6,
+          "text": "• 特征经 BatchNorm 和 Flatten 后，分别用于情绪分类与域对抗训练。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 特征经 BatchNorm 和 Flatten 后，分别用于情绪分类与域对抗训练。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        }
+      ]
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/pwb2hwfy",
+      "id": "8",
+      "name": "文本框 7",
+      "bbox": [
+        841.87,
+        285.8,
+        344.8,
+        203.47
+      ],
+      "geometry": "rect",
+      "text": "🔄 残差连接 (Residual)\n• 在 MRGCN 层中设置残差路径，将输入特征映射后与图卷积输出相加。\n• 保留原始 EEG 电极节点信息，避免多层图卷积后特征过度趋同。\n• 缓解图神经网络中的“过平滑”问题，提高训练稳定性。\n",
+      "textPreview": "🔄 残差连接 (Residual) | • 在 MRGCN 层中设置残差路径，将输入特征映射后与图卷积输出相加。 | • 保留原始 EEG 电极节点信息，避免多层图卷积后特征过度趋同。 | • 缓解图神经网络中的“过平滑”问题，提高训练稳定性。 |",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 11,
+        "lines": [
+          {
+            "index": 1,
+            "text": "🔄 残差连接 (Residual)"
+          },
+          {
+            "index": 2,
+            "text": "• 在 MRGCN"
+          },
+          {
+            "index": 3,
+            "text": "层中设置残差路径，将输入特征映射后与"
+          },
+          {
+            "index": 4,
+            "text": "图卷积输出相加。"
+          },
+          {
+            "index": 5,
+            "text": "• 保留原始 EEG"
+          },
+          {
+            "index": 6,
+            "text": "电极节点信息，避免多层图卷积后特征过"
+          },
+          {
+            "index": 7,
+            "text": "度趋同。"
+          },
+          {
+            "index": 8,
+            "text": "•"
+          },
+          {
+            "index": 9,
+            "text": "缓解图神经网络中的“过平滑”问题，提高"
+          },
+          {
+            "index": 10,
+            "text": "训练稳定性。"
+          },
+          {
+            "index": 11,
+            "text": ""
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "🔄 残差连接 (Residual)",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "🔄 残差连接 (Residual)",
+              "typeface": "微软雅黑",
+              "color": "#103A6E",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "• 在 MRGCN 层中设置残差路径，将输入特征映射后与图卷积输出相加。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 在 MRGCN 层中设置残差路径，将输入特征映射后与图卷积输出相加。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        },
+        {
+          "index": 3,
+          "text": "• 保留原始 EEG 电极节点信息，避免多层图卷积后特征过度趋同。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 保留原始 EEG 电极节点信息，避免多层图卷积后特征过度趋同。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        },
+        {
+          "index": 4,
+          "text": "• 缓解图神经网络中的“过平滑”问题，提高训练稳定性。",
+          "spaceBefore": 0,
+          "spaceAfter": 0,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 缓解图神经网络中的“过平滑”问题，提高训练稳定性。",
+              "fontSize": 18.67,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000
+        }
+      ]
+    }
+  ],
+  "composeRuns": []
+}

@@ -1,0 +1,136 @@
+{"kind":"slide","id":"sl/2x4nap4r","slide":2,"title":"基于领域对抗多头残差图卷积网络的EEG情绪识别模型优化与端侧部署","textShapes":2}
+{"kind":"textbox","id":"sh/udg7adsj","slide":2,"textChars":32,"textLines":1}
+{"kind":"textbox","id":"sh/udg7adsj","slide":2,"textChars":53,"textLines":9}
+{"kind":"image","id":"im/u9knih4b","slide":2,"name":"Picture 2","bbox":[0,0,1260,714.67]}
+{"kind":"slide","id":"sl/pg3ex0nu","slide":3,"title":"目 录 CONTENTS","textShapes":6}
+{"kind":"textbox","id":"sh/5o7qpg3e","slide":3,"textChars":12,"textLines":1}
+{"kind":"shape","id":"sh/g3ex0nux","slide":3,"name":"AutoShape 3","bbox":[55.2,151.87,373.33,256.2]}
+{"kind":"textbox","id":"sh/r65wjudg","slide":3,"textChars":34,"textLines":3}
+{"kind":"shape","id":"sh/ylc7u54z","slide":3,"name":"AutoShape 5","bbox":[444.27,143.53,373.33,263.33]}
+{"kind":"textbox","id":"sh/9cvixcze","slide":3,"textChars":86,"textLines":4}
+{"kind":"shape","id":"sh/gr2p8nqx","slide":3,"name":"AutoShape 7","bbox":[833.33,143.6,373.33,281.87]}
+{"kind":"shape","id":"sh/rytsvu9k","slide":3,"name":"AutoShape 8","bbox":[853.33,203.33,333.33,193.33]}
+{"kind":"shape","id":"sh/yd0z6103","slide":3,"name":"AutoShape 9","bbox":[186.67,421.8,440,252.67]}
+{"kind":"shape","id":"sh/wb2hwfyx","slide":3,"name":"AutoShape 10","bbox":[213.33,466.67,386.67,173.33]}
+{"kind":"shape","id":"sh/lwval87e","slide":3,"name":"AutoShape 11","bbox":[662,425.4,440,249]}
+{"kind":"shape","id":"sh/e9cvixcz","slide":3,"name":"AutoShape 12","bbox":[680,433.33,386.67,128.73]}
+{"kind":"textbox","id":"sh/3q5o7qpg","slide":3,"textChars":84,"textLines":9}
+{"kind":"textbox","id":"sh/w3m94fu1","slide":3,"textChars":79,"textLines":6}
+{"kind":"textbox","id":"sh/loj2t83i","slide":3,"textChars":21,"textLines":3}
+{"kind":"slide","id":"sl/s72x4nap","slide":4,"title":"01","textShapes":3}
+{"kind":"textbox","id":"sh/dsji5sne","slide":4,"textChars":2,"textLines":1}
+{"kind":"textbox","id":"sh/6dcbulwv","slide":4,"textChars":7,"textLines":1}
+{"kind":"textbox","id":"sh/vy90je9c","slide":4,"textChars":18,"textLines":1}
+{"kind":"image","id":"im/psfil0rq","slide":4,"name":"Picture 2","bbox":[0,0,1260,714.67]}
+{"kind":"slide","id":"sl/val87ed8","slide":5,"title":"01 研究背景与意义","textShapes":9}
+{"kind":"textbox","id":"sh/87ed8bat","slide":5,"textChars":11,"textLines":1}
+{"kind":"shape","id":"sh/xs72x4na","slide":5,"name":"AutoShape 5","bbox":[53.33,146.67,573.33,253.33]}
+{"kind":"textbox","id":"sh/fmlkjm1c","slide":5,"textChars":4,"textLines":1}
+{"kind":"textbox","id":"sh/8jqh0fep","slide":5,"textChars":86,"textLines":1}
+{"kind":"shape","id":"sh/x4nap4r6","slide":5,"name":"AutoShape 9","bbox":[653.33,146.67,573.33,253.33]}
+{"kind":"textbox","id":"sh/8bat47y1","slide":5,"textChars":8,"textLines":1}
+{"kind":"textbox","id":"sh/jqh0fepk","slide":5,"textChars":89,"textLines":2}
+{"kind":"shape","id":"sh/q5o7qpg3","slide":5,"name":"AutoShape 13","bbox":[53.33,426.67,573.33,253.33]}
+{"kind":"textbox","id":"sh/8nqxs72x","slide":5,"textChars":7,"textLines":1}
+{"kind":"textbox","id":"sh/j2t83itg","slide":5,"textChars":82,"textLines":2}
+{"kind":"shape","id":"sh/qh0fepkz","slide":5,"name":"AutoShape 17","bbox":[653.33,426.67,573.33,253.33]}
+{"kind":"textbox","id":"sh/crmhk3q5","slide":5,"textChars":7,"textLines":1}
+{"kind":"textbox","id":"sh/sfil0rqd","slide":5,"textChars":93,"textLines":1}
+{"kind":"image","id":"im/qtcj6tov","slide":5,"name":"Picture 2","bbox":[0,0,1260,714.67]}
+{"kind":"image","id":"im/1gvy90je","slide":5,"name":"Picture 6","bbox":[80,173.33,37.33,37.33]}
+{"kind":"image","id":"im/8z25kb6x","slide":5,"name":"Picture 10","bbox":[680,173.33,37.33,37.33]}
+{"kind":"image","id":"im/fmlkjm1c","slide":5,"name":"Picture 14","bbox":[80,453.33,37.33,37.33]}
+{"kind":"image","id":"im/q1orytsv","slide":5,"name":"Picture 18","bbox":[680,453.33,37.33,37.33]}
+{"kind":"slide","id":"sl/mlkjm1cf","slide":6,"title":"02 技术难点与主要创新","textShapes":10}
+{"kind":"textbox","id":"sh/dg7adsji","slide":6,"textChars":86,"textLines":1}
+{"kind":"shape","id":"sh/6hcrmhk3","slide":6,"name":"AutoShape 4","bbox":[53.33,165.07,573.33,520]}
+{"kind":"textbox","id":"sh/z25kb6xk","slide":6,"textChars":8,"textLines":1}
+{"kind":"shape","id":"sh/onyd0z61","slide":6,"name":"AutoShape 6","bbox":[80,253.33,520,120]}
+{"kind":"textbox","id":"sh/6dcbulwv","slide":6,"textChars":50,"textLines":2}
+{"kind":"shape","id":"sh/vy90je9c","slide":6,"name":"AutoShape 9","bbox":[80,393.33,520,120]}
+{"kind":"textbox","id":"sh/y90je9cv","slide":6,"textChars":52,"textLines":2}
+{"kind":"shape","id":"sh/5wjudg7a","slide":6,"name":"AutoShape 12","bbox":[80,533.33,520,120]}
+{"kind":"textbox","id":"sh/n29gr2p8","slide":6,"textChars":60,"textLines":2}
+{"kind":"shape","id":"sh/yhgn29gr","slide":6,"name":"AutoShape 15","bbox":[653.33,165.07,573.33,520]}
+{"kind":"textbox","id":"sh/58z25kb6","slide":6,"textChars":8,"textLines":1}
+{"kind":"shape","id":"sh/gn29gr2p","slide":6,"name":"AutoShape 17","bbox":[680,253.33,253.33,186.67]}
+{"kind":"textbox","id":"sh/ytsvu9kn","slide":6,"textChars":39,"textLines":2}
+{"kind":"shape","id":"sh/2x4nap4r","slide":6,"name":"AutoShape 20","bbox":[946.67,253.33,253.33,186.67]}
+{"kind":"textbox","id":"sh/k3q5o7qp","slide":6,"textChars":43,"textLines":2}
+{"kind":"shape","id":"sh/donyd0z6","slide":6,"name":"AutoShape 23","bbox":[680,460,253.33,186.67]}
+{"kind":"textbox","id":"sh/val87ed8","slide":6,"textChars":47,"textLines":2}
+{"kind":"shape","id":"sh/kre1w7mp","slide":6,"name":"AutoShape 26","bbox":[946.67,460,253.33,186.67]}
+{"kind":"textbox","id":"sh/2lszqtcj","slide":6,"textChars":40,"textLines":2}
+{"kind":"image","id":"im/47y1kre1","slide":6,"name":"Picture 7","bbox":[100,280,37.33,37.33]}
+{"kind":"image","id":"im/e1w7mp0b","slide":6,"name":"Picture 10","bbox":[100,420,37.33,37.33]}
+{"kind":"image","id":"im/7mp0bi9s","slide":6,"name":"Picture 13","bbox":[100,560,37.33,37.33]}
+{"kind":"image","id":"im/w7mp0bi9","slide":6,"name":"Picture 18","bbox":[696,273.33,32,32]}
+{"kind":"image","id":"im/psfil0rq","slide":6,"name":"Picture 21","bbox":[962.67,273.33,32,32]}
+{"kind":"image","id":"im/epkzupwb","slide":6,"name":"Picture 24","bbox":[696,480,32,32]}
+{"kind":"image","id":"im/7adsji5s","slide":6,"name":"Picture 27","bbox":[962.67,480,32,32]}
+{"kind":"slide","id":"sl/58z25kb6","slide":7,"title":"02","textShapes":3}
+{"kind":"textbox","id":"sh/r65wjudg","slide":7,"textChars":2,"textLines":1}
+{"kind":"textbox","id":"sh/g3ex0nux","slide":7,"textChars":9,"textLines":1}
+{"kind":"textbox","id":"sh/5o7qpg3e","slide":7,"textChars":46,"textLines":1}
+{"kind":"image","id":"im/nqxs72x4","slide":7,"name":"Picture 2","bbox":[0,0,1260,714.67]}
+{"kind":"slide","id":"sl/0z61032l","slide":8,"title":"01 总体技术路线","textShapes":7}
+{"kind":"textbox","id":"sh/8jqh0fep","slide":8,"textChars":9,"textLines":1}
+{"kind":"shape","id":"sh/fa9w3m94","slide":8,"name":"AutoShape 4","bbox":[56,160,1148,93.33]}
+{"kind":"textbox","id":"sh/qpg3ex0n","slide":8,"textChars":40,"textLines":1}
+{"kind":"shape","id":"sh/xczed8v6","slide":8,"name":"AutoShape 6","bbox":[46.67,293.33,220,360]}
+{"kind":"textbox","id":"sh/8v6psfil","slide":8,"textChars":49,"textLines":3}
+{"kind":"shape","id":"sh/je9cvixc","slide":8,"name":"AutoShape 8","bbox":[293.33,293.33,220,360]}
+{"kind":"textbox","id":"sh/qtcj6tov","slide":8,"textChars":52,"textLines":3}
+{"kind":"shape","id":"sh/svu9knih","slide":8,"name":"AutoShape 10","bbox":[540,293.33,220,360]}
+{"kind":"textbox","id":"sh/hgn29gr2","slide":8,"textChars":56,"textLines":3}
+{"kind":"shape","id":"sh/ap4r65wj","slide":8,"name":"AutoShape 12","bbox":[786.67,293.33,220,360]}
+{"kind":"textbox","id":"sh/za1gvy90","slide":8,"textChars":57,"textLines":3}
+{"kind":"shape","id":"sh/s36hcrmh","slide":8,"name":"AutoShape 14","bbox":[1033.33,293.33,220,360]}
+{"kind":"textbox","id":"sh/hoza1gvy","slide":8,"textChars":56,"textLines":3}
+{"kind":"image","id":"im/tgfmlkjm","slide":8,"name":"Picture 2","bbox":[0,0,1260,714.67]}
+{"kind":"slide","id":"sl/fu18jqh0","slide":9,"title":"02 基线模型选择与论证","textShapes":6}
+{"kind":"textbox","id":"sh/c7u54zid","slide":9,"textChars":12,"textLines":1}
+{"kind":"shape","id":"sh/1orytsvu","slide":9,"name":"AutoShape 5","bbox":[53.33,146.67,573.33,213.33]}
+{"kind":"shape","id":"sh/u18jqh0f","slide":9,"name":"AutoShape 6","bbox":[53.33,146.67,8,213.33]}
+{"kind":"textbox","id":"sh/jm1cfa9w","slide":9,"textChars":105,"textLines":5}
+{"kind":"shape","id":"sh/cvixczed","slide":9,"name":"AutoShape 8","bbox":[653.33,146.67,573.33,213.33]}
+{"kind":"shape","id":"sh/5gbq1ory","slide":9,"name":"AutoShape 9","bbox":[653.33,146.67,8,213.33]}
+{"kind":"textbox","id":"sh/18jqh0fe","slide":9,"textChars":109,"textLines":5}
+{"kind":"shape","id":"sh/8nqxs72x","slide":9,"name":"AutoShape 11","bbox":[53.33,386.67,573.33,213.33]}
+{"kind":"shape","id":"sh/j2t83itg","slide":9,"name":"AutoShape 12","bbox":[53.33,386.67,8,213.33]}
+{"kind":"textbox","id":"sh/qh0fepkz","slide":9,"textChars":97,"textLines":5}
+{"kind":"shape","id":"sh/1w7mp0bi","slide":9,"name":"AutoShape 14","bbox":[653.33,386.67,573.33,213.33]}
+{"kind":"textbox","id":"sh/8bat47y1","slide":9,"textChars":105,"textLines":5}
+{"kind":"shape","id":"sh/jqh0fepk","slide":9,"name":"AutoShape 16","bbox":[61.33,608.6,1159.6,66.6]}
+{"kind":"textbox","id":"sh/1kre1w7m","slide":9,"textChars":52,"textLines":1}
+{"kind":"image","id":"im/f6dcbulw","slide":9,"name":"Picture 2","bbox":[0,0,1260,714.67]}
+{"kind":"image","id":"im/36hcrmhk","slide":9,"name":"Picture 17","bbox":[80,621.87,53.33,53.33]}
+{"kind":"slide","id":"sl/qh0fepkz","slide":10,"title":"03 核心技术原理 (1) - MRGCN模型","textShapes":5}
+{"kind":"textbox","id":"sh/dg7adsji","slide":10,"textChars":23,"textLines":1}
+{"kind":"shape","id":"sh/6hcrmhk3","slide":10,"name":"AutoShape 4","bbox":[53.33,146.67,1153.33,120]}
+{"kind":"textbox","id":"sh/z25kb6xk","slide":10,"textChars":74,"textLines":1}
+{"kind":"shape","id":"sh/onyd0z61","slide":10,"name":"AutoShape 6","bbox":[55.33,280.87,776.53,231.53]}
+{"kind":"shape","id":"sh/d8v6psfi","slide":10,"name":"AutoShape 7","bbox":[73.33,293.33,756.53,180]}
+{"kind":"shape","id":"sh/vy90je9c","slide":10,"name":"AutoShape 9","bbox":[473.33,341.53,340,180]}
+{"kind":"shape","id":"sh/nuxc3ylc","slide":10,"name":"AutoShape 10","bbox":[836.07,281,366.67,231.33]}
+{"kind":"shape","id":"sh/y90je9cv","slide":10,"name":"AutoShape 11","bbox":[857.27,285.8,340,234.73]}
+{"kind":"shape","id":"sh/5wjudg7a","slide":10,"name":"AutoShape 12","bbox":[53.33,540,1153.33,133.33]}
+{"kind":"textbox","id":"sh/gbq1oryt","slide":10,"textChars":47,"textLines":2}
+{"kind":"textbox","id":"sh/n29gr2p8","slide":10,"textChars":273,"textLines":6}
+{"kind":"textbox","id":"sh/6dcbulwv","slide":10,"textChars":118,"textLines":5}
+{"kind":"image","id":"im/l0rqd4vm","slide":10,"name":"Picture 2","bbox":[0,0,1260,714.67]}
+{"kind":"slide","id":"sl/29gr2p8n","slide":11,"title":"03 核心技术原理 (2) - DANN领域对抗","textShapes":9}
+{"kind":"textbox","id":"sh/r2p8nqxs","slide":11,"textChars":24,"textLines":1}
+{"kind":"shape","id":"sh/2hwfyxob","slide":11,"name":"AutoShape 5","bbox":[53.33,173.33,280,480]}
+{"kind":"textbox","id":"sh/kjm1cfa9","slide":11,"textChars":4,"textLines":1}
+{"kind":"textbox","id":"sh/rqd4vmtw","slide":11,"textChars":87,"textLines":2}
+{"kind":"shape","id":"sh/25kb6xkf","slide":11,"name":"AutoShape 9","bbox":[360,173.33,280,480]}
+{"kind":"textbox","id":"sh/x0nuxc3y","slide":11,"textChars":4,"textLines":1}
+{"kind":"textbox","id":"sh/m94fu18j","slide":11,"textChars":94,"textLines":3}
+{"kind":"shape","id":"sh/fu18jqh0","slide":11,"name":"AutoShape 13","bbox":[666.67,173.33,280,480]}
+{"kind":"textbox","id":"sh/xobm58z2","slide":11,"textChars":10,"textLines":1}
+{"kind":"textbox","id":"sh/qxs72x4n","slide":11,"textChars":92,"textLines":3}
+{"kind":"shape","id":"sh/fil0rqd4","slide":11,"name":"AutoShape 17","bbox":[966.67,173.33,280,480]}
+{"kind":"textbox","id":"sh/xkf6dcbu","slide":11,"textChars":4,"textLines":1}
+{"kind":"textbox","id":"sh/xczed8v6","slide":11,"textChars":97,"textLines":3}
+{"kind":"notice","message":"Truncated: omitted 383 lines. Increase maxChars or narrow target."}

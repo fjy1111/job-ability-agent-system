@@ -1,0 +1,337 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/6pqsaw",
+    "id": "6pqsaw",
+    "slide": 1,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "Noto Sans SC"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/7qpg3ex0",
+      "id": "12",
+      "name": "Picture 2",
+      "bbox": [
+        0,
+        0,
+        1260,
+        714.67
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00033,
+        "top": 0,
+        "right": 0.00033,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image1.png",
+        "contentType": "image/png",
+        "byteLength": 4398140
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image1.png",
+        "contentType": "image/png",
+        "byteLength": 4398140
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/h0fepkzu",
+      "id": "4",
+      "name": "AutoShape 4",
+      "bbox": [
+        53.33,
+        205.67,
+        1153.33,
+        120
+      ],
+      "geometry": "rect",
+      "text": "基于领域对抗多头残差图卷积网络的EEG情绪识别模型优化与端侧部署",
+      "textPreview": "基于领域对抗多头残差图卷积网络的EEG情绪识别模型优化与端侧部署",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "基于领域对抗多头残差图卷积网络的EEG情绪识别模型优化与端侧部"
+          },
+          {
+            "index": 2,
+            "text": "署"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "基于领域对抗多头残差图卷积网络的EEG情绪识别模型优化与端侧部署",
+          "indent": 0,
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "基于领域对抗多头残差图卷积网络的EEG情绪识别模型优化与端侧部署",
+              "fontSize": 37.33,
+              "typeface": "Noto Sans SC",
+              "color": "#0F172A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7mp0bi9s",
+      "id": "11",
+      "name": "文本框 10",
+      "bbox": [
+        129.93,
+        386.47,
+        457.8,
+        277.53
+      ],
+      "geometry": "rect",
+      "text": "\n队伍名称：神经没有bug队\n\n参赛队员：郑杰龙 | 庞冠春 | 侯程予\n\n完成时间：2026年6月\n\n\n",
+      "textPreview": "| 队伍名称：神经没有bug队 |  | 参赛队员：郑杰龙 | 庞冠春 | 侯程予 |  | 完成时间：2026年6月 |  |  |",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 9,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          },
+          {
+            "index": 2,
+            "text": "队伍名称：神经没有bug队"
+          },
+          {
+            "index": 3,
+            "text": ""
+          },
+          {
+            "index": 4,
+            "text": "参赛队员：郑杰龙 | 庞冠春 | 侯程予"
+          },
+          {
+            "index": 5,
+            "text": ""
+          },
+          {
+            "index": 6,
+            "text": "完成时间：2026年6月"
+          },
+          {
+            "index": 7,
+            "text": ""
+          },
+          {
+            "index": 8,
+            "text": ""
+          },
+          {
+            "index": 9,
+            "text": ""
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 2,
+          "text": "队伍名称：神经没有bug队",
+          "runs": [
+            {
+              "index": 1,
+              "text": "队伍名称：",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#1E3A8A",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "神经没有bug队",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#334155"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 4,
+          "text": "参赛队员：郑杰龙 | 庞冠春 | 侯程予",
+          "runs": [
+            {
+              "index": 1,
+              "text": "参赛队员：",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#1E3A8A",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "郑杰龙 | 庞冠春 | 侯程予",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#334155"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 6,
+          "text": "完成时间：2026年6月",
+          "runs": [
+            {
+              "index": 1,
+              "text": "完成时间：",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#1E3A8A",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "2026年",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#334155"
+            },
+            {
+              "index": 3,
+              "text": "6",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#334155"
+            },
+            {
+              "index": 4,
+              "text": "月",
+              "fontSize": 26.67,
+              "typeface": "Noto Sans SC",
+              "color": "#334155"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ]
+    }
+  ],
+  "composeRuns": []
+}

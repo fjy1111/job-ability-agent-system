@@ -1,0 +1,1294 @@
+{
+  "outputSlides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 1,
+      "narrativeRole": "cover",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/udg7adsj",
+          "sourceText": "基于领域对抗多头残差图卷积网络的EEG情绪识别模型优化与端侧部署",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/udg7adsj",
+          "sourceText": "| 队伍名称：神经没有bug队 |  | 参赛队员：郑杰龙 | 庞冠春 | 侯程予 |  | 完成时间：2026年6月 |  |  |",
+          "contentIndex": 1
+        }
+      ]
+    },
+    {
+      "outputSlide": 2,
+      "sourceSlide": 2,
+      "narrativeRole": "contents",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/5o7qpg3e",
+          "sourceText": "目 录 CONTENTS",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/r65wjudg",
+          "sourceText": "01. 项目概述与背景 | • 研究背景与意义  | • 技术难点与主要创新",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/9cvixcze",
+          "sourceText": "02. 方案设计与技术原理 | • 总体技术路线  | • 基线模型选择与论证 | • 核心原理：MRGCN、DANN、知识蒸馏、                       模型量化",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/3q5o7qpg",
+          "sourceText": "03. 软件模块划分 | • 软件模块划分 | • 数据读取与样本构建流程 | • MRGCN训练流程 | • DANN扩展与自适应调参 | • 知识蒸馏与轻量模型训练 | • 量化与推理 |  |",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/w3m94fu1",
+          "sourceText": "04. 系统测试与结果分析 | • 测试内容与评价指标 | • 模型轻量化 | • 项目候选模型对比与端侧部署方案选择 | • 多线程端侧推理性能对比 | • 优化效果与误差分析",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/loj2t83i",
+          "sourceText": "05. 总结与展望 | •项目总结 | •未来展望",
+          "contentIndex": 5
+        }
+      ]
+    },
+    {
+      "outputSlide": 3,
+      "sourceSlide": 3,
+      "narrativeRole": "section one",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/dsji5sne",
+          "sourceText": "01",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/6dcbulwv",
+          "sourceText": "项目概述与背景",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/vy90je9c",
+          "sourceText": "研究背景与意义| 技术难点与主要创新",
+          "contentIndex": 2
+        }
+      ]
+    },
+    {
+      "outputSlide": 4,
+      "sourceSlide": 4,
+      "narrativeRole": "background and goals",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/87ed8bat",
+          "sourceText": "01 研究背景与意义",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/fmlkjm1c",
+          "sourceText": "核心价值",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/8jqh0fep",
+          "sourceText": "随着脑机接口(BCI)、情绪健康监测和边缘智能设备的发展，基于脑电(EEG)信号的情绪识别，能够突破传统接触式与非接触式识别的局限，具备重要的科研价值与广泛的现实应用前景。",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/8bat47y1",
+          "sourceText": "EEG 信号优势",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/jqh0fepk",
+          "sourceText": "• 直接性：绕过人的主观意识表达，直接反映大脑皮层神经电生理活动，是情绪状态最底层的生理信号之一。 | • 抗伪装性：相比面部表情、语音语调等外部行为信号，极难被主观伪装或刻意掩饰。",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/8nqxs72x",
+          "sourceText": "面临的技术挑战",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/j2t83itg",
+          "sourceText": "• 信号特征复杂：高维度、多通道且极易受眼电、肌电等生理噪声干扰。 | • 泛化性瓶颈：个体间生理差异与跨时段状态变化，导致“域偏移”问题，严重影响模型跨被试识别效果。",
+          "contentIndex": 6
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/crmhk3q5",
+          "sourceText": "本项目核心目标",
+          "contentIndex": 7
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/sfil0rqd",
+          "sourceText": "面向 CPU/ARM64 边缘计算平台，构建“数据处理→特征增强→泛化优化→端侧推理”的全链路技术方案，攻克跨被试识别难题，实现一套高效、高精度、低功耗且可落地的 EEG 情绪识别系统。",
+          "contentIndex": 8
+        }
+      ]
+    },
+    {
+      "outputSlide": 5,
+      "sourceSlide": 5,
+      "narrativeRole": "challenges and innovations",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/dg7adsji",
+          "sourceText": "02 技术难点与主要创新",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/z25kb6xk",
+          "sourceText": "▌ 三大技术难点",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/6dcbulwv",
+          "sourceText": "图结构与推理效率的矛盾 | MRGCN模型表达能力强，但计算复杂度高，在端侧CPU上推理效率是巨大挑战。",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/y90je9cv",
+          "sourceText": "跨实验泛化与域偏移 | EEG信号受个体状态影响大，模型易学习到与情绪无关的“域特征”，导致测试准确率下降。",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/n29gr2p8",
+          "sourceText": "端侧部署链路复杂 | 从Python训练环境到ARM64 CPU的C++推理环境，涉及模型转换、量化、算子兼容性等复杂问题。",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/58z25kb6",
+          "sourceText": "▌ 四大核心创新",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/ytsvu9kn",
+          "sourceText": "增强动态信息表达 | 结合滑动窗口多频带特征与图结构建模，让模型感知短时动态信息。",
+          "contentIndex": 6
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/k3q5o7qp",
+          "sourceText": "融合脑网络构建 | 融合短距离空间连接、功能连接和可学习邻接矩阵，更精准刻画脑区协同关系。",
+          "contentIndex": 7
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/val87ed8",
+          "sourceText": "提升泛化稳定性 | 引入领域自适应(DANN)与自适应调参策略，提升模型在不同数据分布下的鲁棒性。",
+          "contentIndex": 8
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/2lszqtcj",
+          "sourceText": "构建完整工程闭环 | 建立从模型训练到端侧部署的完整流程，实现算法到产品的落地验证。",
+          "contentIndex": 9
+        }
+      ]
+    },
+    {
+      "outputSlide": 6,
+      "sourceSlide": 6,
+      "narrativeRole": "section two",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/r65wjudg",
+          "sourceText": "02",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/g3ex0nux",
+          "sourceText": "方案设计与技术原理",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/5o7qpg3e",
+          "sourceText": "总体技术路线 | 基线模型选择 | MRGCN · DANN · 知识蒸馏·模型量化核心算法",
+          "contentIndex": 2
+        }
+      ]
+    },
+    {
+      "outputSlide": 7,
+      "sourceSlide": 7,
+      "narrativeRole": "overall technical route",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/8jqh0fep",
+          "sourceText": "01 总体技术路线",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/qpg3ex0n",
+          "sourceText": "核心思想：围绕“算法建模 → 泛化优化 → 量化压缩 → 端侧推理”的全链路展开",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/8v6psfil",
+          "sourceText": "01 | 数据处理 | 读取多频带EEG特征，通过滑动窗口算法构建统一维度的输入样本，确保数据输入一致性。",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/qtcj6tov",
+          "sourceText": "02 | 核心建模 | 以MRGCN为核心算法，将电极视为图神经网络节点，构建脑功能网络，精准提取脑区拓扑特征。",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/hgn29gr2",
+          "sourceText": "03 | 模型优化 | 融合多种异构脑网络特征，并引入DANN领域对抗训练机制，有效降低个体差异影响，增强模型泛化能力。",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/za1gvy90",
+          "sourceText": "04 | 工程部署 | 对训练好的模型进行ONNX与NCNN格式转换，并实施INT8量化压缩，大幅降低模型体积与算力需求。",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/hoza1gvy",
+          "sourceText": "05 | 端侧验证 | 在ARM64架构的嵌入式CPU平台上，通过C++程序进行推理性能与准确率双重评测，形成完整闭环。",
+          "contentIndex": 6
+        }
+      ]
+    },
+    {
+      "outputSlide": 8,
+      "sourceSlide": 7,
+      "narrativeRole": "system architecture",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/8jqh0fep",
+          "sourceText": "01 总体技术路线",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/qpg3ex0n",
+          "sourceText": "核心思想：围绕“算法建模 → 泛化优化 → 量化压缩 → 端侧推理”的全链路展开",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/8v6psfil",
+          "sourceText": "01 | 数据处理 | 读取多频带EEG特征，通过滑动窗口算法构建统一维度的输入样本，确保数据输入一致性。",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/qtcj6tov",
+          "sourceText": "02 | 核心建模 | 以MRGCN为核心算法，将电极视为图神经网络节点，构建脑功能网络，精准提取脑区拓扑特征。",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/hgn29gr2",
+          "sourceText": "03 | 模型优化 | 融合多种异构脑网络特征，并引入DANN领域对抗训练机制，有效降低个体差异影响，增强模型泛化能力。",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/za1gvy90",
+          "sourceText": "04 | 工程部署 | 对训练好的模型进行ONNX与NCNN格式转换，并实施INT8量化压缩，大幅降低模型体积与算力需求。",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/hoza1gvy",
+          "sourceText": "05 | 端侧验证 | 在ARM64架构的嵌入式CPU平台上，通过C++程序进行推理性能与准确率双重评测，形成完整闭环。",
+          "contentIndex": 6
+        }
+      ]
+    },
+    {
+      "outputSlide": 9,
+      "sourceSlide": 15,
+      "narrativeRole": "ability workflow",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/rytsvu9k",
+          "sourceText": "02 数据读取与样本构建流程",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/g7adsji5",
+          "sourceText": "从 SEED 数据集 de_LDS 特征出发，构造可用于 MRGCN-DANN 训练的统一样本 |",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/rmhk3q5o",
+          "sourceText": "读取 .mat | 特征文件",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/5o7qpg3e",
+          "sourceText": "SEED/ExtractedFeatures_1s",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/nap4r65w",
+          "sourceText": "提取 de_LDS",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/54zidony",
+          "sourceText": "每个 trial 的差分熵 + LDS 平滑特征",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/udg7adsj",
+          "sourceText": "滑动窗口",
+          "contentIndex": 6
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/cfa9w3m9",
+          "sourceText": "W=4，S=4 | 连续 4 秒拼接",
+          "contentIndex": 7
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/65wjudg7",
+          "sourceText": "样本形状",
+          "contentIndex": 8
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/oza1gvy9",
+          "sourceText": "62 × 20 | 62 通道 × 4s × 5 频带",
+          "contentIndex": 9
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/zed8v6ps",
+          "sourceText": "标签映射",
+          "contentIndex": 10
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/hcrmhk3q",
+          "sourceText": "-1 / 0 / 1 | 映射为 0 / 1 / 2",
+          "contentIndex": 11
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/p8nqxs72",
+          "sourceText": "Trial 划分",
+          "contentIndex": 12
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/7ed8bat4",
+          "sourceText": "1–9 训练 | 10–15 测试",
+          "contentIndex": 13
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/pkzupwb2",
+          "sourceText": "样本张量组织",
+          "contentIndex": 14
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/7qpg3ex0",
+          "sourceText": "时间窗口 | 4 秒",
+          "contentIndex": 15
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/32lszqtc",
+          "sourceText": "电极通道 | 62 个",
+          "contentIndex": 16
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/at47y1kr",
+          "sourceText": "频带特征 | 5 个",
+          "contentIndex": 17
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/lkjm1cfa",
+          "sourceText": "输入样本 | 62 × 20",
+          "contentIndex": 18
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/3itgfmlk",
+          "sourceText": "域标签生成",
+          "contentIndex": 19
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/tovahoza",
+          "sourceText": "训练 trial 记为源域，测试 trial 记为目标域；该标签用于后续 DANN 分支学习域不变特征。",
+          "contentIndex": 20
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/bi9s36hc",
+          "sourceText": "数据划分作用",
+          "contentIndex": 21
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/ixczed8v",
+          "sourceText": "按 trial 划分可以模拟不同时段/试次分布差异，为后续领域对抗训练提供应用背景。",
+          "contentIndex": 22
+        }
+      ]
+    },
+    {
+      "outputSlide": 10,
+      "sourceSlide": 8,
+      "narrativeRole": "four dimension ability model",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/c7u54zid",
+          "sourceText": "02 基线模型选择与论证",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/jm1cfa9w",
+          "sourceText": "DNN (全连接网络) | 特点：特征展平后输入全连接网络，结构简单直接。 | 优势：结构简单，计算速度快，易于实现与部署。 | 局限：无法建模电极间的空间拓扑关系，丢失关键信息。 | 作用：作为最基础的传统模型进行对照分析。",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/18jqh0fe",
+          "sourceText": "CNN-LSTM (混合时序模型) | 特点：结合卷积特征提取与LSTM时序建模能力。 | 优势：能有效利用脑电信号的时间动态信息。 | 局限：对非规则排列的电极空间拓扑结构表达不足。 | 作用：用于验证时序建模在任务中的有效性对比。",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/qh0fepkz",
+          "sourceText": "普通 GCN (图卷积网络) | 特点：将电极建模为图节点，引入基础图结构。 | 优势：能够表达不同通道间的简单空间关系。 | 局限：图结构单一，特征提取与表达能力受限。 | 作用：作为图神经网络的基础对照组。",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/8bat47y1",
+          "sourceText": "MRGCN (多头残差图卷积网络) | 特点：融合多头图卷积与残差连接机制，结构更先进。 | 优势：兼顾复杂拓扑关系建模、训练稳定性与强表达能力。 | 局限：网络结构相对复杂，端侧部署需优化。 | 作用：本作品的核心基线模型。",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/1kre1w7m",
+          "sourceText": "最终决策：选择 MRGCN 作为基线模型，因其在脑区拓扑建模、训练稳定性与特征表达能力上取得了最佳平衡。",
+          "contentIndex": 5
+        }
+      ]
+    },
+    {
+      "outputSlide": 11,
+      "sourceSlide": 10,
+      "narrativeRole": "agent roles",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/r2p8nqxs",
+          "sourceText": "03 核心技术原理 (2) - DANN领域对抗",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/kjm1cfa9",
+          "sourceText": "核心问题",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/rqd4vmtw",
+          "sourceText": "EEG数据中普遍存在“域偏移”挑战：不同试次、不同时间段的采集环境差异，会导致数据分布产生显著不同。 | 如果不解决该问题，模型在训练集表现优异，但在测试集上泛化能力会大幅下降。",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/x0nuxc3y",
+          "sourceText": "核心结构",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/m94fu18j",
+          "sourceText": "在MRGCN特征提取器后，并联两个分支： | 1. 情绪分类器：预测样本的情绪标签（如负性、中性、正性）。 | 2. 域分类器：判别样本来源，区分是来自“源域”(训练集)还是“目标域”(测试集)。",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/xobm58z2",
+          "sourceText": "关键机制 (GRL)",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/qxs72x4n",
+          "sourceText": "核心组件：梯度反转层 (GRL)，它在不同传播阶段扮演不同角色： | • 前向传播：“透明”状态，不对特征做任何变换。 | • 反向传播：对域分类器的反馈梯度乘上一个负系数，实现梯度方向反转。",
+          "contentIndex": 6
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/xkf6dcbu",
+          "sourceText": "训练目标",
+          "contentIndex": 7
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/xczed8v6",
+          "sourceText": "通过构建“情绪分类”与“域分类”的对抗关系，引导特征提取器： | → 保留情绪信息：让情绪分类器可以准确预测类别。 | → 剔除域差异：让域分类器无法分辨来源，最终学到“域不变特征”，大幅提升泛化能力。",
+          "contentIndex": 8
+        }
+      ]
+    },
+    {
+      "outputSlide": 12,
+      "sourceSlide": 11,
+      "narrativeRole": "single llm and tools",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/onyd0z61",
+          "sourceText": "03 核心技术原理 (3) - 知识蒸馏",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/d8v6psfi",
+          "sourceText": "核心思想：用高精度教师模型指导轻量学生模型，在保留识别能力的同时降低端侧推理开销。",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/6hcrmhk3",
+          "sourceText": "一、蒸馏动机 | 教师 MRGCN-DANN 图结构表达强，但端侧推理开销较高。 | 学生采用 MLP / CNN1D，去除复杂图卷积，更适合 ARM64 与 NCNN 部署。",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/z25kb6xk",
+          "sourceText": "二、训练设计 | 冻结教师模型，以 soft logits 作为知识指导。 | 学生同时学习硬标签 CE 与软标签 KL，兼顾分类正确性和知识迁移。",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/oj2t83it",
+          "sourceText": "三、核心优势 | 继承教师模型的类别边界与泛化知识，降低轻量化精度损失。 | 学生模型参数更少、计算更轻，便于 ONNX / NCNN / INT8 部署。",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/d4vmtwra",
+          "sourceText": "四、创新点与端侧价值 | 将知识蒸馏与 DANN 域自适应结合，同时关注情绪判别与域偏移抑制。 | 在识别精度、跨 trial 泛化能力和端侧效率之间建立平衡。",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/h4byhgn2",
+          "sourceText": "联合损失：L = CE(y, p_s) + α·KL(p_t / T, p_s / T) + λ·L_domain",
+          "contentIndex": 6
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/sji5snel",
+          "sourceText": "最终目标：以“高精度教师 + 轻量学生 + 域约束蒸馏”实现精度、泛化能力与端侧效率的平衡。",
+          "contentIndex": 7
+        }
+      ]
+    },
+    {
+      "outputSlide": 13,
+      "sourceSlide": 13,
+      "narrativeRole": "section three",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/wfyxobm5",
+          "sourceText": "03",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/36hcrmhk",
+          "sourceText": "软件设计与实现",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/eloj2t83",
+          "sourceText": "软件模块划分 | 数据读取与样本构建流程 | MRGCN训练流程 | DANN扩展与自适应调参 | 知识蒸馏 | 量化与推理   |",
+          "contentIndex": 2
+        }
+      ]
+    },
+    {
+      "outputSlide": 14,
+      "sourceSlide": 15,
+      "narrativeRole": "job matching pipeline",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/rytsvu9k",
+          "sourceText": "02 数据读取与样本构建流程",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/g7adsji5",
+          "sourceText": "从 SEED 数据集 de_LDS 特征出发，构造可用于 MRGCN-DANN 训练的统一样本 |",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/rmhk3q5o",
+          "sourceText": "读取 .mat | 特征文件",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/5o7qpg3e",
+          "sourceText": "SEED/ExtractedFeatures_1s",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/nap4r65w",
+          "sourceText": "提取 de_LDS",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/54zidony",
+          "sourceText": "每个 trial 的差分熵 + LDS 平滑特征",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/udg7adsj",
+          "sourceText": "滑动窗口",
+          "contentIndex": 6
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/cfa9w3m9",
+          "sourceText": "W=4，S=4 | 连续 4 秒拼接",
+          "contentIndex": 7
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/65wjudg7",
+          "sourceText": "样本形状",
+          "contentIndex": 8
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/oza1gvy9",
+          "sourceText": "62 × 20 | 62 通道 × 4s × 5 频带",
+          "contentIndex": 9
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/zed8v6ps",
+          "sourceText": "标签映射",
+          "contentIndex": 10
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/hcrmhk3q",
+          "sourceText": "-1 / 0 / 1 | 映射为 0 / 1 / 2",
+          "contentIndex": 11
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/p8nqxs72",
+          "sourceText": "Trial 划分",
+          "contentIndex": 12
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/7ed8bat4",
+          "sourceText": "1–9 训练 | 10–15 测试",
+          "contentIndex": 13
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/pkzupwb2",
+          "sourceText": "样本张量组织",
+          "contentIndex": 14
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/7qpg3ex0",
+          "sourceText": "时间窗口 | 4 秒",
+          "contentIndex": 15
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/32lszqtc",
+          "sourceText": "电极通道 | 62 个",
+          "contentIndex": 16
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/at47y1kr",
+          "sourceText": "频带特征 | 5 个",
+          "contentIndex": 17
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/lkjm1cfa",
+          "sourceText": "输入样本 | 62 × 20",
+          "contentIndex": 18
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/3itgfmlk",
+          "sourceText": "域标签生成",
+          "contentIndex": 19
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/tovahoza",
+          "sourceText": "训练 trial 记为源域，测试 trial 记为目标域；该标签用于后续 DANN 分支学习域不变特征。",
+          "contentIndex": 20
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/bi9s36hc",
+          "sourceText": "数据划分作用",
+          "contentIndex": 21
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/ixczed8v",
+          "sourceText": "按 trial 划分可以模拟不同时段/试次分布差异，为后续领域对抗训练提供应用背景。",
+          "contentIndex": 22
+        }
+      ]
+    },
+    {
+      "outputSlide": 15,
+      "sourceSlide": 9,
+      "narrativeRole": "local retrieval and score",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/dg7adsji",
+          "sourceText": "03 核心技术原理 (1) - MRGCN模型",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/z25kb6xk",
+          "sourceText": "💡 基本思想：将EEG电极抽象为图节点，电极间的连接关系抽象为图边，利用图卷积网络(GCN)强大的拓扑学习能力，精准提取脑区间复杂的拓扑交互特征。",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/gbq1oryt",
+          "sourceText": "🚀 端到端工作流程 | 脑网络构建 → 图卷积聚合 → 残差保留 → 多头融合 → 情绪特征输出",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/n29gr2p8",
+          "sourceText": "🧠 低秩多头图卷积 (Low-rank Multi-head) | • 以 62 个 EEG 电极为图节点，采用低秩可学习邻接矩阵建模通道连接，降低参数量与存储开销。 | • “多头”表示同一层中包含多个并行图卷积分支，每个 Head 学习不同的邻接模式和特征变换。 | ...",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/6dcbulwv",
+          "sourceText": "🔄 残差连接 (Residual) | • 在 MRGCN 层中设置残差路径，将输入特征映射后与图卷积输出相加。 | • 保留原始 EEG 电极节点信息，避免多层图卷积后特征过度趋同。 | • 缓解图神经网络中的“过平滑”问题，提高训练稳定性。 |",
+          "contentIndex": 4
+        }
+      ]
+    },
+    {
+      "outputSlide": 16,
+      "sourceSlide": 19,
+      "narrativeRole": "ai rerank and persistent cache",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/je9cvixc",
+          "sourceText": "06 NCNN量化部署与端侧推理优化",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/fmlkjm1c",
+          "sourceText": "模型转换与量化部署",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/x4nap4r6",
+          "sourceText": "PyTorch | 候选模型",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/jqh0fepk",
+          "sourceText": "ONNX | 中间表示",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/8nqxs72x",
+          "sourceText": "PNNX | 结构转换",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/1cfa9w3m",
+          "sourceText": "NCNN | FP32 模型",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/h0fepkzu",
+          "sourceText": "NCNN | INT8 量化",
+          "contentIndex": 6
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/orytsvu9",
+          "sourceText": "端侧推理与评价指标",
+          "contentIndex": 7
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/al87ed8b",
+          "sourceText": "模型加载 | param/bin",
+          "contentIndex": 8
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/hk3q5o7q",
+          "sourceText": "读取测试样本 | test_data.bin",
+          "contentIndex": 9
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/psfil0rq",
+          "sourceText": "Cache 预热 | warmup",
+          "contentIndex": 10
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/epkzupwb",
+          "sourceText": "多轮 Benchmark | 统计延迟/吞吐",
+          "contentIndex": 11
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/36hcrmhk",
+          "sourceText": "准确率评估 | 预测 vs 标签",
+          "contentIndex": 12
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/yhgn29gr",
+          "sourceText": "端侧优化策略",
+          "contentIndex": 13
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/n29gr2p8",
+          "sourceText": "2 Worker × 1 Thread 混合并行：多个独立 Net 实例实现数据并行，动态任务领取缓解大小核负载不均衡。",
+          "contentIndex": 14
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/58z25kb6",
+          "sourceText": "评价指标",
+          "contentIndex": 15
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/y90je9cv",
+          "sourceText": "分类准确率、单样本平均延迟、吞吐量、模型大小与 FP32 / INT8 精度差异共同评估部署效果。",
+          "contentIndex": 16
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/gbq1oryt",
+          "sourceText": "• ONNX 用于检查计算图、输入输出维度和算子连接关系 |  | • NCNN 面向移动端/嵌入式端，适合无GPU的ARM64 CPU 平台 |  | • FP32 与 INT8 模型并行保留，便于比较准确率、延迟和吞吐量",
+          "contentIndex": 17
+        }
+      ]
+    },
+    {
+      "outputSlide": 17,
+      "sourceSlide": 20,
+      "narrativeRole": "section four",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/b2hwfyxo",
+          "sourceText": "04",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/4byhgn29",
+          "sourceText": "系统测试与结果分析",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/twra5gbq",
+          "sourceText": "测试内容与评价指标 | 模型轻量化| 项目候选模型对比 | 多线程端侧推理性能对比 | 优化效果与误差分析",
+          "contentIndex": 2
+        }
+      ]
+    },
+    {
+      "outputSlide": 18,
+      "sourceSlide": 21,
+      "narrativeRole": "test metrics",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/onyd0z61",
+          "sourceText": "01 测试内容与评价指标",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/vahoza1g",
+          "sourceText": "测试维度",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/dg7adsji",
+          "sourceText": "▍算法有效性 | 核心关注模型在各类测试数据集上的分类准确率，以验证算法逻辑的严密性和解决问题的能力。",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/vmtwra5g",
+          "sourceText": "▍端侧部署性能 | 聚焦模型在实际硬件上的表现，重点考察模型文件大小、推理延迟以及单位时间的吞吐量。",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/t83itgfm",
+          "sourceText": "核心评价指标体系",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/bq1oryts",
+          "sourceText": "分类准确率 | 预测标签与真实标签的一致程度，衡量算法的正确性。",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/twra5gbq",
+          "sourceText": "单样本延迟 | 处理单个数据样本所需的平均时间，数值越低代表响应越快。",
+          "contentIndex": 6
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/bm58z25k",
+          "sourceText": "吞吐量 (QPS) | 单位时间内系统能够稳定处理的最大样本数量，体现并发处理能力。",
+          "contentIndex": 7
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/q5o7qpg3",
+          "sourceText": "模型大小 (Size) | 量化与压缩后的最终模型文件体积，越小越利于端侧存储和传输。",
+          "contentIndex": 8
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/8bat47y1",
+          "sourceText": "稳定性 (Stability)：在不同随机种子、不同数据划分以及不同硬件环境下，模型各项指标结果的方差，以验证鲁棒性。",
+          "contentIndex": 9
+        }
+      ]
+    },
+    {
+      "outputSlide": 19,
+      "sourceSlide": 25,
+      "narrativeRole": "optimization gains and risks",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/il0rqd4v",
+          "sourceText": "05 端侧优化效果与误差分析",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/tcj6tova",
+          "sourceText": "端侧优化收益",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/bi9s36hc",
+          "sourceText": "📊  模型层面：通过精细的超参数调整与网络结构筛选，在保持核心性能的前提下，有效控制模型整体规模，降低运行负担。",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/yd0z6103",
+          "sourceText": "⚖ 量化层面：采用NCCN自带的INT8量化，压缩模型权重并保持FP32输入输出，兼顾精度与兼容性，降低端侧存储及访存开销。",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/gfmlkjm1",
+          "sourceText": "🚀 引擎层面：基于NCNN框架针对ARM CPU进行深度适配，结合多线程并行计算与数据布局优化，显著提升推理吞吐量。",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/9s36hcrm",
+          "sourceText": "误差来源分析",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/nih4byhg",
+          "sourceText": "🧪 数据预处理误差 | 特征提取方式、滑动窗口大小及数据标准化策略在不同环境下的差异。",
+          "contentIndex": 6
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/61032lsz",
+          "sourceText": "🎲 模型训练随机性 | 权重初始化方式、训练数据Batch顺序等不可控随机因素的累积。",
+          "contentIndex": 7
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/o7qpg3ex",
+          "sourceText": "📉 量化精度损失 | INT8 低精度量化过程中不可避免的数值精度损失，影响最终输出。",
+          "contentIndex": 8
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/6dcbulwv",
+          "sourceText": "💻 端侧测量误差 | CPU动态调频、后台进程干扰、线程调度延迟等系统环境波动因素。",
+          "contentIndex": 9
+        }
+      ]
+    },
+    {
+      "outputSlide": 20,
+      "sourceSlide": 26,
+      "narrativeRole": "section five",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/je9cvixc",
+          "sourceText": "05",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/87ed8bat",
+          "sourceText": "总结与展望",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/xs72x4na",
+          "sourceText": "项目总结 | 未来展望",
+          "contentIndex": 2
+        }
+      ]
+    },
+    {
+      "outputSlide": 21,
+      "sourceSlide": 27,
+      "narrativeRole": "summary and outlook",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/8v6psfil",
+          "sourceText": "PROJECT SUMMARY · 项目总结",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/qtcj6tov",
+          "sourceText": "完整技术方案构建 | 打通从算法建模到端侧部署的全流程，形成闭环的、可执行的端到端解决方案。",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/nih4byhg",
+          "sourceText": "核心问题突破与解决 | 复现高精度MRGCN模型，引入DANN与自适应调参技术，有效解决了模型的泛化与落地难题。",
+          "contentIndex": 2
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/5o7qpg3e",
+          "sourceText": "可复用的工程化价值 | 为图神经网络（GNN）在边缘计算平台的压缩部署与推理加速提供了成熟的工程参考路径。",
+          "contentIndex": 3
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/r65wjudg",
+          "sourceText": "FUTURE OUTLOOK · 未来展望",
+          "contentIndex": 4
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/9cvixcze",
+          "sourceText": "01 / 建立完善评测体系 | 补充完整、统一的实测性能日志，量化对比不同模型架构与量化策略下的推理速度与精度。",
+          "contentIndex": 5
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/rytsvu9k",
+          "sourceText": "02 / 深度底层算子优化 | 进一步优化底层 MatMul/GEMM 算子，结合 NEON SIMD 和 cache 分块提升 CPU 端效率",
+          "contentIndex": 6
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/a9w3m94f",
+          "sourceText": "03 / 真实场景多维扩展 | 突破现有测试环境，扩展到跨被试验证、跨数据集迁移及在线实时推理，向真实应用场景迈进。",
+          "contentIndex": 7
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/zupwb2hw",
+          "sourceText": "05 总结与展望",
+          "contentIndex": 8
+        }
+      ]
+    },
+    {
+      "outputSlide": 22,
+      "sourceSlide": 28,
+      "narrativeRole": "thanks",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/r2p8nqxs",
+          "sourceText": "感谢聆听",
+          "contentIndex": 0
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/2p8nqxs7",
+          "sourceText": "队伍名称：神经没有bug队 |  | 参赛队员：郑杰龙 · 庞冠春 · 侯程予",
+          "contentIndex": 1
+        },
+        {
+          "action": "rewrite",
+          "sourceElementId": "sh/kzupwb2h",
+          "sourceText": "敬请各位专家老师批评指正",
+          "contentIndex": 2
+        }
+      ]
+    }
+  ],
+  "omittedSourceSlides": [
+    {
+      "sourceSlide": 12,
+      "reason": "该页含 EEG 专属图表或不属于本次答辩叙事结构"
+    },
+    {
+      "sourceSlide": 14,
+      "reason": "该页含 EEG 专属图表或不属于本次答辩叙事结构"
+    },
+    {
+      "sourceSlide": 16,
+      "reason": "该页含 EEG 专属图表或不属于本次答辩叙事结构"
+    },
+    {
+      "sourceSlide": 17,
+      "reason": "该页含 EEG 专属图表或不属于本次答辩叙事结构"
+    },
+    {
+      "sourceSlide": 18,
+      "reason": "该页含 EEG 专属图表或不属于本次答辩叙事结构"
+    },
+    {
+      "sourceSlide": 22,
+      "reason": "该页含 EEG 专属图表或不属于本次答辩叙事结构"
+    },
+    {
+      "sourceSlide": 23,
+      "reason": "该页含 EEG 专属图表或不属于本次答辩叙事结构"
+    },
+    {
+      "sourceSlide": 24,
+      "reason": "该页含 EEG 专属图表或不属于本次答辩叙事结构"
+    }
+  ]
+}

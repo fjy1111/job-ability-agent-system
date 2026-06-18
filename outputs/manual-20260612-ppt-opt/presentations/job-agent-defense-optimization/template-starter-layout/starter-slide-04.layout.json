@@ -1,0 +1,1113 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/4vg1jw",
+    "id": "4vg1jw",
+    "slide": 4,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "Noto Sans SC"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/65wjudg7",
+      "id": "21",
+      "name": "Picture 2",
+      "bbox": [
+        0,
+        0,
+        1260,
+        714.67
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00033,
+        "top": 0,
+        "right": 0.00033,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8z25kb6x",
+      "id": "4",
+      "name": "AutoShape 4",
+      "bbox": [
+        66.33,
+        72.27,
+        1153.33,
+        80
+      ],
+      "geometry": "rect",
+      "text": " 01 研究背景与意义",
+      "textPreview": "01 研究背景与意义",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": " 01 研究背景与意义"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": " 01 研究背景与意义",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": " 01 研究背景与意义",
+              "fontSize": 42.67,
+              "typeface": "Noto Sans SC",
+              "color": "#104862",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1gvy90je",
+      "id": "5",
+      "name": "AutoShape 5",
+      "bbox": [
+        53.33,
+        146.67,
+        573.33,
+        253.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineColor": "rgba(229, 231, 235, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 4,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/hwfyxobm",
+      "id": "22",
+      "name": "Picture 6",
+      "bbox": [
+        80,
+        173.33,
+        37.33,
+        37.33
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image3.png",
+        "contentType": "image/png",
+        "byteLength": 465
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image3.png",
+        "contentType": "image/png",
+        "byteLength": 465
+      }
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/je9cvixc",
+      "id": "7",
+      "name": "AutoShape 7",
+      "bbox": [
+        133.33,
+        170.67,
+        453.33,
+        42.67
+      ],
+      "geometry": "rect",
+      "text": "核心价值",
+      "textPreview": "核心价值",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "核心价值"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "核心价值",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "核心价值",
+              "fontSize": 25.33,
+              "typeface": "Noto Sans SC",
+              "color": "#2563EB",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8v6psfil",
+      "id": "8",
+      "name": "AutoShape 8",
+      "bbox": [
+        80,
+        240,
+        520,
+        133.33
+      ],
+      "geometry": "rect",
+      "text": "随着脑机接口(BCI)、情绪健康监测和边缘智能设备的发展，基于脑电(EEG)信号的情绪识别，能够突破传统接触式与非接触式识别的局限，具备重要的科研价值与广泛的现实应用前景。",
+      "textPreview": "随着脑机接口(BCI)、情绪健康监测和边缘智能设备的发展，基于脑电(EEG)信号的情绪识别，能够突破传统接触式与非接触式识别的局限，具备重要的科研价值与广泛的现实应用前景。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "随着脑机接口(BCI)、情绪健康监测和边缘智能设备的发展，基于脑"
+          },
+          {
+            "index": 2,
+            "text": "电(EEG)信号的情绪识别，能够突破传统接触式与非接触式识别的"
+          },
+          {
+            "index": 3,
+            "text": "局限，具备重要的科研价值与广泛的现实应用前景。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "随着脑机接口(BCI)、情绪健康监测和边缘智能设备的发展，基于脑电(EEG)信号的情绪识别，能够突破传统接触式与非接触式识别的局限，具备重要的科研价值与广泛的现实应用前景。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "随着脑机接口(BCI)、情绪健康监测和边缘智能设备的发展，基于脑电(EEG)信号的情绪识别，能够突破传统接触式与非接触式识别的局限，具备重要的科研价值与广泛的现实应用前景。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xczed8v6",
+      "id": "9",
+      "name": "AutoShape 9",
+      "bbox": [
+        653.33,
+        146.67,
+        573.33,
+        253.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineColor": "rgba(229, 231, 235, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 8,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/obm58z25",
+      "id": "23",
+      "name": "Picture 10",
+      "bbox": [
+        680,
+        173.33,
+        37.33,
+        37.33
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image4.png",
+        "contentType": "image/png",
+        "byteLength": 2096
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image4.png",
+        "contentType": "image/png",
+        "byteLength": 2096
+      }
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/k3q5o7qp",
+      "id": "11",
+      "name": "AutoShape 11",
+      "bbox": [
+        733.33,
+        170.67,
+        453.33,
+        42.67
+      ],
+      "geometry": "rect",
+      "text": "EEG 信号优势",
+      "textPreview": "EEG 信号优势",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "EEG 信号优势"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "EEG 信号优势",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "EEG 信号优势",
+              "fontSize": 25.33,
+              "typeface": "Noto Sans SC",
+              "color": "#10B981",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vixczed8",
+      "id": "12",
+      "name": "AutoShape 12",
+      "bbox": [
+        680,
+        240,
+        520,
+        133.33
+      ],
+      "geometry": "rect",
+      "text": "• 直接性：绕过人的主观意识表达，直接反映大脑皮层神经电生理活动，是情绪状态最底层的生理信号之一。\n• 抗伪装性：相比面部表情、语音语调等外部行为信号，极难被主观伪装或刻意掩饰。",
+      "textPreview": "• 直接性：绕过人的主观意识表达，直接反映大脑皮层神经电生理活动，是情绪状态最底层的生理信号之一。 | • 抗伪装性：相比面部表情、语音语调等外部行为信号，极难被主观伪装或刻意掩饰。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 6,
+        "lines": [
+          {
+            "index": 1,
+            "text": "• 直接性："
+          },
+          {
+            "index": 2,
+            "text": "绕过人的主观意识表达，直接反映大脑皮层神经电生理活动，是情"
+          },
+          {
+            "index": 3,
+            "text": "绪状态最底层的生理信号之一。"
+          },
+          {
+            "index": 4,
+            "text": "• 抗伪装性："
+          },
+          {
+            "index": 5,
+            "text": "相比面部表情、语音语调等外部行为信号，极难被主观伪装或刻意"
+          },
+          {
+            "index": 6,
+            "text": "掩饰。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• 直接性：绕过人的主观意识表达，直接反映大脑皮层神经电生理活动，是情绪状态最底层的生理信号之一。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 直接性：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "绕过人的主观意识表达，直接反映大脑皮层神经电生理活动，是情绪状态最底层的生理信号之一。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "• 抗伪装性：相比面部表情、语音语调等外部行为信号，极难被主观伪装或刻意掩饰。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 抗伪装性：",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "相比面部表情、语音语调等外部行为信号，极难被主观伪装或刻意掩饰。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2x4nap4r",
+      "id": "13",
+      "name": "AutoShape 13",
+      "bbox": [
+        53.33,
+        426.67,
+        573.33,
+        253.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineColor": "rgba(229, 231, 235, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 12,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/zed8v6ps",
+      "id": "24",
+      "name": "Picture 14",
+      "bbox": [
+        80,
+        453.33,
+        37.33,
+        37.33
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image5.png",
+        "contentType": "image/png",
+        "byteLength": 1131
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image5.png",
+        "contentType": "image/png",
+        "byteLength": 1131
+      }
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kre1w7mp",
+      "id": "15",
+      "name": "AutoShape 15",
+      "bbox": [
+        133.33,
+        450.67,
+        453.33,
+        42.67
+      ],
+      "geometry": "rect",
+      "text": "面临的技术挑战",
+      "textPreview": "面临的技术挑战",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "面临的技术挑战"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "面临的技术挑战",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "面临的技术挑战",
+              "fontSize": 25.33,
+              "typeface": "Noto Sans SC",
+              "color": "#F59E0B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/val87ed8",
+      "id": "16",
+      "name": "AutoShape 16",
+      "bbox": [
+        80,
+        520,
+        520,
+        133.33
+      ],
+      "geometry": "rect",
+      "text": "• 信号特征复杂：高维度、多通道且极易受眼电、肌电等生理噪声干扰。\n• 泛化性瓶颈：个体间生理差异与跨时段状态变化，导致“域偏移”问题，严重影响模型跨被试识别效果。",
+      "textPreview": "• 信号特征复杂：高维度、多通道且极易受眼电、肌电等生理噪声干扰。 | • 泛化性瓶颈：个体间生理差异与跨时段状态变化，导致“域偏移”问题，严重影响模型跨被试识别效果。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 6,
+        "lines": [
+          {
+            "index": 1,
+            "text": "•"
+          },
+          {
+            "index": 2,
+            "text": "信号特征复杂：高维度、多通道且极易受眼电、肌电等生理噪声干"
+          },
+          {
+            "index": 3,
+            "text": "扰。"
+          },
+          {
+            "index": 4,
+            "text": "•"
+          },
+          {
+            "index": 5,
+            "text": "泛化性瓶颈：个体间生理差异与跨时段状态变化，导致“域偏移”问"
+          },
+          {
+            "index": 6,
+            "text": "题，严重影响模型跨被试识别效果。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "• 信号特征复杂：高维度、多通道且极易受眼电、肌电等生理噪声干扰。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 信号特征复杂：高维度、多通道且极易受眼电、肌电等生理噪声干扰。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "• 泛化性瓶颈：个体间生理差异与跨时段状态变化，导致“域偏移”问题，严重影响模型跨被试识别效果。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "• 泛化性瓶颈：个体间生理差异与跨时段状态变化，导致“域偏移”问题，严重影响模型跨被试识别效果。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6psfil0r",
+      "id": "17",
+      "name": "AutoShape 17",
+      "bbox": [
+        653.33,
+        426.67,
+        573.33,
+        253.33
+      ],
+      "geometry": "roundRect",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 6.67,
+          "right": 6.67,
+          "bottom": 6.67,
+          "left": 6.67
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      },
+      "fillColor": "rgba(255, 255, 255, 0.95)",
+      "lineColor": "rgba(229, 231, 235, 1)",
+      "lineWidth": 1.33
+    },
+    {
+      "order": 16,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/6xkf6dcb",
+      "id": "25",
+      "name": "Picture 18",
+      "bbox": [
+        680,
+        453.33,
+        37.33,
+        37.33
+      ],
+      "contentType": "image/png",
+      "asset": {
+        "assetId": "/ppt/media/image6.png",
+        "contentType": "image/png",
+        "byteLength": 1118
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image6.png",
+        "contentType": "image/png",
+        "byteLength": 1118
+      }
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/knih4byh",
+      "id": "19",
+      "name": "AutoShape 19",
+      "bbox": [
+        733.33,
+        450.67,
+        453.33,
+        42.67
+      ],
+      "geometry": "rect",
+      "text": "本项目核心目标",
+      "textPreview": "本项目核心目标",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "本项目核心目标"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "本项目核心目标",
+          "indent": 0,
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "本项目核心目标",
+              "fontSize": 25.33,
+              "typeface": "Noto Sans SC",
+              "color": "#DC2626",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wjudg7ad",
+      "id": "20",
+      "name": "AutoShape 20",
+      "bbox": [
+        680,
+        520,
+        520,
+        133.33
+      ],
+      "geometry": "rect",
+      "text": "面向 CPU/ARM64 边缘计算平台，构建“数据处理→特征增强→泛化优化→端侧推理”的全链路技术方案，攻克跨被试识别难题，实现一套高效、高精度、低功耗且可落地的 EEG 情绪识别系统。",
+      "textPreview": "面向 CPU/ARM64 边缘计算平台，构建“数据处理→特征增强→泛化优化→端侧推理”的全链路技术方案，攻克跨被试识别难题，实现一套高效、高精度、低功耗且可落地的 EEG 情绪识别系统。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 4,
+        "lines": [
+          {
+            "index": 1,
+            "text": "面向 CPU/ARM64"
+          },
+          {
+            "index": 2,
+            "text": "边缘计算平台，构建“数据处理→特征增强→泛化优化→端侧推理”"
+          },
+          {
+            "index": 3,
+            "text": "的全链路技术方案，攻克跨被试识别难题，实现一套高效、高精度"
+          },
+          {
+            "index": 4,
+            "text": "、低功耗且可落地的 EEG 情绪识别系统。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "面向 CPU/ARM64 边缘计算平台，构建“数据处理→特征增强→泛化优化→端侧推理”的全链路技术方案，攻克跨被试识别难题，实现一套高效、高精度、低功耗且可落地的 EEG 情绪识别系统。",
+          "indent": 0,
+          "lineSpacingPercent": 117000,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "面向 CPU/ARM64 边缘计算平台，构建“数据处理→特征增强→泛化优化→端侧推理”的全链路技术方案，攻克跨被试识别难题，实现一套高效、高精度、低功耗且可落地的 EEG 情绪识别系统。",
+              "fontSize": 17.33,
+              "typeface": "Noto Sans SC",
+              "color": "#374151"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    }
+  ],
+  "composeRuns": []
+}

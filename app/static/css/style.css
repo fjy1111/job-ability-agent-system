@@ -5202,6 +5202,214 @@ body {
     line-height: 1.8;
 }
 
+.auth-privacy-hint {
+    display: block;
+    margin-top: 7px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.tri-party-role-switch > input,
+.tri-party-role-switch > select {
+    min-height: 38px;
+    border: 1px solid #d6dbe4;
+    border-radius: 8px;
+    padding: 0 10px;
+    background: #ffffff;
+    color: #111827;
+    box-sizing: border-box;
+}
+
+.tri-party-role-locked {
+    min-width: 230px;
+    padding: 12px 14px;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    background: #f0fdf4;
+}
+
+.tri-party-role-locked strong,
+.tri-party-role-locked span {
+    display: block;
+}
+
+.tri-party-role-locked strong {
+    color: #166534;
+    font-size: 13px;
+}
+
+.tri-party-role-locked span {
+    margin-top: 4px;
+    color: #475569;
+    font-size: 12px;
+}
+
+.tri-party-privacy-banner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    margin-top: 16px;
+    padding: 16px 18px;
+    border: 1px solid #a7f3d0;
+    border-radius: 8px;
+    background: #ecfdf5;
+}
+
+.tri-party-privacy-banner.compact {
+    grid-template-columns: auto minmax(0, 1fr);
+}
+
+.tri-party-privacy-icon {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #047857;
+    color: #ffffff;
+    font-weight: 900;
+}
+
+.tri-party-privacy-banner strong {
+    color: #065f46;
+}
+
+.tri-party-privacy-banner p {
+    margin: 4px 0 0;
+    color: #335c50;
+    line-height: 1.65;
+}
+
+.tri-party-privacy-banner > span {
+    color: #047857;
+    font-size: 12px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.tri-party-consent {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    padding: 12px;
+    border: 1px solid #a7f3d0;
+    border-radius: 8px;
+    background: #f0fdf4;
+}
+
+.tri-party-consent input {
+    width: 17px !important;
+    height: 17px;
+    margin-top: 3px;
+    accent-color: #047857;
+}
+
+.tri-party-consent span {
+    color: #335c50 !important;
+    font-size: 13px !important;
+    line-height: 1.65;
+}
+
+.tri-party-secure-view-form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 14px;
+    padding: 12px;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    background: #eff6ff;
+}
+
+.tri-party-secure-view-form.enterprise {
+    border-color: #a7f3d0;
+    background: #ecfdf5;
+}
+
+.tri-party-secure-view-form button {
+    flex: none;
+    min-height: 38px;
+    border: 0;
+    border-radius: 8px;
+    padding: 0 14px;
+    background: #174ea6;
+    color: #ffffff;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.tri-party-secure-view-form.enterprise button {
+    background: #047857;
+}
+
+.tri-party-secure-view-form span {
+    color: #475569;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.tri-party-resume-page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 38px 22px 60px;
+}
+
+.tri-party-resume-page-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+}
+
+.tri-party-resume-page-head p,
+.tri-party-resume-page-head h1,
+.tri-party-resume-page-head span {
+    margin: 0;
+}
+
+.tri-party-resume-page-head p {
+    color: #047857;
+    font-weight: 900;
+}
+
+.tri-party-resume-page-head h1 {
+    margin-top: 7px;
+    color: #111827;
+}
+
+.tri-party-resume-page-head span {
+    display: block;
+    margin-top: 8px;
+    color: #64748b;
+}
+
+.tri-party-resume-page-head a {
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: #334155;
+    text-decoration: none;
+    font-weight: 900;
+}
+
+.tri-party-resume-document {
+    margin-top: 16px;
+    padding: 24px;
+}
+
+.tri-party-resume-document pre {
+    margin: 0;
+    color: #1e293b;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.85;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+}
+
 @media screen and (max-width: 1060px) {
     .tri-party-topbar {
         grid-template-columns: 1fr;
@@ -5252,5 +5460,24 @@ body {
 
     .tri-party-role-switch button {
         width: 100%;
+    }
+
+    .tri-party-privacy-banner,
+    .tri-party-resume-page-head {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    .tri-party-privacy-banner {
+        display: grid;
+    }
+
+    .tri-party-privacy-banner > span {
+        white-space: normal;
+    }
+
+    .tri-party-secure-view-form,
+    .tri-party-resume-page-head {
+        flex-direction: column;
     }
 }

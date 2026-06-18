@@ -1,0 +1,31 @@
+task mode: template-following
+primary deck-profile: template-following
+secondary profile gates: engineering-platform
+
+required proof objects:
+- 系统总体技术路线与模块架构
+- 四维能力画像与证据链
+- 单次 LLM + 多工具复核协作流程
+- 本地召回、规则评分、结果多样性与 AI 精排
+- MySQL 持久化缓存及性能对比
+- 测试指标、创新总结和未来计划
+
+source/asset requirements:
+- 第一份 PPT 作为版式、字体、色彩、章节节奏和品牌元素的唯一模板来源
+- 第二份 PPT 作为技术内容、指标和项目结论来源
+- 不新增未经验证的徽标、截图或外部品牌资产
+
+brand authenticity constraints:
+- 保留参考 PPT 中已有竞赛标识与背景资产
+- 不绘制或仿制新的竞赛标识
+- 项目名称、队名和成员信息以第二份 PPT 为准
+
+profile-specific QA gates:
+- 每页均映射到参考 PPT 的原始页面
+- 章节过渡、目录、总结和致谢完整
+- 无 EEG 项目残留文字
+- 无空占位符、文本裁切或明显重叠
+- 所有核心技术结论与第二份 PPT 一致
+
+known missing inputs:
+- 未提供答辩时长，因此按约 15-20 分钟、22 页节奏组织

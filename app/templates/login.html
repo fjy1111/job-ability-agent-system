@@ -2,6 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+    <meta name="referrer" content="no-referrer">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="/static/css/style.css?v=7">
 </head>
@@ -60,6 +62,18 @@
                         </label>
                         {% endfor %}
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="role_access_code">学校/企业机构访问码</label>
+                    <input
+                        type="password"
+                        id="role_access_code"
+                        name="role_access_code"
+                        placeholder="学生身份无需填写"
+                        autocomplete="one-time-code"
+                    >
+                    <small class="auth-privacy-hint">机构身份需要管理员配置的独立访问码，防止普通账号越权查看学生材料。</small>
                 </div>
 
                 <button type="submit" class="auth-btn">登录</button>

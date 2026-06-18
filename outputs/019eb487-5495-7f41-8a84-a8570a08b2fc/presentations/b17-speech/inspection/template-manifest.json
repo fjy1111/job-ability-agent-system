@@ -1,0 +1,443 @@
+{
+  "sourcePptx": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/B17-light.pptx",
+  "workspace": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech",
+  "outDir": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection",
+  "generatedAt": "2026-06-15T15:19:24.929Z",
+  "slideCount": 34,
+  "slideArtifacts": [
+    {
+      "slide": 1,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-01.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-01.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-01.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-01.layout.json"
+    },
+    {
+      "slide": 2,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-02.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-02.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-02.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-02.layout.json"
+    },
+    {
+      "slide": 3,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-03.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-03.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-03.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-03.layout.json"
+    },
+    {
+      "slide": 4,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-04.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-04.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-04.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-04.layout.json"
+    },
+    {
+      "slide": 5,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-05.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-05.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-05.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-05.layout.json"
+    },
+    {
+      "slide": 6,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-06.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-06.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-06.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-06.layout.json"
+    },
+    {
+      "slide": 7,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-07.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-07.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-07.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-07.layout.json"
+    },
+    {
+      "slide": 8,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-08.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-08.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-08.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-08.layout.json"
+    },
+    {
+      "slide": 9,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-09.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-09.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-09.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-09.layout.json"
+    },
+    {
+      "slide": 10,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-10.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-10.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-10.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-10.layout.json"
+    },
+    {
+      "slide": 11,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-11.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-11.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-11.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-11.layout.json"
+    },
+    {
+      "slide": 12,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-12.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-12.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-12.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-12.layout.json"
+    },
+    {
+      "slide": 13,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-13.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-13.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-13.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-13.layout.json"
+    },
+    {
+      "slide": 14,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-14.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-14.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-14.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-14.layout.json"
+    },
+    {
+      "slide": 15,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-15.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-15.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-15.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-15.layout.json"
+    },
+    {
+      "slide": 16,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-16.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-16.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-16.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-16.layout.json"
+    },
+    {
+      "slide": 17,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-17.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-17.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-17.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-17.layout.json"
+    },
+    {
+      "slide": 18,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-18.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-18.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-18.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-18.layout.json"
+    },
+    {
+      "slide": 19,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-19.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-19.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-19.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-19.layout.json"
+    },
+    {
+      "slide": 20,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-20.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-20.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-20.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-20.layout.json"
+    },
+    {
+      "slide": 21,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-21.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-21.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-21.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-21.layout.json"
+    },
+    {
+      "slide": 22,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-22.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-22.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-22.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-22.layout.json"
+    },
+    {
+      "slide": 23,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-23.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-23.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-23.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-23.layout.json"
+    },
+    {
+      "slide": 24,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-24.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-24.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-24.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-24.layout.json"
+    },
+    {
+      "slide": 25,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-25.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-25.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-25.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-25.layout.json"
+    },
+    {
+      "slide": 26,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-26.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-26.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-26.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-26.layout.json"
+    },
+    {
+      "slide": 27,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-27.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-27.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-27.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-27.layout.json"
+    },
+    {
+      "slide": 28,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-28.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-28.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-28.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-28.layout.json"
+    },
+    {
+      "slide": 29,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-29.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-29.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-29.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-29.layout.json"
+    },
+    {
+      "slide": 30,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-30.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-30.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-30.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-30.layout.json"
+    },
+    {
+      "slide": 31,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-31.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-31.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-31.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-31.layout.json"
+    },
+    {
+      "slide": 32,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-32.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-32.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-32.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-32.layout.json"
+    },
+    {
+      "slide": 33,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-33.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-33.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-33.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-33.layout.json"
+    },
+    {
+      "slide": 34,
+      "previewPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/source-slides/source-slide-34.png",
+      "previewRelativePath": "inspection/source-slides/source-slide-34.png",
+      "layoutPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/layouts/source-slide-34.layout.json",
+      "layoutRelativePath": "inspection/layouts/source-slide-34.layout.json"
+    }
+  ],
+  "inspectPath": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/template-inspect.ndjson",
+  "inspectRelativePath": "inspection/template-inspect.ndjson",
+  "inspectTruncated": true,
+  "inspectMetadata": {
+    "revision": "sw24wl",
+    "target": {
+      "id": "pr/ndo6tw"
+    },
+    "kind": {
+      "requested": "slide,textbox,shape,image,table,chart",
+      "tokens": [
+        "slide",
+        "textbox",
+        "shape",
+        "image",
+        "table",
+        "chart"
+      ]
+    },
+    "include": {
+      "tokens": []
+    },
+    "exclude": {
+      "tokens": []
+    },
+    "notices": []
+  },
+  "extractedMedia": [
+    {
+      "entry": "ppt/media/",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/media",
+      "relativePath": "inspection/assets/ppt/media/media",
+      "bytes": 0
+    },
+    {
+      "entry": "ppt/media/image1.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image1.png",
+      "relativePath": "inspection/assets/ppt/media/image1.png",
+      "bytes": 1573282
+    },
+    {
+      "entry": "ppt/media/image10.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image10.png",
+      "relativePath": "inspection/assets/ppt/media/image10.png",
+      "bytes": 125374
+    },
+    {
+      "entry": "ppt/media/image11.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image11.png",
+      "relativePath": "inspection/assets/ppt/media/image11.png",
+      "bytes": 100686
+    },
+    {
+      "entry": "ppt/media/image12.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image12.png",
+      "relativePath": "inspection/assets/ppt/media/image12.png",
+      "bytes": 343784
+    },
+    {
+      "entry": "ppt/media/image13.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image13.png",
+      "relativePath": "inspection/assets/ppt/media/image13.png",
+      "bytes": 102855
+    },
+    {
+      "entry": "ppt/media/image14.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image14.png",
+      "relativePath": "inspection/assets/ppt/media/image14.png",
+      "bytes": 487557
+    },
+    {
+      "entry": "ppt/media/image15.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image15.png",
+      "relativePath": "inspection/assets/ppt/media/image15.png",
+      "bytes": 287249
+    },
+    {
+      "entry": "ppt/media/image16.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image16.png",
+      "relativePath": "inspection/assets/ppt/media/image16.png",
+      "bytes": 232176
+    },
+    {
+      "entry": "ppt/media/image17.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image17.png",
+      "relativePath": "inspection/assets/ppt/media/image17.png",
+      "bytes": 861944
+    },
+    {
+      "entry": "ppt/media/image18.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image18.png",
+      "relativePath": "inspection/assets/ppt/media/image18.png",
+      "bytes": 982333
+    },
+    {
+      "entry": "ppt/media/image19.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image19.png",
+      "relativePath": "inspection/assets/ppt/media/image19.png",
+      "bytes": 762928
+    },
+    {
+      "entry": "ppt/media/image2.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image2.png",
+      "relativePath": "inspection/assets/ppt/media/image2.png",
+      "bytes": 1067739
+    },
+    {
+      "entry": "ppt/media/image20.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image20.png",
+      "relativePath": "inspection/assets/ppt/media/image20.png",
+      "bytes": 791925
+    },
+    {
+      "entry": "ppt/media/image21.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image21.png",
+      "relativePath": "inspection/assets/ppt/media/image21.png",
+      "bytes": 737548
+    },
+    {
+      "entry": "ppt/media/image22.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image22.png",
+      "relativePath": "inspection/assets/ppt/media/image22.png",
+      "bytes": 236277
+    },
+    {
+      "entry": "ppt/media/image23.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image23.png",
+      "relativePath": "inspection/assets/ppt/media/image23.png",
+      "bytes": 235804
+    },
+    {
+      "entry": "ppt/media/image3.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image3.png",
+      "relativePath": "inspection/assets/ppt/media/image3.png",
+      "bytes": 192577
+    },
+    {
+      "entry": "ppt/media/image4.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image4.png",
+      "relativePath": "inspection/assets/ppt/media/image4.png",
+      "bytes": 183814
+    },
+    {
+      "entry": "ppt/media/image5.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image5.png",
+      "relativePath": "inspection/assets/ppt/media/image5.png",
+      "bytes": 583993
+    },
+    {
+      "entry": "ppt/media/image6.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image6.png",
+      "relativePath": "inspection/assets/ppt/media/image6.png",
+      "bytes": 82443
+    },
+    {
+      "entry": "ppt/media/image7.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image7.png",
+      "relativePath": "inspection/assets/ppt/media/image7.png",
+      "bytes": 159591
+    },
+    {
+      "entry": "ppt/media/image8.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image8.png",
+      "relativePath": "inspection/assets/ppt/media/image8.png",
+      "bytes": 489719
+    },
+    {
+      "entry": "ppt/media/image9.png",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/image9.png",
+      "relativePath": "inspection/assets/ppt/media/image9.png",
+      "bytes": 340371
+    },
+    {
+      "entry": "ppt/media/media1.mov",
+      "path": "/Users/monkey/job-ability-agent-system/outputs/019eb487-5495-7f41-8a84-a8570a08b2fc/presentations/b17-speech/inspection/assets/ppt/media/media1.mov",
+      "relativePath": "inspection/assets/ppt/media/media1.mov",
+      "bytes": 1588
+    }
+  ],
+  "fonts": [
+    "+mj-lt",
+    "+mn-ea",
+    "+mn-lt",
+    "Aptos",
+    "Aptos Display",
+    "Calibri",
+    "Calibri Light",
+    "Noto Sans SC",
+    "微软雅黑"
+  ],
+  "packageParts": {
+    "mediaCount": 25,
+    "slideXmlCount": 34,
+    "chartCount": 0,
+    "tableSlideCount": 0
+  }
+}

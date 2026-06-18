@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "checkedAt": "2026-06-12T15:58:57.115Z",
+  "workspace": "/Users/monkey/job-ability-agent-system/outputs/manual-20260612-ppt-opt/presentations/job-agent-defense-optimization",
+  "finalPptx": "/Users/monkey/job-ability-agent-system/outputs/manual-20260612-ppt-opt/presentations/job-agent-defense-optimization/output/岗位能力达成学生成长诊断与精准就业智能体系统_优化答辩版.pptx",
+  "starterPptx": "/Users/monkey/job-ability-agent-system/outputs/manual-20260612-ppt-opt/presentations/job-agent-defense-optimization/template-starter.pptx",
+  "mapPath": "/Users/monkey/job-ability-agent-system/outputs/manual-20260612-ppt-opt/presentations/job-agent-defense-optimization/template-frame-map.json",
+  "starterLayoutDir": "/Users/monkey/job-ability-agent-system/outputs/manual-20260612-ppt-opt/presentations/job-agent-defense-optimization/template-starter-layout",
+  "finalLayoutDir": "/Users/monkey/job-ability-agent-system/outputs/manual-20260612-ppt-opt/presentations/job-agent-defense-optimization/layout/final",
+  "editDir": "/Users/monkey/job-ability-agent-system/outputs/manual-20260612-ppt-opt/presentations/job-agent-defense-optimization",
+  "issueCount": 0,
+  "issues": []
+}

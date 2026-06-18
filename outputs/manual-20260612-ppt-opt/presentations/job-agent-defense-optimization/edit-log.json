@@ -1,0 +1,1082 @@
+[
+  {
+    "outputSlide": 1,
+    "elementId": "4",
+    "before": "基于领域对抗多头残差图卷积网络的EEG情绪识别模型优化与端侧部署",
+    "after": "岗位能力达成学生成长诊断与精准就业智能体系统"
+  },
+  {
+    "outputSlide": 1,
+    "elementId": "11",
+    "before": "\n队伍名称：神经没有bug队\n\n参赛队员：郑杰龙 | 庞冠春 | 侯程予\n\n完成时间：2026年6月\n\n\n",
+    "after": "\n队伍名称：智聘未来\n\n参赛队员：黎盛 | 侯程予 | 冯靖原\n\n完成时间：2026年6月\n\n\n"
+  },
+  {
+    "outputSlide": 2,
+    "elementId": "2",
+    "before": "目 录 CONTENTS",
+    "after": "目 录 CONTENTS"
+  },
+  {
+    "outputSlide": 2,
+    "elementId": "4",
+    "before": "01. 项目概述与背景\n• 研究背景与意义 \n• 技术难点与主要创新",
+    "after": "01. 项目背景与需求\n• 现实问题与建设目标\n• 技术难点与核心创新"
+  },
+  {
+    "outputSlide": 2,
+    "elementId": "6",
+    "before": "02. 方案设计与技术原理\n• 总体技术路线 \n• 基线模型选择与论证\n• 核心原理：MRGCN、DANN、知识蒸馏、                       模型量化",
+    "after": "02. 系统设计与智能体协作\n• 总体技术路线与系统架构\n• 四维画像、LLM 与工具协作"
+  },
+  {
+    "outputSlide": 2,
+    "elementId": "13",
+    "before": "03. 软件模块划分\n• 软件模块划分\n• 数据读取与样本构建流程\n• MRGCN训练流程\n• DANN扩展与自适应调参\n• 知识蒸馏与轻量模型训练\n• 量化与推理\n\n",
+    "after": "03. 岗位匹配与性能优化\n• 岗位知识库与本地召回\n• 多样性控制、AI 精排与持久缓存"
+  },
+  {
+    "outputSlide": 2,
+    "elementId": "14",
+    "before": "04. 系统测试与结果分析\n• 测试内容与评价指标\n• 模型轻量化\n• 项目候选模型对比与端侧部署方案选择\n• 多线程端侧推理性能对比\n• 优化效果与误差分析",
+    "after": "04. 系统测试与应用成效\n• 功能测试与性能指标\n• 优化收益与风险控制"
+  },
+  {
+    "outputSlide": 2,
+    "elementId": "15",
+    "before": "05. 总结与展望\n•项目总结\n•未来展望",
+    "after": "05. 总结与展望\n• 项目总结\n• 后续规划"
+  },
+  {
+    "outputSlide": 3,
+    "elementId": "3",
+    "before": "01",
+    "after": "01"
+  },
+  {
+    "outputSlide": 3,
+    "elementId": "4",
+    "before": "项目概述与背景",
+    "after": "项目背景与需求"
+  },
+  {
+    "outputSlide": 3,
+    "elementId": "5",
+    "before": "研究背景与意义| 技术难点与主要创新",
+    "after": "现实问题与建设目标 | 技术难点与核心创新"
+  },
+  {
+    "outputSlide": 4,
+    "elementId": "4",
+    "before": " 01 研究背景与意义",
+    "after": "01 项目背景与需求"
+  },
+  {
+    "outputSlide": 4,
+    "elementId": "7",
+    "before": "核心价值",
+    "after": "成长评价断点"
+  },
+  {
+    "outputSlide": 4,
+    "elementId": "8",
+    "before": "随着脑机接口(BCI)、情绪健康监测和边缘智能设备的发展，基于脑电(EEG)信号的情绪识别，能够突破传统接触式与非接触式识别的局限，具备重要的科研价值与广泛的现实应用前景。",
+    "after": "学生材料分散在简历、课程、项目与竞赛中，传统评价难以形成统一证据链，也难以回答“能力从哪里来、下一步补什么”。"
+  },
+  {
+    "outputSlide": 4,
+    "elementId": "11",
+    "before": "EEG 信号优势",
+    "after": "就业匹配痛点"
+  },
+  {
+    "outputSlide": 4,
+    "elementId": "12",
+    "before": "• 直接性：绕过人的主观意识表达，直接反映大脑皮层神经电生理活动，是情绪状态最底层的生理信号之一。\n• 抗伪装性：相比面部表情、语音语调等外部行为信号，极难被主观伪装或刻意掩饰。",
+    "after": "• 推荐结果容易被目标岗位关键词主导，同类岗位重复占位。\n• 远程模型串行调用使首屏等待过长，结果也难以稳定复用。"
+  },
+  {
+    "outputSlide": 4,
+    "elementId": "15",
+    "before": "面临的技术挑战",
+    "after": "系统建设挑战"
+  },
+  {
+    "outputSlide": 4,
+    "elementId": "16",
+    "before": "• 信号特征复杂：高维度、多通道且极易受眼电、肌电等生理噪声干扰。\n• 泛化性瓶颈：个体间生理差异与跨时段状态变化，导致“域偏移”问题，严重影响模型跨被试识别效果。",
+    "after": "• 同时满足可解释评分、语义理解、工作流展示和低时延。\n• 将非结构化岗位文本转为可计算知识，并保证缓存版本一致。"
+  },
+  {
+    "outputSlide": 4,
+    "elementId": "19",
+    "before": "本项目核心目标",
+    "after": "本项目核心目标"
+  },
+  {
+    "outputSlide": 4,
+    "elementId": "20",
+    "before": "面向 CPU/ARM64 边缘计算平台，构建“数据处理→特征增强→泛化优化→端侧推理”的全链路技术方案，攻克跨被试识别难题，实现一套高效、高精度、低功耗且可落地的 EEG 情绪识别系统。",
+    "after": "构建“学生材料 → 四维画像 → 岗位召回 → 可解释评分 → AI 精排 → 成长建议”的闭环系统，让诊断有证据、推荐有依据、行动可执行。"
+  },
+  {
+    "outputSlide": 5,
+    "elementId": "3",
+    "before": "                                                                          02 技术难点与主要创新",
+    "after": "02 技术难点与核心创新"
+  },
+  {
+    "outputSlide": 5,
+    "elementId": "5",
+    "before": "▌ 三大技术难点",
+    "after": "▌ 三大建设难点"
+  },
+  {
+    "outputSlide": 5,
+    "elementId": "8",
+    "before": "图结构与推理效率的矛盾\nMRGCN模型表达能力强，但计算复杂度高，在端侧CPU上推理效率是巨大挑战。",
+    "after": "多源材料结构不统一\n简历、表单、PDF 与课程记录格式差异大，基础信息、技能和项目证据容易遗漏。"
+  },
+  {
+    "outputSlide": 5,
+    "elementId": "11",
+    "before": "跨实验泛化与域偏移\nEEG信号受个体状态影响大，模型易学习到与情绪无关的“域特征”，导致测试准确率下降。",
+    "after": "智能质量与响应速度矛盾\n多次 LLM 串行调用虽然语义丰富，但会显著拉长画像生成和岗位匹配时间。"
+  },
+  {
+    "outputSlide": 5,
+    "elementId": "14",
+    "before": "端侧部署链路复杂\n从Python训练环境到ARM64 CPU的C++推理环境，涉及模型转换、量化、算子兼容性等复杂问题。",
+    "after": "岗位推荐同质化\n标题近义、技能高度重叠的岗位会重复进入 TOP5，降低结果覆盖面与决策价值。"
+  },
+  {
+    "outputSlide": 5,
+    "elementId": "16",
+    "before": "▌ 四大核心创新",
+    "after": "▌ 四项核心创新"
+  },
+  {
+    "outputSlide": 5,
+    "elementId": "19",
+    "before": "增强动态信息表达\n结合滑动窗口多频带特征与图结构建模，让模型感知短时动态信息。",
+    "after": "四维画像证据化\n专业、实践、工具、职业四维评分绑定证据卡和行动项，避免不可解释综合分。"
+  },
+  {
+    "outputSlide": 5,
+    "elementId": "22",
+    "before": "融合脑网络构建\n融合短距离空间连接、功能连接和可学习邻接矩阵，更精准刻画脑区协同关系。",
+    "after": "单次 LLM + 多工具复核\n一次语义生成保留五类专家角色、七次工具调用和完整交接日志。"
+  },
+  {
+    "outputSlide": 5,
+    "elementId": "25",
+    "before": "提升泛化稳定性\n引入领域自适应(DANN)与自适应调参策略，提升模型在不同数据分布下的鲁棒性。",
+    "after": "本地召回与双向精排\n先本地稀疏召回和规则评分，再以学生适岗分与岗位适生分完成 AI 增强。"
+  },
+  {
+    "outputSlide": 5,
+    "elementId": "28",
+    "before": "构建完整工程闭环\n建立从模型训练到端侧部署的完整流程，实现算法到产品的落地验证。",
+    "after": "版本化持久缓存\n以诊断、岗位库和算法版本生成缓存键，应用重启后仍可复用匹配结果。"
+  },
+  {
+    "outputSlide": 6,
+    "elementId": "3",
+    "before": "02",
+    "after": "02"
+  },
+  {
+    "outputSlide": 6,
+    "elementId": "4",
+    "before": "方案设计与技术原理",
+    "after": "系统设计与智能体协作"
+  },
+  {
+    "outputSlide": 6,
+    "elementId": "5",
+    "before": "总体技术路线 | 基线模型选择 | MRGCN · DANN · 知识蒸馏·模型量化核心算法",
+    "after": "总体技术路线 | 系统架构 | 四维画像 | 单次 LLM 与工具复核"
+  },
+  {
+    "outputSlide": 7,
+    "elementId": "3",
+    "before": "01 总体技术路线",
+    "after": "01 总体技术路线"
+  },
+  {
+    "outputSlide": 7,
+    "elementId": "5",
+    "before": "核心思想：围绕“算法建模 → 泛化优化 → 量化压缩 → 端侧推理”的全链路展开",
+    "after": "核心思想：让“结构化本地算法”和“语义增强大模型”各自承担最擅长的环节"
+  },
+  {
+    "outputSlide": 7,
+    "elementId": "7",
+    "before": "01\n数据处理\n读取多频带EEG特征，通过滑动窗口算法构建统一维度的输入样本，确保数据输入一致性。",
+    "after": "01\n材料接入\n接收简历、表单、PDF/DOCX/TXT，提取姓名、专业、年级、技能与项目。"
+  },
+  {
+    "outputSlide": 7,
+    "elementId": "9",
+    "before": "02\n核心建模\n以MRGCN为核心算法，将电极视为图神经网络节点，构建脑功能网络，精准提取脑区拓扑特征。",
+    "after": "02\n能力诊断\n通过本地 Rubric 计算四维分数，给出稳定评分边界与证据来源。"
+  },
+  {
+    "outputSlide": 7,
+    "elementId": "11",
+    "before": "03\n模型优化\n融合多种异构脑网络特征，并引入DANN领域对抗训练机制，有效降低个体差异影响，增强模型泛化能力。",
+    "after": "03\n智能体协作\nLangGraph 编排五类专家角色，一次 LLM 生成共享草案，多工具完成复核。"
+  },
+  {
+    "outputSlide": 7,
+    "elementId": "13",
+    "before": "04\n工程部署\n对训练好的模型进行ONNX与NCNN格式转换，并实施INT8量化压缩，大幅降低模型体积与算力需求。",
+    "after": "04\n岗位匹配\n对 679 条岗位执行本地召回、规则评分、多样性控制和可选 AI 精排。"
+  },
+  {
+    "outputSlide": 7,
+    "elementId": "15",
+    "before": "05\n端侧验证\n在ARM64架构的嵌入式CPU平台上，通过C++程序进行推理性能与准确率双重评测，形成完整闭环。",
+    "after": "05\n结果闭环\n生成成长建议、课程映射和岗位路径，并将结果写入 MySQL 持久化缓存。"
+  },
+  {
+    "outputSlide": 8,
+    "elementId": "3",
+    "before": "01 总体技术路线",
+    "after": "02 系统总体架构"
+  },
+  {
+    "outputSlide": 8,
+    "elementId": "5",
+    "before": "核心思想：围绕“算法建模 → 泛化优化 → 量化压缩 → 端侧推理”的全链路展开",
+    "after": "架构分层：表现层 → 业务编排层 → 智能体与算法层 → 数据访问层 → 数据资源层"
+  },
+  {
+    "outputSlide": 8,
+    "elementId": "7",
+    "before": "01\n数据处理\n读取多频带EEG特征，通过滑动窗口算法构建统一维度的输入样本，确保数据输入一致性。",
+    "after": "01\n表现层\n智能体聊天、能力画像、岗位匹配、课程映射、简历优化和历史记录。"
+  },
+  {
+    "outputSlide": 8,
+    "elementId": "9",
+    "before": "02\n核心建模\n以MRGCN为核心算法，将电极视为图神经网络节点，构建脑功能网络，精准提取脑区拓扑特征。",
+    "after": "02\n业务编排层\nFastAPI 提供路由与服务编排，统一会话、诊断、导出与异常降级。"
+  },
+  {
+    "outputSlide": 8,
+    "elementId": "11",
+    "before": "03\n模型优化\n融合多种异构脑网络特征，并引入DANN领域对抗训练机制，有效降低个体差异影响，增强模型泛化能力。",
+    "after": "03\n智能体与算法层\nLangGraph 工作流、本地 Rubric、稀疏向量召回、规则精排与 AI 双向精排。"
+  },
+  {
+    "outputSlide": 8,
+    "elementId": "13",
+    "before": "04\n工程部署\n对训练好的模型进行ONNX与NCNN格式转换，并实施INT8量化压缩，大幅降低模型体积与算力需求。",
+    "after": "04\n数据访问层\nSQLAlchemy 管理事务、查询、缓存命中和版本校验，保证结果一致性。"
+  },
+  {
+    "outputSlide": 8,
+    "elementId": "15",
+    "before": "05\n端侧验证\n在ARM64架构的嵌入式CPU平台上，通过C++程序进行推理性能与准确率双重评测，形成完整闭环。",
+    "after": "05\n数据资源层\nMySQL 保存用户、诊断、岗位知识、课程映射、工具日志与匹配缓存。"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "3",
+    "before": "02 数据读取与样本构建流程",
+    "after": "03 学生能力画像生成流程"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "4",
+    "before": "从 SEED 数据集 de_LDS 特征出发，构造可用于 MRGCN-DANN 训练的统一样本\n",
+    "after": "从多源材料出发，形成“可评分、可追溯、可继续行动”的结构化能力画像"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "7",
+    "before": "读取 .mat\n特征文件",
+    "after": "输入标准化"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "9",
+    "before": "SEED/ExtractedFeatures_1s",
+    "after": "简历 / 表单 / PDF"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "12",
+    "before": "提取 de_LDS",
+    "after": "画像采集"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "14",
+    "before": "每个 trial 的差分熵 + LDS 平滑特征",
+    "after": "姓名、专业、年级、技能、项目、竞赛、证书"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "17",
+    "before": "滑动窗口",
+    "after": "四维评分"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "19",
+    "before": "W=4，S=4\n连续 4 秒拼接",
+    "after": "专业 / 实践 / 工具 / 职业"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "22",
+    "before": "样本形状",
+    "after": "证据抽取"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "24",
+    "before": "62 × 20\n62 通道 × 4s × 5 频带",
+    "after": "项目、技能和经历引用"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "27",
+    "before": "标签映射",
+    "after": "能力归因"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "29",
+    "before": "-1 / 0 / 1\n映射为 0 / 1 / 2",
+    "after": "优势、短板与维度行动项"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "32",
+    "before": "Trial 划分",
+    "after": "质量复核"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "34",
+    "before": "1–9 训练\n10–15 测试",
+    "after": "字段完整性与评分一致性"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "36",
+    "before": "样本张量组织",
+    "after": "共享工作区"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "38",
+    "before": "时间窗口\n4 秒",
+    "after": "专家角色\n5 个"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "41",
+    "before": "电极通道\n62 个",
+    "after": "工具调用\n7 次"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "44",
+    "before": "频带特征\n5 个",
+    "after": "交接记录\n5 次"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "47",
+    "before": "输入样本\n62 × 20",
+    "after": "LLM 请求\n1 次"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "49",
+    "before": "域标签生成",
+    "after": "工具复核机制"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "50",
+    "before": "训练 trial 记为源域，测试 trial 记为目标域；该标签用于后续 DANN 分支学习域不变特征。",
+    "after": "标准化、关键词扫描、Rubric 计算、证据矩阵和最终审计均由本地工具完成。"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "52",
+    "before": "数据划分作用",
+    "after": "质量控制"
+  },
+  {
+    "outputSlide": 9,
+    "elementId": "53",
+    "before": "按 trial 划分可以模拟不同时段/试次分布差异，为后续领域对抗训练提供应用背景。",
+    "after": "保留 shared_workspace、tool_calls、collaboration_log 与 quality_notes，便于复盘和答辩展示。"
+  },
+  {
+    "outputSlide": 10,
+    "elementId": "4",
+    "before": "02 基线模型选择与论证",
+    "after": "04 四维能力画像模型"
+  },
+  {
+    "outputSlide": 10,
+    "elementId": "7",
+    "before": "DNN (全连接网络)\n特点：特征展平后输入全连接网络，结构简单直接。\n优势：结构简单，计算速度快，易于实现与部署。\n局限：无法建模电极间的空间拓扑关系，丢失关键信息。\n作用：作为最基础的传统模型进行对照分析。",
+    "after": "专业基础能力\n来源：课程知识、专业概念、核心技能、证书和知识体系完整度。\n展示：分数、证据卡和针对性补强建议。"
+  },
+  {
+    "outputSlide": 10,
+    "elementId": "10",
+    "before": "CNN-LSTM (混合时序模型)\n特点：结合卷积特征提取与LSTM时序建模能力。\n优势：能有效利用脑电信号的时间动态信息。\n局限：对非规则排列的电极空间拓扑结构表达不足。\n作用：用于验证时序建模在任务中的有效性对比。",
+    "after": "技术实践能力\n来源：项目、实习、竞赛、可交付作品和工程闭环。\n展示：实践深度、角色贡献和成果证据。"
+  },
+  {
+    "outputSlide": 10,
+    "elementId": "13",
+    "before": "普通 GCN (图卷积网络)\n特点：将电极建模为图节点，引入基础图结构。\n优势：能够表达不同通道间的简单空间关系。\n局限：图结构单一，特征提取与表达能力受限。\n作用：作为图神经网络的基础对照组。",
+    "after": "工具技能能力\n来源：语言、框架、数据库、中间件、部署工具和 AI 工具。\n展示：技能覆盖率、熟练度和缺口。"
+  },
+  {
+    "outputSlide": 10,
+    "elementId": "15",
+    "before": "MRGCN (多头残差图卷积网络)\n特点：融合多头图卷积与残差连接机制，结构更先进。\n优势：兼顾复杂拓扑关系建模、训练稳定性与强表达能力。\n局限：网络结构相对复杂，端侧部署需优化。\n作用：本作品的核心基线模型。",
+    "after": "职业发展能力\n来源：目标清晰度、材料表达、岗位认知、面试准备和软技能。\n展示：方向适配、风险提示与行动清单。"
+  },
+  {
+    "outputSlide": 10,
+    "elementId": "18",
+    "before": "最终决策：选择 MRGCN 作为基线模型，因其在脑区拓扑建模、训练稳定性与特征表达能力上取得了最佳平衡。",
+    "after": "最终决策：四个维度分别给出评分边界、证据来源和下一步动作，避免只输出一个无法解释的综合分。"
+  },
+  {
+    "outputSlide": 11,
+    "elementId": "4",
+    "before": "03 核心技术原理 (2) - DANN领域对抗",
+    "after": "05 多智能体角色与职责"
+  },
+  {
+    "outputSlide": 11,
+    "elementId": "7",
+    "before": "核心问题",
+    "after": "画像采集智能体"
+  },
+  {
+    "outputSlide": 11,
+    "elementId": "8",
+    "before": "EEG数据中普遍存在“域偏移”挑战：不同试次、不同时间段的采集环境差异，会导致数据分布产生显著不同。\n如果不解决该问题，模型在训练集表现优异，但在测试集上泛化能力会大幅下降。",
+    "after": "清洗学生基础信息，统一字段并识别显性技能、项目和经历。"
+  },
+  {
+    "outputSlide": 11,
+    "elementId": "11",
+    "before": "核心结构",
+    "after": "四维评分智能体"
+  },
+  {
+    "outputSlide": 11,
+    "elementId": "12",
+    "before": "在MRGCN特征提取器后，并联两个分支：\n1. 情绪分类器：预测样本的情绪标签（如负性、中性、正性）。\n2. 域分类器：判别样本来源，区分是来自“源域”(训练集)还是“目标域”(测试集)。",
+    "after": "调用本地 Rubric 计算四维能力分数，绑定评分证据与边界。"
+  },
+  {
+    "outputSlide": 11,
+    "elementId": "15",
+    "before": "关键机制 (GRL)",
+    "after": "证据归因智能体"
+  },
+  {
+    "outputSlide": 11,
+    "elementId": "16",
+    "before": "核心组件：梯度反转层 (GRL)，它在不同传播阶段扮演不同角色：\n• 前向传播：“透明”状态，不对特征做任何变换。\n• 反向传播：对域分类器的反馈梯度乘上一个负系数，实现梯度方向反转。",
+    "after": "构建技能与项目证据矩阵，识别优势、短板和风险来源。"
+  },
+  {
+    "outputSlide": 11,
+    "elementId": "19",
+    "before": "训练目标",
+    "after": "质量复核智能体"
+  },
+  {
+    "outputSlide": 11,
+    "elementId": "20",
+    "before": "通过构建“情绪分类”与“域分类”的对抗关系，引导特征提取器：\n→ 保留情绪信息：让情绪分类器可以准确预测类别。\n→ 剔除域差异：让域分类器无法分辨来源，最终学到“域不变特征”，大幅提升泛化能力。",
+    "after": "检查字段完整性、评分一致性、工具链记录和最终 JSON 结构。"
+  },
+  {
+    "outputSlide": 12,
+    "elementId": "4",
+    "before": "03 核心技术原理 (3) - 知识蒸馏",
+    "after": "06 单次 LLM 与多工具复核"
+  },
+  {
+    "outputSlide": 12,
+    "elementId": "5",
+    "before": "核心思想：用高精度教师模型指导轻量学生模型，在保留识别能力的同时降低端侧推理开销。",
+    "after": "核心思想：一次 LLM 负责语义草案，本地工具负责计算、审计和留痕，兼顾协作展示与响应效率。"
+  },
+  {
+    "outputSlide": 12,
+    "elementId": "6",
+    "before": "一、蒸馏动机\n教师 MRGCN-DANN 图结构表达强，但端侧推理开销较高。\n学生采用 MLP / CNN1D，去除复杂图卷积，更适合 ARM64 与 NCNN 部署。",
+    "after": "一、共享草案\nLLM 一次输出 ability_scores、score_evidence、recognized_skills、advantages、weaknesses 和行动项。"
+  },
+  {
+    "outputSlide": 12,
+    "elementId": "7",
+    "before": "二、训练设计\n冻结教师模型，以 soft logits 作为知识指导。\n学生同时学习硬标签 CE 与软标签 KL，兼顾分类正确性和知识迁移。",
+    "after": "二、本地评分\nRubricScoreCalculator 根据关键词覆盖、项目经历、材料完整度和目标岗位给出稳定边界。"
+  },
+  {
+    "outputSlide": 12,
+    "elementId": "8",
+    "before": "三、核心优势\n继承教师模型的类别边界与泛化知识，降低轻量化精度损失。\n学生模型参数更少、计算更轻，便于 ONNX / NCNN / INT8 部署。",
+    "after": "三、工具复核\n标准化器、技能扫描器、证据矩阵、维度审计和最终审计依次校验共享结果。"
+  },
+  {
+    "outputSlide": 12,
+    "elementId": "9",
+    "before": "四、创新点与端侧价值\n将知识蒸馏与 DANN 域自适应结合，同时关注情绪判别与域偏移抑制。\n在识别精度、跨 trial 泛化能力和端侧效率之间建立平衡。",
+    "after": "四、协作留痕\n保留五次专家交接、七次工具调用、共享工作区和质量备注，支持过程可视化。"
+  },
+  {
+    "outputSlide": 12,
+    "elementId": "10",
+    "before": "联合损失：L = CE(y, p_s) + α·KL(p_t / T, p_s / T) + λ·L_domain",
+    "after": "协作链：Normalize → SkillScan → Rubric → EvidenceMatrix → ConsistencyAudit → FinalAudit"
+  },
+  {
+    "outputSlide": 12,
+    "elementId": "11",
+    "before": "最终目标：以“高精度教师 + 轻量学生 + 域约束蒸馏”实现精度、泛化能力与端侧效率的平衡。",
+    "after": "最终目标：把多次远程调用压缩为一次请求，同时保留可解释、可复核、可展示的智能体工作流。"
+  },
+  {
+    "outputSlide": 13,
+    "elementId": "3",
+    "before": "03",
+    "after": "03"
+  },
+  {
+    "outputSlide": 13,
+    "elementId": "4",
+    "before": "软件设计与实现",
+    "after": "岗位匹配与性能优化"
+  },
+  {
+    "outputSlide": 13,
+    "elementId": "5",
+    "before": "软件模块划分 | 数据读取与样本构建流程 | MRGCN训练流程 | DANN扩展与自适应调参 | 知识蒸馏 | 量化与推理  \n",
+    "after": "岗位知识库 | 本地召回与评分 | 多样性控制 | AI 精排 | 持久化缓存"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "3",
+    "before": "02 数据读取与样本构建流程",
+    "after": "01 岗位匹配数据流程"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "4",
+    "before": "从 SEED 数据集 de_LDS 特征出发，构造可用于 MRGCN-DANN 训练的统一样本\n",
+    "after": "把非结构化招聘文本转为可计算岗位画像，再完成召回、评分、精排和成长关联"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "7",
+    "before": "读取 .mat\n特征文件",
+    "after": "岗位记录"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "9",
+    "before": "SEED/ExtractedFeatures_1s",
+    "after": "679 条真实岗位数据"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "12",
+    "before": "提取 de_LDS",
+    "after": "文本清洗"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "14",
+    "before": "每个 trial 的差分熵 + LDS 平滑特征",
+    "after": "中英文分词、标题归一化"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "17",
+    "before": "滑动窗口",
+    "after": "稀疏向量"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "19",
+    "before": "W=4，S=4\n连续 4 秒拼接",
+    "after": "n-gram 与词频权重"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "22",
+    "before": "样本形状",
+    "after": "本地召回"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "24",
+    "before": "62 × 20\n62 通道 × 4s × 5 频带",
+    "after": "快速获得 TOP30 候选"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "27",
+    "before": "标签映射",
+    "after": "规则评分"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "29",
+    "before": "-1 / 0 / 1\n映射为 0 / 1 / 2",
+    "after": "技能、项目、画像与约束"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "32",
+    "before": "Trial 划分",
+    "after": "AI 精排"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "34",
+    "before": "1–9 训练\n10–15 测试",
+    "after": "TOP10 输入，输出 TOP5"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "36",
+    "before": "样本张量组织",
+    "after": "岗位画像字段"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "38",
+    "before": "时间窗口\n4 秒",
+    "after": "岗位名称\n与描述"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "41",
+    "before": "电极通道\n62 个",
+    "after": "技能要求\n与项目线索"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "44",
+    "before": "频带特征\n5 个",
+    "after": "培养关联\n课程与证书"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "47",
+    "before": "输入样本\n62 × 20",
+    "after": "匹配约束\n学历与方向"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "49",
+    "before": "域标签生成",
+    "after": "多样性控制"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "50",
+    "before": "训练 trial 记为源域，测试 trial 记为目标域；该标签用于后续 DANN 分支学习域不变特征。",
+    "after": "标题归一化、岗位族配额和分数阈值共同限制同类岗位重复占位。"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "52",
+    "before": "数据划分作用",
+    "after": "成长关联"
+  },
+  {
+    "outputSlide": 14,
+    "elementId": "53",
+    "before": "按 trial 划分可以模拟不同时段/试次分布差异，为后续领域对抗训练提供应用背景。",
+    "after": "每个推荐岗位同时输出已匹配技能、待补技能、推荐理由和可按需生成的个性化路径。"
+  },
+  {
+    "outputSlide": 15,
+    "elementId": "3",
+    "before": "03 核心技术原理 (1) - MRGCN模型",
+    "after": "02 本地召回与可解释评分"
+  },
+  {
+    "outputSlide": 15,
+    "elementId": "5",
+    "before": "💡 基本思想：将EEG电极抽象为图节点，电极间的连接关系抽象为图边，利用图卷积网络(GCN)强大的拓扑学习能力，精准提取脑区间复杂的拓扑交互特征。",
+    "after": "基本思想：先用稀疏词袋向量快速缩小候选集，再用技能覆盖率、项目证据和四维画像完成规则精排。"
+  },
+  {
+    "outputSlide": 15,
+    "elementId": "13",
+    "before": "🚀 端到端工作流程\n脑网络构建 → 图卷积聚合 → 残差保留 → 多头融合 → 情绪特征输出",
+    "after": "端到端流程\n岗位清洗 → 稀疏向量索引 → TOP30 召回 → 本地规则评分 → TOP10 候选"
+  },
+  {
+    "outputSlide": 15,
+    "elementId": "14",
+    "before": "🧠 低秩多头图卷积 (Low-rank Multi-head)\n• 以 62 个 EEG 电极为图节点，采用低秩可学习邻接矩阵建模通道连接，降低参数量与存储开销。\n• “多头”表示同一层中包含多个并行图卷积分支，每个 Head 学习不同的邻接模式和特征变换。\n• 第一层 MRGCN 采用 4个 Head，每个 Head 学习不同连接模式，提取多视角脑区拓扑特征。\n• 第二层 MRGCN 采用 1 个 Head，对多头特征进行压缩融合，得到紧凑共享特征。\n• 特征经 BatchNorm 和 Flatten 后，分别用于情绪分类与域对抗训练。",
+    "after": "稀疏向量召回\n• 英文技术词直接保留，中文使用 n-gram 与关键词补强。\n• 词频权重 w(t)=1+ln(tf)，通过余弦相似度筛选候选岗位。\n• 索引只在岗位库变化时重建，避免每次请求重复计算。"
+  },
+  {
+    "outputSlide": 15,
+    "elementId": "8",
+    "before": "🔄 残差连接 (Residual)\n• 在 MRGCN 层中设置残差路径，将输入特征映射后与图卷积输出相加。\n• 保留原始 EEG 电极节点信息，避免多层图卷积后特征过度趋同。\n• 缓解图神经网络中的“过平滑”问题，提高训练稳定性。\n",
+    "after": "可解释规则评分\n• 技能覆盖 55%，项目证据 15%，四维画像 15%。\n• 目标方向 10%，学历适配 3%，证书适配 2%。\n• 每一项均可追溯到学生材料或岗位字段，便于解释和调参。"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "3",
+    "before": "06 NCNN量化部署与端侧推理优化",
+    "after": "03 AI 精排与 MySQL 持久化缓存"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "7",
+    "before": "模型转换与量化部署",
+    "after": "双向 AI 精排"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "9",
+    "before": "PyTorch\n候选模型",
+    "after": "TOP10\n本地候选"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "12",
+    "before": "ONNX\n中间表示",
+    "after": "学生→岗位\n当前适岗度"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "15",
+    "before": "PNNX\n结构转换",
+    "after": "岗位→学生\n成长适生度"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "18",
+    "before": "NCNN\nFP32 模型",
+    "after": "加权合成\n60% + 40%"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "21",
+    "before": "NCNN\nINT8 量化",
+    "after": "TOP5\n最终推荐"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "24",
+    "before": "端侧推理与评价指标",
+    "after": "缓存键与复用"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "26",
+    "before": "模型加载\nparam/bin",
+    "after": "诊断记录\nID"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "29",
+    "before": "读取测试样本\ntest_data.bin",
+    "after": "岗位库\n版本"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "32",
+    "before": "Cache 预热\nwarmup",
+    "after": "算法\n版本"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "35",
+    "before": "多轮 Benchmark\n统计延迟/吞吐",
+    "after": "结果\n类型"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "38",
+    "before": "准确率评估\n预测 vs 标签",
+    "after": "SHA-256\n缓存键"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "40",
+    "before": "端侧优化策略",
+    "after": "失败保护"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "41",
+    "before": "2 Worker × 1 Thread 混合并行：多个独立 Net 实例实现数据并行，动态任务领取缓解大小核负载不均衡。",
+    "after": "岗位页先展示本地结果；AI 异常时重试并保留可解释候选。"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "43",
+    "before": "评价指标",
+    "after": "持久化价值"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "44",
+    "before": "分类准确率、单样本平均延迟、吞吐量、模型大小与 FP32 / INT8 精度差异共同评估部署效果。",
+    "after": "结果写入 MySQL，重启后仍可命中；岗位库或算法版本变化时自动失效。"
+  },
+  {
+    "outputSlide": 16,
+    "elementId": "46",
+    "before": "• ONNX 用于检查计算图、输入输出维度和算子连接关系\n\n• NCNN 面向移动端/嵌入式端，适合无GPU的ARM64 CPU 平台\n\n• FP32 与 INT8 模型并行保留，便于比较准确率、延迟和吞吐量",
+    "after": "核心策略\n首屏本地算法保证速度\nAI 精排提升语义与成长适配\nMySQL 缓存负责稳定复用"
+  },
+  {
+    "outputSlide": 17,
+    "elementId": "3",
+    "before": "04",
+    "after": "04"
+  },
+  {
+    "outputSlide": 17,
+    "elementId": "4",
+    "before": "系统测试与结果分析",
+    "after": "系统测试与应用成效"
+  },
+  {
+    "outputSlide": 17,
+    "elementId": "5",
+    "before": "测试内容与评价指标 | 模型轻量化| 项目候选模型对比 | 多线程端侧推理性能对比 | 优化效果与误差分析",
+    "after": "功能验证 | 性能指标 | 优化收益 | 风险与降级策略"
+  },
+  {
+    "outputSlide": 18,
+    "elementId": "2",
+    "before": "01 测试内容与评价指标",
+    "after": "01 测试内容与评价指标"
+  },
+  {
+    "outputSlide": 18,
+    "elementId": "5",
+    "before": "测试维度",
+    "after": "测试维度"
+  },
+  {
+    "outputSlide": 18,
+    "elementId": "7",
+    "before": "▍算法有效性\n核心关注模型在各类测试数据集上的分类准确率，以验证算法逻辑的严密性和解决问题的能力。",
+    "after": "▍功能正确性\n验证学生信息提取、四维画像、证据链、岗位召回、AI 精排、缓存命中和结果导出。"
+  },
+  {
+    "outputSlide": 18,
+    "elementId": "9",
+    "before": "▍端侧部署性能\n聚焦模型在实际硬件上的表现，重点考察模型文件大小、推理延迟以及单位时间的吞吐量。",
+    "after": "▍页面响应性能\n重点考察首屏本地匹配、远程 AI 精排、持久化缓存读取和异常降级时间。"
+  },
+  {
+    "outputSlide": 18,
+    "elementId": "12",
+    "before": "核心评价指标体系",
+    "after": "核心评价指标体系"
+  },
+  {
+    "outputSlide": 18,
+    "elementId": "14",
+    "before": "分类准确率\n预测标签与真实标签的一致程度，衡量算法的正确性。",
+    "after": "本地匹配\n30 次平均约 90.73 ms，P95 约 91.41 ms。"
+  },
+  {
+    "outputSlide": 18,
+    "elementId": "16",
+    "before": "单样本延迟\n处理单个数据样本所需的平均时间，数值越低代表响应越快。",
+    "after": "AI 精排\nTOP10 双向语义精排实测约 73.92 s。"
+  },
+  {
+    "outputSlide": 18,
+    "elementId": "18",
+    "before": "吞吐量 (QPS)\n单位时间内系统能够稳定处理的最大样本数量，体现并发处理能力。",
+    "after": "缓存读取\nMySQL 持久化缓存平均约 0.368 ms。"
+  },
+  {
+    "outputSlide": 18,
+    "elementId": "20",
+    "before": "模型大小 (Size)\n量化与压缩后的最终模型文件体积，越小越利于端侧存储和传输。",
+    "after": "核心测试\n岗位匹配关键测试 10/10 通过。"
+  },
+  {
+    "outputSlide": 18,
+    "elementId": "22",
+    "before": "稳定性 (Stability)：在不同随机种子、不同数据划分以及不同硬件环境下，模型各项指标结果的方差，以验证鲁棒性。",
+    "after": "稳定性：缓存键绑定诊断记录、岗位库版本、算法版本和结果类型，防止跨版本误命中。"
+  },
+  {
+    "outputSlide": 19,
+    "elementId": "4",
+    "before": "05 端侧优化效果与误差分析",
+    "after": "02 优化收益与风险分析"
+  },
+  {
+    "outputSlide": 19,
+    "elementId": "7",
+    "before": "端侧优化收益",
+    "after": "性能与体验收益"
+  },
+  {
+    "outputSlide": 19,
+    "elementId": "9",
+    "before": "📊  模型层面：通过精细的超参数调整与网络结构筛选，在保持核心性能的前提下，有效控制模型整体规模，降低运行负担。",
+    "after": "首屏收益：岗位页面不再等待远程模型，本地召回和规则评分可在百毫秒级返回。"
+  },
+  {
+    "outputSlide": 19,
+    "elementId": "11",
+    "before": "⚖ 量化层面：采用NCCN自带的INT8量化，压缩模型权重并保持FP32输入输出，兼顾精度与兼容性，降低端侧存储及访存开销。",
+    "after": "调用收益：画像生成由多次语义请求合并为一次，仍保留角色协作、工具调用和交接日志。"
+  },
+  {
+    "outputSlide": 19,
+    "elementId": "13",
+    "before": "🚀 引擎层面：基于NCNN框架针对ARM CPU进行深度适配，结合多线程并行计算与数据布局优化，显著提升推理吞吐量。",
+    "after": "复用收益：AI 精排与成长路径写入 MySQL，刷新、重启和重复请求均可直接命中。"
+  },
+  {
+    "outputSlide": 19,
+    "elementId": "16",
+    "before": "误差来源分析",
+    "after": "风险与治理"
+  },
+  {
+    "outputSlide": 19,
+    "elementId": "18",
+    "before": "🧪 数据预处理误差\n特征提取方式、滑动窗口大小及数据标准化策略在不同环境下的差异。",
+    "after": "网络与模型波动\n增加重试、超时提示和本地结果保护，避免远程调用阻断页面。"
+  },
+  {
+    "outputSlide": 19,
+    "elementId": "20",
+    "before": "🎲 模型训练随机性\n权重初始化方式、训练数据Batch顺序等不可控随机因素的累积。",
+    "after": "结构化输出偏差\n使用 JSON Schema、工具审计和最终质量复核，降低字段缺失与格式错误。"
+  },
+  {
+    "outputSlide": 19,
+    "elementId": "22",
+    "before": "📉 量化精度损失\nINT8 低精度量化过程中不可避免的数值精度损失，影响最终输出。",
+    "after": "数据质量风险\n对姓名、专业、年级和岗位标题进行归一化，保留证据来源便于人工检查。"
+  },
+  {
+    "outputSlide": 19,
+    "elementId": "24",
+    "before": "💻 端侧测量误差\nCPU动态调频、后台进程干扰、线程调度延迟等系统环境波动因素。",
+    "after": "缓存一致性风险\n岗位库或算法升级时版本键变化，旧缓存自动失效，避免复用过期结果。"
+  },
+  {
+    "outputSlide": 20,
+    "elementId": "3",
+    "before": "05",
+    "after": "05"
+  },
+  {
+    "outputSlide": 20,
+    "elementId": "4",
+    "before": "总结与展望",
+    "after": "总结与展望"
+  },
+  {
+    "outputSlide": 20,
+    "elementId": "5",
+    "before": "项目总结 | 未来展望",
+    "after": "项目总结 | 应用价值 | 后续规划"
+  },
+  {
+    "outputSlide": 21,
+    "elementId": "6",
+    "before": "PROJECT SUMMARY · 项目总结",
+    "after": "PROJECT SUMMARY · 项目总结"
+  },
+  {
+    "outputSlide": 21,
+    "elementId": "8",
+    "before": "完整技术方案构建\n打通从算法建模到端侧部署的全流程，形成闭环的、可执行的端到端解决方案。",
+    "after": "形成学生成长诊断闭环\n贯通材料采集、能力画像、岗位匹配、课程映射与成长建议，支持诊断和就业协同。"
+  },
+  {
+    "outputSlide": 21,
+    "elementId": "10",
+    "before": "核心问题突破与解决\n复现高精度MRGCN模型，引入DANN与自适应调参技术，有效解决了模型的泛化与落地难题。",
+    "after": "兼顾智能质量与系统效率\n本地算法负责稳定评分和首屏响应，大模型负责语义增强，多工具负责审计留痕。"
+  },
+  {
+    "outputSlide": 21,
+    "elementId": "12",
+    "before": "可复用的工程化价值\n为图神经网络（GNN）在边缘计算平台的压缩部署与推理加速提供了成熟的工程参考路径。",
+    "after": "建立可复用工程能力\n结构化 JSON、版本化 MySQL 缓存、导出与历史记录提升系统可维护性和可复现性。"
+  },
+  {
+    "outputSlide": 21,
+    "elementId": "14",
+    "before": "FUTURE OUTLOOK · 未来展望",
+    "after": "FUTURE OUTLOOK · 未来展望"
+  },
+  {
+    "outputSlide": 21,
+    "elementId": "16",
+    "before": "01 / 建立完善评测体系\n补充完整、统一的实测性能日志，量化对比不同模型架构与量化策略下的推理速度与精度。",
+    "after": "01 / 扩充岗位与课程知识图谱\n持续完善岗位族、技能标准、课程标签和成长路径之间的关联。"
+  },
+  {
+    "outputSlide": 21,
+    "elementId": "18",
+    "before": "02 / 深度底层算子优化\n进一步优化底层 MatMul/GEMM 算子，结合 NEON SIMD 和 cache 分块提升 CPU 端效率",
+    "after": "02 / 建立在线评测体系\n沉淀响应时间、精排成功率、缓存命中率和推荐多样性的长期指标。"
+  },
+  {
+    "outputSlide": 21,
+    "elementId": "20",
+    "before": "03 / 真实场景多维扩展\n突破现有测试环境，扩展到跨被试验证、跨数据集迁移及在线实时推理，向真实应用场景迈进。",
+    "after": "03 / 推进真实场景验证\n在更多专业、年级和企业岗位数据上开展教师与学生双侧反馈验证。"
+  },
+  {
+    "outputSlide": 21,
+    "elementId": "21",
+    "before": "05 总结与展望",
+    "after": "05 总结与展望"
+  },
+  {
+    "outputSlide": 22,
+    "elementId": "3",
+    "before": " 感谢聆听",
+    "after": "感谢聆听"
+  },
+  {
+    "outputSlide": 22,
+    "elementId": "6",
+    "before": "队伍名称：神经没有bug队\n\n参赛队员：郑杰龙 · 庞冠春 · 侯程予",
+    "after": "队伍名称：智聘未来\n\n参赛队员：黎盛 · 侯程予 · 冯靖原"
+  },
+  {
+    "outputSlide": 22,
+    "elementId": "8",
+    "before": "敬请各位专家老师批评指正",
+    "after": "敬请各位专家老师批评指正"
+  }
+]

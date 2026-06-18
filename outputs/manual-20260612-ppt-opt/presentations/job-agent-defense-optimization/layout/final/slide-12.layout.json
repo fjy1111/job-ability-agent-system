@@ -1,0 +1,772 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/4fu18jqh",
+    "id": "4fu18jqh",
+    "slide": 13,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1260,
+      "height": 714.67
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Arial"
+      },
+      "minorFont": {
+        "latinTypeface": "Arial"
+      }
+    },
+    "typefaces": [
+      "Arial",
+      "微软雅黑"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/ulwval87",
+      "id": "12",
+      "name": "Picture 2",
+      "bbox": [
+        0,
+        0,
+        1260,
+        714.67
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00033,
+        "top": 0,
+        "right": 0.00033,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image2.png",
+        "contentType": "image/png",
+        "byteLength": 1097511
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/adsji5sn",
+      "id": "4",
+      "name": "AutoShape 4",
+      "bbox": [
+        53.33,
+        53.33,
+        1153.33,
+        80
+      ],
+      "geometry": "rect",
+      "text": "06 单次 LLM 与多工具复核",
+      "textPreview": "06 单次 LLM 与多工具复核",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "vertical": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "square",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "06 单次 LLM 与多工具复核"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "06 单次 LLM 与多工具复核",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "06 单次 LLM 与多工具复核",
+              "fontSize": 41.33,
+              "typeface": "微软雅黑",
+              "color": "#093A5A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "lineWidth": 1.31
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3ylc7u54",
+      "id": "5",
+      "name": "TextBox 4",
+      "bbox": [
+        81.6,
+        126.72,
+        1104,
+        34.96
+      ],
+      "geometry": "rect",
+      "text": "核心思想：一次 LLM 负责语义草案，本地工具负责计算、审计和留痕，兼顾协作展示与响应效率。",
+      "textPreview": "核心思想：一次 LLM 负责语义草案，本地工具负责计算、审计和留痕，兼顾协作展示与响应效率。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "wrap": "none",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 3.84,
+          "right": 0,
+          "bottom": 3.84,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "核心思想：一次 LLM 负责语义草案，本地工具负责计算、审计和留痕，兼顾协作展示与响应效率。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "核心思想：一次 LLM 负责语义草案，本地工具负责计算、审计和留痕，兼顾协作展示与响应效率。",
+          "lineSpacingPercent": 110000,
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "核心思想：一次 LLM 负责语义草案，本地工具负责计算、审计和留痕，兼顾协作展示与响应效率。",
+              "fontSize": 20.67,
+              "typeface": "微软雅黑",
+              "color": "#2C3E50"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sji5snel",
+      "id": "6",
+      "name": "Rounded Rectangle 5",
+      "bbox": [
+        69.12,
+        174.72,
+        561.6,
+        168.96
+      ],
+      "geometry": "roundRect",
+      "text": "一、共享草案\nLLM 一次输出 ability_scores、score_evidence、recognized_skills、advantages、weaknesses 和行动项。",
+      "textPreview": "一、共享草案 | LLM 一次输出 ability_scores、score_evidence、recognized_skills、advantages、weaknesses 和行动项。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "textTransform": "none",
+        "insets": {
+          "top": 11.52,
+          "right": 15.36,
+          "bottom": 9.6,
+          "left": 17.28
+        }
+      },
+      "textLayout": {
+        "lineCount": 5,
+        "lines": [
+          {
+            "index": 1,
+            "text": "一、共享草案"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "LLM 一次输出"
+          },
+          {
+            "index": 4,
+            "text": "ability_scores、score_evidence、recognized_skills、advantages、"
+          },
+          {
+            "index": 5,
+            "text": "weaknesses 和行动项。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "一、共享草案",
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "一、共享草案",
+              "fontSize": 28,
+              "typeface": "微软雅黑",
+              "color": "#093A5A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "LLM 一次输出 ability_scores、score_evidence、recognized_skills、advantages、weaknesses 和行动项。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "LLM 一次输出 ability_scores、score_evidence、recognized_skills、advantages、weaknesses 和行动项。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "fillColor": "#F3F8FF",
+      "lineColor": "#96C0F4",
+      "lineWidth": 2
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/h4byhgn2",
+      "id": "7",
+      "name": "Rounded Rectangle 6",
+      "bbox": [
+        650.88,
+        174.72,
+        561.6,
+        168.96
+      ],
+      "geometry": "roundRect",
+      "text": "二、本地评分\nRubricScoreCalculator 根据关键词覆盖、项目经历、材料完整度和目标岗位给出稳定边界。",
+      "textPreview": "二、本地评分 | RubricScoreCalculator 根据关键词覆盖、项目经历、材料完整度和目标岗位给出稳定边界。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "textTransform": "none",
+        "insets": {
+          "top": 11.52,
+          "right": 15.36,
+          "bottom": 9.6,
+          "left": 17.28
+        }
+      },
+      "textLayout": {
+        "lineCount": 5,
+        "lines": [
+          {
+            "index": 1,
+            "text": "二、本地评分"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "RubricScoreCalculator"
+          },
+          {
+            "index": 4,
+            "text": "根据关键词覆盖、项目经历、材料完整度和目标岗位给出稳定边界"
+          },
+          {
+            "index": 5,
+            "text": "。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "二、本地评分",
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "二、本地评分",
+              "fontSize": 28,
+              "typeface": "微软雅黑",
+              "color": "#007682",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "RubricScoreCalculator 根据关键词覆盖、项目经历、材料完整度和目标岗位给出稳定边界。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "RubricScoreCalculator 根据关键词覆盖、项目经历、材料完整度和目标岗位给出稳定边界。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "fillColor": "#F0FBFB",
+      "lineColor": "#68C9C9",
+      "lineWidth": 2
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ap4r65wj",
+      "id": "8",
+      "name": "Rounded Rectangle 7",
+      "bbox": [
+        69.12,
+        370.56,
+        561.6,
+        163.2
+      ],
+      "geometry": "roundRect",
+      "text": "三、工具复核\n标准化器、技能扫描器、证据矩阵、维度审计和最终审计依次校验共享结果。",
+      "textPreview": "三、工具复核 | 标准化器、技能扫描器、证据矩阵、维度审计和最终审计依次校验共享结果。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "textTransform": "none",
+        "insets": {
+          "top": 11.52,
+          "right": 15.36,
+          "bottom": 9.6,
+          "left": 17.28
+        }
+      },
+      "textLayout": {
+        "lineCount": 4,
+        "lines": [
+          {
+            "index": 1,
+            "text": "三、工具复核"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "标准化器、技能扫描器、证据矩阵、维度审计和最终审计依次校验"
+          },
+          {
+            "index": 4,
+            "text": "共享结果。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "三、工具复核",
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "三、工具复核",
+              "fontSize": 28,
+              "typeface": "微软雅黑",
+              "color": "#093A5A",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "标准化器、技能扫描器、证据矩阵、维度审计和最终审计依次校验共享结果。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "标准化器、技能扫描器、证据矩阵、维度审计和最终审计依次校验共享结果。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "fillColor": "#FAFCFF",
+      "lineColor": "#96C0F4",
+      "lineWidth": 2
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/za1gvy90",
+      "id": "9",
+      "name": "Rounded Rectangle 8",
+      "bbox": [
+        650.88,
+        370.56,
+        561.6,
+        163.2
+      ],
+      "geometry": "roundRect",
+      "text": "四、协作留痕\n保留五次专家交接、七次工具调用、共享工作区和质量备注，支持过程可视化。",
+      "textPreview": "四、协作留痕 | 保留五次专家交接、七次工具调用、共享工作区和质量备注，支持过程可视化。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "textTransform": "none",
+        "insets": {
+          "top": 11.52,
+          "right": 15.36,
+          "bottom": 9.6,
+          "left": 17.28
+        }
+      },
+      "textLayout": {
+        "lineCount": 4,
+        "lines": [
+          {
+            "index": 1,
+            "text": "四、协作留痕"
+          },
+          {
+            "index": 2,
+            "text": ""
+          },
+          {
+            "index": 3,
+            "text": "保留五次专家交接、七次工具调用、共享工作区和质量备注，支持"
+          },
+          {
+            "index": 4,
+            "text": "过程可视化。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "四、协作留痕",
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "四、协作留痕",
+              "fontSize": 28,
+              "typeface": "微软雅黑",
+              "color": "#E95D0C",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        },
+        {
+          "index": 2,
+          "text": "保留五次专家交接、七次工具调用、共享工作区和质量备注，支持过程可视化。",
+          "lineSpacingPercent": 102000,
+          "spaceBefore": 400,
+          "resolvedTextStyle": {
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "保留五次专家交接、七次工具调用、共享工作区和质量备注，支持过程可视化。",
+              "fontSize": 17.47,
+              "typeface": "微软雅黑",
+              "color": "#192B3E"
+            }
+          ],
+          "bulletCharacter": "",
+          "spaceAfter": 0
+        }
+      ],
+      "fillColor": "#FFF6EF",
+      "lineColor": "#F29A61",
+      "lineWidth": 2
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/z61032ls",
+      "id": "10",
+      "name": "TextBox 9",
+      "bbox": [
+        91.2,
+        541.44,
+        1094.4,
+        24
+      ],
+      "geometry": "rect",
+      "text": "协作链：Normalize → SkillScan → Rubric → EvidenceMatrix → ConsistencyAudit → FinalAudit",
+      "textPreview": "协作链：Normalize → SkillScan → Rubric → EvidenceMatrix → ConsistencyAudit → FinalAudit",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "#000000",
+        "alignment": "left",
+        "textTransform": "none",
+        "wrap": "none",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "协作链：Normalize → SkillScan → Rubric → EvidenceMatrix → ConsistencyAudit → FinalAudit"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "协作链：Normalize → SkillScan → Rubric → EvidenceMatrix → ConsistencyAudit → FinalAudit",
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "协作链：Normalize → SkillScan → Rubric → EvidenceMatrix → ConsistencyAudit → FinalAudit",
+              "fontSize": 18,
+              "typeface": "微软雅黑",
+              "color": "#235078"
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ]
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/al87ed8b",
+      "id": "11",
+      "name": "Rounded Rectangle 10",
+      "bbox": [
+        81.6,
+        580.8,
+        1118.4,
+        48
+      ],
+      "geometry": "roundRect",
+      "text": "最终目标：把多次远程调用压缩为一次请求，同时保留可解释、可复核、可展示的智能体工作流。",
+      "textPreview": "最终目标：把多次远程调用压缩为一次请求，同时保留可解释、可复核、可展示的智能体工作流。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 18.67,
+        "typeface": "Arial",
+        "color": "lt1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "textTransform": "none",
+        "insets": {
+          "top": 3.84,
+          "right": 17.28,
+          "bottom": 3.84,
+          "left": 17.28
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "最终目标：把多次远程调用压缩为一次请求，同时保留可解释、可复核、可展示的智能体工作流。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "最终目标：把多次远程调用压缩为一次请求，同时保留可解释、可复核、可展示的智能体工作流。",
+          "resolvedTextStyle": {
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "最终目标：把多次远程调用压缩为一次请求，同时保留可解释、可复核、可展示的智能体工作流。",
+              "fontSize": 19.33,
+              "typeface": "微软雅黑",
+              "color": "#002F5E",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "lineSpacingPercent": 100000,
+          "spaceBefore": 0,
+          "spaceAfter": 0
+        }
+      ],
+      "fillColor": "#EEFAFF",
+      "lineColor": "#62B6D8",
+      "lineWidth": 1.6
+    }
+  ],
+  "composeRuns": []
+}

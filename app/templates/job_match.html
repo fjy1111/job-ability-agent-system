@@ -472,6 +472,28 @@
             cursor: pointer;
         }
 
+        .resume-privacy-consent {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 9px;
+            align-items: start;
+            margin: 0 22px 16px;
+            padding: 11px 12px;
+            border: 1px solid #a7f3d0;
+            border-radius: 8px;
+            background: #ecfdf5;
+            color: #335c50;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .resume-privacy-consent input {
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+            accent-color: #047857;
+        }
+
         .resume-apply-status {
             margin: 0 22px 18px;
             color: #b45309;
@@ -793,6 +815,11 @@
             <input id="resumeApplyFileInput" type="file" accept=".pdf">
         </label>
 
+        <label class="resume-privacy-consent">
+            <input id="resumePrivacyConsent" type="checkbox">
+            <span>我同意学校查看原始材料进行真实性核验，并仅向目标企业转交自动脱敏后的简历。</span>
+        </label>
+
         <p class="resume-apply-status" id="resumeApplyStatus"></p>
 
         <div class="resume-apply-actions">
@@ -821,6 +848,8 @@
     const resumeApplyConfirm = document.getElementById("resumeApplyConfirm");
     const resumeApplyClose = document.getElementById("resumeApplyClose");
     const resumeApplyCancel = document.getElementById("resumeApplyCancel");
+    const resumePrivacyConsent = document.getElementById("resumePrivacyConsent");
+    const collaborationCsrfToken = {{ csrf_token | tojson }};
     let selectedApplyCompany = null;
     let selectedResumeFile = null;
 
@@ -849,6 +878,7 @@
         setApplyFile(null);
         resumeApplyStatus.textContent = "";
         resumeApplyConfirm.disabled = false;
+        resumePrivacyConsent.checked = false;
     }
 
     function showCompanyMessage(recordId, message, type = "success") {
@@ -1123,12 +1153,18 @@
             resumeApplyStatus.textContent = "当前投递入口仅支持 PDF 简历。";
             return;
         }
+        if (!resumePrivacyConsent.checked) {
+            resumeApplyStatus.textContent = "请先确认隐私授权。";
+            return;
+        }
 
         const formData = new FormData();
         formData.append("job_record_id", selectedApplyCompany.recordId);
         formData.append("company_name", selectedApplyCompany.companyName);
         formData.append("job_name", selectedApplyCompany.jobName);
         formData.append("resume_file", selectedResumeFile);
+        formData.append("privacy_consent", "accepted");
+        formData.append("csrf_token", collaborationCsrfToken);
 
         resumeApplyConfirm.disabled = true;
         resumeApplyStatus.textContent = "正在解析 PDF 并写入投递记录...";

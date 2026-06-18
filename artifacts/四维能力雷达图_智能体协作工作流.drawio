@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-06-15T16:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="ability-profile-workflow" name="四维能力雷达图智能体工作流">
+    <mxGraphModel dx="2600" dy="1800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2600" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="四维能力雷达图生成过程：多智能体协作与工具调用工作流" style="text;html=1;align=center;verticalAlign=middle;fontSize=30;fontStyle=1;fontColor=#0B2F63;" vertex="1" parent="1">
+          <mxGeometry x="360" y="20" width="1880" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="真实代码链路：FastAPI 输入 → LangGraph 5 个智能体顺序协作 → 1 次综合 LLM 评分 → 3 层本地审计 → MySQL → Canvas 雷达图" style="text;html=1;align=center;verticalAlign=middle;fontSize=16;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry x="360" y="72" width="1880" height="35" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="inputLane" value="1  输入与预处理" style="swimlane;html=1;rounded=1;startSize=44;horizontal=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;fontStyle=1;fontColor=#1f2937;" vertex="1" parent="1">
+          <mxGeometry x="35" y="140" width="300" height="1080" as="geometry"/>
+        </mxCell>
+        <mxCell id="inputSource" value="学生输入&lt;br&gt;&lt;br&gt;• PDF / Word / 文本简历&lt;br&gt;• 学生基础信息表单&lt;br&gt;• 姓名、专业、年级&lt;br&gt;• 目标岗位&lt;br&gt;• 技能、项目、竞赛&lt;br&gt;• 证书、自我介绍" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;strokeWidth=2;fontSize=15;align=left;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="210" width="250" height="230" as="geometry"/>
+        </mxCell>
+        <mxCell id="fastapiEntry" value="FastAPI 入口&lt;br&gt;&lt;br&gt;/agent/chat&lt;br&gt;或 /student/submit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="485" width="250" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="resumeExtract" value="简历文本与基础信息提取&lt;br&gt;&lt;br&gt;extract_resume_text_from_upload&lt;br&gt;extract_student_profile_from_resume" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=14;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="60" y="650" width="250" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="studentData" value="student_data / student_context&lt;br&gt;&lt;br&gt;结构化字段 + resume_text&lt;br&gt;作为 DiagnosisState.student" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="845" width="250" height="125" as="geometry"/>
+        </mxCell>
+        <mxCell id="runAgent" value="run_diagnosis_agent(student_data)&lt;br&gt;启动 diagnosis_graph.invoke(...)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1015" width="250" height="105" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="graphLane" value="2  LangGraph 编排层：StateGraph(DiagnosisState)" style="swimlane;html=1;rounded=1;startSize=46;horizontal=1;fillColor=#eef6ff;strokeColor=#2563eb;strokeWidth=2;fontSize=20;fontStyle=1;fontColor=#0B2F63;" vertex="1" parent="1">
+          <mxGeometry x="365" y="140" width="1850" height="1080" as="geometry"/>
+        </mxCell>
+        <mxCell id="graphRule" value="固定有向流程：START → extract_profile → score_ability → analyze_profile_evidence → diagnose_ability → review_profile → END" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#93c5fd;dashed=1;fontSize=15;fontStyle=1;fontColor=#1e3a8a;" vertex="1" parent="1">
+          <mxGeometry x="405" y="205" width="1770" height="48" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="agent1Card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="405" y="280" width="320" height="690" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent1" value="01 画像采集智能体&lt;br&gt;&lt;font style=&quot;font-size:13px&quot;&gt;extract_profile_node&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="300" width="280" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent1Task" value="职责&lt;br&gt;清洗学生材料，构建所有后续节点共用的分析文本；只识别简历中明确出现的技能，不补写经历。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;fontSize=14;align=left;spacing=9;" vertex="1" parent="1">
+          <mxGeometry x="425" y="390" width="280" height="105" as="geometry"/>
+        </mxCell>
+        <mxCell id="toolNormalizer" value="本地工具 A&lt;br&gt;&lt;b&gt;ProfileTextNormalizer&lt;/b&gt;&lt;br&gt;&lt;br&gt;清洗 major、target_job、skills、projects、competitions、certificates、self_intro；合并 resume_text；统计已填/缺失字段。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=13;align=left;spacing=9;" vertex="1" parent="1">
+          <mxGeometry x="425" y="515" width="280" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="toolScanner" value="本地工具 B&lt;br&gt;&lt;b&gt;SkillKeywordScanner&lt;/b&gt;&lt;br&gt;&lt;br&gt;在 GENERAL_SKILLS 词表中扫描显性技能，并划分 programming、frameworks、data_ai、engineering、product_quality 技能组。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=13;align=left;spacing=9;" vertex="1" parent="1">
+          <mxGeometry x="425" y="695" width="280" height="165" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent1Output" value="产物&lt;br&gt;&lt;b&gt;normalized_text&lt;/b&gt;&lt;br&gt;&lt;b&gt;recognized_skills&lt;/b&gt;&lt;br&gt;input_profile + skill_scan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="425" y="880" width="280" height="72" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="agent2Card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="755" y="280" width="390" height="690" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent2" value="02 四维评分智能体&lt;br&gt;&lt;font style=&quot;font-size:13px&quot;&gt;score_ability_node · 唯一 LLM 发起者&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="775" y="300" width="350" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="rubricTool" value="本地工具 C&lt;br&gt;&lt;b&gt;RubricScoreCalculator&lt;/b&gt;&lt;br&gt;&lt;br&gt;先按确定性规则计算四维参考分：&lt;br&gt;专业：基础45 + 专业命中×6 + 证书8&lt;br&gt;实践：基础35 + 项目25 + 竞赛18 + 实习12 + 开发证据6&lt;br&gt;工具：基础35 + 工具命中×5 + 技能较丰富5&lt;br&gt;职业：基础35 + 目标岗位25 + 自述12 + 证书8 + 项目/竞赛8&lt;br&gt;&lt;br&gt;&lt;b&gt;注意：仅作为 LLM 评分边界和审计参考，不直接作为页面最终分。&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=12;align=left;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="775" y="390" width="350" height="245" as="geometry"/>
+        </mxCell>
+        <mxCell id="llmAgent" value="单次综合 LLM 调用&lt;br&gt;&lt;b&gt;综合画像协作智能体 / LLMAbilityScorer&lt;/b&gt;&lt;br&gt;&lt;br&gt;输入：student 基础信息 + normalized_text + recognized_skills + rubric_result&lt;br&gt;&lt;br&gt;同一次请求模拟 4 个专家角色：&lt;br&gt;1. 四维评分专家&lt;br&gt;2. 证据抽取专家&lt;br&gt;3. 能力归因专家&lt;br&gt;4. 质量复核专家&lt;br&gt;&lt;br&gt;ChatOpenAI：temperature=0.2，timeout=60s，max_retries=2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=3;fontSize=12;align=left;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="775" y="655" width="350" height="235" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent2Output" value="严格 JSON 共享草案&lt;br&gt;ability_scores · score_evidence · recognized_skills&lt;br&gt;assessment_summary · advantages · weaknesses&lt;br&gt;dimension_actions · quality_notes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="775" y="905" width="350" height="47" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="agent3Card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1175" y="280" width="310" height="690" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent3" value="03 证据抽取智能体&lt;br&gt;&lt;font style=&quot;font-size:13px&quot;&gt;analyze_profile_evidence_node&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=17;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1195" y="300" width="270" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent3Task" value="职责&lt;br&gt;不重新调用 LLM；把共享草案中的分数和证据转换为可人工复核的证据卡，约束事实边界。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;fontSize=13;align=left;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1195" y="390" width="270" height="105" as="geometry"/>
+        </mxCell>
+        <mxCell id="evidenceTool" value="本地工具 D&lt;br&gt;&lt;b&gt;EvidenceMatrixTool&lt;/b&gt;&lt;br&gt;&lt;br&gt;逐维生成：&lt;br&gt;• 分数与证据列表&lt;br&gt;• 有效证据数量&lt;br&gt;• 高/中/低可信度&lt;br&gt;• 弱项维度&lt;br&gt;• 缺失材料&lt;br&gt;• fact_boundary：仅引用学生表单和规则识别结果" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=13;align=left;spacing=9;" vertex="1" parent="1">
+          <mxGeometry x="1195" y="520" width="270" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent3Output" value="产物&lt;br&gt;evidence_matrix&lt;br&gt;evidence_cards&lt;br&gt;profile_tags&lt;br&gt;risk_flags" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1195" y="780" width="270" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent3Rule" value="证据不足时生成风险提示，不能把缺失材料当成能力不足。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1195" y="915" width="270" height="38" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="agent4Card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1515" y="280" width="310" height="690" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent4" value="04 能力归因智能体&lt;br&gt;&lt;font style=&quot;font-size:13px&quot;&gt;diagnose_ability_node&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=17;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1535" y="300" width="270" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent4Task" value="职责&lt;br&gt;结合共享 LLM 草案、四维分数和证据卡，形成“分数为什么这样、优势是什么、下一步补什么”的画像解释。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;fontSize=13;align=left;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1535" y="390" width="270" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="consistencyTool" value="本地工具 E&lt;br&gt;&lt;b&gt;ConsistencyAuditTool&lt;/b&gt;&lt;br&gt;&lt;br&gt;检查分数、证据卡和结论冲突：&lt;br&gt;• 高分但证据低可信 → 下调表达强度&lt;br&gt;• 低分但已有证据 → 表述为“待发展”，而非“完全缺失”&lt;br&gt;• 无冲突 → 通过复核" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;fontSize=13;align=left;spacing=9;" vertex="1" parent="1">
+          <mxGeometry x="1535" y="530" width="270" height="195" as="geometry"/>
+        </mxCell>
+        <mxCell id="abilityReport" value="本地报告组装&lt;br&gt;&lt;br&gt;从 collaborative_draft 读取摘要、优势、短板和四维动作；按分数排序识别相对优势与最低两项发展焦点。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=13;align=left;spacing=9;" vertex="1" parent="1">
+          <mxGeometry x="1535" y="750" width="270" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent4Output" value="产物&lt;br&gt;summary · advantages · weaknesses&lt;br&gt;dimension_insights · development_focus&lt;br&gt;review_findings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1535" y="895" width="270" height="58" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="agent5Card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1855" y="280" width="320" height="690" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent5" value="05 质量复核智能体&lt;br&gt;&lt;font style=&quot;font-size:13px&quot;&gt;review_profile_node&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=17;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1875" y="300" width="280" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent5Task" value="职责&lt;br&gt;再次执行一致性检查，并对工具链、智能体交接、最终事实边界进行发布前审计。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;fontSize=13;align=left;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1875" y="390" width="280" height="105" as="geometry"/>
+        </mxCell>
+        <mxCell id="consistencyAgain" value="本地工具 E（再次调用）&lt;br&gt;&lt;b&gt;ConsistencyAuditTool&lt;/b&gt;&lt;br&gt;发布前重新检查四维分数与证据卡。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1875" y="520" width="280" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="finalAudit" value="本地工具 F&lt;br&gt;&lt;b&gt;FinalAuditTool&lt;/b&gt;&lt;br&gt;&lt;br&gt;检查：&lt;br&gt;• tool_calls 是否完整&lt;br&gt;• collaboration_log 是否有交接&lt;br&gt;• 最终画像是否混入岗位排名&lt;br&gt;• 输出“可发布”或限制条件" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=3;fontSize=13;align=left;spacing=9;" vertex="1" parent="1">
+          <mxGeometry x="1875" y="640" width="280" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent5Output" value="最终工作流结果&lt;br&gt;quality_review · final_audit&lt;br&gt;完整 tool_calls / collaboration_log&lt;br&gt;workflow_steps / shared_workspace" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1875" y="850" width="280" height="102" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="stateBus" value="共享状态总线 DiagnosisState / shared_workspace&lt;br&gt;student → normalized_text → recognized_skills → ability_scores + score_evidence → collaborative_draft → evidence_cards + risk_flags → ability_report → quality_review&lt;br&gt;同时累计：workflow_steps、tool_calls、collaboration_log、review_findings、llm_agents、used_llm、agent_warning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#3a8c55;strokeWidth=3;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="405" y="1000" width="1770" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="handoffNote" value="智能体交接产物：1→2 normalized_text + skill_scan ｜ 2→3 ability_scores + score_evidence + collaborative_draft ｜ 3→4 evidence_matrix + evidence_cards + risk_flags ｜ 4→5 ability_report + consistency_audit ｜ 5→输出 final_audit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;dashed=1;fontSize=13;fontColor=#166534;" vertex="1" parent="1">
+          <mxGeometry x="405" y="1135" width="1770" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="failureBox" value="异常路径&lt;br&gt;LLM 未配置、超时或 JSON 非法 → 抛出 LLMCallError → 工作流终止 → 页面显示“调用LLM失败”&lt;br&gt;当前画像流程没有用本地 Rubric 分替代最终 LLM 分。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;dashed=1;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="2270" y="560" width="285" height="150" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="outputLane" value="3  持久化、页面组装与雷达图渲染" style="swimlane;html=1;rounded=1;startSize=46;horizontal=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;fontSize=20;fontStyle=1;fontColor=#14532d;" vertex="1" parent="1">
+          <mxGeometry x="365" y="1260" width="2190" height="455" as="geometry"/>
+        </mxCell>
+        <mxCell id="dbRecord" value="MySQL：DiagnosisRecord&lt;br&gt;&lt;br&gt;保存学生字段&lt;br&gt;professional_score&lt;br&gt;practice_score&lt;br&gt;tools_score&lt;br&gt;career_score&lt;br&gt;agent_status=completed&lt;br&gt;agent_result_json（完整智能体结果）" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="405" y="1335" width="310" height="300" as="geometry"/>
+        </mxCell>
+        <mxCell id="renderService" value="FastAPI 页面组装&lt;br&gt;&lt;br&gt;build_ability_scores(record)&lt;br&gt;normalize_ability_profile_result(...)&lt;br&gt;sanitize_ability_profile_display(...)&lt;br&gt;render_ability_profile(...)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="785" y="1365" width="330" height="230" as="geometry"/>
+        </mxCell>
+        <mxCell id="jinjaData" value="Jinja 模板&lt;br&gt;&lt;b&gt;ability_profile.html&lt;/b&gt;&lt;br&gt;&lt;br&gt;把四维分数写入 DOM：&lt;br&gt;data-professional&lt;br&gt;data-practice&lt;br&gt;data-tools&lt;br&gt;data-career&lt;br&gt;&lt;br&gt;同时展示分数条、证据卡、风险提示和发展焦点。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1185" y="1345" width="330" height="270" as="geometry"/>
+        </mxCell>
+        <mxCell id="radarJs" value="前端绘图工具&lt;br&gt;&lt;b&gt;ability_radar.js / Canvas 2D&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. 读取四维 data-* 分数&lt;br&gt;2. 分数裁剪到 0～100&lt;br&gt;3. 顺序：专业基础 → 职业发展 → 工具技能 → 技术实践&lt;br&gt;4. 计算 score/100 对应半径&lt;br&gt;5. 绘制五层网格、坐标轴、蓝色能力多边形和四个数据点&lt;br&gt;6. ResizeObserver 响应式重绘" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1585" y="1335" width="410" height="290" as="geometry"/>
+        </mxCell>
+        <mxCell id="finalRadar" value="最终可视化结果&lt;br&gt;&lt;br&gt;四维能力雷达图&lt;br&gt;专业基础 / 技术实践&lt;br&gt;工具技能 / 职业发展&lt;br&gt;&lt;br&gt;并列输出：&lt;br&gt;分数解释 + 证据卡&lt;br&gt;优势/短板 + 风险提示&lt;br&gt;发展焦点 + 审计记录" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#dae8fc;strokeColor=#2563eb;strokeWidth=4;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="2090" y="1355" width="285" height="285" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend" value="图例&lt;br&gt;&lt;font color=&quot;#1e3a8a&quot;&gt;蓝色：LangGraph 智能体 / 后端节点&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#9a5800&quot;&gt;橙色：确定性本地工具 / 前端绘图工具&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#6b3f7a&quot;&gt;紫色：唯一一次远程 LLM 调用&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#166534&quot;&gt;绿色：共享数据、持久化和最终产物&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#991b1b&quot;&gt;红色：一致性、事实边界和发布审计&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#94a3b8;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="2270" y="150" width="285" height="245" as="geometry"/>
+        </mxCell>
+        <mxCell id="sourceNote" value="代码依据&lt;br&gt;app/agent/diagnosis_agent.py&lt;br&gt;app/main.py&lt;br&gt;app/models/diagnosis.py&lt;br&gt;app/templates/ability_profile.html&lt;br&gt;app/static/js/ability_radar.js" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#94a3b8;fontSize=12;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="2270" y="420" width="285" height="115" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edgeInput1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="inputSource" target="fastapiEntry">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeInput2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="fastapiEntry" target="resumeExtract">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeInput3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="resumeExtract" target="studentData">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeInput4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="studentData" target="runAgent">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeStart" value="START" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=3;endArrow=block;endFill=1;fontSize=12;fontStyle=1;" edge="1" parent="1" source="runAgent" target="agent1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edgeA1A2" value="handoff 1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=3;endArrow=block;endFill=1;fontSize=11;fontStyle=1;" edge="1" parent="1" source="agent1Output" target="agent2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeA2A3" value="handoff 2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=3;endArrow=block;endFill=1;fontSize=11;fontStyle=1;" edge="1" parent="1" source="agent2Output" target="agent3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeA3A4" value="handoff 3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=3;endArrow=block;endFill=1;fontSize=11;fontStyle=1;" edge="1" parent="1" source="agent3Output" target="agent4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeA4A5" value="handoff 4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=3;endArrow=block;endFill=1;fontSize=11;fontStyle=1;" edge="1" parent="1" source="agent4Output" target="agent5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edgeNormalizer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#d79b00;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="agent1" target="toolNormalizer">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeScanner" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#d79b00;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="toolNormalizer" target="toolScanner">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeA1Out" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82b366;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="toolScanner" target="agent1Output">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeRubric" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#d79b00;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="agent2" target="rubricTool">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeLLM" value="rubric 参考 + 共享上下文" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#9673a6;strokeWidth=3;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="rubricTool" target="llmAgent">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeLLMOut" value="严格 JSON" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82b366;strokeWidth=2;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="llmAgent" target="agent2Output">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeEvidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#d79b00;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="agent3" target="evidenceTool">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeEvidenceOut" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82b366;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="evidenceTool" target="agent3Output">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeConsistency" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#b85450;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="agent4" target="consistencyTool">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeReport" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#d6b656;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="consistencyTool" target="abilityReport">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeReportOut" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82b366;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="abilityReport" target="agent4Output">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeConsistencyAgain" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#b85450;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="agent5" target="consistencyAgain">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeFinalAudit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#b85450;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="consistencyAgain" target="finalAudit">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeFinalOut" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82b366;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="finalAudit" target="agent5Output">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edgeState1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#3a8c55;strokeWidth=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="agent1Output" target="stateBus">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeState2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#3a8c55;strokeWidth=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="agent2Output" target="stateBus">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeState3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#3a8c55;strokeWidth=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="agent3Output" target="stateBus">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeState4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#3a8c55;strokeWidth=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="agent4Output" target="stateBus">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeState5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#3a8c55;strokeWidth=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="agent5Output" target="stateBus">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeFailure" value="失败/超时/非法 JSON" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#b85450;strokeWidth=2;dashed=1;endArrow=block;endFill=1;fontSize=11;fontColor=#991b1b;" edge="1" parent="1" source="llmAgent" target="failureBox">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edgeToDb" value="END / 返回 agent_result" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#16a34a;strokeWidth=3;endArrow=block;endFill=1;fontSize=12;fontStyle=1;" edge="1" parent="1" source="agent5Output" target="dbRecord">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2020" y="1240"/>
+              <mxPoint x="560" y="1240"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edgeDbRender" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#16a34a;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="dbRecord" target="renderService">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeRenderJinja" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#2563eb;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="renderService" target="jinjaData">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeJinjaJs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#d79b00;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="jinjaData" target="radarJs">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edgeJsRadar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#2563eb;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="radarJs" target="finalRadar">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
