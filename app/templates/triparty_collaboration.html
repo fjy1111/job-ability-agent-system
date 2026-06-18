@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=16">
+</head>
+<body class="tri-party-body">
+    <header class="tri-party-topbar">
+        <a class="tri-party-brand" href="/">
+            <span class="tri-party-brand-mark">
+                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                    <circle cx="6" cy="7" r="3"></circle>
+                    <circle cx="18" cy="7" r="3"></circle>
+                    <circle cx="12" cy="17" r="3"></circle>
+                    <path d="M8.5 9.5l2 5"></path>
+                    <path d="M15.5 9.5l-2 5"></path>
+                    <path d="M9 17h6"></path>
+                </svg>
+            </span>
+            <span>
+                <strong>三方数据协同</strong>
+                <small>学生-学校-企业闭环</small>
+            </span>
+        </a>
+
+        <nav class="tri-party-nav">
+            <a href="/">智能体</a>
+            <a href="/ability/profile">能力画像</a>
+            <a href="/job/match">岗位匹配</a>
+            <a href="/employment/guidance">就业指导</a>
+            <a class="active" href="/collaboration">三方协同</a>
+        </nav>
+
+        <div class="tri-party-account">
+            <span>{{ role_label }}</span>
+            <strong>{{ username }}</strong>
+            <a href="/logout">退出</a>
+        </div>
+    </header>
+
+    <main class="tri-party-workspace">
+        <section class="tri-party-summary">
+            <div>
+                <p>当前身份</p>
+                <h1>{{ role_label }}工作台</h1>
+                {% if role == "student" %}
+                <span>投递简历后，数据先进入学校审核，再流转到企业评估。</span>
+                {% elif role == "school" %}
+                <span>审核学生简历真实性，未发现造假后自动转交企业。</span>
+                {% else %}
+                <span>对学校审核通过的简历做录用决策，并同步优化建议。</span>
+                {% endif %}
+            </div>
+
+            <form action="/collaboration/role" method="post" class="tri-party-role-switch">
+                <label for="user_role">切换身份</label>
+                <select id="user_role" name="user_role">
+                    {% for option in role_options %}
+                    <option value="{{ option.value }}" {% if role == option.value %}selected{% endif %}>
+                        {{ option.label }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <button type="submit">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M4 7h11"></path>
+                        <path d="M12 4l3 3-3 3"></path>
+                        <path d="M20 17H9"></path>
+                        <path d="M12 14l-3 3 3 3"></path>
+                    </svg>
+                    <span>切换</span>
+                </button>
+            </form>
+        </section>
+
+        {% if message %}
+        <div class="tri-party-alert success">{{ message }}</div>
+        {% endif %}
+        {% if error %}
+        <div class="tri-party-alert error">{{ error }}</div>
+        {% endif %}
+
+        <section class="tri-party-flow">
+            <article>
+                <strong>{{ counts.school_review }}</strong>
+                <span>学校审核中</span>
+            </article>
+            <article>
+                <strong>{{ counts.warning_to_student }}</strong>
+                <span>学生预警</span>
+            </article>
+            <article>
+                <strong>{{ counts.enterprise_review }}</strong>
+                <span>企业评估中</span>
+            </article>
+            <article>
+                <strong>{{ counts.hired }}</strong>
+                <span>已录用</span>
+            </article>
+            <article>
+                <strong>{{ counts.rejected }}</strong>
+                <span>已拒录</span>
+            </article>
+        </section>
+
+        {% if role == "student" %}
+        <section class="tri-party-grid">
+            <form action="/collaboration/student/submit" method="post" class="tri-party-panel tri-party-form">
+                <div class="tri-party-panel-head">
+                    <p>Student</p>
+                    <h2>投递简历给企业</h2>
+                </div>
+
+                <label>
+                    <span>姓名</span>
+                    <input type="text" name="student_name" value="{{ input_data.get('student_name', '') }}" required>
+                </label>
+
+                <label>
+                    <span>专业</span>
+                    <input type="text" name="major" value="{{ input_data.get('major', '') }}" placeholder="如：软件工程">
+                </label>
+
+                <label>
+                    <span>目标企业</span>
+                    <input type="text" name="target_company" value="{{ input_data.get('target_company', '') }}" required>
+                </label>
+
+                <label>
+                    <span>目标岗位</span>
+                    <input type="text" name="target_job" value="{{ input_data.get('target_job', '') }}" required>
+                </label>
+
+                <label>
+                    <span>简历内容</span>
+                    <textarea name="resume_text" rows="10" required>{{ input_data.get('resume_text', '') }}</textarea>
+                </label>
+
+                <button type="submit" class="tri-party-primary-btn">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M22 2L11 13"></path>
+                        <path d="M22 2l-7 20-4-9-9-4z"></path>
+                    </svg>
+                    <span>提交学校审核</span>
+                </button>
+            </form>
+
+            <section class="tri-party-panel">
+                <div class="tri-party-panel-head">
+                    <p>Timeline</p>
+                    <h2>我的投递记录</h2>
+                </div>
+
+                {% if applications %}
+                <div class="tri-party-list">
+                    {% for application in applications %}
+                    <article class="tri-party-record">
+                        <header>
+                            <div>
+                                <span class="tri-party-record-time">{{ application.created_at.strftime("%Y-%m-%d %H:%M") }}</span>
+                                <h3>{{ application.target_company }} · {{ application.target_job }}</h3>
+                            </div>
+                            <b class="tri-party-status status-{{ application.status }}">
+                                {{ status_labels.get(application.status, application.status) }}
+                            </b>
+                        </header>
+
+                        {% if application.school_feedback %}
+                        <div class="tri-party-note">
+                            <strong>学校审核意见</strong>
+                            <p>{{ application.school_feedback }}</p>
+                        </div>
+                        {% endif %}
+
+                        {% if application.warning_message %}
+                        <div class="tri-party-note warning">
+                            <strong>学校预警</strong>
+                            <p>{{ application.warning_message }}</p>
+                        </div>
+                        {% endif %}
+
+                        {% if application.enterprise_decision %}
+                        <div class="tri-party-feedback-grid">
+                            <div>
+                                <strong>企业结论</strong>
+                                <p>{{ decision_labels.get(application.enterprise_decision, application.enterprise_decision) }}</p>
+                            </div>
+                            <div>
+                                <strong>给学生的优化方向</strong>
+                                <p>{{ application.enterprise_advice_to_student }}</p>
+                            </div>
+                            <div>
+                                <strong>给学校的培养建议</strong>
+                                <p>{{ application.enterprise_advice_to_school }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </article>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="tri-party-empty">暂无投递记录。</p>
+                {% endif %}
+            </section>
+        </section>
+        {% endif %}
+
+        {% if role == "school" %}
+        <section class="tri-party-panel">
+            <div class="tri-party-panel-head">
+                <p>School Review</p>
+                <h2>学校审核队列</h2>
+            </div>
+
+            {% if applications %}
+            <div class="tri-party-list">
+                {% for application in applications %}
+                <article class="tri-party-record">
+                    <header>
+                        <div>
+                            <span class="tri-party-record-time">{{ application.created_at.strftime("%Y-%m-%d %H:%M") }}</span>
+                            <h3>{{ application.student_name }} · {{ application.target_company }} · {{ application.target_job }}</h3>
+                        </div>
+                        <b class="tri-party-status status-{{ application.status }}">
+                            {{ status_labels.get(application.status, application.status) }}
+                        </b>
+                    </header>
+
+                    <dl class="tri-party-meta">
+                        <div><dt>学生账号</dt><dd>{{ application.student_username }}</dd></div>
+                        <div><dt>专业</dt><dd>{{ application.major or "未填写" }}</dd></div>
+                        <div><dt>简历哈希</dt><dd>{{ application.resume_hash[:12] }}</dd></div>
+                    </dl>
+
+                    <details class="tri-party-resume-preview">
+                        <summary>查看简历内容</summary>
+                        <pre>{{ application.resume_text }}</pre>
+                    </details>
+
+                    {% if application.status == "school_review" %}
+                    <form action="/collaboration/school/{{ application.id }}/review" method="post" class="tri-party-review-form">
+                        <div class="tri-party-radio-row">
+                            <label>
+                                <input type="radio" name="review_result" value="passed" checked>
+                                <span>未发现造假，转交企业</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="review_result" value="fake">
+                                <span>发现疑似造假，预警学生</span>
+                            </label>
+                        </div>
+
+                        <label>
+                            <span>学校审核意见</span>
+                            <textarea name="school_feedback" rows="3" placeholder="填写真实性核验、课程表现或材料依据"></textarea>
+                        </label>
+
+                        <label>
+                            <span>预警信息</span>
+                            <textarea name="warning_message" rows="3" placeholder="若发现造假，写明需学生核验或补充的内容"></textarea>
+                        </label>
+
+                        <button type="submit" class="tri-party-primary-btn">
+                            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                                <path d="M20 6L9 17l-5-5"></path>
+                            </svg>
+                            <span>提交审核</span>
+                        </button>
+                    </form>
+                    {% else %}
+                    <div class="tri-party-note">
+                        <strong>学校处理结果</strong>
+                        <p>{{ application.school_feedback or application.warning_message or "已完成审核。" }}</p>
+                    </div>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="tri-party-empty">暂无待审核简历。</p>
+            {% endif %}
+        </section>
+        {% endif %}
+
+        {% if role == "enterprise" %}
+        <section class="tri-party-panel">
+            <div class="tri-party-panel-head">
+                <p>Enterprise Review</p>
+                <h2>企业评估队列</h2>
+            </div>
+
+            {% if applications %}
+            <div class="tri-party-list">
+                {% for application in applications %}
+                <article class="tri-party-record">
+                    <header>
+                        <div>
+                            <span class="tri-party-record-time">
+                                {{ (application.forwarded_at or application.created_at).strftime("%Y-%m-%d %H:%M") }}
+                            </span>
+                            <h3>{{ application.student_name }} · {{ application.target_company }} · {{ application.target_job }}</h3>
+                        </div>
+                        <b class="tri-party-status status-{{ application.status }}">
+                            {{ status_labels.get(application.status, application.status) }}
+                        </b>
+                    </header>
+
+                    <dl class="tri-party-meta">
+                        <div><dt>专业</dt><dd>{{ application.major or "未填写" }}</dd></div>
+                        <div><dt>学校审核人</dt><dd>{{ application.school_reviewer or "未记录" }}</dd></div>
+                        <div><dt>审核结果</dt><dd>{{ application.school_feedback or "学校已审核通过" }}</dd></div>
+                    </dl>
+
+                    <details class="tri-party-resume-preview">
+                        <summary>查看学校转交的简历</summary>
+                        <pre>{{ application.resume_text }}</pre>
+                    </details>
+
+                    {% if application.status == "enterprise_review" %}
+                    <form action="/collaboration/enterprise/{{ application.id }}/decision" method="post" class="tri-party-review-form">
+                        <div class="tri-party-radio-row">
+                            <label>
+                                <input type="radio" name="decision" value="hire" checked>
+                                <span>录用</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="decision" value="reject">
+                                <span>拒录</span>
+                            </label>
+                        </div>
+
+                        <label>
+                            <span>给学生的优化方向</span>
+                            <textarea name="advice_to_student" rows="4" required placeholder="说明技能、项目、表达或求职策略的改进方向"></textarea>
+                        </label>
+
+                        <label>
+                            <span>给学校的培养建议</span>
+                            <textarea name="advice_to_school" rows="4" required placeholder="说明课程、实训、岗位能力培养或校企协作建议"></textarea>
+                        </label>
+
+                        <button type="submit" class="tri-party-primary-btn">
+                            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                                <path d="M20 6L9 17l-5-5"></path>
+                            </svg>
+                            <span>提交企业结论</span>
+                        </button>
+                    </form>
+                    {% else %}
+                    <div class="tri-party-feedback-grid">
+                        <div>
+                            <strong>企业结论</strong>
+                            <p>{{ decision_labels.get(application.enterprise_decision, application.enterprise_decision) }}</p>
+                        </div>
+                        <div>
+                            <strong>给学生的优化方向</strong>
+                            <p>{{ application.enterprise_advice_to_student }}</p>
+                        </div>
+                        <div>
+                            <strong>给学校的培养建议</strong>
+                            <p>{{ application.enterprise_advice_to_school }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="tri-party-empty">暂无学校转交的简历。</p>
+            {% endif %}
+        </section>
+        {% endif %}
+    </main>
+</body>
+</html>

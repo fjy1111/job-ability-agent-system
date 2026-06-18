@@ -230,12 +230,285 @@
             transform: translateY(-1px);
         }
 
+        .company-toggle-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 9px 18px;
+            background: #0f766e;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(15, 118, 110, 0.16);
+            transition: all 0.2s ease;
+        }
+
+        .company-toggle-btn:hover {
+            background: #115e59;
+            transform: translateY(-1px);
+        }
+
+        .company-toggle-btn:disabled,
+        .path-toggle-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+            transform: none;
+        }
+
         .path-detail {
             display: none;
         }
 
-        .path-detail.show {
+        .path-detail.show,
+        .company-detail.show {
             display: block;
+        }
+
+        .company-detail {
+            display: none;
+            margin-top: 18px;
+            padding: 18px 20px;
+            border: 1px solid #d5eee8;
+            border-radius: 14px;
+            background: #f7fffc;
+        }
+
+        .company-list {
+            display: grid;
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .company-card {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 150px;
+            gap: 14px 18px;
+            padding: 16px;
+            border: 1px solid #e1e7ef;
+            border-radius: 12px;
+            background: #ffffff;
+        }
+
+        .company-card h4 {
+            margin: 0 0 6px;
+            color: #0f3768;
+            font-size: 18px;
+        }
+
+        .company-card p {
+            margin: 6px 0 0;
+            color: #475569;
+            line-height: 1.75;
+        }
+
+        .company-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .company-meta span {
+            display: inline-flex;
+            align-items: center;
+            min-height: 26px;
+            padding: 0 9px;
+            border-radius: 999px;
+            background: #eef6ff;
+            color: #1d4ed8;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .company-score-panel {
+            display: grid;
+            gap: 10px;
+            align-content: start;
+            justify-items: end;
+        }
+
+        .company-score-panel strong {
+            color: #0f766e;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .company-score-panel small {
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .apply-company-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            background: #2563eb;
+            color: #ffffff;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .apply-company-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .company-message {
+            grid-column: 1 / -1;
+            margin: 0;
+            padding: 10px 12px;
+            border-radius: 8px;
+            line-height: 1.6;
+            font-weight: 700;
+        }
+
+        .company-message:empty {
+            display: none;
+        }
+
+        .company-message.success {
+            border: 1px solid #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .company-message.error {
+            border: 1px solid #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .resume-apply-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(15, 23, 42, 0.48);
+            box-sizing: border-box;
+        }
+
+        .resume-apply-modal.show {
+            display: flex;
+        }
+
+        .resume-apply-dialog {
+            width: min(560px, 100%);
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+            overflow: hidden;
+        }
+
+        .resume-apply-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: start;
+            padding: 20px 22px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .resume-apply-head h3 {
+            margin: 0;
+            color: #111827;
+            font-size: 22px;
+        }
+
+        .resume-apply-head p {
+            margin: 8px 0 0;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .modal-close-btn {
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .resume-dropzone {
+            position: relative;
+            display: grid;
+            gap: 8px;
+            margin: 22px;
+            padding: 28px 18px;
+            border: 1px dashed #9db4d4;
+            border-radius: 12px;
+            background: #f8fbff;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .resume-dropzone strong {
+            color: #0f3768;
+            font-size: 17px;
+        }
+
+        .resume-dropzone span {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .resume-dropzone.dragging,
+        .resume-dropzone.has-file {
+            border-color: #2563eb;
+            background: #eef4ff;
+        }
+
+        .resume-dropzone input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .resume-apply-status {
+            margin: 0 22px 18px;
+            color: #b45309;
+            line-height: 1.7;
+            font-weight: 700;
+        }
+
+        .resume-apply-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 16px 22px 22px;
+        }
+
+        .resume-apply-actions button {
+            min-height: 40px;
+            border: none;
+            border-radius: 8px;
+            padding: 0 16px;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .apply-cancel-btn {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .apply-confirm-btn {
+            background: #0f766e;
+            color: #ffffff;
+        }
+
+        .apply-confirm-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
         }
 
         @media (max-width: 900px) {
@@ -250,6 +523,14 @@
 
             .match-actions {
                 justify-content: flex-start;
+            }
+
+            .company-card {
+                grid-template-columns: 1fr;
+            }
+
+            .company-score-panel {
+                justify-items: start;
             }
         }
     </style>
@@ -365,6 +646,15 @@
                 >
                     查看个性化路径
                 </button>
+                <button
+                    type="button"
+                    class="company-toggle-btn"
+                    data-job-name="{{ job.job_name }}"
+                    data-loaded="false"
+                    onclick="loadOrToggleCompanies('{{ loop.index }}', this)"
+                >
+                    查看TOP5公司
+                </button>
             </div>
 
             <div class="gap-detail-box path-detail" id="path-detail-{{ loop.index }}">
@@ -470,6 +760,11 @@
                 <p class="empty-tip">点击“查看个性化路径”后，系统才会为当前岗位生成成长方案。</p>
                 {% endif %}
             </div>
+
+            <div class="company-detail" id="company-detail-{{ loop.index }}">
+                <h3 class="gap-detail-title">TOP5 公司双向匹配</h3>
+                <p class="empty-tip">点击“查看TOP5公司”后，系统会基于当前学生画像与数据库岗位记录筛选公司。</p>
+            </div>
         </div>
         {% endfor %}
         {% else %}
@@ -482,6 +777,31 @@
     <a href="/" class="link">返回首页</a>
 </div>
 
+<div class="resume-apply-modal" id="resumeApplyModal" aria-hidden="true">
+    <div class="resume-apply-dialog" role="dialog" aria-modal="true" aria-labelledby="resumeApplyTitle">
+        <div class="resume-apply-head">
+            <div>
+                <h3 id="resumeApplyTitle">投递 PDF 简历</h3>
+                <p id="resumeApplyTarget">请选择公司后上传 PDF 简历。</p>
+            </div>
+            <button type="button" class="modal-close-btn" id="resumeApplyClose" aria-label="关闭">×</button>
+        </div>
+
+        <label class="resume-dropzone" id="resumeApplyDropzone">
+            <strong id="resumeApplyFileName">拖入 PDF 简历</strong>
+            <span>仅支持 .pdf 文件，确认投递后会进入学校审核流程。</span>
+            <input id="resumeApplyFileInput" type="file" accept=".pdf">
+        </label>
+
+        <p class="resume-apply-status" id="resumeApplyStatus"></p>
+
+        <div class="resume-apply-actions">
+            <button type="button" class="apply-cancel-btn" id="resumeApplyCancel">取消</button>
+            <button type="button" class="apply-confirm-btn" id="resumeApplyConfirm">确认投递</button>
+        </div>
+    </div>
+</div>
+
 <script>
     function escapeHtml(value) {
         return String(value ?? "")
@@ -490,6 +810,116 @@
             .replaceAll(">", "&gt;")
             .replaceAll('"', "&quot;")
             .replaceAll("'", "&#039;");
+    }
+
+    const resumeApplyModal = document.getElementById("resumeApplyModal");
+    const resumeApplyTarget = document.getElementById("resumeApplyTarget");
+    const resumeApplyDropzone = document.getElementById("resumeApplyDropzone");
+    const resumeApplyFileInput = document.getElementById("resumeApplyFileInput");
+    const resumeApplyFileName = document.getElementById("resumeApplyFileName");
+    const resumeApplyStatus = document.getElementById("resumeApplyStatus");
+    const resumeApplyConfirm = document.getElementById("resumeApplyConfirm");
+    const resumeApplyClose = document.getElementById("resumeApplyClose");
+    const resumeApplyCancel = document.getElementById("resumeApplyCancel");
+    let selectedApplyCompany = null;
+    let selectedResumeFile = null;
+
+    function renderInlineValues(items, fallback) {
+        const values = Array.isArray(items) ? items.filter(Boolean) : [];
+        return values.length ? values.map(escapeHtml).join("、") : fallback;
+    }
+
+    function setApplyFile(file) {
+        selectedResumeFile = file || null;
+        if (selectedResumeFile) {
+            resumeApplyFileName.textContent = selectedResumeFile.name;
+            resumeApplyDropzone.classList.add("has-file");
+            resumeApplyStatus.textContent = "";
+            return;
+        }
+        resumeApplyFileName.textContent = "拖入 PDF 简历";
+        resumeApplyDropzone.classList.remove("has-file");
+        resumeApplyFileInput.value = "";
+    }
+
+    function closeApplyModal() {
+        resumeApplyModal.classList.remove("show");
+        resumeApplyModal.setAttribute("aria-hidden", "true");
+        selectedApplyCompany = null;
+        setApplyFile(null);
+        resumeApplyStatus.textContent = "";
+        resumeApplyConfirm.disabled = false;
+    }
+
+    function showCompanyMessage(recordId, message, type = "success") {
+        const node = document.getElementById("company-message-" + recordId);
+        if (!node) {
+            return;
+        }
+        node.className = `company-message ${type}`;
+        node.textContent = message;
+    }
+
+    function openApplyModal(btn) {
+        selectedApplyCompany = {
+            recordId: btn.dataset.recordId,
+            companyName: btn.dataset.companyName,
+            jobName: btn.dataset.jobName
+        };
+        resumeApplyTarget.textContent = `${selectedApplyCompany.companyName} · ${selectedApplyCompany.jobName}`;
+        setApplyFile(null);
+        resumeApplyStatus.textContent = "";
+        resumeApplyModal.classList.add("show");
+        resumeApplyModal.setAttribute("aria-hidden", "false");
+    }
+
+    function renderCompanyMatches(box, companies, warning) {
+        if (!companies.length) {
+            box.innerHTML = `
+                <h3 class="gap-detail-title">TOP5 公司双向匹配</h3>
+                <p class="empty-tip">${escapeHtml(warning || "数据库中暂未筛选到该岗位对应的公司。")}</p>
+            `;
+            return;
+        }
+
+        const cards = companies.map((company, index) => `
+            <article class="company-card">
+                <div>
+                    <h4>TOP ${index + 1}. ${escapeHtml(company.company_name || "未知公司")}</h4>
+                    <p><strong>岗位：</strong>${escapeHtml(company.job_name || "未知岗位")}</p>
+                    <p><strong>匹配说明：</strong>${escapeHtml(company.recommend_reason || "系统已完成学生适岗与岗位适生双向筛选。")}</p>
+                    <p><strong>已匹配技能：</strong>${renderInlineValues(company.matched_skills, "暂无明显匹配技能")}</p>
+                    <p><strong>待补齐技能：</strong>${renderInlineValues(company.missing_skills, "暂无明显短板")}</p>
+                    <div class="company-meta">
+                        <span>${escapeHtml(company.hiring_city || "城市未填写")}</span>
+                        <span>${escapeHtml(company.salary_range || "薪资未填写")}</span>
+                        <span>${escapeHtml(company.education_requirement || "学历要求未填写")}</span>
+                    </div>
+                </div>
+                <div class="company-score-panel">
+                    <strong>${escapeHtml(company.match_score ?? 0)}%</strong>
+                    <small>双向综合分</small>
+                    <small>适岗 ${escapeHtml(company.student_to_job_score ?? 0)} / 适生 ${escapeHtml(company.job_to_student_score ?? 0)}</small>
+                    <button
+                        type="button"
+                        class="apply-company-btn"
+                        data-record-id="${escapeHtml(company.job_record_id)}"
+                        data-company-name="${escapeHtml(company.company_name || "")}"
+                        data-job-name="${escapeHtml(company.job_name || "")}"
+                        onclick="openApplyModal(this)"
+                    >
+                        投递简历
+                    </button>
+                </div>
+                <p class="company-message" id="company-message-${escapeHtml(company.job_record_id)}"></p>
+            </article>
+        `).join("");
+
+        box.innerHTML = `
+            <h3 class="gap-detail-title">TOP5 公司双向匹配</h3>
+            <p class="path-summary">系统已按数据库岗位记录完成公司级双向筛选：先匹配岗位方向，再计算学生适岗分与岗位适生分。</p>
+            <div class="company-list">${cards}</div>
+        `;
     }
 
     function togglePathDetail(index, btn) {
@@ -592,6 +1022,138 @@
             btn.disabled = false;
         }
     }
+
+    function toggleCompanyDetail(index, btn) {
+        const box = document.getElementById("company-detail-" + index);
+        if (!box) {
+            return;
+        }
+        const isShow = box.classList.toggle("show");
+        if (btn) {
+            btn.textContent = isShow ? "收起TOP5公司" : "查看TOP5公司";
+        }
+        if (isShow) {
+            box.scrollIntoView({behavior: "smooth", block: "nearest"});
+        }
+    }
+
+    async function loadOrToggleCompanies(index, btn) {
+        if (btn.dataset.loaded === "true") {
+            toggleCompanyDetail(index, btn);
+            return;
+        }
+
+        const box = document.getElementById("company-detail-" + index);
+        if (!box) {
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "正在筛选公司...";
+        box.classList.add("show");
+        box.innerHTML = `
+            <h3 class="gap-detail-title">TOP5 公司双向匹配</h3>
+            <p class="empty-tip">正在按岗位方向、学生适岗分和岗位适生分筛选数据库公司...</p>
+        `;
+
+        try {
+            const response = await fetch(`/job/match/companies?job_name=${encodeURIComponent(btn.dataset.jobName || "")}`);
+            const data = await response.json();
+            if (!data.ok) {
+                throw new Error(data.error || "TOP5 公司筛选失败");
+            }
+            renderCompanyMatches(box, data.companies || [], data.warning || "");
+            btn.dataset.loaded = "true";
+            btn.textContent = "收起TOP5公司";
+            box.scrollIntoView({behavior: "smooth", block: "nearest"});
+        } catch (error) {
+            box.innerHTML = `
+                <h3 class="gap-detail-title">TOP5 公司双向匹配</h3>
+                <p class="empty-tip">${escapeHtml(error.message || "TOP5 公司筛选失败，请稍后重试。")}</p>
+            `;
+            btn.textContent = "重新查看TOP5公司";
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    ["dragenter", "dragover"].forEach((eventName) => {
+        resumeApplyDropzone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            resumeApplyDropzone.classList.add("dragging");
+        });
+    });
+
+    ["dragleave", "drop"].forEach((eventName) => {
+        resumeApplyDropzone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            resumeApplyDropzone.classList.remove("dragging");
+        });
+    });
+
+    resumeApplyDropzone.addEventListener("drop", (event) => {
+        const file = event.dataTransfer.files[0];
+        if (file) {
+            setApplyFile(file);
+        }
+    });
+
+    resumeApplyFileInput.addEventListener("change", () => {
+        setApplyFile(resumeApplyFileInput.files[0]);
+    });
+
+    resumeApplyClose.addEventListener("click", closeApplyModal);
+    resumeApplyCancel.addEventListener("click", closeApplyModal);
+    resumeApplyModal.addEventListener("click", (event) => {
+        if (event.target === resumeApplyModal) {
+            closeApplyModal();
+        }
+    });
+
+    resumeApplyConfirm.addEventListener("click", async () => {
+        if (!selectedApplyCompany) {
+            resumeApplyStatus.textContent = "请先选择要投递的公司。";
+            return;
+        }
+        if (!selectedResumeFile) {
+            resumeApplyStatus.textContent = "请先拖入 PDF 简历。";
+            return;
+        }
+        if (!selectedResumeFile.name.toLowerCase().endsWith(".pdf")) {
+            resumeApplyStatus.textContent = "当前投递入口仅支持 PDF 简历。";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("job_record_id", selectedApplyCompany.recordId);
+        formData.append("company_name", selectedApplyCompany.companyName);
+        formData.append("job_name", selectedApplyCompany.jobName);
+        formData.append("resume_file", selectedResumeFile);
+
+        resumeApplyConfirm.disabled = true;
+        resumeApplyStatus.textContent = "正在解析 PDF 并写入投递记录...";
+
+        try {
+            const response = await fetch("/job/match/company/apply", {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+            if (!data.ok) {
+                const message = (data.errors || ["投递失败，请稍后重试。"])[0];
+                throw new Error(message);
+            }
+            showCompanyMessage(selectedApplyCompany.recordId, data.message || "投递成功。", "success");
+            closeApplyModal();
+        } catch (error) {
+            resumeApplyStatus.textContent = error.message || "投递失败，请稍后重试。";
+            if (selectedApplyCompany) {
+                showCompanyMessage(selectedApplyCompany.recordId, resumeApplyStatus.textContent, "error");
+            }
+        } finally {
+            resumeApplyConfirm.disabled = false;
+        }
+    });
 
     const refineButton = document.getElementById("refine-button");
     if (refineButton && !refineButton.disabled) {
