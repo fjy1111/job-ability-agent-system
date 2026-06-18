@@ -4615,3 +4615,642 @@ body {
         font-size: 20px;
     }
 }
+
+/* =========================
+   三方数据协同
+========================= */
+
+.auth-field-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f3a5f;
+}
+
+.auth-role-options {
+    display: grid;
+    gap: 10px;
+}
+
+.auth-role-option {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 4px 10px;
+    align-items: center;
+    min-height: 58px;
+    padding: 10px 12px;
+    border: 1px solid #d9e2ef;
+    border-radius: 8px;
+    background: #fbfdff;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.auth-role-option input {
+    grid-row: 1 / span 2;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #2563eb;
+}
+
+.auth-role-option strong {
+    color: #1f3a5f;
+    line-height: 1.2;
+}
+
+.auth-role-option small {
+    color: #667085;
+    line-height: 1.45;
+}
+
+.auth-role-option.active {
+    border-color: #2563eb;
+    background: #eff6ff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.tri-party-body {
+    min-height: 100vh;
+    background: #f6f7f9;
+    color: #172033;
+}
+
+.tri-party-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    min-height: 86px;
+    display: grid;
+    grid-template-columns: minmax(220px, auto) minmax(0, 1fr) auto;
+    gap: 22px;
+    align-items: center;
+    padding: 0 42px;
+    border-bottom: 1px solid #e1e7ef;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+.tri-party-brand,
+.tri-party-nav,
+.tri-party-account,
+.tri-party-role-switch,
+.tri-party-primary-btn {
+    display: flex;
+    align-items: center;
+}
+
+.tri-party-brand {
+    gap: 13px;
+    color: #111827;
+    text-decoration: none;
+}
+
+.tri-party-brand-mark {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #0f766e;
+    color: #ffffff;
+    flex: none;
+}
+
+.tri-party-brand-mark svg {
+    width: 25px;
+    height: 25px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.tri-party-brand strong {
+    display: block;
+    color: #111827;
+    font-size: 21px;
+    line-height: 1.15;
+}
+
+.tri-party-brand small {
+    display: block;
+    margin-top: 3px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.tri-party-nav {
+    justify-content: center;
+    gap: 24px;
+    min-width: 0;
+}
+
+.tri-party-nav a,
+.tri-party-account a {
+    color: #475569;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.tri-party-nav a.active {
+    color: #0f766e;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0f766e;
+}
+
+.tri-party-account {
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.tri-party-account span {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #ecfdf5;
+    color: #047857;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.tri-party-account strong {
+    color: #111827;
+    font-size: 15px;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tri-party-workspace {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 34px 24px 60px;
+    box-sizing: border-box;
+}
+
+.tri-party-summary,
+.tri-party-panel {
+    border: 1px solid #e1e7ef;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+    box-sizing: border-box;
+}
+
+.tri-party-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 20px;
+    align-items: center;
+    padding: 24px;
+}
+
+.tri-party-summary p,
+.tri-party-panel-head p {
+    margin: 0 0 8px;
+    color: #0f766e;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.tri-party-summary h1,
+.tri-party-panel-head h2 {
+    margin: 0;
+    color: #111827;
+    letter-spacing: 0;
+}
+
+.tri-party-summary h1 {
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+.tri-party-summary span {
+    display: block;
+    margin-top: 10px;
+    color: #475569;
+    line-height: 1.7;
+}
+
+.tri-party-role-switch {
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.tri-party-role-switch label {
+    color: #475569;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.tri-party-role-switch select {
+    height: 38px;
+    min-width: 110px;
+    border: 1px solid #d6dbe4;
+    border-radius: 8px;
+    padding: 0 10px;
+    background: #ffffff;
+    color: #111827;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    font-weight: 800;
+}
+
+.tri-party-role-switch button,
+.tri-party-primary-btn {
+    min-height: 40px;
+    gap: 8px;
+    justify-content: center;
+    border: 0;
+    border-radius: 8px;
+    padding: 0 14px;
+    background: #0f766e;
+    color: #ffffff;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.tri-party-role-switch button svg,
+.tri-party-primary-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex: none;
+}
+
+.tri-party-role-switch button:hover,
+.tri-party-primary-btn:hover {
+    background: #115e59;
+}
+
+.tri-party-alert {
+    margin-top: 18px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    line-height: 1.7;
+    font-weight: 800;
+}
+
+.tri-party-alert.success {
+    border: 1px solid #bbf7d0;
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.tri-party-alert.error {
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.tri-party-flow {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0;
+}
+
+.tri-party-flow article {
+    min-height: 84px;
+    padding: 15px;
+    border: 1px solid #e1e7ef;
+    border-radius: 8px;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+.tri-party-flow strong {
+    display: block;
+    color: #2563eb;
+    font-size: 28px;
+    line-height: 1;
+}
+
+.tri-party-flow span {
+    display: block;
+    margin-top: 9px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.tri-party-grid {
+    display: grid;
+    grid-template-columns: 390px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.tri-party-panel {
+    padding: 22px;
+}
+
+.tri-party-panel-head {
+    margin-bottom: 18px;
+}
+
+.tri-party-panel-head h2 {
+    font-size: 23px;
+    line-height: 1.25;
+}
+
+.tri-party-form,
+.tri-party-review-form {
+    display: grid;
+    gap: 14px;
+}
+
+.tri-party-form label,
+.tri-party-review-form label {
+    display: grid;
+    gap: 7px;
+}
+
+.tri-party-form label span,
+.tri-party-review-form label span {
+    color: #263241;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.tri-party-form input,
+.tri-party-form textarea,
+.tri-party-review-form textarea {
+    width: 100%;
+    border: 1px solid #d6dbe4;
+    border-radius: 8px;
+    padding: 11px 12px;
+    background: #ffffff;
+    color: #111827;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    box-sizing: border-box;
+}
+
+.tri-party-form input:focus,
+.tri-party-form textarea:focus,
+.tri-party-review-form textarea:focus {
+    outline: none;
+    border-color: #0f766e;
+    box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+}
+
+.tri-party-list {
+    display: grid;
+    gap: 14px;
+}
+
+.tri-party-record {
+    padding: 16px;
+    border: 1px solid #e5eaf2;
+    border-radius: 8px;
+    background: #fbfcfd;
+}
+
+.tri-party-record header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: start;
+    margin-bottom: 14px;
+}
+
+.tri-party-record h3 {
+    margin: 4px 0 0;
+    color: #111827;
+    font-size: 18px;
+    line-height: 1.35;
+}
+
+.tri-party-record-time {
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.tri-party-status {
+    min-height: 30px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.status-school_review {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.status-warning_to_student {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.status-enterprise_review {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.status-hired {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-rejected {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.tri-party-meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0 0 14px;
+}
+
+.tri-party-meta div {
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid #e8edf5;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.tri-party-meta dt {
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.tri-party-meta dd {
+    margin: 5px 0 0;
+    color: #111827;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.tri-party-resume-preview {
+    margin-bottom: 14px;
+    border: 1px solid #e8edf5;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.tri-party-resume-preview summary {
+    padding: 11px 12px;
+    color: #174ea6;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.tri-party-resume-preview pre {
+    max-height: 260px;
+    margin: 0;
+    padding: 14px;
+    overflow: auto;
+    border-top: 1px solid #e8edf5;
+    color: #334155;
+    white-space: pre-wrap;
+    line-height: 1.7;
+    font-family: Consolas, "Microsoft YaHei", monospace;
+}
+
+.tri-party-radio-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tri-party-radio-row label {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    border: 1px solid #dbe4ef;
+    border-radius: 8px;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.tri-party-radio-row input {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    accent-color: #0f766e;
+}
+
+.tri-party-note,
+.tri-party-feedback-grid > div {
+    padding: 13px;
+    border: 1px solid #e8edf5;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.tri-party-note {
+    margin-top: 12px;
+}
+
+.tri-party-note.warning {
+    border-color: #fed7aa;
+    background: #fff7ed;
+}
+
+.tri-party-note strong,
+.tri-party-feedback-grid strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #174ea6;
+}
+
+.tri-party-note.warning strong {
+    color: #c2410c;
+}
+
+.tri-party-note p,
+.tri-party-feedback-grid p {
+    margin: 0;
+    color: #475569;
+    line-height: 1.75;
+}
+
+.tri-party-feedback-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.tri-party-empty {
+    margin: 0;
+    padding: 30px 12px;
+    color: #64748b;
+    text-align: center;
+    line-height: 1.8;
+}
+
+@media screen and (max-width: 1060px) {
+    .tri-party-topbar {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        align-items: start;
+        padding: 18px 24px;
+    }
+
+    .tri-party-nav {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
+
+    .tri-party-account {
+        justify-content: flex-start;
+    }
+
+    .tri-party-grid,
+    .tri-party-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .tri-party-role-switch {
+        justify-content: flex-start;
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .tri-party-workspace {
+        padding: 22px 14px 42px;
+    }
+
+    .tri-party-flow,
+    .tri-party-meta,
+    .tri-party-feedback-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tri-party-record header {
+        grid-template-columns: 1fr;
+    }
+
+    .tri-party-role-switch {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .tri-party-role-switch button {
+        width: 100%;
+    }
+}

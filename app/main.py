@@ -16,7 +16,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from starlette.middleware.sessions import SessionMiddleware
 
-from sqlalchemy import Boolean, Float, ForeignKey, create_engine, String, Text, Integer, DateTime, select
+from sqlalchemy import Boolean, Float, ForeignKey, create_engine, String, Text, Integer, DateTime, or_, select
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -936,6 +936,111 @@ class ExtractionLogRecord(Base):
     )
 
 
+class TriPartyResumeApplicationRecord(Base):
+    """
+    学生-学校-企业三方协同投递记录。
+    简历先进入学校审核，未发现造假后再流转到企业评估。
+    """
+    __tablename__ = "triparty_resume_applications"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+    student_user_id: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+        index=True
+    )
+    student_username: Mapped[str] = mapped_column(
+        String(50),
+        default=""
+    )
+    student_name: Mapped[str] = mapped_column(
+        String(100),
+        default=""
+    )
+    major: Mapped[str] = mapped_column(
+        String(120),
+        default=""
+    )
+    target_company: Mapped[str] = mapped_column(
+        String(160),
+        default=""
+    )
+    target_job: Mapped[str] = mapped_column(
+        String(160),
+        default=""
+    )
+    resume_text: Mapped[str] = mapped_column(
+        Text,
+        nullable=False
+    )
+    resume_hash: Mapped[str] = mapped_column(
+        String(64),
+        default="",
+        index=True
+    )
+    status: Mapped[str] = mapped_column(
+        String(40),
+        default="school_review",
+        nullable=False,
+        index=True
+    )
+    school_reviewer: Mapped[str] = mapped_column(
+        String(100),
+        default=""
+    )
+    school_review_result: Mapped[str] = mapped_column(
+        String(40),
+        default=""
+    )
+    school_feedback: Mapped[str] = mapped_column(
+        Text,
+        default=""
+    )
+    warning_message: Mapped[str] = mapped_column(
+        Text,
+        default=""
+    )
+    forwarded_at: Mapped[datetime | None] = mapped_column(
+        DateTime,
+        nullable=True
+    )
+    enterprise_reviewer: Mapped[str] = mapped_column(
+        String(100),
+        default=""
+    )
+    enterprise_decision: Mapped[str] = mapped_column(
+        String(40),
+        default=""
+    )
+    enterprise_advice_to_student: Mapped[str] = mapped_column(
+        Text,
+        default=""
+    )
+    enterprise_advice_to_school: Mapped[str] = mapped_column(
+        Text,
+        default=""
+    )
+    decided_at: Mapped[datetime | None] = mapped_column(
+        DateTime,
+        nullable=True
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.now,
+        nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.now,
+        onupdate=datetime.now,
+        nullable=False
+    )
+
+
 # =========================================================
 # 数据库初始化
 # =========================================================
@@ -1396,9 +1501,74 @@ app.mount(
 templates = Jinja2Templates(directory=str(TEMPLATE_DIR))
 
 
+TRIPARTY_ROLE_OPTIONS = (
+    {
+        "value": "student",
+        "label": "学生",
+        "description": "投递简历，接收学校审核与企业反馈"
+    },
+    {
+        "value": "school",
+        "label": "学校",
+        "description": "审核简历真实性，决定是否转交企业"
+    },
+    {
+        "value": "enterprise",
+        "label": "企业",
+        "description": "评估候选人，给出录用结论和改进建议"
+    },
+)
+TRIPARTY_ROLE_VALUES = {item["value"] for item in TRIPARTY_ROLE_OPTIONS}
+TRIPARTY_ROLE_LABELS = {
+    item["value"]: item["label"]
+    for item in TRIPARTY_ROLE_OPTIONS
+}
+TRIPARTY_STATUS_LABELS = {
+    "school_review": "学校审核中",
+    "warning_to_student": "学校退回预警",
+    "enterprise_review": "企业评估中",
+    "hired": "企业已录用",
+    "rejected": "企业已拒录",
+}
+TRIPARTY_DECISION_LABELS = {
+    "hire": "录用",
+    "reject": "拒录",
+}
+
+
 # =========================================================
 # 登录状态工具函数
 # =========================================================
+
+def normalize_triparty_role(role: str | None) -> str:
+    role = (role or "").strip()
+    if role in TRIPARTY_ROLE_VALUES:
+        return role
+    return "student"
+
+
+def get_session_role(request: Request) -> str:
+    return normalize_triparty_role(request.session.get("user_role"))
+
+
+def get_session_role_label(request: Request) -> str:
+    return TRIPARTY_ROLE_LABELS[get_session_role(request)]
+
+
+def build_login_context(
+    title: str = "用户登录",
+    error: str = "",
+    message: str = "",
+    selected_role: str | None = None,
+) -> dict:
+    return {
+        "title": title,
+        "error": error,
+        "message": message,
+        "role_options": TRIPARTY_ROLE_OPTIONS,
+        "selected_role": normalize_triparty_role(selected_role),
+    }
+
 
 def get_login_redirect(request: Request):
     """
@@ -1415,6 +1585,111 @@ def get_login_redirect(request: Request):
         )
 
     return None
+
+
+def build_collaboration_redirect(
+    message: str = "",
+    error: str = "",
+) -> RedirectResponse:
+    params = {}
+    if message:
+        params["message"] = message
+    if error:
+        params["error"] = error
+    query = f"?{urlencode(params)}" if params else ""
+    return RedirectResponse(
+        url=f"/collaboration{query}",
+        status_code=303
+    )
+
+
+def ensure_triparty_role(
+    request: Request,
+    expected_role: str,
+) -> RedirectResponse | None:
+    current_role = get_session_role(request)
+    if current_role == expected_role:
+        return None
+
+    expected_label = TRIPARTY_ROLE_LABELS.get(expected_role, expected_role)
+    return build_collaboration_redirect(
+        error=f"请先以{expected_label}身份登录或切换身份后再操作。"
+    )
+
+
+def build_collaboration_context(
+    request: Request,
+    db: Session,
+    message: str = "",
+    error: str = "",
+    input_data: dict | None = None,
+) -> dict:
+    role = get_session_role(request)
+    user_id = request.session.get("user_id")
+
+    if role == "student":
+        applications = (
+            db.query(TriPartyResumeApplicationRecord)
+            .filter(TriPartyResumeApplicationRecord.student_user_id == user_id)
+            .order_by(
+                TriPartyResumeApplicationRecord.created_at.desc(),
+                TriPartyResumeApplicationRecord.id.desc()
+            )
+            .all()
+        )
+    elif role == "school":
+        applications = (
+            db.query(TriPartyResumeApplicationRecord)
+            .order_by(
+                (TriPartyResumeApplicationRecord.status == "school_review").desc(),
+                TriPartyResumeApplicationRecord.created_at.desc(),
+                TriPartyResumeApplicationRecord.id.desc()
+            )
+            .all()
+        )
+    else:
+        applications = (
+            db.query(TriPartyResumeApplicationRecord)
+            .filter(
+                TriPartyResumeApplicationRecord.status.in_(
+                    ["enterprise_review", "hired", "rejected"]
+                )
+            )
+            .order_by(
+                (TriPartyResumeApplicationRecord.status == "enterprise_review").desc(),
+                TriPartyResumeApplicationRecord.forwarded_at.desc(),
+                TriPartyResumeApplicationRecord.created_at.desc(),
+                TriPartyResumeApplicationRecord.id.desc()
+            )
+            .all()
+        )
+
+    all_records = db.query(TriPartyResumeApplicationRecord).all()
+    counts = {
+        "school_review": 0,
+        "warning_to_student": 0,
+        "enterprise_review": 0,
+        "hired": 0,
+        "rejected": 0,
+    }
+    for record in all_records:
+        if record.status in counts:
+            counts[record.status] += 1
+
+    return {
+        "title": "三方数据协同工作台",
+        "username": request.session.get("username"),
+        "role": role,
+        "role_label": TRIPARTY_ROLE_LABELS[role],
+        "role_options": TRIPARTY_ROLE_OPTIONS,
+        "status_labels": TRIPARTY_STATUS_LABELS,
+        "decision_labels": TRIPARTY_DECISION_LABELS,
+        "applications": applications,
+        "counts": counts,
+        "message": message,
+        "error": error,
+        "input_data": input_data or {},
+    }
 
 
 # =========================================================
@@ -1767,6 +2042,232 @@ def get_job_matches_for_record(
         match_cached = False
 
     return attach_cached_gap_paths(student_record, job_matches), match_source, match_cached
+
+
+def normalize_search_text(value: str | None) -> str:
+    return re.sub(r"[\s\-_（）()【】\[\]·.,，、/|:：;；]+", "", str(value or "").lower())
+
+
+def extract_company_job_terms(job_name: str) -> list[str]:
+    text = str(job_name or "").strip()
+    terms: list[str] = []
+    for item in re.findall(r"[A-Za-z0-9+#.]+", text):
+        if len(item.strip()) >= 2:
+            terms.append(item.strip())
+
+    keyword_terms = [
+        "软件开发",
+        "后端",
+        "前端",
+        "云计算",
+        "数据库",
+        "数据分析",
+        "数据",
+        "算法",
+        "测试",
+        "运维",
+        "开发",
+        "工程师",
+        "实习",
+        "Java",
+        "Python",
+        "C++",
+        "AI",
+        "DevOps",
+        "SQL",
+        "MySQL",
+    ]
+    normalized = normalize_search_text(text)
+    for term in keyword_terms:
+        if normalize_search_text(term) in normalized:
+            terms.append(term)
+
+    return list(dict.fromkeys(term for term in terms if term))
+
+
+def company_job_title_score(target_job_name: str, candidate_job_name: str) -> int:
+    target_norm = normalize_search_text(target_job_name)
+    candidate_norm = normalize_search_text(candidate_job_name)
+    if not target_norm or not candidate_norm:
+        return 0
+    if target_norm == candidate_norm:
+        return 100
+    if target_norm in candidate_norm or candidate_norm in target_norm:
+        return 88
+
+    terms = extract_company_job_terms(target_job_name)
+    if not terms:
+        return 0
+
+    score = 0
+    for term in terms:
+        term_norm = normalize_search_text(term)
+        if not term_norm:
+            continue
+        if term_norm in candidate_norm:
+            if term_norm in {"工程师", "开发", "实习"}:
+                score += 8
+            else:
+                score += 18
+    return min(score, 82)
+
+
+def build_company_candidate_payload(record: JobKnowledgeRecord) -> dict:
+    return {
+        "id": record.id,
+        "job_id": record.id,
+        "job_name": record.job_name,
+        "company_name": record.company_name,
+        "hiring_city": record.hiring_city,
+        "educational_requirements": record.educational_requirements,
+        "required_skills_json": record.required_skills_json,
+        "related_projects_json": record.related_projects_json,
+        "recommended_courses_json": record.recommended_courses_json,
+        "recommended_certificates_json": record.recommended_certificates_json,
+        "salary_range": record.salary_range,
+    }
+
+
+def get_company_candidate_records(
+    db: Session,
+    target_job_name: str,
+    max_candidates: int = 120,
+) -> list[JobKnowledgeRecord]:
+    base_query = (
+        db.query(JobKnowledgeRecord)
+        .filter(JobKnowledgeRecord.company_name != "")
+    )
+    target_job_name = str(target_job_name or "").strip()
+    records: list[JobKnowledgeRecord] = []
+    seen_ids: set[int] = set()
+
+    if target_job_name:
+        direct_matches = (
+            base_query
+            .filter(JobKnowledgeRecord.job_name.like(f"%{target_job_name}%"))
+            .order_by(JobKnowledgeRecord.id.asc())
+            .limit(max_candidates)
+            .all()
+        )
+        for record in direct_matches:
+            records.append(record)
+            seen_ids.add(record.id)
+
+        if len(records) >= 5:
+            return records[:max_candidates]
+
+        term_filters = []
+        for term in extract_company_job_terms(target_job_name):
+            if term == "工程师":
+                continue
+            term_filters.append(JobKnowledgeRecord.job_name.like(f"%{term}%"))
+        if term_filters and len(records) < max_candidates:
+            term_matches = (
+                base_query
+                .filter(or_(*term_filters))
+                .order_by(JobKnowledgeRecord.id.asc())
+                .limit(max_candidates)
+                .all()
+            )
+            for record in term_matches:
+                if record.id not in seen_ids:
+                    records.append(record)
+                    seen_ids.add(record.id)
+                if len(records) >= max_candidates:
+                    break
+
+    if not records:
+        records = (
+            base_query
+            .order_by(JobKnowledgeRecord.id.asc())
+            .limit(max_candidates)
+            .all()
+        )
+
+    return records[:max_candidates]
+
+
+def build_company_growth_score(base_match: dict, title_score: int) -> int:
+    matched_count = len(base_match.get("matched_skills") or [])
+    missing_count = len(base_match.get("missing_skills") or base_match.get("skill_gaps") or [])
+    skill_score = min(45, matched_count * 8)
+    gap_score = max(0, 35 - missing_count * 5)
+    title_component = round(title_score * 0.2)
+    return max(35, min(100, skill_score + gap_score + title_component))
+
+
+def build_top_company_matches_for_job(
+    db: Session,
+    student_record: DiagnosisRecord,
+    target_job_name: str,
+    top_n: int = 5,
+) -> list[dict]:
+    student_data = build_student_data(student_record)
+    assessment = build_match_assessment(student_record)
+    candidate_records = get_company_candidate_records(db, target_job_name)
+    if not candidate_records:
+        return []
+
+    best_by_company: dict[str, dict] = {}
+    for record in candidate_records:
+        payload = build_company_candidate_payload(record)
+        base_match = match_profile_to_job_local(
+            student_data,
+            payload,
+            assessment=assessment,
+        )
+        title_score = company_job_title_score(target_job_name, record.job_name)
+        if target_job_name and title_score <= 0 and len(candidate_records) > top_n:
+            continue
+
+        student_to_job_score = max(
+            0,
+            min(
+                100,
+                round(float(base_match.get("match_score") or 0) * 0.72 + title_score * 0.28),
+            ),
+        )
+        job_to_student_score = build_company_growth_score(base_match, title_score)
+        final_score = max(
+            0,
+            min(
+                100,
+                round(student_to_job_score * 0.6 + job_to_student_score * 0.4),
+            ),
+        )
+        company_name = record.company_name.strip()
+        company_item = {
+            "job_record_id": record.id,
+            "company_name": company_name,
+            "job_name": record.job_name,
+            "hiring_city": record.hiring_city,
+            "salary_range": record.salary_range,
+            "education_requirement": record.educational_requirements,
+            "match_score": final_score,
+            "student_to_job_score": student_to_job_score,
+            "job_to_student_score": job_to_student_score,
+            "title_match_score": title_score,
+            "matched_skills": base_match.get("matched_skills") or [],
+            "missing_skills": (base_match.get("missing_skills") or base_match.get("skill_gaps") or [])[:8],
+            "recommend_reason": (
+                f"系统按岗位名相关度、学生适岗分和岗位适生分进行双向筛选。"
+                f"学生适岗分{student_to_job_score}，岗位适生分{job_to_student_score}。"
+            ),
+        }
+        existed = best_by_company.get(company_name)
+        if existed is None or company_item["match_score"] > existed["match_score"]:
+            best_by_company[company_name] = company_item
+
+    companies = sorted(
+        best_by_company.values(),
+        key=lambda item: (
+            item["match_score"],
+            item["student_to_job_score"],
+            item["job_to_student_score"],
+        ),
+        reverse=True,
+    )
+    return companies[:top_n]
 
 
 def ensure_gap_paths_for_job_matches(
@@ -2907,11 +3408,7 @@ def register_submit(
     return templates.TemplateResponse(
         request,
         "login.html",
-        {
-            "title": "用户登录",
-            "error": "",
-            "message": "注册成功，请登录"
-        }
+        build_login_context(message="注册成功，请登录")
     )
 
 
@@ -2923,18 +3420,14 @@ def login_page(request: Request):
 
     if request.session.get("user_id"):
         return RedirectResponse(
-            url="/",
+            url="/collaboration",
             status_code=303
         )
 
     return templates.TemplateResponse(
         request,
         "login.html",
-        {
-            "title": "用户登录",
-            "error": "",
-            "message": ""
-        }
+        build_login_context()
     )
 
 
@@ -2943,6 +3436,7 @@ def login_submit(
     request: Request,
     username: str = Form(...),
     password: str = Form(...),
+    user_role: str = Form("student"),
     db: Session = Depends(get_db)
 ):
     """
@@ -2951,16 +3445,16 @@ def login_submit(
 
     username = username.strip()
     password = password.strip()
+    selected_role = normalize_triparty_role(user_role)
 
     if not username or not password:
         return templates.TemplateResponse(
             request,
             "login.html",
-            {
-                "title": "用户登录",
-                "error": "用户名和密码不能为空",
-                "message": ""
-            }
+            build_login_context(
+                error="用户名和密码不能为空",
+                selected_role=selected_role,
+            )
         )
 
     user = db.scalar(
@@ -2971,30 +3465,30 @@ def login_submit(
         return templates.TemplateResponse(
             request,
             "login.html",
-            {
-                "title": "用户登录",
-                "error": "用户不存在",
-                "message": ""
-            }
+            build_login_context(
+                error="用户不存在",
+                selected_role=selected_role,
+            )
         )
 
     if user.password != password:
         return templates.TemplateResponse(
             request,
             "login.html",
-            {
-                "title": "用户登录",
-                "error": "密码错误",
-                "message": ""
-            }
+            build_login_context(
+                error="密码错误",
+                selected_role=selected_role,
+            )
         )
 
     # 登录成功：保存登录状态
     request.session["user_id"] = user.id
     request.session["username"] = user.username
+    request.session["user_role"] = selected_role
+    request.session["role_label"] = TRIPARTY_ROLE_LABELS[selected_role]
 
     return RedirectResponse(
-        url="/",
+        url="/collaboration",
         status_code=303
     )
 
@@ -3032,8 +3526,241 @@ def index(request: Request):
         {
             "title": "岗位能力达成学生成长诊断与精准就业智能体系统",
             "username": request.session.get("username"),
+            "role_label": get_session_role_label(request),
             "message": ""
         }
+    )
+
+
+@app.get("/collaboration")
+def triparty_collaboration_dashboard(
+    request: Request,
+    message: str = "",
+    error: str = "",
+    db: Session = Depends(get_db)
+):
+    """
+    学生-学校-企业三方数据协同工作台。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    return templates.TemplateResponse(
+        request,
+        "triparty_collaboration.html",
+        build_collaboration_context(
+            request,
+            db,
+            message=message,
+            error=error,
+        )
+    )
+
+
+@app.post("/collaboration/role")
+def triparty_role_switch(
+    request: Request,
+    user_role: str = Form("student"),
+):
+    """
+    演示场景下允许已登录用户快速切换三方身份。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    selected_role = normalize_triparty_role(user_role)
+    request.session["user_role"] = selected_role
+    request.session["role_label"] = TRIPARTY_ROLE_LABELS[selected_role]
+
+    return build_collaboration_redirect(
+        message=f"已切换为{TRIPARTY_ROLE_LABELS[selected_role]}身份。"
+    )
+
+
+@app.post("/collaboration/student/submit")
+def triparty_student_submit(
+    request: Request,
+    student_name: str = Form(...),
+    major: str = Form(""),
+    target_company: str = Form(...),
+    target_job: str = Form(...),
+    resume_text: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    """
+    学生投递简历：数据先写入数据库，状态进入学校审核。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    role_error = ensure_triparty_role(request, "student")
+    if role_error:
+        return role_error
+
+    student_name = student_name.strip()
+    major = major.strip()
+    target_company = target_company.strip()
+    target_job = target_job.strip()
+    resume_text = resume_text.strip()
+
+    input_data = {
+        "student_name": student_name,
+        "major": major,
+        "target_company": target_company,
+        "target_job": target_job,
+        "resume_text": resume_text,
+    }
+    if not student_name or not target_company or not target_job or not resume_text:
+        return templates.TemplateResponse(
+            request,
+            "triparty_collaboration.html",
+            build_collaboration_context(
+                request,
+                db,
+                error="请完整填写姓名、目标企业、目标岗位和简历内容。",
+                input_data=input_data,
+            )
+        )
+
+    record = TriPartyResumeApplicationRecord(
+        student_user_id=request.session.get("user_id"),
+        student_username=request.session.get("username", ""),
+        student_name=student_name,
+        major=major,
+        target_company=target_company,
+        target_job=target_job,
+        resume_text=resume_text,
+        resume_hash=hashlib.sha256(resume_text.encode("utf-8")).hexdigest(),
+        status="school_review",
+    )
+
+    db.add(record)
+    db.commit()
+
+    return build_collaboration_redirect(
+        message="简历已写入数据库，并送达学校端等待老师审核。"
+    )
+
+
+@app.post("/collaboration/school/{application_id}/review")
+def triparty_school_review(
+    application_id: int,
+    request: Request,
+    review_result: str = Form(...),
+    school_feedback: str = Form(""),
+    warning_message: str = Form(""),
+    db: Session = Depends(get_db)
+):
+    """
+    学校审核简历真实性：发现造假则预警学生，未发现造假则转企业。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    role_error = ensure_triparty_role(request, "school")
+    if role_error:
+        return role_error
+
+    record = db.get(TriPartyResumeApplicationRecord, application_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="协同记录不存在")
+
+    if record.status != "school_review":
+        return build_collaboration_redirect(
+            error="该简历已经完成学校审核，无需重复处理。"
+        )
+
+    review_result = review_result.strip()
+    school_feedback = school_feedback.strip()
+    warning_message = warning_message.strip()
+    record.school_reviewer = request.session.get("username", "")
+    record.school_feedback = school_feedback
+
+    if review_result == "fake":
+        record.status = "warning_to_student"
+        record.school_review_result = "fake"
+        record.warning_message = warning_message or school_feedback or "学校审核发现简历存在疑似造假内容，请学生核验并重新提交真实材料。"
+        record.forwarded_at = None
+        db.add(record)
+        db.commit()
+        return build_collaboration_redirect(
+            message="已通过数据库向学生发送简历造假预警。"
+        )
+
+    record.status = "enterprise_review"
+    record.school_review_result = "passed"
+    record.school_feedback = school_feedback or "学校已核验简历信息，未发现明显造假，已转交企业评估。"
+    record.warning_message = ""
+    record.forwarded_at = datetime.now()
+    db.add(record)
+    db.commit()
+
+    return build_collaboration_redirect(
+        message="学校审核通过，简历已通过数据库自动发送给企业。"
+    )
+
+
+@app.post("/collaboration/enterprise/{application_id}/decision")
+def triparty_enterprise_decision(
+    application_id: int,
+    request: Request,
+    decision: str = Form(...),
+    advice_to_student: str = Form(...),
+    advice_to_school: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    """
+    企业给出录用或拒录结果，并向学生和学校分别反馈优化建议。
+    """
+    redirect_response = get_login_redirect(request)
+
+    if redirect_response:
+        return redirect_response
+
+    role_error = ensure_triparty_role(request, "enterprise")
+    if role_error:
+        return role_error
+
+    record = db.get(TriPartyResumeApplicationRecord, application_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="协同记录不存在")
+
+    if record.status != "enterprise_review":
+        return build_collaboration_redirect(
+            error="该简历已经完成企业评估，无需重复处理。"
+        )
+
+    decision = decision.strip()
+    advice_to_student = advice_to_student.strip()
+    advice_to_school = advice_to_school.strip()
+
+    if decision not in TRIPARTY_DECISION_LABELS:
+        return build_collaboration_redirect(error="请选择录用或拒录。")
+
+    if not advice_to_student or not advice_to_school:
+        return build_collaboration_redirect(
+            error="企业提交录用或拒录时，必须同时给学生和学校填写优化建议。"
+        )
+
+    record.enterprise_reviewer = request.session.get("username", "")
+    record.enterprise_decision = decision
+    record.status = "hired" if decision == "hire" else "rejected"
+    record.enterprise_advice_to_student = advice_to_student
+    record.enterprise_advice_to_school = advice_to_school
+    record.decided_at = datetime.now()
+    db.add(record)
+    db.commit()
+
+    return build_collaboration_redirect(
+        message=f"企业已提交{TRIPARTY_DECISION_LABELS[decision]}结论，并同步给学生和学校优化建议。"
     )
 
 
@@ -4035,6 +4762,129 @@ def job_match(
             "export_error": request.query_params.get("export_error", ""),
         }
     )
+
+
+@app.get("/job/match/companies")
+def job_match_companies(
+    request: Request,
+    job_name: str,
+    db: Session = Depends(get_db)
+):
+    """
+    为 TOP5 岗位查询数据库中的 TOP5 公司。
+    使用与岗位精排一致的双向分数结构：学生适岗分 + 岗位适生分。
+    """
+    if not request.session.get("user_id"):
+        return {"ok": False, "error": "请先登录。"}
+
+    user_id = request.session.get("user_id")
+    student_record = (
+        db.query(DiagnosisRecord)
+        .filter(DiagnosisRecord.user_id == user_id)
+        .order_by(DiagnosisRecord.created_at.desc(), DiagnosisRecord.id.desc())
+        .first()
+    )
+    if student_record is None:
+        return {"ok": False, "error": "请先完成学生能力诊断，再查看岗位公司。"}
+
+    target_job_name = str(job_name or "").strip()
+    if not target_job_name:
+        return {"ok": False, "error": "岗位名称不能为空。"}
+
+    companies = build_top_company_matches_for_job(
+        db,
+        student_record,
+        target_job_name,
+        top_n=5,
+    )
+    return {
+        "ok": True,
+        "job_name": target_job_name,
+        "match_source": "database_bidirectional",
+        "companies": companies,
+        "warning": "" if companies else "数据库中暂未筛选到该岗位对应的公司，请先导入带公司字段的岗位数据。",
+    }
+
+
+@app.post("/job/match/company/apply")
+async def job_match_company_apply(
+    request: Request,
+    job_record_id: int = Form(...),
+    company_name: str = Form(...),
+    job_name: str = Form(...),
+    resume_file: UploadFile | None = File(None),
+    db: Session = Depends(get_db)
+):
+    """
+    从 TOP5 公司列表投递 PDF 简历。
+    投递记录进入学生-学校-企业三方协同表，由学校先审核真实性。
+    """
+    if not request.session.get("user_id"):
+        return {"ok": False, "errors": ["请先登录。"]}
+
+    if get_session_role(request) != "student":
+        return {"ok": False, "errors": ["请以学生身份登录后再投递简历。"]}
+
+    if resume_file is None or not resume_file.filename:
+        return {"ok": False, "errors": ["请先拖入 PDF 简历。"]}
+
+    if Path(resume_file.filename).suffix.lower() != ".pdf":
+        return {"ok": False, "errors": ["当前投递入口仅支持 PDF 简历。"]}
+
+    user_id = request.session.get("user_id")
+    student_record = (
+        db.query(DiagnosisRecord)
+        .filter(DiagnosisRecord.user_id == user_id)
+        .order_by(DiagnosisRecord.created_at.desc(), DiagnosisRecord.id.desc())
+        .first()
+    )
+    if student_record is None:
+        return {"ok": False, "errors": ["请先完成学生能力诊断，再投递简历。"]}
+
+    file_content = await resume_file.read()
+    resume_text, upload_warnings = extract_resume_text_from_upload(
+        resume_file.filename,
+        file_content,
+    )
+    if not resume_text.strip():
+        return {
+            "ok": False,
+            "errors": upload_warnings or ["PDF 简历未解析出有效文本，请更换文件后重试。"],
+        }
+
+    company_record = db.get(JobKnowledgeRecord, job_record_id)
+    final_company_name = (
+        (company_record.company_name if company_record else "")
+        or str(company_name or "").strip()
+    )
+    final_job_name = (
+        (company_record.job_name if company_record else "")
+        or str(job_name or "").strip()
+    )
+    if not final_company_name or not final_job_name:
+        return {"ok": False, "errors": ["公司或岗位信息缺失，请刷新页面后重试。"]}
+
+    application = TriPartyResumeApplicationRecord(
+        student_user_id=user_id,
+        student_username=request.session.get("username", ""),
+        student_name=student_record.name,
+        major=student_record.major,
+        target_company=final_company_name,
+        target_job=final_job_name,
+        resume_text=resume_text.strip(),
+        resume_hash=hashlib.sha256(resume_text.encode("utf-8")).hexdigest(),
+        status="school_review",
+        school_feedback="由 TOP5 公司投递入口提交，等待学校老师审核简历真实性。",
+    )
+    db.add(application)
+    db.commit()
+
+    return {
+        "ok": True,
+        "application_id": application.id,
+        "message": f"PDF 简历已投递至 {final_company_name}，当前进入学校端真实性审核，审核通过后将自动转企业。",
+        "warnings": upload_warnings,
+    }
 
 
 @app.post("/job/match/export-pdf")

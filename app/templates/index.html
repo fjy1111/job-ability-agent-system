@@ -56,6 +56,17 @@
                     </svg>
                     <span>就业指导</span>
                 </a>
+                <a href="/collaboration">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <circle cx="6" cy="7" r="3"></circle>
+                        <circle cx="18" cy="7" r="3"></circle>
+                        <circle cx="12" cy="17" r="3"></circle>
+                        <path d="M8.5 9.5l2 5"></path>
+                        <path d="M15.5 9.5l-2 5"></path>
+                        <path d="M9 17h6"></path>
+                    </svg>
+                    <span>三方协同</span>
+                </a>
                 <a href="/resume/match">
                     <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
                         <path d="M5 6h4"></path>
@@ -97,7 +108,7 @@
 
             <div class="agent-sidebar-footer">
                 {% if username %}
-                <span class="agent-user">{{ username }}</span>
+                <span class="agent-user">{{ username }} · {{ role_label }}</span>
                 {% endif %}
                 <a href="/logout">退出登录</a>
             </div>

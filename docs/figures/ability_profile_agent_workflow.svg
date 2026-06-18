@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1120" viewBox="0 0 1800 1120" role="img" aria-labelledby="title desc">
+  <title id="title">学生能力画像生成智能体工作流</title>
+  <desc id="desc">展示能力画像生成过程中的输入、简历信息抽取、五个智能体节点、工具调用、共享状态、专家交接和最终输出。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-dashed" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7c3aed"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .bg { fill: #f8fafc; }
+      .title { font-family: "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; font-size: 42px; font-weight: 700; fill: #0f172a; }
+      .subtitle { font-family: "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; font-size: 20px; fill: #475569; }
+      .lane-title { font-family: "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; font-size: 22px; font-weight: 700; fill: #0f172a; }
+      .label { font-family: "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #0f172a; }
+      .small { font-family: "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; font-size: 16px; fill: #334155; }
+      .tiny { font-family: "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; font-size: 14px; fill: #475569; }
+      .mono { font-family: "Consolas", "Cascadia Mono", monospace; font-size: 15px; fill: #334155; }
+      .node { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 16; filter: url(#shadow); }
+      .input { fill: #ecfeff; stroke: #0891b2; }
+      .agent { fill: #eff6ff; stroke: #2563eb; }
+      .llm { fill: #f5f3ff; stroke: #7c3aed; }
+      .tool { fill: #f0fdf4; stroke: #16a34a; }
+      .audit { fill: #fff7ed; stroke: #f97316; }
+      .output { fill: #fefce8; stroke: #ca8a04; }
+      .workspace { fill: #ffffff; stroke: #64748b; stroke-width: 2; stroke-dasharray: 8 8; rx: 18; }
+      .lane { fill: #ffffff; stroke: #e2e8f0; stroke-width: 2; rx: 18; }
+      .arrow { stroke: #334155; stroke-width: 2.6; fill: none; marker-end: url(#arrow); }
+      .blue-arrow { stroke: #2563eb; stroke-width: 2.4; fill: none; marker-end: url(#arrow-blue); }
+      .dash-arrow { stroke: #7c3aed; stroke-width: 2.4; stroke-dasharray: 9 8; fill: none; marker-end: url(#arrow-dashed); }
+      .tool-arrow { stroke: #16a34a; stroke-width: 2.2; fill: none; marker-end: url(#arrow); }
+      .chip { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.4; rx: 12; }
+      .index { fill: #2563eb; }
+      .index-text { font-family: Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #ffffff; text-anchor: middle; dominant-baseline: middle; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1800" height="1120"/>
+
+  <text class="title" x="900" y="72" text-anchor="middle">学生能力画像生成智能体工作流</text>
+  <text class="subtitle" x="900" y="108" text-anchor="middle">从简历/表单输入到四维能力画像报告：工具调用、共享状态与智能体协作全过程</text>
+
+  <rect class="lane" x="60" y="145" width="1680" height="280"/>
+  <text class="lane-title" x="90" y="184">一、主流程：LangGraph 串行状态图</text>
+
+  <rect class="node input" x="90" y="225" width="190" height="112"/>
+  <text class="label" x="185" y="265" text-anchor="middle">简历/表单输入</text>
+  <text class="small" x="185" y="296" text-anchor="middle">上传简历或填写字段</text>
+  <text class="tiny" x="185" y="321" text-anchor="middle">message + resume_text</text>
+
+  <rect class="node input" x="325" y="225" width="205" height="112"/>
+  <text class="label" x="427" y="258" text-anchor="middle">简历信息抽取智能体</text>
+  <text class="small" x="427" y="289" text-anchor="middle">映射 9 个数据库字段</text>
+  <text class="tiny" x="427" y="315" text-anchor="middle">缺失字段填“无”</text>
+
+  <rect class="node agent" x="575" y="225" width="190" height="112"/>
+  <circle class="index" cx="604" cy="225" r="16"/><text class="index-text" x="604" y="225">1</text>
+  <text class="label" x="670" y="265" text-anchor="middle">画像采集智能体</text>
+  <text class="small" x="670" y="296" text-anchor="middle">标准化文本与技能扫描</text>
+  <text class="tiny" x="670" y="321" text-anchor="middle">extract_profile</text>
+
+  <rect class="node llm" x="810" y="225" width="190" height="112"/>
+  <circle class="index" cx="839" cy="225" r="16"/><text class="index-text" x="839" y="225">2</text>
+  <text class="label" x="905" y="265" text-anchor="middle">四维评分智能体</text>
+  <text class="small" x="905" y="296" text-anchor="middle">单次 LLM 生成共享草案</text>
+  <text class="tiny" x="905" y="321" text-anchor="middle">score_ability</text>
+
+  <rect class="node agent" x="1045" y="225" width="190" height="112"/>
+  <circle class="index" cx="1074" cy="225" r="16"/><text class="index-text" x="1074" y="225">3</text>
+  <text class="label" x="1140" y="265" text-anchor="middle">证据抽取智能体</text>
+  <text class="small" x="1140" y="296" text-anchor="middle">生成证据矩阵与证据卡</text>
+  <text class="tiny" x="1140" y="321" text-anchor="middle">analyze_profile_evidence</text>
+
+  <rect class="node agent" x="1280" y="225" width="190" height="112"/>
+  <circle class="index" cx="1309" cy="225" r="16"/><text class="index-text" x="1309" y="225">4</text>
+  <text class="label" x="1375" y="265" text-anchor="middle">能力归因智能体</text>
+  <text class="small" x="1375" y="296" text-anchor="middle">归纳优势、短板和发展焦点</text>
+  <text class="tiny" x="1375" y="321" text-anchor="middle">diagnose_ability</text>
+
+  <rect class="node audit" x="1515" y="225" width="190" height="112"/>
+  <circle class="index" cx="1544" cy="225" r="16"/><text class="index-text" x="1544" y="225">5</text>
+  <text class="label" x="1610" y="265" text-anchor="middle">质量复核智能体</text>
+  <text class="small" x="1610" y="296" text-anchor="middle">复核工具链与事实边界</text>
+  <text class="tiny" x="1610" y="321" text-anchor="middle">review_profile</text>
+
+  <path class="arrow" d="M280 281 H325"/>
+  <path class="arrow" d="M530 281 H575"/>
+  <path class="arrow" d="M765 281 H810"/>
+  <path class="arrow" d="M1000 281 H1045"/>
+  <path class="arrow" d="M1235 281 H1280"/>
+  <path class="arrow" d="M1470 281 H1515"/>
+
+  <rect class="workspace" x="200" y="455" width="1400" height="150"/>
+  <text class="lane-title" x="230" y="493">二、共享状态与协作产物</text>
+  <rect class="chip" x="250" y="522" width="245" height="46"/>
+  <text class="mono" x="372" y="551" text-anchor="middle">DiagnosisState</text>
+  <rect class="chip" x="530" y="522" width="260" height="46"/>
+  <text class="mono" x="660" y="551" text-anchor="middle">shared_workspace</text>
+  <rect class="chip" x="825" y="522" width="285" height="46"/>
+  <text class="mono" x="967" y="551" text-anchor="middle">collaborative_draft</text>
+  <rect class="chip" x="1145" y="522" width="205" height="46"/>
+  <text class="mono" x="1247" y="551" text-anchor="middle">tool_calls</text>
+  <rect class="chip" x="1385" y="522" width="185" height="46"/>
+  <text class="mono" x="1477" y="551" text-anchor="middle">workflow_steps</text>
+
+  <path class="blue-arrow" d="M670 337 C670 390 430 400 372 522"/>
+  <path class="blue-arrow" d="M905 337 C905 392 950 410 967 522"/>
+  <path class="blue-arrow" d="M1140 337 C1140 392 1205 410 1247 522"/>
+  <path class="blue-arrow" d="M1375 337 C1375 392 1445 410 1477 522"/>
+  <path class="blue-arrow" d="M1610 337 C1610 390 1525 420 1477 522"/>
+
+  <rect class="lane" x="60" y="635" width="1680" height="245"/>
+  <text class="lane-title" x="90" y="674">三、工具调用链：可审计、可解释</text>
+
+  <rect class="node tool" x="105" y="715" width="210" height="78"/>
+  <text class="mono" x="210" y="747" text-anchor="middle">ProfileTextNormalizer</text>
+  <text class="tiny" x="210" y="772" text-anchor="middle">清洗表单并生成共享文本</text>
+
+  <rect class="node tool" x="350" y="715" width="210" height="78"/>
+  <text class="mono" x="455" y="747" text-anchor="middle">SkillKeywordScanner</text>
+  <text class="tiny" x="455" y="772" text-anchor="middle">识别显性技能与技能组</text>
+
+  <rect class="node tool" x="595" y="715" width="210" height="78"/>
+  <text class="mono" x="700" y="747" text-anchor="middle">RubricScoreCalculator</text>
+  <text class="tiny" x="700" y="772" text-anchor="middle">生成规则评分参考</text>
+
+  <rect class="node llm" x="840" y="715" width="210" height="78"/>
+  <text class="mono" x="945" y="747" text-anchor="middle">LLMAbilityScorer</text>
+  <text class="tiny" x="945" y="772" text-anchor="middle">一次 LLM 生成共享画像草案</text>
+
+  <rect class="node tool" x="1085" y="715" width="210" height="78"/>
+  <text class="mono" x="1190" y="747" text-anchor="middle">EvidenceMatrixTool</text>
+  <text class="tiny" x="1190" y="772" text-anchor="middle">构造四维证据矩阵</text>
+
+  <rect class="node tool" x="1330" y="715" width="210" height="78"/>
+  <text class="mono" x="1435" y="747" text-anchor="middle">ConsistencyAuditTool</text>
+  <text class="tiny" x="1435" y="772" text-anchor="middle">检查分数、证据、结论冲突</text>
+
+  <rect class="node audit" x="1575" y="715" width="130" height="78"/>
+  <text class="mono" x="1640" y="747" text-anchor="middle">FinalAuditTool</text>
+  <text class="tiny" x="1640" y="772" text-anchor="middle">最终复核</text>
+
+  <path class="tool-arrow" d="M315 754 H350"/>
+  <path class="tool-arrow" d="M560 754 H595"/>
+  <path class="tool-arrow" d="M805 754 H840"/>
+  <path class="tool-arrow" d="M1050 754 H1085"/>
+  <path class="tool-arrow" d="M1295 754 H1330"/>
+  <path class="tool-arrow" d="M1540 754 H1575"/>
+
+  <path class="dash-arrow" d="M670 337 C610 530 255 570 210 715"/>
+  <path class="dash-arrow" d="M905 337 C910 520 790 600 700 715"/>
+  <path class="dash-arrow" d="M905 337 C935 520 945 600 945 715"/>
+  <path class="dash-arrow" d="M1140 337 C1165 520 1185 600 1190 715"/>
+  <path class="dash-arrow" d="M1375 337 C1395 520 1420 600 1435 715"/>
+  <path class="dash-arrow" d="M1610 337 C1630 520 1640 600 1640 715"/>
+
+  <rect class="lane" x="60" y="910" width="1680" height="160"/>
+  <text class="lane-title" x="90" y="949">四、最终输出：能力画像报告</text>
+  <rect class="node output" x="105" y="980" width="190" height="58"/>
+  <text class="label" x="200" y="1016" text-anchor="middle">四维能力分数</text>
+  <rect class="node output" x="330" y="980" width="150" height="58"/>
+  <text class="label" x="405" y="1016" text-anchor="middle">证据卡</text>
+  <rect class="node output" x="515" y="980" width="150" height="58"/>
+  <text class="label" x="590" y="1016" text-anchor="middle">画像标签</text>
+  <rect class="node output" x="700" y="980" width="170" height="58"/>
+  <text class="label" x="785" y="1016" text-anchor="middle">优势与短板</text>
+  <rect class="node output" x="905" y="980" width="150" height="58"/>
+  <text class="label" x="980" y="1016" text-anchor="middle">风险提示</text>
+  <rect class="node output" x="1090" y="980" width="170" height="58"/>
+  <text class="label" x="1175" y="1016" text-anchor="middle">发展焦点</text>
+  <rect class="node output" x="1295" y="980" width="190" height="58"/>
+  <text class="label" x="1390" y="1016" text-anchor="middle">质量复核结论</text>
+  <rect class="node output" x="1520" y="980" width="185" height="58"/>
+  <text class="label" x="1612" y="1016" text-anchor="middle">页面/JSON 展示</text>
+
+  <path class="arrow" d="M1610 337 C1725 520 1718 850 1612 980"/>
+  <path class="arrow" d="M1477 568 C1515 730 1520 895 1390 980"/>
+  <text class="tiny" x="1160" y="892">报告保留 workflow_steps / tool_calls / collaboration_log</text>
+
+  <rect x="80" y="1088" width="10" height="10" fill="#2563eb"/>
+  <text class="tiny" x="98" y="1098">实线箭头：数据流转</text>
+  <rect x="250" y="1088" width="10" height="10" fill="#7c3aed"/>
+  <text class="tiny" x="268" y="1098">虚线箭头：智能体调用工具 / 专家交接</text>
+  <rect x="545" y="1088" width="10" height="10" fill="#16a34a"/>
+  <text class="tiny" x="563" y="1098">绿色节点：本地工具调用</text>
+  <rect x="765" y="1088" width="10" height="10" fill="#7c3aed"/>
+  <text class="tiny" x="783" y="1098">紫色节点：单次 LLM 协作草案</text>
+</svg>

@@ -44,6 +44,24 @@
                     >
                 </div>
 
+                <div class="form-group">
+                    <span class="auth-field-label">登录身份</span>
+                    <div class="auth-role-options">
+                        {% for option in role_options %}
+                        <label class="auth-role-option {% if selected_role == option.value %}active{% endif %}">
+                            <input
+                                type="radio"
+                                name="user_role"
+                                value="{{ option.value }}"
+                                {% if selected_role == option.value %}checked{% endif %}
+                            >
+                            <strong>{{ option.label }}</strong>
+                            <small>{{ option.description }}</small>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
                 <button type="submit" class="auth-btn">登录</button>
             </form>
 
