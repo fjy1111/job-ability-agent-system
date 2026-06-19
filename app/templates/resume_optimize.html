@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="/static/css/style.css?v=12">
+    <link rel="stylesheet" href="/static/css/style.css?v=18">
 </head>
 <body class="resume-page-body">
     <header class="resume-topbar">
@@ -143,6 +143,20 @@
             </div>
 
             <p class="resume-result-summary">{{ result.summary }}</p>
+
+            {% if result.expert_rules_used_count %}
+            <div class="resume-expert-rules-panel">
+                <div>
+                    <strong>已参考 {{ result.expert_rules_used_count }} 条专家手工标注建议</strong>
+                    <span>规则来自历史专家批注知识库，仅展示本次命中的规则标题。</span>
+                </div>
+                <ul>
+                    {% for rule in result.expert_rules_used %}
+                    <li>{{ rule.title }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
             <div class="resume-result-layout">
                 <div class="resume-output-panel">

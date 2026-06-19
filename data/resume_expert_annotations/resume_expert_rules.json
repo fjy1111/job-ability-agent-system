@@ -1,0 +1,167 @@
+[
+  {
+    "id": "rule_001",
+    "category": "project_experience",
+    "title": "项目经历需要补充个人角色",
+    "problem_patterns": ["项目经历", "核心模块", "负责", "参与", "缺少角色", "主要负责"],
+    "suggestion": "项目经历中应明确个人角色，例如负责人、核心成员、后端开发、前端开发、算法实现、测试部署等，避免只写项目功能而看不出个人贡献。",
+    "example_before": "实现文件上传下载、关键词搜索等功能。",
+    "example_after": "本人作为后端开发成员，主要负责文件上传下载接口、关键词搜索模块和缓存优化逻辑的实现。",
+    "source_image": "001.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_002",
+    "category": "project_experience",
+    "title": "项目经历需要补充项目时间",
+    "problem_patterns": ["项目经历", "项目时间", "起止时间", "开发周期"],
+    "suggestion": "项目经历应补充起止时间，例如 2024.03-2024.06，使项目经历更加完整可信。",
+    "example_before": "Linux 文件管理服务器",
+    "example_after": "Linux 文件管理服务器｜2024.03-2024.06",
+    "source_image": "001.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_003",
+    "category": "project_experience",
+    "title": "项目功能描述要具体",
+    "problem_patterns": ["项目功能", "系统功能", "模块", "业务", "搜索", "上传", "下载", "APP"],
+    "suggestion": "项目描述不能只写技术点，应先说明项目解决什么问题、面向什么业务场景、最终实现了哪些核心功能，再说明个人负责的模块。",
+    "example_before": "使用 Redis 提高查询效率。",
+    "example_after": "项目面向汽车出行场景，实现关键词搜索、网页推荐和缓存查询功能；本人负责 Redis 缓存设计，减少重复查询，提高接口响应效率。",
+    "source_image": "002.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_004",
+    "category": "project_experience",
+    "title": "个人贡献要和团队工作区分",
+    "problem_patterns": ["团队", "我们", "参与", "协作", "负责", "个人工作", "个人贡献"],
+    "suggestion": "项目经历应区分团队整体工作和个人具体贡献，例如团队完成系统搭建，个人负责接口设计、缓存优化、搜索模块或部署测试。",
+    "example_before": "完成公司关键词搜索工具的实现和上线。",
+    "example_after": "团队完成关键词搜索工具的整体开发，本人负责词典构建、索引文件生成和 Redis 缓存接入，并参与上线测试。",
+    "source_image": "003.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_005",
+    "category": "technical_highlight",
+    "title": "技术亮点要写成“技术方案 + 解决问题 + 效果”",
+    "problem_patterns": ["技术亮点", "Redis", "缓存", "epoll", "倒排索引", "TF-IDF", "SimHash", "线程池", "进程池"],
+    "suggestion": "技术亮点不要只堆技术名词，应写清楚使用了什么技术、解决了什么问题、带来了什么效果。",
+    "example_before": "使用 SimHash 算法对网页进行去重。",
+    "example_after": "使用 SimHash 对网页内容进行相似度计算并去重，减少重复网页进入推荐结果，提高搜索结果相关性。",
+    "source_image": "002.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_006",
+    "category": "technical_highlight",
+    "title": "尽量补充量化结果",
+    "problem_patterns": ["提升", "优化", "效率", "性能", "响应时间", "查询", "点击率", "减少"],
+    "suggestion": "能量化的地方尽量量化，例如查询效率提升 XX%、响应时间降低 XX%、人工处理时间减少 XX%、点击率提升 XX%。如果没有真实数据，可使用谨慎表述，如'明显提升'或'减少重复查询开销'。",
+    "example_before": "提高查询效率。",
+    "example_after": "通过 Redis 缓存高频查询结果，减少数据库重复访问，使查询响应速度明显提升。",
+    "source_image": "003.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_007",
+    "category": "technical_highlight",
+    "title": "Redis 缓存需要说明用途",
+    "problem_patterns": ["Redis", "缓存", "查询效率", "高频查询"],
+    "suggestion": "写 Redis 时不要只写'使用 Redis 作为缓存'，应说明缓存对象和效果，例如'使用 Redis 缓存高频查询结果，减少数据库重复访问，提高查询效率'。",
+    "example_before": "使用 Redis 作为缓存系统，提高查询效率。",
+    "example_after": "使用 Redis 缓存高频关键词查询结果，减少重复数据库查询，提高搜索接口响应效率。",
+    "source_image": "003.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_008",
+    "category": "technical_highlight",
+    "title": "搜索推荐类项目需要突出索引与排序",
+    "problem_patterns": ["搜索", "推荐", "关键词", "倒排索引", "TF-IDF", "SimHash", "网页", "分词"],
+    "suggestion": "搜索推荐类项目应重点说明分词、索引构建、相似度计算、去重、排序或推荐逻辑，例如倒排索引、TF-IDF、最小编辑距离、SimHash 等。",
+    "example_before": "通过关键词进行推荐。",
+    "example_after": "使用 cppjieba 对中文文本分词，构建倒排索引，并结合 TF-IDF 计算关键词相关性，提升网页推荐的准确性。",
+    "source_image": "002.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_009",
+    "category": "technical_highlight",
+    "title": "Linux/C++ 项目要突出系统编程能力",
+    "problem_patterns": ["Linux", "C++", "epoll", "Socket", "线程池", "进程池", "IO", "文件服务器", "断点续传"],
+    "suggestion": "Linux/C++ 项目应突出系统编程能力，例如网络通信、epoll 多路复用、线程池/进程池、超时断开、文件上传下载、断点续传等。",
+    "example_before": "实现文件上传和下载功能。",
+    "example_after": "基于 Linux Socket 和 epoll 多路复用实现文件上传下载服务，支持超时断开和断点续传，提升高并发连接处理能力。",
+    "source_image": "001.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_010",
+    "category": "skills",
+    "title": "技能描述不能过泛",
+    "problem_patterns": ["熟悉", "了解", "掌握", "C++", "Java", "MySQL", "Redis", "设计模式", "STL"],
+    "suggestion": "技能描述应避免空泛堆叠，建议写成'熟悉 C++ STL，了解容器、算法和配置器；熟悉 MySQL 索引和查询优化；熟悉 Redis 常见数据结构和缓存使用场景'。",
+    "example_before": "熟悉 C++、MySQL、Redis。",
+    "example_after": "熟悉 C++ STL 常用容器与算法，熟悉 MySQL 索引与查询优化，了解 Redis 常见数据结构及缓存使用场景。",
+    "source_image": "004.png",
+    "priority": 8
+  },
+  {
+    "id": "rule_011",
+    "category": "education",
+    "title": "教育经历不要堆无关课程成绩",
+    "problem_patterns": ["教育经历", "相关课程", "课程成绩", "GPA", "在校课程"],
+    "suggestion": "教育经历中不建议堆大量在校课程成绩，应保留 GPA、排名或与岗位强相关的课程，表达要简洁。",
+    "example_before": "相关课程：C++程序语言设计（91）、计算机组成原理（89）、Python程序设计（92）……",
+    "example_after": "GPA：3.41/4.00，专业排名 Top 10%。相关课程：数据结构、操作系统、计算机网络、数据库原理。",
+    "source_image": "003.png",
+    "priority": 8
+  },
+  {
+    "id": "rule_012",
+    "category": "education",
+    "title": "排名表达要更规范",
+    "problem_patterns": ["专业前", "排名", "Top", "前10%", "前 10%"],
+    "suggestion": "排名建议写成规范表达，例如'专业排名 Top 10%'，比'专业前10%'更适合简历。",
+    "example_before": "专业前10%",
+    "example_after": "专业排名 Top 10%",
+    "source_image": "003.png",
+    "priority": 7
+  },
+  {
+    "id": "rule_013",
+    "category": "certificates",
+    "title": "英语四六级需要写分数",
+    "problem_patterns": ["英语四级", "英语六级", "CET-4", "CET-6", "四六级"],
+    "suggestion": "英语四六级建议写明分数，例如'CET-6 520 分'，比只写'通过六级'更有说服力。",
+    "example_before": "大学英语四/六级",
+    "example_after": "CET-6 520 分，具备良好的英文文档阅读能力。",
+    "source_image": "003.png",
+    "priority": 7
+  },
+  {
+    "id": "rule_014",
+    "category": "certificates",
+    "title": "奖项证书要突出含金量",
+    "problem_patterns": ["国家一等奖", "国家", "竞赛", "奖项", "证书", "全国", "比赛"],
+    "suggestion": "重要奖项应突出层级，例如国家级、省级、校级，并简要说明比赛内容或个人贡献，提高简历可信度。",
+    "example_before": "全国大学生半导体创新竞赛国家一等奖。",
+    "example_after": "全国大学生半导体创新竞赛国家一等奖，负责核心算法实现与比赛答辩材料整理。",
+    "source_image": "003.png",
+    "priority": 8
+  },
+  {
+    "id": "rule_015",
+    "category": "work_experience",
+    "title": "工作经历需要补充岗位名称",
+    "problem_patterns": ["工作经历", "实习经历", "公司", "岗位名称", "有限公司"],
+    "suggestion": "工作经历中应写清楚岗位名称，例如'后端开发实习生'、'前端开发实习生'，否则企业无法快速判断经历方向。",
+    "example_before": "神州优车信息技术（天津）有限公司",
+    "example_after": "神州优车信息技术（天津）有限公司｜后端开发实习生｜2020.07-2020.11",
+    "source_image": "003.png",
+    "priority": 9
+  }
+]

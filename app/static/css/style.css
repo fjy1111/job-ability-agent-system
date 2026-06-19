@@ -1639,6 +1639,39 @@ h1 {
     margin: 0 0 22px;
 }
 
+.resume-expert-rules-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+    gap: 16px;
+    margin: 0 0 22px;
+    padding: 16px;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    background: #eff6ff;
+}
+
+.resume-expert-rules-panel strong {
+    display: block;
+    color: #1d4ed8;
+    font-size: 16px;
+}
+
+.resume-expert-rules-panel span {
+    display: block;
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.resume-expert-rules-panel ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #1e3a8a;
+    line-height: 1.9;
+    font-weight: 700;
+}
+
 .resume-result-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 320px;
@@ -1828,6 +1861,7 @@ h1 {
     }
 
     .resume-options-grid,
+    .resume-expert-rules-panel,
     .resume-result-layout {
         grid-template-columns: 1fr;
     }

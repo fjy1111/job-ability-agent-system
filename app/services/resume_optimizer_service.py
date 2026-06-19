@@ -10,6 +10,7 @@ from typing import Any
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 
+from app.services.resume_expert_kb_service import retrieve_resume_expert_rules
 from app.services.llm_errors import LLMCallError
 
 load_dotenv()
@@ -244,6 +245,86 @@ def _validate_result(data: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _public_expert_rule(rule: dict[str, Any]) -> dict[str, str]:
+    return {
+        "id": str(rule.get("id", "")).strip(),
+        "title": str(rule.get("title", "")).strip(),
+        "category": str(rule.get("category", "")).strip(),
+        "suggestion": str(rule.get("suggestion", "")).strip(),
+        "source_image": str(rule.get("source_image", "")).strip(),
+    }
+
+
+def _expert_rules_prompt(matched_rules: list[dict]) -> str:
+    if not matched_rules:
+        return ""
+
+    rule_lines = []
+    for index, rule in enumerate(matched_rules, start=1):
+        title = str(rule.get("title", "")).strip()
+        suggestion = str(rule.get("suggestion", "")).strip()
+        if title and suggestion:
+            rule_lines.append(f"{index}. {title}：{suggestion}")
+        elif suggestion:
+            rule_lines.append(f"{index}. {suggestion}")
+
+    if not rule_lines:
+        return ""
+
+    return f"""
+【专家手工标注建议知识库】
+以下是从历史专家批注中检索到的规则，请优先参考：
+
+{chr(10).join(rule_lines)}
+
+生成简历优化建议时，请结合学生简历内容和上述专家规则，重点检查：
+* 是否缺少岗位名称
+* 是否缺少项目时间
+* 是否缺少个人角色
+* 项目功能是否描述清楚
+* 技术亮点是否写清楚“技术方案 + 解决问题 + 效果”
+* 是否有量化成果
+* 技能描述是否过泛
+* 教育经历和证书表达是否规范
+"""
+
+
+def _attach_expert_rules(result: dict[str, Any], matched_rules: list[dict]) -> dict[str, Any]:
+    public_rules = [
+        rule
+        for rule in (_public_expert_rule(item) for item in matched_rules)
+        if rule["title"] or rule["suggestion"]
+    ]
+    result["expert_rules_used_count"] = len(public_rules)
+    result["expert_rules_used"] = public_rules
+    return result
+
+
+def _invoke_optimizer_with_retry(prompt: str) -> dict[str, Any]:
+    llm = _create_llm()
+    prompts = [
+        prompt,
+        (
+            f"{prompt}\n\n"
+            "上一次的输出未通过 JSON 结构校验。请严格按要求返回单个 JSON 对象，"
+            "不要输出 Markdown、解释文字或额外字段。"
+        ),
+    ]
+
+    for index, current_prompt in enumerate(prompts):
+        try:
+            response = llm.invoke(
+                current_prompt,
+                response_format={"type": "json_object"},
+            )
+            return _validate_result(_safe_json_loads(str(response.content)))
+        except LLMCallError:
+            if index == len(prompts) - 1:
+                raise
+
+    raise LLMCallError()
+
+
 def optimize_resume(
     resume_text: str,
     job_description: str,
@@ -255,6 +336,8 @@ def optimize_resume(
     调用大模型生成简历优化结果。失败时只抛出“调用LLM失败”。
     """
     role = target_role.strip() or "目标岗位"
+    matched_rules = retrieve_resume_expert_rules(resume_text, max_rules=8)
+    expert_rules_text = _expert_rules_prompt(matched_rules)
     prompt = f"""
 你是资深就业辅导与简历优化智能体。请基于候选人简历和目标岗位生成可直接展示的简历优化结果。
 
@@ -271,6 +354,8 @@ def optimize_resume(
 
 候选人简历：
 {resume_text[:6000]}
+
+{expert_rules_text}
 
 JSON 格式：
 {{
@@ -294,8 +379,8 @@ JSON 格式：
 """
 
     try:
-        response = _create_llm().invoke(prompt)
-        return _validate_result(_safe_json_loads(str(response.content)))
+        result = _invoke_optimizer_with_retry(prompt)
+        return _attach_expert_rules(result, matched_rules)
     except LLMCallError:
         raise
     except Exception:
