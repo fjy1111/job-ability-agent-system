@@ -148,13 +148,9 @@
             <div class="resume-expert-rules-panel">
                 <div>
                     <strong>已参考 {{ result.expert_rules_used_count }} 条专家手工标注建议</strong>
-                    <span>规则来自历史专家批注知识库，仅展示本次命中的规则标题。</span>
+                    <span>规则来自历史专家批注知识库，本次命中的改写片段已在优化稿正文中标记。</span>
                 </div>
-                <ul>
-                    {% for rule in result.expert_rules_used %}
-                    <li>{{ rule.title }}</li>
-                    {% endfor %}
-                </ul>
+                <p>黄色高亮片段表示参考专家规则后新增或改写的内容。</p>
             </div>
             {% endif %}
 
@@ -163,7 +159,11 @@
                     <div class="resume-output-head">
                         <h3>优化稿</h3>
                     </div>
+                    {% if result.highlighted_optimized_html %}
+                    <pre>{{ result.highlighted_optimized_html | safe }}</pre>
+                    {% else %}
                     <pre>{{ result.optimized_resume }}</pre>
+                    {% endif %}
                 </div>
 
                 <aside class="resume-insight-panel">
