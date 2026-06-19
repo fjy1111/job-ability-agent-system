@@ -3,7 +3,14 @@
     "id": "rule_001",
     "category": "project_experience",
     "title": "项目经历需要补充个人角色",
-    "problem_patterns": ["项目经历", "核心模块", "负责", "参与", "缺少角色", "主要负责"],
+    "problem_patterns": [
+      "项目经历",
+      "核心模块",
+      "负责",
+      "参与",
+      "缺少角色",
+      "主要负责"
+    ],
     "suggestion": "项目经历中应明确个人角色，例如负责人、核心成员、后端开发、前端开发、算法实现、测试部署等，避免只写项目功能而看不出个人贡献。",
     "example_before": "实现文件上传下载、关键词搜索等功能。",
     "example_after": "本人作为后端开发成员，主要负责文件上传下载接口、关键词搜索模块和缓存优化逻辑的实现。",
@@ -14,7 +21,12 @@
     "id": "rule_002",
     "category": "project_experience",
     "title": "项目经历需要补充项目时间",
-    "problem_patterns": ["项目经历", "项目时间", "起止时间", "开发周期"],
+    "problem_patterns": [
+      "项目经历",
+      "项目时间",
+      "起止时间",
+      "开发周期"
+    ],
     "suggestion": "项目经历应补充起止时间，例如 2024.03-2024.06，使项目经历更加完整可信。",
     "example_before": "Linux 文件管理服务器",
     "example_after": "Linux 文件管理服务器｜2024.03-2024.06",
@@ -25,7 +37,16 @@
     "id": "rule_003",
     "category": "project_experience",
     "title": "项目功能描述要具体",
-    "problem_patterns": ["项目功能", "系统功能", "模块", "业务", "搜索", "上传", "下载", "APP"],
+    "problem_patterns": [
+      "项目功能",
+      "系统功能",
+      "模块",
+      "业务",
+      "搜索",
+      "上传",
+      "下载",
+      "APP"
+    ],
     "suggestion": "项目描述不能只写技术点，应先说明项目解决什么问题、面向什么业务场景、最终实现了哪些核心功能，再说明个人负责的模块。",
     "example_before": "使用 Redis 提高查询效率。",
     "example_after": "项目面向汽车出行场景，实现关键词搜索、网页推荐和缓存查询功能；本人负责 Redis 缓存设计，减少重复查询，提高接口响应效率。",
@@ -36,7 +57,15 @@
     "id": "rule_004",
     "category": "project_experience",
     "title": "个人贡献要和团队工作区分",
-    "problem_patterns": ["团队", "我们", "参与", "协作", "负责", "个人工作", "个人贡献"],
+    "problem_patterns": [
+      "团队",
+      "我们",
+      "参与",
+      "协作",
+      "负责",
+      "个人工作",
+      "个人贡献"
+    ],
     "suggestion": "项目经历应区分团队整体工作和个人具体贡献，例如团队完成系统搭建，个人负责接口设计、缓存优化、搜索模块或部署测试。",
     "example_before": "完成公司关键词搜索工具的实现和上线。",
     "example_after": "团队完成关键词搜索工具的整体开发，本人负责词典构建、索引文件生成和 Redis 缓存接入，并参与上线测试。",
@@ -47,7 +76,17 @@
     "id": "rule_005",
     "category": "technical_highlight",
     "title": "技术亮点要写成“技术方案 + 解决问题 + 效果”",
-    "problem_patterns": ["技术亮点", "Redis", "缓存", "epoll", "倒排索引", "TF-IDF", "SimHash", "线程池", "进程池"],
+    "problem_patterns": [
+      "技术亮点",
+      "Redis",
+      "缓存",
+      "epoll",
+      "倒排索引",
+      "TF-IDF",
+      "SimHash",
+      "线程池",
+      "进程池"
+    ],
     "suggestion": "技术亮点不要只堆技术名词，应写清楚使用了什么技术、解决了什么问题、带来了什么效果。",
     "example_before": "使用 SimHash 算法对网页进行去重。",
     "example_after": "使用 SimHash 对网页内容进行相似度计算并去重，减少重复网页进入推荐结果，提高搜索结果相关性。",
@@ -58,7 +97,16 @@
     "id": "rule_006",
     "category": "technical_highlight",
     "title": "尽量补充量化结果",
-    "problem_patterns": ["提升", "优化", "效率", "性能", "响应时间", "查询", "点击率", "减少"],
+    "problem_patterns": [
+      "提升",
+      "优化",
+      "效率",
+      "性能",
+      "响应时间",
+      "查询",
+      "点击率",
+      "减少"
+    ],
     "suggestion": "能量化的地方尽量量化，例如查询效率提升 XX%、响应时间降低 XX%、人工处理时间减少 XX%、点击率提升 XX%。如果没有真实数据，可使用谨慎表述，如'明显提升'或'减少重复查询开销'。",
     "example_before": "提高查询效率。",
     "example_after": "通过 Redis 缓存高频查询结果，减少数据库重复访问，使查询响应速度明显提升。",
@@ -69,7 +117,12 @@
     "id": "rule_007",
     "category": "technical_highlight",
     "title": "Redis 缓存需要说明用途",
-    "problem_patterns": ["Redis", "缓存", "查询效率", "高频查询"],
+    "problem_patterns": [
+      "Redis",
+      "缓存",
+      "查询效率",
+      "高频查询"
+    ],
     "suggestion": "写 Redis 时不要只写'使用 Redis 作为缓存'，应说明缓存对象和效果，例如'使用 Redis 缓存高频查询结果，减少数据库重复访问，提高查询效率'。",
     "example_before": "使用 Redis 作为缓存系统，提高查询效率。",
     "example_after": "使用 Redis 缓存高频关键词查询结果，减少重复数据库查询，提高搜索接口响应效率。",
@@ -80,7 +133,16 @@
     "id": "rule_008",
     "category": "technical_highlight",
     "title": "搜索推荐类项目需要突出索引与排序",
-    "problem_patterns": ["搜索", "推荐", "关键词", "倒排索引", "TF-IDF", "SimHash", "网页", "分词"],
+    "problem_patterns": [
+      "搜索",
+      "推荐",
+      "关键词",
+      "倒排索引",
+      "TF-IDF",
+      "SimHash",
+      "网页",
+      "分词"
+    ],
     "suggestion": "搜索推荐类项目应重点说明分词、索引构建、相似度计算、去重、排序或推荐逻辑，例如倒排索引、TF-IDF、最小编辑距离、SimHash 等。",
     "example_before": "通过关键词进行推荐。",
     "example_after": "使用 cppjieba 对中文文本分词，构建倒排索引，并结合 TF-IDF 计算关键词相关性，提升网页推荐的准确性。",
@@ -91,7 +153,17 @@
     "id": "rule_009",
     "category": "technical_highlight",
     "title": "Linux/C++ 项目要突出系统编程能力",
-    "problem_patterns": ["Linux", "C++", "epoll", "Socket", "线程池", "进程池", "IO", "文件服务器", "断点续传"],
+    "problem_patterns": [
+      "Linux",
+      "C++",
+      "epoll",
+      "Socket",
+      "线程池",
+      "进程池",
+      "IO",
+      "文件服务器",
+      "断点续传"
+    ],
     "suggestion": "Linux/C++ 项目应突出系统编程能力，例如网络通信、epoll 多路复用、线程池/进程池、超时断开、文件上传下载、断点续传等。",
     "example_before": "实现文件上传和下载功能。",
     "example_after": "基于 Linux Socket 和 epoll 多路复用实现文件上传下载服务，支持超时断开和断点续传，提升高并发连接处理能力。",
@@ -102,7 +174,17 @@
     "id": "rule_010",
     "category": "skills",
     "title": "技能描述不能过泛",
-    "problem_patterns": ["熟悉", "了解", "掌握", "C++", "Java", "MySQL", "Redis", "设计模式", "STL"],
+    "problem_patterns": [
+      "熟悉",
+      "了解",
+      "掌握",
+      "C++",
+      "Java",
+      "MySQL",
+      "Redis",
+      "设计模式",
+      "STL"
+    ],
     "suggestion": "技能描述应避免空泛堆叠，建议写成'熟悉 C++ STL，了解容器、算法和配置器；熟悉 MySQL 索引和查询优化；熟悉 Redis 常见数据结构和缓存使用场景'。",
     "example_before": "熟悉 C++、MySQL、Redis。",
     "example_after": "熟悉 C++ STL 常用容器与算法，熟悉 MySQL 索引与查询优化，了解 Redis 常见数据结构及缓存使用场景。",
@@ -113,7 +195,13 @@
     "id": "rule_011",
     "category": "education",
     "title": "教育经历不要堆无关课程成绩",
-    "problem_patterns": ["教育经历", "相关课程", "课程成绩", "GPA", "在校课程"],
+    "problem_patterns": [
+      "教育经历",
+      "相关课程",
+      "课程成绩",
+      "GPA",
+      "在校课程"
+    ],
     "suggestion": "教育经历中不建议堆大量在校课程成绩，应保留 GPA、排名或与岗位强相关的课程，表达要简洁。",
     "example_before": "相关课程：C++程序语言设计（91）、计算机组成原理（89）、Python程序设计（92）……",
     "example_after": "GPA：3.41/4.00，专业排名 Top 10%。相关课程：数据结构、操作系统、计算机网络、数据库原理。",
@@ -124,7 +212,13 @@
     "id": "rule_012",
     "category": "education",
     "title": "排名表达要更规范",
-    "problem_patterns": ["专业前", "排名", "Top", "前10%", "前 10%"],
+    "problem_patterns": [
+      "专业前",
+      "排名",
+      "Top",
+      "前10%",
+      "前 10%"
+    ],
     "suggestion": "排名建议写成规范表达，例如'专业排名 Top 10%'，比'专业前10%'更适合简历。",
     "example_before": "专业前10%",
     "example_after": "专业排名 Top 10%",
@@ -135,7 +229,13 @@
     "id": "rule_013",
     "category": "certificates",
     "title": "英语四六级需要写分数",
-    "problem_patterns": ["英语四级", "英语六级", "CET-4", "CET-6", "四六级"],
+    "problem_patterns": [
+      "英语四级",
+      "英语六级",
+      "CET-4",
+      "CET-6",
+      "四六级"
+    ],
     "suggestion": "英语四六级建议写明分数，例如'CET-6 520 分'，比只写'通过六级'更有说服力。",
     "example_before": "大学英语四/六级",
     "example_after": "CET-6 520 分，具备良好的英文文档阅读能力。",
@@ -146,7 +246,15 @@
     "id": "rule_014",
     "category": "certificates",
     "title": "奖项证书要突出含金量",
-    "problem_patterns": ["国家一等奖", "国家", "竞赛", "奖项", "证书", "全国", "比赛"],
+    "problem_patterns": [
+      "国家一等奖",
+      "国家",
+      "竞赛",
+      "奖项",
+      "证书",
+      "全国",
+      "比赛"
+    ],
     "suggestion": "重要奖项应突出层级，例如国家级、省级、校级，并简要说明比赛内容或个人贡献，提高简历可信度。",
     "example_before": "全国大学生半导体创新竞赛国家一等奖。",
     "example_after": "全国大学生半导体创新竞赛国家一等奖，负责核心算法实现与比赛答辩材料整理。",
@@ -157,11 +265,1029 @@
     "id": "rule_015",
     "category": "work_experience",
     "title": "工作经历需要补充岗位名称",
-    "problem_patterns": ["工作经历", "实习经历", "公司", "岗位名称", "有限公司"],
+    "problem_patterns": [
+      "工作经历",
+      "实习经历",
+      "公司",
+      "岗位名称",
+      "有限公司"
+    ],
     "suggestion": "工作经历中应写清楚岗位名称，例如'后端开发实习生'、'前端开发实习生'，否则企业无法快速判断经历方向。",
     "example_before": "神州优车信息技术（天津）有限公司",
     "example_after": "神州优车信息技术（天津）有限公司｜后端开发实习生｜2020.07-2020.11",
     "source_image": "003.png",
     "priority": 9
+  },
+  {
+    "id": "rule_016",
+    "category": "microservice_architecture",
+    "title": "微服务项目需要说明架构拆分和个人负责模块",
+    "problem_patterns": [
+      "微服务",
+      "Spring Cloud",
+      "Spring Cloud Alibaba",
+      "Nacos",
+      "Gateway",
+      "OpenFeign"
+    ],
+    "suggestion": "微服务项目不能只写技术名词，应说明系统拆分了哪些服务，个人负责哪些服务，以及这些服务解决了什么业务问题。",
+    "example_before": "使用 Spring Cloud Alibaba、Nacos、Gateway、OpenFeign。",
+    "example_after": "基于 Spring Cloud Alibaba 搭建微服务架构，拆分用户、订单、商家与配送服务；本人作为核心后端开发，主要负责订单服务与配送调度模块，支撑下单、状态流转和履约跟踪。",
+    "source_image": "004.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_017",
+    "category": "microservice_architecture",
+    "title": "Nacos / Gateway 需要说明用途",
+    "problem_patterns": [
+      "Nacos",
+      "Gateway",
+      "注册配置中心",
+      "统一网关",
+      "路由",
+      "跨域"
+    ],
+    "suggestion": "写 Nacos 和 Gateway 时，应说明它们在项目中承担的作用，例如服务注册、配置管理、统一路由、跨域处理、权限入口等。",
+    "example_before": "项目使用 Nacos 和 Gateway。",
+    "example_after": "使用 Nacos 作为注册配置中心管理服务实例与配置，使用 Gateway 实现统一网关、路由转发、跨域处理和权限入口收敛。",
+    "source_image": "004.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_018",
+    "category": "security",
+    "title": "Spring Security / JWT 需要说明安全场景",
+    "problem_patterns": [
+      "Spring Security",
+      "JWT",
+      "认证",
+      "授权",
+      "接口安全"
+    ],
+    "suggestion": "安全相关技术应说明用于登录认证、接口鉴权、用户身份校验或权限控制，而不是只堆技术名称。",
+    "example_before": "使用 Spring Security 和 JWT。",
+    "example_after": "基于 Spring Security + JWT 完成登录认证、接口鉴权与用户身份校验，保障订单、商家后台等核心接口安全。",
+    "source_image": "004.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_019",
+    "category": "scheduled_task",
+    "title": "XXL-JOB 需要说明解决的问题",
+    "problem_patterns": [
+      "XXL-JOB",
+      "定时任务",
+      "分片广播",
+      "订单状态",
+      "自动处理"
+    ],
+    "suggestion": "写 XXL-JOB 时，应说明它解决了什么定时任务或状态一致性问题，例如超时订单关闭、异常订单处理、状态同步等。",
+    "example_before": "使用 XXL-JOB 做定时任务。",
+    "example_after": "使用 XXL-JOB 分片广播处理超时订单关闭与订单状态同步，减少人工处理并提升状态一致性。",
+    "source_image": "004.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_020",
+    "category": "deployment",
+    "title": "Docker Compose 需要说明部署价值",
+    "problem_patterns": [
+      "Docker",
+      "Docker Compose",
+      "部署",
+      "运维",
+      "测试环境"
+    ],
+    "suggestion": "部署相关内容应说明它带来的价值，例如简化环境搭建、提高部署效率、方便测试复现等。",
+    "example_before": "使用 Docker Compose 部署。",
+    "example_after": "使用 Docker Compose 编排 MySQL、Redis、Nacos 等依赖服务，简化测试环境搭建，提高部署效率并方便问题复现。",
+    "source_image": "004.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_021",
+    "category": "project_experience",
+    "title": "个人角色需要更突出",
+    "problem_patterns": [
+      "个人角色",
+      "后端负责人",
+      "核心后端开发",
+      "后端核心开发",
+      "独立完成",
+      "主要负责",
+      "个人贡献"
+    ],
+    "suggestion": "项目经历中应突出个人角色和负责范围，让企业能看出候选人的真实贡献。",
+    "example_before": "参与外卖项目开发。",
+    "example_after": "本人作为后端核心开发，主要负责订单服务、商家后台和配送调度模块，独立完成核心接口设计与联调。",
+    "source_image": "004.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_022",
+    "category": "project_experience",
+    "title": "项目描述需要说明业务场景",
+    "problem_patterns": [
+      "项目描述",
+      "业务场景",
+      "订单",
+      "配送",
+      "商家",
+      "用户",
+      "调度"
+    ],
+    "suggestion": "项目描述应先说明项目面向什么场景、解决什么业务问题，再写技术实现。",
+    "example_before": "外卖系统，使用 Spring Boot 开发。",
+    "example_after": "项目面向外卖下单、商家接单、骑手配送和订单调度场景，解决多角色协同、订单状态流转和履约跟踪问题。",
+    "source_image": "004.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_023",
+    "category": "technical_highlight",
+    "title": "技术亮点需要写成“技术方案 + 解决问题 + 效果”",
+    "problem_patterns": [
+      "技术亮点",
+      "解决",
+      "降低",
+      "提升",
+      "减少",
+      "提高",
+      "优化"
+    ],
+    "suggestion": "技术亮点应写清楚用了什么技术、解决什么问题、产生什么效果。",
+    "example_before": "优化订单查询。",
+    "example_after": "通过 Redis 缓存高频订单查询结果，降低数据库重复访问并提高接口响应速度。",
+    "source_image": "004.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_024",
+    "category": "backend_java",
+    "title": "后端项目需要说明接口设计与业务闭环",
+    "problem_patterns": [
+      "后端",
+      "接口",
+      "Controller",
+      "Service",
+      "RESTful",
+      "业务闭环",
+      "CRUD"
+    ],
+    "suggestion": "后端项目不要只写完成接口，应说明接口服务于什么业务流程、涉及哪些核心表或模块，以及如何支撑完整业务闭环。",
+    "example_before": "负责后端接口开发。",
+    "example_after": "负责订单创建、状态流转和查询接口设计，覆盖下单、支付、配送和售后等核心业务流程。",
+    "source_image": "general_backend.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_025",
+    "category": "backend_java",
+    "title": "Spring Boot 项目需要突出分层结构",
+    "problem_patterns": [
+      "Spring Boot",
+      "SpringMVC",
+      "Controller",
+      "Service",
+      "Mapper",
+      "分层",
+      "后端架构"
+    ],
+    "suggestion": "Spring Boot 项目应说明 Controller、Service、Mapper/DAO 等分层职责，体现工程结构清晰，而不是只写使用框架。",
+    "example_before": "使用 Spring Boot 开发系统。",
+    "example_after": "基于 Spring Boot 构建后端服务，按 Controller、Service、Mapper 分层组织业务逻辑，提升代码可维护性。",
+    "source_image": "general_backend.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_026",
+    "category": "backend_java",
+    "title": "MyBatis/MyBatis-Plus 要说明数据访问场景",
+    "problem_patterns": [
+      "MyBatis",
+      "MyBatis-Plus",
+      "Mapper",
+      "SQL",
+      "数据库访问",
+      "ORM"
+    ],
+    "suggestion": "写 MyBatis/MyBatis-Plus 时，应说明用于哪些核心数据表或复杂查询场景，例如订单、用户、商品、权限等。",
+    "example_before": "使用 MyBatis-Plus 操作数据库。",
+    "example_after": "使用 MyBatis-Plus 完成用户、订单和商品表的增删改查，并针对订单列表查询编写分页与条件筛选逻辑。",
+    "source_image": "general_backend.png",
+    "priority": 8
+  },
+  {
+    "id": "rule_027",
+    "category": "database",
+    "title": "数据库设计要说明表结构和关系",
+    "problem_patterns": [
+      "数据库设计",
+      "表设计",
+      "ER图",
+      "一对多",
+      "多对多",
+      "外键",
+      "字段"
+    ],
+    "suggestion": "数据库相关项目应说明核心表、字段设计和表之间关系，避免只写'使用 MySQL'。",
+    "example_before": "使用 MySQL 存储数据。",
+    "example_after": "设计用户、岗位、诊断记录和匹配结果等核心表，通过 user_id 关联学生数据与历史诊断记录。",
+    "source_image": "general_database.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_028",
+    "category": "database",
+    "title": "索引优化要写清查询场景",
+    "problem_patterns": [
+      "索引",
+      "SQL优化",
+      "慢查询",
+      "查询优化",
+      "联合索引",
+      "explain"
+    ],
+    "suggestion": "写索引优化时，应说明具体慢查询场景、索引设计依据和优化效果，避免泛泛而谈。",
+    "example_before": "对数据库进行索引优化。",
+    "example_after": "针对岗位名称和技能字段的组合查询建立联合索引，并通过 EXPLAIN 分析执行计划，减少全表扫描。",
+    "source_image": "general_database.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_029",
+    "category": "database",
+    "title": "事务处理要说明一致性问题",
+    "problem_patterns": [
+      "事务",
+      "ACID",
+      "回滚",
+      "一致性",
+      "订单",
+      "库存",
+      "支付"
+    ],
+    "suggestion": "涉及事务时，应说明事务保护了哪些关键操作，以及解决了什么数据一致性问题。",
+    "example_before": "使用事务保证数据一致性。",
+    "example_after": "在订单创建与库存扣减流程中使用事务控制，异常时自动回滚，避免订单生成但库存未更新的问题。",
+    "source_image": "general_database.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_030",
+    "category": "message_queue",
+    "title": "消息队列要说明削峰、解耦或异步场景",
+    "problem_patterns": [
+      "RabbitMQ",
+      "Kafka",
+      "消息队列",
+      "MQ",
+      "异步",
+      "削峰",
+      "解耦"
+    ],
+    "suggestion": "写消息队列时，应说明它用于异步处理、削峰填谷、系统解耦还是事件通知，并说明消费失败或重试机制。",
+    "example_before": "使用 RabbitMQ 处理消息。",
+    "example_after": "使用 RabbitMQ 异步处理订单通知与超时关闭任务，降低主流程阻塞，并通过重试机制提升消息可靠性。",
+    "source_image": "general_backend.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_031",
+    "category": "distributed_system",
+    "title": "分布式锁要说明并发冲突场景",
+    "problem_patterns": [
+      "分布式锁",
+      "Redisson",
+      "并发",
+      "重复提交",
+      "库存",
+      "抢单",
+      "幂等"
+    ],
+    "suggestion": "写分布式锁时，应说明具体并发冲突场景，例如重复提交、库存扣减、抢单或状态更新，并说明锁的效果。",
+    "example_before": "使用 Redisson 分布式锁。",
+    "example_after": "使用 Redisson 分布式锁控制订单状态更新，避免多节点并发处理导致重复关闭或重复支付。",
+    "source_image": "general_backend.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_032",
+    "category": "distributed_system",
+    "title": "幂等设计要说明重复请求来源",
+    "problem_patterns": [
+      "幂等",
+      "重复提交",
+      "Token",
+      "接口重复调用",
+      "防重",
+      "唯一索引"
+    ],
+    "suggestion": "幂等设计应说明重复请求来自哪里，以及使用 Token、唯一索引、状态机或分布式锁等方式如何避免重复处理。",
+    "example_before": "实现接口幂等。",
+    "example_after": "基于 Redis Token 实现订单提交幂等校验，避免用户重复点击或网络重试导致重复下单。",
+    "source_image": "general_backend.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_033",
+    "category": "api_design",
+    "title": "接口联调经历要写清对象和结果",
+    "problem_patterns": [
+      "接口联调",
+      "前后端联调",
+      "API",
+      "Postman",
+      "Swagger",
+      "Knife4j"
+    ],
+    "suggestion": "接口联调经历应说明和谁联调、联调哪些接口、解决了什么问题以及最终结果。",
+    "example_before": "参与接口联调。",
+    "example_after": "使用 Swagger 输出接口文档，与前端完成登录、订单查询和商品管理接口联调，修复字段不一致和状态码定义问题。",
+    "source_image": "general_backend.png",
+    "priority": 8
+  },
+  {
+    "id": "rule_034",
+    "category": "frontend",
+    "title": "前端项目需要说明页面模块和交互逻辑",
+    "problem_patterns": [
+      "前端",
+      "Vue",
+      "React",
+      "页面",
+      "组件",
+      "交互",
+      "表单"
+    ],
+    "suggestion": "前端项目应说明负责的页面模块、交互逻辑和数据展示方式，避免只写使用 Vue/React。",
+    "example_before": "使用 Vue 开发前端页面。",
+    "example_after": "负责岗位匹配页、能力雷达图和历史记录页开发，实现表单提交、异步加载和 ECharts 可视化展示。",
+    "source_image": "general_frontend.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_035",
+    "category": "frontend",
+    "title": "组件封装要说明复用价值",
+    "problem_patterns": [
+      "组件",
+      "封装",
+      "复用",
+      "Element",
+      "Ant Design",
+      "组件化"
+    ],
+    "suggestion": "写组件封装时，应说明封装了什么组件、在哪些页面复用、带来了什么维护效率提升。",
+    "example_before": "封装通用组件。",
+    "example_after": "封装岗位卡片、能力评分条和结果提示组件，在岗位匹配、成长路径和历史记录页面复用，减少重复代码。",
+    "source_image": "general_frontend.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_036",
+    "category": "frontend",
+    "title": "前端性能优化要写具体手段",
+    "problem_patterns": [
+      "前端性能",
+      "懒加载",
+      "首屏",
+      "打包",
+      "缓存",
+      "页面加载",
+      "性能优化"
+    ],
+    "suggestion": "前端性能优化应写清具体手段，例如懒加载、分页加载、减少重复请求、静态资源缓存、组件拆分等。",
+    "example_before": "优化页面性能。",
+    "example_after": "通过分页加载岗位列表、缓存岗位结果和减少重复接口请求，降低首屏渲染压力并提升页面响应速度。",
+    "source_image": "general_frontend.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_037",
+    "category": "frontend",
+    "title": "TypeScript 要说明类型约束价值",
+    "problem_patterns": [
+      "TypeScript",
+      "TS",
+      "类型",
+      "接口类型",
+      "类型约束"
+    ],
+    "suggestion": "写 TypeScript 时，应说明它如何约束接口数据、减少字段错误或提升协作效率。",
+    "example_before": "使用 TypeScript 开发。",
+    "example_after": "使用 TypeScript 定义岗位结果、能力画像和表单字段类型，减少前后端字段不一致造成的运行错误。",
+    "source_image": "general_frontend.png",
+    "priority": 8
+  },
+  {
+    "id": "rule_038",
+    "category": "testing",
+    "title": "测试岗位项目要说明测试对象和测试类型",
+    "problem_patterns": [
+      "测试",
+      "功能测试",
+      "接口测试",
+      "自动化测试",
+      "测试用例",
+      "缺陷"
+    ],
+    "suggestion": "测试经历应说明测试对象、测试类型、用例数量、发现缺陷和修复跟进情况，避免只写'负责测试'。",
+    "example_before": "负责系统测试。",
+    "example_after": "负责登录、岗位匹配和简历优化模块的功能测试与接口测试，编写 80 条测试用例，发现并跟进 12 个缺陷。",
+    "source_image": "general_testing.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_039",
+    "category": "testing",
+    "title": "自动化测试要说明工具和覆盖范围",
+    "problem_patterns": [
+      "Selenium",
+      "Pytest",
+      "unittest",
+      "自动化测试",
+      "接口自动化",
+      "UI自动化"
+    ],
+    "suggestion": "自动化测试应说明使用工具、覆盖哪些接口或页面、如何断言结果以及提升了什么效率。",
+    "example_before": "使用 Pytest 做自动化测试。",
+    "example_after": "基于 Pytest 编写岗位匹配接口自动化测试，覆盖正常输入、空字段、异常岗位和缓存命中等场景。",
+    "source_image": "general_testing.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_040",
+    "category": "testing",
+    "title": "性能测试要说明指标和工具",
+    "problem_patterns": [
+      "性能测试",
+      "JMeter",
+      "压测",
+      "并发",
+      "QPS",
+      "响应时间",
+      "吞吐量"
+    ],
+    "suggestion": "性能测试经历应说明测试工具、并发规模、关键指标和优化结果，例如 QPS、平均响应时间、P95 等。",
+    "example_before": "进行了性能测试。",
+    "example_after": "使用 JMeter 对岗位匹配接口进行 100 并发压测，记录平均响应时间、P95 和错误率，并根据结果优化缓存策略。",
+    "source_image": "general_testing.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_041",
+    "category": "data_engineering",
+    "title": "数据分析项目要说明数据来源和指标体系",
+    "problem_patterns": [
+      "数据分析",
+      "指标",
+      "数据来源",
+      "可视化",
+      "报表",
+      "BI"
+    ],
+    "suggestion": "数据分析项目应说明数据来源、清洗过程、分析指标和业务结论，避免只写使用工具。",
+    "example_before": "使用 Python 做数据分析。",
+    "example_after": "基于招聘数据清洗岗位名称、薪资和技能字段，构建技能热度、岗位需求和城市分布等指标，并用图表展示分析结论。",
+    "source_image": "general_data.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_042",
+    "category": "data_engineering",
+    "title": "ETL 项目要说明抽取、清洗和入库流程",
+    "problem_patterns": [
+      "ETL",
+      "数据清洗",
+      "数据抽取",
+      "入库",
+      "爬虫",
+      "数据处理"
+    ],
+    "suggestion": "ETL 项目应按抽取、清洗、转换、入库四个环节说明个人贡献，并补充数据量或处理频率。",
+    "example_before": "完成数据清洗和入库。",
+    "example_after": "负责岗位数据 ETL 流程，完成网页数据抽取、字段标准化、去重清洗和 MySQL 入库，累计处理 600+ 条岗位记录。",
+    "source_image": "general_data.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_043",
+    "category": "big_data",
+    "title": "大数据项目要说明数据规模和计算框架",
+    "problem_patterns": [
+      "Hadoop",
+      "Spark",
+      "Flink",
+      "Hive",
+      "HDFS",
+      "离线计算",
+      "实时计算"
+    ],
+    "suggestion": "大数据项目应说明数据规模、计算框架、处理链路和输出结果，避免只堆 Hadoop/Spark/Flink 名称。",
+    "example_before": "使用 Spark 处理数据。",
+    "example_after": "基于 Spark 对日志数据进行离线统计，完成用户行为聚合和指标计算，并将结果写入 Hive 表供报表展示。",
+    "source_image": "general_bigdata.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_044",
+    "category": "big_data",
+    "title": "实时计算要说明延迟和窗口逻辑",
+    "problem_patterns": [
+      "Flink",
+      "Kafka",
+      "实时",
+      "窗口",
+      "Watermark",
+      "流处理"
+    ],
+    "suggestion": "实时计算项目应说明数据流来源、窗口计算逻辑、延迟控制和结果输出位置。",
+    "example_before": "使用 Flink 做实时统计。",
+    "example_after": "基于 Kafka + Flink 实现实时订单流统计，使用滚动窗口计算分钟级订单量，并写入 Redis 供看板展示。",
+    "source_image": "general_bigdata.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_045",
+    "category": "algorithm_ai",
+    "title": "算法项目需要说明数据集、指标和效果",
+    "problem_patterns": [
+      "算法",
+      "模型",
+      "准确率",
+      "召回率",
+      "F1",
+      "数据集",
+      "训练"
+    ],
+    "suggestion": "算法项目应说明数据集来源、样本规模、评价指标、模型效果和个人负责环节，避免只写模型名称。",
+    "example_before": "使用模型完成分类。",
+    "example_after": "基于 5000 条标注样本训练文本分类模型，使用准确率、召回率和 F1 评估效果，本人负责数据清洗、特征构建和模型调参。",
+    "source_image": "general_ai.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_046",
+    "category": "algorithm_ai",
+    "title": "机器学习项目要说明特征工程",
+    "problem_patterns": [
+      "机器学习",
+      "特征工程",
+      "分类",
+      "回归",
+      "XGBoost",
+      "随机森林",
+      "SVM"
+    ],
+    "suggestion": "机器学习项目应说明特征构造、数据划分、模型对比和调参过程，体现分析能力。",
+    "example_before": "使用 XGBoost 训练模型。",
+    "example_after": "完成缺失值处理、类别特征编码和训练集/测试集划分，对比逻辑回归、随机森林和 XGBoost，并通过网格搜索优化参数。",
+    "source_image": "general_ai.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_047",
+    "category": "algorithm_ai",
+    "title": "深度学习项目要说明模型结构和训练过程",
+    "problem_patterns": [
+      "深度学习",
+      "CNN",
+      "RNN",
+      "Transformer",
+      "PyTorch",
+      "TensorFlow",
+      "训练"
+    ],
+    "suggestion": "深度学习项目应说明模型结构、训练数据、损失函数、训练轮次和指标结果，不要只写使用 PyTorch。",
+    "example_before": "使用 PyTorch 训练模型。",
+    "example_after": "基于 PyTorch 搭建 CNN 分类模型，完成数据增强、训练验证集划分和准确率评估，最终验证集准确率达到 92%。",
+    "source_image": "general_ai.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_048",
+    "category": "llm_application",
+    "title": "大模型应用项目要说明调用链路和业务场景",
+    "problem_patterns": [
+      "大模型",
+      "LLM",
+      "LangChain",
+      "LangGraph",
+      "Agent",
+      "Prompt",
+      "RAG"
+    ],
+    "suggestion": "大模型应用项目应说明业务场景、模型调用链路、提示词设计、结构化输出和容错策略。",
+    "example_before": "使用大模型实现智能问答。",
+    "example_after": "基于 LangGraph 构建就业指导智能体，设计岗位分析、能力诊断和建议生成节点，并通过结构化 JSON 约束模型输出。",
+    "source_image": "general_llm.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_049",
+    "category": "llm_application",
+    "title": "RAG 项目要说明知识库构建和检索策略",
+    "problem_patterns": [
+      "RAG",
+      "向量数据库",
+      "知识库",
+      "检索",
+      "Embedding",
+      "召回"
+    ],
+    "suggestion": "RAG 项目应说明文档切分、向量化、召回策略、重排方式和回答引用来源，而不是只写接入知识库。",
+    "example_before": "使用 RAG 实现问答。",
+    "example_after": "构建课程与岗位知识库，对文档进行分块和向量化，基于相似度召回相关内容并注入提示词生成可追溯回答。",
+    "source_image": "general_llm.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_050",
+    "category": "llm_application",
+    "title": "Prompt 优化要说明约束目标",
+    "problem_patterns": [
+      "Prompt",
+      "提示词",
+      "结构化输出",
+      "JSON",
+      "模型输出",
+      "格式约束"
+    ],
+    "suggestion": "提示词优化应说明为了约束什么结果，例如输出字段、评分标准、解释长度、错误兜底等。",
+    "example_before": "优化 Prompt。",
+    "example_after": "设计结构化 Prompt，要求模型返回岗位匹配分、推荐理由、缺失技能和学习建议，降低自由生成导致的字段缺失问题。",
+    "source_image": "general_llm.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_051",
+    "category": "ops_cloud",
+    "title": "Linux 运维经历要说明命令和场景",
+    "problem_patterns": [
+      "Linux",
+      "运维",
+      "命令",
+      "部署",
+      "日志",
+      "进程",
+      "端口"
+    ],
+    "suggestion": "Linux 运维经历应说明使用哪些命令解决什么问题，例如查看日志、管理进程、排查端口或部署服务。",
+    "example_before": "熟悉 Linux 常用命令。",
+    "example_after": "熟悉使用 ps、netstat、tail、grep 等命令定位服务端口占用、进程异常和日志错误，支持项目部署排查。",
+    "source_image": "general_ops.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_052",
+    "category": "ops_cloud",
+    "title": "Nginx 要说明反向代理和负载均衡场景",
+    "problem_patterns": [
+      "Nginx",
+      "反向代理",
+      "负载均衡",
+      "静态资源",
+      "网关"
+    ],
+    "suggestion": "写 Nginx 时，应说明用于静态资源托管、反向代理、负载均衡或 HTTPS 转发等具体场景。",
+    "example_before": "使用 Nginx 部署项目。",
+    "example_after": "使用 Nginx 反向代理 FastAPI 服务并托管静态资源，统一转发前端请求，提高访问入口稳定性。",
+    "source_image": "general_ops.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_053",
+    "category": "ops_cloud",
+    "title": "CI/CD 要说明流水线步骤",
+    "problem_patterns": [
+      "CI/CD",
+      "Jenkins",
+      "GitHub Actions",
+      "流水线",
+      "自动部署",
+      "DevOps"
+    ],
+    "suggestion": "CI/CD 经历应说明代码拉取、测试、构建、部署和回滚等流水线步骤，体现工程自动化能力。",
+    "example_before": "使用 Jenkins 自动部署。",
+    "example_after": "基于 Jenkins 配置 CI/CD 流水线，完成代码拉取、单元测试、镜像构建和服务器部署，减少手动发布成本。",
+    "source_image": "general_ops.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_054",
+    "category": "ops_cloud",
+    "title": "Kubernetes 项目要说明资源对象和部署价值",
+    "problem_patterns": [
+      "Kubernetes",
+      "K8s",
+      "Pod",
+      "Deployment",
+      "Service",
+      "Ingress",
+      "容器编排"
+    ],
+    "suggestion": "Kubernetes 项目应说明使用了哪些资源对象，解决了什么部署、扩缩容或服务发现问题。",
+    "example_before": "了解 Kubernetes。",
+    "example_after": "使用 Deployment 管理后端服务副本，使用 Service 暴露内部访问入口，并通过 Ingress 统一管理外部路由。",
+    "source_image": "general_ops.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_055",
+    "category": "security",
+    "title": "隐私与脱敏功能要说明保护对象",
+    "problem_patterns": [
+      "脱敏",
+      "隐私",
+      "手机号",
+      "邮箱",
+      "身份证",
+      "权限",
+      "安全"
+    ],
+    "suggestion": "隐私保护功能应说明保护哪些敏感字段、在哪里脱敏、对哪些角色可见。",
+    "example_before": "实现简历脱敏。",
+    "example_after": "对企业端展示的简历进行手机号、邮箱和地址脱敏，仅保留必要求职信息，降低学生隐私泄露风险。",
+    "source_image": "general_security.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_056",
+    "category": "security",
+    "title": "CSRF/限流要说明防护风险",
+    "problem_patterns": [
+      "CSRF",
+      "限流",
+      "Rate Limit",
+      "攻击",
+      "安全防护",
+      "表单提交"
+    ],
+    "suggestion": "安全防护功能应说明防护的风险，例如跨站请求、频繁提交、恶意刷接口等，并说明防护位置。",
+    "example_before": "添加 CSRF 和限流。",
+    "example_after": "在登录、注册和三方协同操作中加入 CSRF 校验和限流机制，减少恶意提交和接口滥用风险。",
+    "source_image": "general_security.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_057",
+    "category": "mobile",
+    "title": "移动端项目要说明端侧页面和接口交互",
+    "problem_patterns": [
+      "Android",
+      "iOS",
+      "小程序",
+      "移动端",
+      "App",
+      "uni-app",
+      "Flutter"
+    ],
+    "suggestion": "移动端项目应说明负责的页面、端侧交互、接口联调和适配问题，避免只写技术框架。",
+    "example_before": "使用 uni-app 开发小程序。",
+    "example_after": "基于 uni-app 开发订单列表、商品详情和个人中心页面，完成接口联调、登录态维护和移动端样式适配。",
+    "source_image": "general_mobile.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_058",
+    "category": "embedded_iot",
+    "title": "嵌入式项目要说明硬件、通信和控制逻辑",
+    "problem_patterns": [
+      "嵌入式",
+      "单片机",
+      "STM32",
+      "传感器",
+      "串口",
+      "I2C",
+      "SPI",
+      "物联网"
+    ],
+    "suggestion": "嵌入式/物联网项目应说明硬件平台、传感器、通信协议和控制逻辑，体现端到端实现能力。",
+    "example_before": "完成智能门禁项目。",
+    "example_after": "基于 STM32 采集传感器数据，通过串口与上位机通信，实现身份识别、门锁控制和异常状态提示。",
+    "source_image": "general_iot.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_059",
+    "category": "computer_vision",
+    "title": "视觉项目要说明数据标注和评价指标",
+    "problem_patterns": [
+      "计算机视觉",
+      "OpenCV",
+      "YOLO",
+      "目标检测",
+      "图像识别",
+      "标注",
+      "mAP"
+    ],
+    "suggestion": "视觉项目应说明数据来源、标注方式、模型或算法、评价指标和实际应用场景。",
+    "example_before": "使用 YOLO 做检测。",
+    "example_after": "基于 YOLO 完成门禁场景下人脸区域检测，整理并标注训练样本，使用 mAP 和误检率评估模型效果。",
+    "source_image": "general_cv.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_060",
+    "category": "nlp",
+    "title": "NLP 项目要说明文本处理流程",
+    "problem_patterns": [
+      "NLP",
+      "分词",
+      "文本分类",
+      "关键词提取",
+      "相似度",
+      "BERT",
+      "语义"
+    ],
+    "suggestion": "NLP 项目应说明文本清洗、分词/编码、模型或算法、评价指标和应用场景。",
+    "example_before": "实现文本分类。",
+    "example_after": "对用户评论进行清洗和分词，使用 BERT 提取语义特征并完成情感分类，使用准确率和 F1 评估效果。",
+    "source_image": "general_nlp.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_061",
+    "category": "resume_targeting",
+    "title": "简历内容要围绕目标岗位取舍",
+    "problem_patterns": [
+      "求职意向",
+      "目标岗位",
+      "岗位",
+      "简历方向",
+      "投递"
+    ],
+    "suggestion": "简历应围绕目标岗位筛选经历和技能，弱相关内容应压缩，强相关项目应展开。",
+    "example_before": "求职意向：Java开发、测试、数据分析、前端。",
+    "example_after": "求职意向：Java 后端开发。简历重点突出 Spring Boot、MySQL、Redis、微服务和接口开发经历。",
+    "source_image": "general_resume.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_062",
+    "category": "resume_expression",
+    "title": "经历描述建议使用 STAR 法则",
+    "problem_patterns": [
+      "项目经历",
+      "实习经历",
+      "工作经历",
+      "成果",
+      "负责",
+      "任务"
+    ],
+    "suggestion": "项目/实习经历可按背景、任务、行动、结果组织，突出个人行动和最终成果。",
+    "example_before": "参与项目开发，完成多个功能。",
+    "example_after": "在订单处理效率较低的背景下，负责订单状态流转模块设计，使用定时任务和状态机优化流程，使异常订单处理更加自动化。",
+    "source_image": "general_resume.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_063",
+    "category": "resume_expression",
+    "title": "避免使用过多主观形容词",
+    "problem_patterns": [
+      "认真",
+      "努力",
+      "积极",
+      "负责",
+      "良好",
+      "较强",
+      "热爱"
+    ],
+    "suggestion": "简历中应减少主观形容词，多使用项目事实、技术动作和结果证明能力。",
+    "example_before": "本人认真负责，学习能力强。",
+    "example_after": "在项目中独立完成订单接口设计、Redis 缓存接入和 Docker Compose 部署，能够快速学习并落地新技术。",
+    "source_image": "general_resume.png",
+    "priority": 8
+  },
+  {
+    "id": "rule_064",
+    "category": "resume_expression",
+    "title": "技能熟练度要和证据匹配",
+    "problem_patterns": [
+      "精通",
+      "熟练",
+      "熟悉",
+      "了解",
+      "掌握",
+      "技能"
+    ],
+    "suggestion": "技能熟练度应与项目证据匹配，避免没有项目支撑却写'精通'或'熟练掌握'。",
+    "example_before": "精通 Redis、Docker、Kubernetes。",
+    "example_after": "熟悉 Redis 缓存使用场景，了解 Docker Compose 部署流程；具备项目实践经验。",
+    "source_image": "general_resume.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_065",
+    "category": "resume_expression",
+    "title": "不要把所有技术都堆到技能清单里",
+    "problem_patterns": [
+      "技能清单",
+      "专业技能",
+      "技术栈",
+      "工具",
+      "了解",
+      "熟悉"
+    ],
+    "suggestion": "技能清单应保留与目标岗位强相关且有项目证据支撑的技术，弱相关或只了解的技术可以删减或下沉。",
+    "example_before": "熟悉 Java、Python、C++、Vue、Docker、K8s、Hadoop、Flink、机器学习。",
+    "example_after": "围绕 Java 后端岗位保留 Java、Spring Boot、MySQL、Redis、Docker Compose，并在项目经历中给出对应证据。",
+    "source_image": "general_resume.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_066",
+    "category": "internship",
+    "title": "实习经历需要写清业务贡献",
+    "problem_patterns": [
+      "实习",
+      "实习生",
+      "工作经历",
+      "公司",
+      "上线",
+      "业务"
+    ],
+    "suggestion": "实习经历应说明岗位、所在业务、个人负责内容和上线/交付结果，体现真实企业环境经验。",
+    "example_before": "在公司参与后端开发。",
+    "example_after": "在某科技公司担任后端开发实习生，负责订单查询接口和缓存优化，参与上线测试并协助排查生产问题。",
+    "source_image": "general_internship.png",
+    "priority": 10
+  },
+  {
+    "id": "rule_067",
+    "category": "internship",
+    "title": "上线经历要说明交付范围",
+    "problem_patterns": [
+      "上线",
+      "发布",
+      "部署",
+      "交付",
+      "生产环境",
+      "测试环境"
+    ],
+    "suggestion": "上线或部署经历应说明上线模块、参与环节、测试验证和后续效果。",
+    "example_before": "项目成功上线。",
+    "example_after": "参与订单模块上线前接口联调、测试验证和日志排查，确保订单查询与状态流转功能稳定运行。",
+    "source_image": "general_internship.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_068",
+    "category": "project_experience",
+    "title": "开源/课程项目要补充真实性证据",
+    "problem_patterns": [
+      "课程设计",
+      "开源",
+      "GitHub",
+      "仓库",
+      "Demo",
+      "作品集",
+      "课程项目"
+    ],
+    "suggestion": "课程项目或开源项目应补充仓库地址、演示截图、部署链接或关键代码模块，提高可信度。",
+    "example_before": "完成一个在线商城项目。",
+    "example_after": "完成在线商城课程项目，包含商品管理、购物车和订单模块，已上传 GitHub 并整理接口文档与演示截图。",
+    "source_image": "general_project.png",
+    "priority": 8
+  },
+  {
+    "id": "rule_069",
+    "category": "project_experience",
+    "title": "比赛项目要说明个人分工和获奖关系",
+    "problem_patterns": [
+      "比赛",
+      "竞赛",
+      "获奖",
+      "队长",
+      "成员",
+      "答辩",
+      "创新"
+    ],
+    "suggestion": "比赛项目应说明个人分工、技术贡献、答辩或文档贡献，以及获奖与项目成果之间的关系。",
+    "example_before": "获得比赛一等奖。",
+    "example_after": "作为团队后端成员参与比赛项目，负责核心接口和数据入库模块，并参与答辩材料整理，最终获得省级一等奖。",
+    "source_image": "general_project.png",
+    "priority": 9
+  },
+  {
+    "id": "rule_070",
+    "category": "resume_format",
+    "title": "简历格式要突出重点并控制长度",
+    "problem_patterns": [
+      "简历格式",
+      "排版",
+      "一页",
+      "重点",
+      "项目过长",
+      "内容太多"
+    ],
+    "suggestion": "简历应控制长度并突出重点，核心项目展开写，弱相关内容压缩，避免大段文字影响 HR 快速阅读。",
+    "example_before": "项目经历使用整段文字描述，缺少分点。",
+    "example_after": "项目经历按项目背景、个人职责、技术方案和成果分点描述，提升可读性。",
+    "source_image": "general_resume.png",
+    "priority": 8
   }
 ]

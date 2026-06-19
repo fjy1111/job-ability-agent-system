@@ -3,6 +3,9 @@ from __future__ import annotations
 import json
 import os
 import re
+import hashlib
+from collections import OrderedDict
+from copy import deepcopy
 from html import escape as html_escape
 from io import BytesIO
 from pathlib import Path
@@ -11,7 +14,10 @@ from typing import Any
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 
-from app.services.resume_expert_kb_service import retrieve_resume_expert_rules
+from app.services.resume_expert_kb_service import (
+    load_resume_expert_rules,
+    retrieve_resume_expert_rules,
+)
 from app.services.llm_errors import LLMCallError
 
 load_dotenv()
@@ -21,6 +27,11 @@ TEXT_EXTENSIONS = {".txt", ".md", ".csv"}
 DOCX_EXTENSIONS = {".docx"}
 PDF_EXTENSIONS = {".pdf"}
 MAX_PDF_PAGES = 5
+RESUME_OPTIMIZER_CACHE_VERSION = "resume_optimizer_v2"
+RESUME_OPTIMIZER_CACHE_MAX_SIZE = 64
+RESUME_OPTIMIZER_EXPERT_RULE_LIMIT = 12
+
+_resume_optimizer_cache: OrderedDict[str, dict[str, Any]] = OrderedDict()
 
 
 def _decode_text(content: bytes) -> str:
@@ -290,6 +301,80 @@ def _expert_rules_prompt(matched_rules: list[dict]) -> str:
 """
 
 
+def _rule_identity(rule: dict[str, Any]) -> str:
+    return str(rule.get("id") or rule.get("title") or "").strip()
+
+
+def _retrieve_optimizer_expert_rules(
+    resume_text: str,
+    max_rules: int = RESUME_OPTIMIZER_EXPERT_RULE_LIMIT,
+) -> list[dict]:
+    selected = retrieve_resume_expert_rules(resume_text, max_rules=max_rules)
+    seen = {_rule_identity(rule) for rule in selected if _rule_identity(rule)}
+
+    if len(selected) >= max_rules:
+        return selected[:max_rules]
+
+    supplemental = sorted(
+        load_resume_expert_rules(),
+        key=lambda item: item.get("priority", 0),
+        reverse=True,
+    )
+    for rule in supplemental:
+        identity = _rule_identity(rule)
+        if not identity or identity in seen:
+            continue
+        selected.append(rule)
+        seen.add(identity)
+        if len(selected) >= max_rules:
+            break
+    return selected[:max_rules]
+
+
+def _resume_optimizer_cache_key(
+    resume_text: str,
+    job_description: str,
+    target_role: str,
+    output_language: str,
+    harvard_format: bool,
+    expert_rules: list[dict],
+) -> str:
+    payload = {
+        "version": RESUME_OPTIMIZER_CACHE_VERSION,
+        "resume_text": str(resume_text or "").strip(),
+        "job_description": str(job_description or "").strip(),
+        "target_role": str(target_role or "").strip(),
+        "output_language": str(output_language or "").strip(),
+        "harvard_format": bool(harvard_format),
+        "expert_rule_ids": [_rule_identity(rule) for rule in expert_rules],
+    }
+    raw = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def clear_resume_optimizer_cache() -> None:
+    _resume_optimizer_cache.clear()
+
+
+def _get_cached_resume_result(cache_key: str) -> dict[str, Any] | None:
+    cached = _resume_optimizer_cache.get(cache_key)
+    if cached is None:
+        return None
+    _resume_optimizer_cache.move_to_end(cache_key)
+    result = deepcopy(cached)
+    result["cache_hit"] = True
+    return result
+
+
+def _save_resume_result_to_cache(cache_key: str, result: dict[str, Any]) -> None:
+    cached = deepcopy(result)
+    cached["cache_hit"] = False
+    _resume_optimizer_cache[cache_key] = cached
+    _resume_optimizer_cache.move_to_end(cache_key)
+    while len(_resume_optimizer_cache) > RESUME_OPTIMIZER_CACHE_MAX_SIZE:
+        _resume_optimizer_cache.popitem(last=False)
+
+
 def _rule_text(rule: dict[str, Any]) -> str:
     patterns = rule.get("problem_patterns")
     if isinstance(patterns, list):
@@ -404,6 +489,7 @@ def build_highlighted_optimized_html(
         [
             r"(?:响应时间|接口响应(?:时间|速度)?|人工处理时间|处理时间|缓存命中率|命中率|重复提交率|提交率|查询效率|检索效率|点击率|准确率|性能|效率|耗时|延迟)[^，。；,\n]{0,24}(?:降低|下降|减少|提升|提高|达|达到|降至|低至|缩短|优化至)[^，。；,\n]{0,12}\d+(?:\.\d+)?%",
             r"(?:降低|下降|减少|提升|提高|达|达到|降至|低至|缩短|优化至)[^，。；,\n]{0,12}\d+(?:\.\d+)?%",
+            r"(?:降低|下降|减少|提升|提高|优化)[^，。；,\n]{2,30}(?:访问|速度|效率|性能|开销|耗时|响应|一致性)",
         ],
         quant_title,
     )
@@ -424,7 +510,8 @@ def build_highlighted_optimized_html(
         matches,
         text,
         [
-            r"(?:后端|前端|算法|测试|数据|全栈)?(?:核心成员|负责人|开发负责人|开发成员)",
+            r"(?:后端|前端|算法|测试|数据|全栈)?(?:核心成员|核心开发|负责人|开发负责人|开发成员)",
+            r"(?:核心后端开发|后端核心开发|后端负责人|个人贡献)",
             r"(?:独立完成|主要负责|本人负责|个人负责)",
             r"作为[^，。；,\n]{0,12}(?:负责人|核心成员|开发成员)",
         ],
@@ -442,6 +529,93 @@ def build_highlighted_optimized_html(
             r"(?:使用|通过|结合|基于|引入|利用)?\s*(?:Redis|Redisson)[^，。；,\n]{0,40}(?:缓存|分布式锁|一致性|高频查询|读多写少|查询结果|热点数据|缓存命中)[^，。；,\n]{0,30}",
         ],
         redis_title,
+    )
+
+    microservice_title = _find_rule_title(
+        rules,
+        ("微服务", "Spring Cloud", "Spring Cloud Alibaba", "OpenFeign", "服务拆分"),
+    )
+    _add_highlight_matches(
+        matches,
+        text,
+        [
+            r"(?:基于|使用|通过|采用)?\s*Spring Cloud Alibaba[^，。；,\n]{0,30}(?:微服务|生态|架构)[^，。；,\n]{0,20}",
+            r"(?:微服务)(?:架构|生态|项目|体系)?",
+            r"(?:拆分|划分)[^，。；,\n]{0,30}(?:服务|模块)",
+            r"OpenFeign[^，。；,\n]{0,30}(?:服务调用|远程调用|服务间调用)",
+        ],
+        microservice_title,
+    )
+
+    gateway_title = _find_rule_title(
+        rules,
+        ("Nacos", "Gateway", "注册配置中心", "统一网关", "路由", "跨域"),
+    )
+    _add_highlight_matches(
+        matches,
+        text,
+        [
+            r"Nacos[^，。；,\n]{0,30}(?:注册配置中心|服务注册|配置管理)[^，。；,\n]{0,20}",
+            r"Gateway[^，。；,\n]{0,40}(?:统一网关|路由转发|跨域处理|权限入口)[^，。；,\n]{0,20}",
+            r"(?:注册配置中心|统一网关|路由转发|跨域处理)",
+        ],
+        gateway_title,
+    )
+
+    security_title = _find_rule_title(
+        rules,
+        ("Spring Security", "JWT", "认证", "授权", "接口安全", "权限控制"),
+    )
+    _add_highlight_matches(
+        matches,
+        text,
+        [
+            r"(?:Spring Security\s*\+\s*JWT|Spring Security|JWT)[^，。；,\n]{0,40}(?:认证授权|登录认证|接口鉴权|用户身份校验|权限控制|接口安全)[^，。；,\n]{0,20}",
+            r"(?:认证授权|登录认证|接口鉴权|用户身份校验|权限控制|接口安全)",
+        ],
+        security_title,
+    )
+
+    xxl_job_title = _find_rule_title(
+        rules,
+        ("XXL-JOB", "定时任务", "分片广播", "订单状态", "自动处理"),
+    )
+    _add_highlight_matches(
+        matches,
+        text,
+        [
+            r"XXL-JOB[^，。；,\n]{0,50}(?:分片广播|定时任务|订单状态|自动处理|状态同步|超时订单|异常订单)[^，。；,\n]{0,30}",
+            r"(?:分片广播|订单状态|自动处理|状态同步|超时订单关闭|异常订单处理)",
+        ],
+        xxl_job_title,
+    )
+
+    docker_title = _find_rule_title(
+        rules,
+        ("Docker Compose", "Docker", "部署", "运维", "测试环境"),
+    )
+    _add_highlight_matches(
+        matches,
+        text,
+        [
+            r"Docker Compose[^，。；,\n]{0,50}(?:简化|部署|测试环境|环境搭建|复现|部署效率)[^，。；,\n]{0,30}",
+            r"(?:简化测试环境搭建|提高部署效率|方便测试复现)",
+        ],
+        docker_title,
+    )
+
+    business_title = _find_rule_title(
+        rules,
+        ("业务场景", "订单", "配送", "商家", "用户", "调度"),
+    )
+    _add_highlight_matches(
+        matches,
+        text,
+        [
+            r"(?:面向|覆盖|支撑)[^，。；,\n]{0,40}(?:订单|配送|商家|用户|调度)[^，。；,\n]{0,30}(?:场景|业务|问题|流程)",
+            r"(?:订单状态流转|配送调度|商家接单|用户下单|履约跟踪)",
+        ],
+        business_title,
     )
 
     english_title = _find_rule_title(
@@ -557,13 +731,30 @@ def optimize_resume(
     job_description: str,
     target_role: str = "",
     output_language: str = "auto",
-    harvard_format: bool = False
+    harvard_format: bool = False,
+    use_cache: bool = True
 ) -> dict[str, Any]:
     """
     调用大模型生成简历优化结果。失败时只抛出“调用LLM失败”。
     """
     role = target_role.strip() or "目标岗位"
-    matched_rules = retrieve_resume_expert_rules(resume_text, max_rules=8)
+    matched_rules = _retrieve_optimizer_expert_rules(
+        resume_text,
+        max_rules=RESUME_OPTIMIZER_EXPERT_RULE_LIMIT,
+    )
+    cache_key = _resume_optimizer_cache_key(
+        resume_text,
+        job_description,
+        target_role,
+        output_language,
+        harvard_format,
+        matched_rules,
+    )
+    if use_cache:
+        cached_result = _get_cached_resume_result(cache_key)
+        if cached_result is not None:
+            return cached_result
+
     expert_rules_text = _expert_rules_prompt(matched_rules)
     prompt = f"""
 你是资深就业辅导与简历优化智能体。请基于候选人简历和目标岗位生成可直接展示的简历优化结果。
@@ -607,7 +798,11 @@ JSON 格式：
 
     try:
         result = _invoke_optimizer_with_retry(prompt)
-        return _attach_expert_rules(result, matched_rules, resume_text)
+        result = _attach_expert_rules(result, matched_rules, resume_text)
+        result["cache_hit"] = False
+        if use_cache:
+            _save_resume_result_to_cache(cache_key, result)
+        return result
     except LLMCallError:
         raise
     except Exception:

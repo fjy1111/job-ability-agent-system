@@ -56,7 +56,9 @@
         </div>
         {% endfor %}
 
-        <form action="/resume/optimize" method="post" enctype="multipart/form-data" class="resume-form">
+        <div id="resumeStreamStatus" class="resume-stream-status" hidden></div>
+
+        <form id="resumeOptimizeForm" action="/resume/optimize" method="post" enctype="multipart/form-data" class="resume-form">
             <section class="resume-optimizer-card upload">
                 <div class="resume-card-title">
                     <span class="resume-title-icon document"></span>
@@ -119,8 +121,10 @@
             </section>
         </form>
 
+        <div id="resumeLiveResult"></div>
+
         {% if result %}
-        <section class="resume-optimizer-card ai-result">
+        <section id="resumeServerResult" class="resume-optimizer-card ai-result">
             <div class="resume-card-title">
                 <span class="resume-title-icon bolt"></span>
                 <h2>优化结果</h2>
@@ -202,7 +206,7 @@
             </div>
         </section>
         {% else %}
-        <section class="resume-optimizer-card locked">
+        <section id="resumeServerResult" class="resume-optimizer-card locked">
             <div class="resume-card-title">
                 <span class="resume-title-icon lock"></span>
                 <h2>结果预览</h2>
@@ -214,5 +218,184 @@
         </section>
         {% endif %}
     </main>
+
+    <script>
+        const resumeForm = document.getElementById("resumeOptimizeForm");
+        const streamStatus = document.getElementById("resumeStreamStatus");
+        const liveResult = document.getElementById("resumeLiveResult");
+        const serverResult = document.getElementById("resumeServerResult");
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function setStreamStatus(message, mode = "info") {
+            streamStatus.hidden = false;
+            streamStatus.className = `resume-stream-status ${mode}`;
+            streamStatus.textContent = message;
+        }
+
+        function renderTags(items, className) {
+            return (Array.isArray(items) ? items : [])
+                .map((item) => `<span>${escapeHtml(item)}</span>`)
+                .join("");
+        }
+
+        function renderParagraphs(items) {
+            return (Array.isArray(items) ? items : [])
+                .map((item) => `<p>${escapeHtml(item)}</p>`)
+                .join("");
+        }
+
+        function renderRewriteSuggestions(items) {
+            return (Array.isArray(items) ? items : [])
+                .map((item) => `
+                    <article>
+                        <strong>${escapeHtml(item.section)}</strong>
+                        <p>原写法：${escapeHtml(item.before)}</p>
+                        <p>建议写法：${escapeHtml(item.after)}</p>
+                        <small>${escapeHtml(item.reason)}</small>
+                    </article>
+                `)
+                .join("");
+        }
+
+        function renderResumeResult(result) {
+            const optimizedHtml = result.highlighted_optimized_html || escapeHtml(result.optimized_resume || "");
+            const expertPanel = Number(result.expert_rules_used_count || 0) > 0
+                ? `
+                    <div class="resume-expert-rules-panel">
+                        <div>
+                            <strong>已参考 ${Number(result.expert_rules_used_count || 0)} 条专家手工标注建议</strong>
+                            <span>规则来自历史专家批注知识库，本次命中的改写片段已在优化稿正文中标记。</span>
+                        </div>
+                        <p>黄色高亮片段表示参考专家规则后新增或改写的内容。</p>
+                    </div>
+                `
+                : "";
+
+            liveResult.innerHTML = `
+                <section class="resume-optimizer-card ai-result">
+                    <div class="resume-card-title">
+                        <span class="resume-title-icon bolt"></span>
+                        <h2>优化结果</h2>
+                        <span class="resume-status-dot"></span>
+                    </div>
+
+                    <div class="resume-score-grid">
+                        <div><strong>${Number(result.overall_score || 0)}</strong><span>综合匹配</span></div>
+                        <div><strong>${Number(result.keyword_score || 0)}</strong><span>关键词覆盖</span></div>
+                        <div><strong>${Number(result.structure_score || 0)}</strong><span>结构表达</span></div>
+                    </div>
+
+                    <p class="resume-result-summary">${escapeHtml(result.summary || "")}</p>
+                    ${expertPanel}
+
+                    <div class="resume-result-layout">
+                        <div class="resume-output-panel">
+                            <div class="resume-output-head">
+                                <h3>优化稿</h3>
+                            </div>
+                            <pre>${optimizedHtml}</pre>
+                        </div>
+
+                        <aside class="resume-insight-panel">
+                            <h3>优势</h3>
+                            <div class="resume-tag-list good">${renderTags(result.strengths, "good")}</div>
+                            <h3>待提升</h3>
+                            <div class="resume-tag-list gap">${renderTags(result.weaknesses, "gap")}</div>
+                        </aside>
+                    </div>
+
+                    <div class="resume-rewrite-list">
+                        <h3>改写建议</h3>
+                        ${renderRewriteSuggestions(result.rewrite_suggestions)}
+                    </div>
+
+                    <div class="resume-action-items">
+                        ${renderParagraphs(result.action_items)}
+                    </div>
+                </section>
+            `;
+        }
+
+        async function handleStreamingSubmit(event) {
+            if (!window.ReadableStream || !window.TextDecoder) {
+                return;
+            }
+
+            event.preventDefault();
+            const submitButton = resumeForm.querySelector("button[type='submit']");
+            const originalButtonText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = "正在生成...";
+            liveResult.innerHTML = "";
+            if (serverResult) {
+                serverResult.hidden = true;
+            }
+            setStreamStatus("正在提交简历优化任务...");
+
+            try {
+                const response = await fetch("/resume/optimize/stream", {
+                    method: "POST",
+                    body: new FormData(resumeForm),
+                });
+
+                if (!response.ok || !response.body) {
+                    resumeForm.submit();
+                    return;
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder("utf-8");
+                let buffer = "";
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) {
+                        break;
+                    }
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split("\n");
+                    buffer = lines.pop() || "";
+
+                    for (const line of lines) {
+                        if (!line.trim()) {
+                            continue;
+                        }
+                        const eventData = JSON.parse(line);
+                        if (eventData.type === "status") {
+                            setStreamStatus(eventData.message || "正在生成...");
+                        } else if (eventData.type === "error") {
+                            setStreamStatus((eventData.errors || ["生成失败"]).join(" "), "error");
+                            if (eventData.redirect_url) {
+                                window.location.href = eventData.redirect_url;
+                            }
+                        } else if (eventData.type === "result") {
+                            renderResumeResult(eventData.result || {});
+                            setStreamStatus(
+                                eventData.cache_hit ? "已命中缓存，结果已快速返回。" : "简历优化完成。",
+                                "success"
+                            );
+                        }
+                    }
+                }
+            } catch (error) {
+                setStreamStatus("实时输出失败，正在切换为普通提交...", "warning");
+                resumeForm.submit();
+                return;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            }
+        }
+
+        resumeForm.addEventListener("submit", handleStreamingSubmit);
+    </script>
 </body>
 </html>

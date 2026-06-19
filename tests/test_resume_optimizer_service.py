@@ -4,7 +4,10 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from app.services.llm_errors import LLMCallError
-from app.services.resume_optimizer_service import optimize_resume
+from app.services.resume_optimizer_service import (
+    clear_resume_optimizer_cache,
+    optimize_resume,
+)
 
 
 VALID_RESULT = {
@@ -31,6 +34,9 @@ class FakeLLM:
 
 
 class ResumeOptimizerServiceTests(unittest.TestCase):
+    def setUp(self):
+        clear_resume_optimizer_cache()
+
     def test_requests_json_output_and_accepts_valid_result(self):
         llm = FakeLLM([json.dumps(VALID_RESULT, ensure_ascii=False)])
 
@@ -71,6 +77,33 @@ class ResumeOptimizerServiceTests(unittest.TestCase):
         ):
             with self.assertRaises(LLMCallError):
                 optimize_resume("Java 简历内容", "优化 Java 后端简历")
+
+
+    def test_reuses_cached_result_for_same_input(self):
+        llm = FakeLLM([json.dumps(VALID_RESULT, ensure_ascii=False)])
+
+        with patch(
+            "app.services.resume_optimizer_service._create_llm",
+            return_value=llm,
+        ):
+            first = optimize_resume("Java 简历内容", "优化 Java 后端简历")
+            second = optimize_resume("Java 简历内容", "优化 Java 后端简历")
+
+        self.assertFalse(first["cache_hit"])
+        self.assertTrue(second["cache_hit"])
+        self.assertEqual(second["optimized_resume"], VALID_RESULT["optimized_resume"])
+        self.assertEqual(len(llm.calls), 1)
+
+    def test_optimizer_attaches_expanded_expert_rules(self):
+        llm = FakeLLM([json.dumps(VALID_RESULT, ensure_ascii=False)])
+
+        with patch(
+            "app.services.resume_optimizer_service._create_llm",
+            return_value=llm,
+        ):
+            result = optimize_resume("我喜欢阅读与运动，沟通主动。", "优化后端开发简历")
+
+        self.assertGreaterEqual(result["expert_rules_used_count"], 10)
 
 
 if __name__ == "__main__":

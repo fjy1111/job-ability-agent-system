@@ -4493,6 +4493,130 @@ def resume_optimize_submit(
     )
 
 
+@app.post("/resume/optimize/stream")
+async def resume_optimize_stream(
+    request: Request,
+    resume_text: str = Form(""),
+    job_description: str = Form(""),
+    target_role: str = Form(""),
+    output_language: str = Form("auto"),
+    harvard_format: str | None = Form(None),
+    resume_file: UploadFile | None = File(None)
+):
+    """
+    Stream resume optimization progress and return the final result as NDJSON.
+    The original POST endpoint remains available as a non-JS fallback.
+    """
+    redirect_response = get_login_redirect(request)
+
+    def stream_event(payload: dict) -> str:
+        return json.dumps(payload, ensure_ascii=False) + "\n"
+
+    if redirect_response:
+        return StreamingResponse(
+            iter([
+                stream_event({
+                    "type": "error",
+                    "errors": ["请先登录后再使用简历优化。"],
+                    "redirect_url": "/login",
+                })
+            ]),
+            media_type="application/x-ndjson",
+        )
+
+    upload_warnings = []
+    uploaded_filename = ""
+    uploaded_resume_text = ""
+
+    if resume_file is not None and resume_file.filename:
+        uploaded_filename = resume_file.filename
+        file_content = await resume_file.read()
+        uploaded_resume_text, upload_warnings = extract_resume_text_from_upload(
+            uploaded_filename,
+            file_content
+        )
+
+    final_resume_text = resume_text.strip() or uploaded_resume_text.strip()
+    final_job_description = job_description.strip()
+    errors = []
+
+    if not final_resume_text:
+        errors.append("请上传可解析的简历文件，或直接粘贴简历文本。")
+
+    if not final_job_description:
+        errors.append("请粘贴招聘岗位描述。")
+
+    input_data = {
+        "resume_text": resume_text.strip() or uploaded_resume_text.strip(),
+        "job_description": final_job_description,
+        "target_role": target_role.strip(),
+        "output_language": output_language,
+        "harvard_format": harvard_format == "on",
+        "uploaded_filename": uploaded_filename
+    }
+
+    def event_generator():
+        yield stream_event({
+            "type": "status",
+            "message": "已解析简历输入，正在校验岗位信息。",
+            "warnings": upload_warnings,
+        })
+
+        if errors:
+            yield stream_event({
+                "type": "error",
+                "errors": errors,
+                "warnings": upload_warnings,
+                "input_data": input_data,
+            })
+            return
+
+        yield stream_event({
+            "type": "status",
+            "message": "正在检索专家手工标注建议，并检查缓存。",
+        })
+
+        try:
+            result = optimize_resume(
+                resume_text=final_resume_text,
+                job_description=final_job_description,
+                target_role=target_role,
+                output_language=output_language,
+                harvard_format=harvard_format == "on",
+            )
+        except LLMCallError:
+            yield stream_event({
+                "type": "error",
+                "errors": ["调用LLM失败"],
+                "warnings": upload_warnings,
+                "input_data": input_data,
+            })
+            return
+
+        warnings = list(upload_warnings)
+        if result.get("agent_warning"):
+            warnings.append(result["agent_warning"])
+
+        yield stream_event({
+            "type": "status",
+            "message": "命中缓存，已快速返回历史优化结果。" if result.get("cache_hit") else "优化完成，正在渲染结果。",
+            "cache_hit": bool(result.get("cache_hit")),
+        })
+        yield stream_event({
+            "type": "result",
+            "result": result,
+            "warnings": warnings,
+            "input_data": input_data,
+            "cache_hit": bool(result.get("cache_hit")),
+        })
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="application/x-ndjson",
+        headers={"Cache-Control": "no-cache"},
+    )
+
+
 @app.get("/resume/match")
 def resume_course_job_match_page(request: Request):
     """

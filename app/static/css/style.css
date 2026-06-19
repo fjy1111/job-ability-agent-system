@@ -2100,6 +2100,35 @@ h1 {
     border: 1px solid #fed7aa;
 }
 
+.resume-stream-status {
+    margin-bottom: 18px;
+    padding: 13px 16px;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    line-height: 1.7;
+    font-weight: 800;
+}
+
+.resume-stream-status.success {
+    border-color: #bbf7d0;
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.resume-stream-status.warning {
+    border-color: #fed7aa;
+    background: #fff7ed;
+    color: #9a3412;
+}
+
+.resume-stream-status.error {
+    border-color: #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
 .resume-form {
     display: flex;
     flex-direction: column;
@@ -2581,6 +2610,12 @@ h1 {
 .resume-primary-action:hover {
     background: #1d4ed8;
     transform: translateY(-1px);
+}
+
+.resume-primary-action:disabled {
+    cursor: wait;
+    opacity: 0.72;
+    transform: none;
 }
 
 .resume-primary-action svg,
