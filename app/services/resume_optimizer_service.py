@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import re
+from html import escape as html_escape
 from io import BytesIO
 from pathlib import Path
 from typing import Any
@@ -289,7 +290,225 @@ def _expert_rules_prompt(matched_rules: list[dict]) -> str:
 """
 
 
-def _attach_expert_rules(result: dict[str, Any], matched_rules: list[dict]) -> dict[str, Any]:
+def _rule_text(rule: dict[str, Any]) -> str:
+    patterns = rule.get("problem_patterns")
+    if isinstance(patterns, list):
+        pattern_text = " ".join(str(item) for item in patterns)
+    else:
+        pattern_text = str(patterns or "")
+    return " ".join(
+        str(rule.get(key, "") or "")
+        for key in ("title", "category", "suggestion")
+    ) + f" {pattern_text}"
+
+
+def _find_rule_title(
+    expert_rules_used: list[dict[str, Any]],
+    keywords: tuple[str, ...],
+) -> str:
+    for rule in expert_rules_used:
+        haystack = _rule_text(rule).casefold()
+        if any(keyword.casefold() in haystack for keyword in keywords):
+            title = str(rule.get("title", "")).strip()
+            if title:
+                return title
+    return ""
+
+
+def _add_highlight_matches(
+    matches: list[tuple[int, int, str]],
+    text: str,
+    patterns: list[str],
+    title: str,
+) -> None:
+    if not title:
+        return
+
+    for pattern in patterns:
+        for match in re.finditer(pattern, text, flags=re.IGNORECASE):
+            start, end = match.span()
+            while start < end and text[start].isspace():
+                start += 1
+            while end > start and text[end - 1].isspace():
+                end -= 1
+            if start < end:
+                matches.append((start, end, title))
+
+
+def _select_non_overlapping_matches(
+    matches: list[tuple[int, int, str]],
+) -> list[tuple[int, int, str]]:
+    selected: list[tuple[int, int, str]] = []
+    cursor = 0
+    for start, end, title in sorted(matches, key=lambda item: (item[0], -(item[1] - item[0]))):
+        if start < cursor:
+            continue
+        selected.append((start, end, title))
+        cursor = end
+    return selected
+
+
+def _add_new_text_highlight_matches(
+    matches: list[tuple[int, int, str]],
+    original_text: str,
+    optimized_text: str,
+    patterns: list[str],
+    title: str,
+) -> None:
+    if not title:
+        return
+
+    original_compact = re.sub(r"\s+", "", str(original_text or "")).casefold()
+    for pattern in patterns:
+        for match in re.finditer(pattern, optimized_text, flags=re.IGNORECASE):
+            start, end = match.span()
+            while start < end and optimized_text[start].isspace():
+                start += 1
+            while end > start and optimized_text[end - 1].isspace():
+                end -= 1
+            if start >= end:
+                continue
+
+            phrase = optimized_text[start:end]
+            phrase_compact = re.sub(r"\s+", "", phrase).casefold()
+            if phrase_compact and phrase_compact not in original_compact:
+                matches.append((start, end, title))
+
+
+def build_highlighted_optimized_html(
+    original_resume_text: str,
+    optimized_resume_text: str,
+    expert_rules_used: list[dict],
+) -> str:
+    """
+    Build safe HTML for the optimized resume and highlight text likely added
+    because of expert annotation rules.
+    """
+    original_text = str(original_resume_text or "")
+    text = str(optimized_resume_text or "")
+    rules = [rule for rule in (expert_rules_used or []) if isinstance(rule, dict)]
+    if not text:
+        return ""
+    if not rules:
+        return html_escape(text, quote=False)
+
+    matches: list[tuple[int, int, str]] = []
+
+    quant_title = _find_rule_title(
+        rules,
+        ("量化", "提升", "降低", "减少", "响应时间", "命中率", "效果"),
+    )
+    _add_highlight_matches(
+        matches,
+        text,
+        [
+            r"(?:响应时间|接口响应(?:时间|速度)?|人工处理时间|处理时间|缓存命中率|命中率|重复提交率|提交率|查询效率|检索效率|点击率|准确率|性能|效率|耗时|延迟)[^，。；,\n]{0,24}(?:降低|下降|减少|提升|提高|达|达到|降至|低至|缩短|优化至)[^，。；,\n]{0,12}\d+(?:\.\d+)?%",
+            r"(?:降低|下降|减少|提升|提高|达|达到|降至|低至|缩短|优化至)[^，。；,\n]{0,12}\d+(?:\.\d+)?%",
+        ],
+        quant_title,
+    )
+
+    ranking_title = _find_rule_title(rules, ("排名", "Top", "GPA")) or quant_title
+    _add_highlight_matches(
+        matches,
+        text,
+        [r"Top\s*\d+(?:\.\d+)?%"],
+        ranking_title,
+    )
+
+    role_title = _find_rule_title(
+        rules,
+        ("个人角色", "个人贡献", "个人职责", "主要负责", "负责人", "核心成员"),
+    )
+    _add_highlight_matches(
+        matches,
+        text,
+        [
+            r"(?:后端|前端|算法|测试|数据|全栈)?(?:核心成员|负责人|开发负责人|开发成员)",
+            r"(?:独立完成|主要负责|本人负责|个人负责)",
+            r"作为[^，。；,\n]{0,12}(?:负责人|核心成员|开发成员)",
+        ],
+        role_title,
+    )
+
+    redis_title = _find_rule_title(
+        rules,
+        ("Redis", "Redisson", "缓存", "分布式锁", "高频查询"),
+    )
+    _add_highlight_matches(
+        matches,
+        text,
+        [
+            r"(?:使用|通过|结合|基于|引入|利用)?\s*(?:Redis|Redisson)[^，。；,\n]{0,40}(?:缓存|分布式锁|一致性|高频查询|读多写少|查询结果|热点数据|缓存命中)[^，。；,\n]{0,30}",
+        ],
+        redis_title,
+    )
+
+    english_title = _find_rule_title(
+        rules,
+        ("英语", "四六级", "CET", "分数"),
+    )
+    _add_highlight_matches(
+        matches,
+        text,
+        [
+            r"(?:CET[-\s]?[46]|英语[四六46]级|大学英语[四六46]级)[：:\s-]*\d{3,4}\s*分?",
+            r"\d{3,4}\s*分",
+        ],
+        english_title,
+    )
+
+    project_time_title = _find_rule_title(
+        rules,
+        ("项目时间", "起止时间", "开发周期"),
+    )
+    _add_new_text_highlight_matches(
+        matches,
+        original_text,
+        text,
+        [
+            r"(?:项目时间|开发周期)[：:\s]*\d{4}[./-]\d{1,2}\s*(?:-|–|—|~|至)\s*\d{4}[./-]\d{1,2}",
+            r"\d{4}[./-]\d{1,2}\s*(?:-|–|—|~|至)\s*\d{4}[./-]\d{1,2}",
+        ],
+        project_time_title,
+    )
+
+    project_detail_title = _find_rule_title(
+        rules,
+        ("项目功能", "技术亮点", "技术方案", "解决问题", "个人职责与成果"),
+    )
+    _add_highlight_matches(
+        matches,
+        text,
+        [
+            r"(?:个人职责与成果|技术方案\s*\+\s*解决问题\s*\+\s*效果)",
+        ],
+        project_detail_title,
+    )
+
+    selected_matches = _select_non_overlapping_matches(matches)
+    if not selected_matches:
+        return html_escape(text, quote=False)
+
+    html_parts: list[str] = []
+    cursor = 0
+    for start, end, title in selected_matches:
+        html_parts.append(html_escape(text[cursor:start], quote=False))
+        safe_text = html_escape(text[start:end], quote=False)
+        safe_title = html_escape(title, quote=True)
+        html_parts.append(
+            f'<span class="expert-highlight" title="{safe_title}">{safe_text}</span>'
+        )
+        cursor = end
+    html_parts.append(html_escape(text[cursor:], quote=False))
+    return "".join(html_parts)
+
+
+def _attach_expert_rules(
+    result: dict[str, Any],
+    matched_rules: list[dict],
+    original_resume_text: str = "",
+) -> dict[str, Any]:
     public_rules = [
         rule
         for rule in (_public_expert_rule(item) for item in matched_rules)
@@ -297,6 +516,14 @@ def _attach_expert_rules(result: dict[str, Any], matched_rules: list[dict]) -> d
     ]
     result["expert_rules_used_count"] = len(public_rules)
     result["expert_rules_used"] = public_rules
+    try:
+        result["highlighted_optimized_html"] = build_highlighted_optimized_html(
+            original_resume_text,
+            str(result.get("optimized_resume", "")),
+            matched_rules,
+        )
+    except Exception:
+        result["highlighted_optimized_html"] = ""
     return result
 
 
@@ -380,7 +607,7 @@ JSON 格式：
 
     try:
         result = _invoke_optimizer_with_retry(prompt)
-        return _attach_expert_rules(result, matched_rules)
+        return _attach_expert_rules(result, matched_rules, resume_text)
     except LLMCallError:
         raise
     except Exception:

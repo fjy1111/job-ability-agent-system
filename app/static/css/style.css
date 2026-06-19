@@ -2688,6 +2688,13 @@ h1 {
     line-height: 1.7;
 }
 
+.resume-expert-rules-panel p {
+    margin: 0;
+    color: #1e3a8a;
+    line-height: 1.8;
+    font-weight: 700;
+}
+
 .resume-expert-rules-panel ul {
     margin: 0;
     padding-left: 20px;
@@ -2761,6 +2768,18 @@ h1 {
     word-break: break-word;
     max-height: 620px;
     overflow: auto;
+}
+
+.expert-highlight {
+    background: #fff3b0;
+    border-radius: 4px;
+    padding: 0 3px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+.expert-highlight:hover {
+    background: #ffe066;
 }
 
 .resume-insight-panel {
