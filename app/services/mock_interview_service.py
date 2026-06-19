@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+import copy
+import hashlib
 import json
 import os
+import random
 import re
+import time
 import uuid
 from pathlib import Path
 from typing import Any
@@ -23,6 +27,10 @@ load_dotenv(BASE_DIR / ".env")
 
 DEFAULT_INTERVIEWER = "林老师"
 QUESTION_COUNT = 6
+WRITTEN_QUESTION_POOL_SIZE = 6
+WRITTEN_POOL_CACHE_TTL_SECONDS = 60 * 60
+WRITTEN_POOL_CACHE_MAX_ITEMS = 64
+_WRITTEN_POOL_CACHE: dict[str, tuple[float, list[dict[str, Any]]]] = {}
 
 ROLE_KEYWORDS = [
     "Python", "Java", "Spring Boot", "FastAPI", "Django", "MySQL", "Redis",
@@ -168,6 +176,379 @@ JSON 格式：
         raise
     except Exception:
         raise LLMCallError()
+
+
+def _normalize_written_question(item: Any) -> dict[str, Any] | None:
+    if not isinstance(item, dict):
+        return None
+
+    prompt = _safe_text(item.get("question"))
+    options = item.get("options")
+    if not prompt or not isinstance(options, list):
+        return None
+
+    normalized_options = [_safe_text(option) for option in options]
+    if len(normalized_options) != 4 or any(not option for option in normalized_options):
+        return None
+    if len(set(normalized_options)) != 4:
+        return None
+
+    correct_index = item.get("correct_index")
+    if isinstance(correct_index, str):
+        value = correct_index.strip().upper()
+        if value in {"A", "B", "C", "D"}:
+            correct_index = ord(value) - ord("A")
+        else:
+            try:
+                correct_index = int(value)
+            except ValueError:
+                return None
+
+    if not isinstance(correct_index, int) or not 0 <= correct_index < 4:
+        return None
+
+    return {
+        "question": prompt,
+        "options": normalized_options,
+        "correct_index": correct_index,
+        "explanation": _safe_text(item.get("explanation")) or "请结合岗位知识点复习该题。",
+        "category": _safe_text(item.get("category")) or "岗位基础",
+    }
+
+
+def _generate_llm_written_question_pool(
+    role: str,
+    job_description: str,
+    resume_text: str,
+) -> list[dict[str, Any]]:
+    prompt = f"""
+你是一名企业招聘笔试命题专家。请根据目标岗位、岗位描述和候选人简历，生成 {WRITTEN_QUESTION_POOL_SIZE} 道中文单选题，供系统随机抽取。
+要求：
+1. 每题只有一个正确答案，固定提供 4 个互不重复的选项。
+2. 题目覆盖岗位基础、项目实践、工程规范和问题分析，不要考察简历中完全无关的知识。
+3. 难度由基础到进阶，避免歧义、脑筋急转弯和纯记忆冷知识。
+4. correct_index 必须是 0、1、2、3 之一，分别对应第 1 至第 4 个选项。
+5. 只输出 JSON，不要 Markdown。
+
+目标岗位：{role}
+岗位信息：{job_description[:2200]}
+简历信息：{resume_text[:3200]}
+
+JSON 格式：
+{{
+  "questions": [
+    {{
+      "question": "题目",
+      "options": ["选项A", "选项B", "选项C", "选项D"],
+      "correct_index": 0,
+      "explanation": "答案解析",
+      "category": "知识分类"
+    }}
+  ]
+}}
+"""
+    try:
+        response = _create_llm().invoke(prompt)
+        parsed = _safe_json_loads(str(response.content))
+        raw_questions = parsed.get("questions")
+        if not isinstance(raw_questions, list):
+            raise LLMCallError()
+
+        questions = [
+            question
+            for question in (_normalize_written_question(item) for item in raw_questions)
+            if question is not None
+        ]
+        if len(questions) < QUESTION_COUNT:
+            raise LLMCallError()
+        return questions
+    except LLMCallError:
+        raise
+    except Exception:
+        raise LLMCallError()
+
+
+def _build_local_written_question_pool(
+    role: str,
+    job_description: str,
+    resume_text: str,
+) -> list[dict[str, Any]]:
+    """按岗位与简历关键词从本地高质量题库即时组卷。"""
+    context = f"{role} {job_description} {resume_text}".lower()
+    bank: list[tuple[list[str], dict[str, Any]]] = [
+        (["java"], {
+            "question": "在 Java 中，以下哪个集合更适合高并发读写场景？",
+            "options": ["HashMap", "ConcurrentHashMap", "ArrayList", "LinkedList"],
+            "correct_index": 1,
+            "explanation": "ConcurrentHashMap 针对并发访问进行了设计，适合多线程读写。",
+            "category": "Java 基础",
+        }),
+        (["spring boot", "spring"], {
+            "question": "Spring Boot 中存在多个同类型 Bean 时，通常用哪个注解指定注入对象？",
+            "options": ["@Order", "@Qualifier", "@Scope", "@DependsOn"],
+            "correct_index": 1,
+            "explanation": "@Qualifier 可与依赖注入注解配合，按名称明确选择 Bean。",
+            "category": "Spring Boot",
+        }),
+        (["mysql", "sql", "数据库"], {
+            "question": "分析 MySQL 查询是否使用索引，最常用的命令是？",
+            "options": ["EXPLAIN", "SHOW TABLES", "DESCRIBE", "SHOW CREATE TABLE"],
+            "correct_index": 0,
+            "explanation": "EXPLAIN 会展示执行计划、索引使用和预估扫描行数。",
+            "category": "数据库",
+        }),
+        (["redis", "缓存"], {
+            "question": "为降低缓存击穿风险，热点数据失效时更合适的做法是？",
+            "options": ["永久不过期", "互斥重建并设置合理过期时间", "删除数据库索引", "关闭缓存"],
+            "correct_index": 1,
+            "explanation": "互斥重建可避免大量请求同时回源，并应配合合理的过期策略。",
+            "category": "缓存设计",
+        }),
+        (["docker", "容器"], {
+            "question": "将本地 Docker 镜像推送到远程仓库使用哪个命令？",
+            "options": ["docker pull", "docker save", "docker push", "docker commit"],
+            "correct_index": 2,
+            "explanation": "docker push 用于把已正确标记的本地镜像推送到远程仓库。",
+            "category": "Docker",
+        }),
+        (["python"], {
+            "question": "Python 中管理项目依赖并隔离运行环境，推荐使用什么？",
+            "options": ["虚拟环境", "全局变量", "系统临时目录", "线程锁"],
+            "correct_index": 0,
+            "explanation": "虚拟环境可以隔离不同项目的解释器依赖与版本。",
+            "category": "Python 基础",
+        }),
+        (["fastapi"], {
+            "question": "FastAPI 中声明请求参数和数据校验通常依赖哪个组件？",
+            "options": ["Pydantic 模型", "Jinja2 模板", "SQLite 游标", "CSS 选择器"],
+            "correct_index": 0,
+            "explanation": "FastAPI 使用 Pydantic 模型完成结构声明、解析和数据校验。",
+            "category": "FastAPI",
+        }),
+        (["vue", "react", "javascript", "typescript", "前端"], {
+            "question": "前端列表渲染时为元素设置稳定 key，主要作用是什么？",
+            "options": ["加密请求", "帮助框架准确复用和更新节点", "压缩图片", "创建数据库索引"],
+            "correct_index": 1,
+            "explanation": "稳定 key 帮助虚拟 DOM 识别节点身份，减少错误复用和不必要更新。",
+            "category": "前端工程",
+        }),
+        (["机器学习", "深度学习", "算法", "大模型"], {
+            "question": "评估分类模型时，类别极不均衡的情况下更应关注哪个指标组合？",
+            "options": ["仅准确率", "精确率、召回率与 F1", "仅训练时长", "参数文件大小"],
+            "correct_index": 1,
+            "explanation": "类别不均衡时准确率可能具有误导性，应结合精确率、召回率和 F1。",
+            "category": "机器学习",
+        }),
+        (["测试", "自动化"], {
+            "question": "接口自动化测试中，为保证用例可重复执行，最重要的实践之一是？",
+            "options": ["依赖固定脏数据", "准备和清理独立测试数据", "跳过断言", "只测试成功路径"],
+            "correct_index": 1,
+            "explanation": "独立准备并清理测试数据可减少用例之间的耦合和偶发失败。",
+            "category": "测试工程",
+        }),
+    ]
+    general_questions = [
+        {
+            "question": "以下哪种 HTTP 方法最符合删除 REST 资源的语义？",
+            "options": ["GET", "POST", "DELETE", "PATCH"],
+            "correct_index": 2,
+            "explanation": "DELETE 用于表达删除指定资源的操作。",
+            "category": "接口设计",
+        },
+        {
+            "question": "线上接口突然变慢时，合理的第一步是什么？",
+            "options": ["直接重写系统", "先查看监控、日志并定位瓶颈", "删除数据库", "忽略告警"],
+            "correct_index": 1,
+            "explanation": "先依据监控、链路与日志缩小问题范围，再采取针对性措施。",
+            "category": "故障排查",
+        },
+        {
+            "question": "团队协作开发中，提交代码前更推荐的做法是？",
+            "options": ["跳过测试直接合并", "运行测试并进行代码审查", "删除提交记录", "共享个人密码"],
+            "correct_index": 1,
+            "explanation": "自动化测试和代码审查可以降低缺陷进入主分支的概率。",
+            "category": "工程规范",
+        },
+        {
+            "question": "防止 SQL 注入最有效的基础措施是？",
+            "options": ["拼接用户输入", "使用参数化查询", "隐藏按钮", "增加页面颜色"],
+            "correct_index": 1,
+            "explanation": "参数化查询把 SQL 结构与输入数据分离，是防止 SQL 注入的基础措施。",
+            "category": "安全基础",
+        },
+        {
+            "question": "项目成果在简历或面试中怎样表达更有说服力？",
+            "options": ["只说参与过", "说明行动、技术方案和量化结果", "省略个人职责", "只罗列工具名"],
+            "correct_index": 1,
+            "explanation": "清晰说明个人行动、方案与可验证结果更能体现实际能力。",
+            "category": "项目实践",
+        },
+        {
+            "question": "设计高并发接口时，哪项做法通常有助于提高稳定性？",
+            "options": ["无限制重试", "限流、超时和降级", "取消日志", "关闭监控"],
+            "correct_index": 1,
+            "explanation": "限流、超时与降级能避免局部故障扩散并保护核心资源。",
+            "category": "系统设计",
+        },
+    ]
+
+    selected: list[dict[str, Any]] = []
+    for keywords, question in bank:
+        if any(keyword.lower() in context for keyword in keywords):
+            selected.append(copy.deepcopy(question))
+    selected.extend(copy.deepcopy(general_questions))
+
+    unique: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for question in selected:
+        if question["question"] in seen:
+            continue
+        seen.add(question["question"])
+        unique.append(question)
+    return unique
+
+
+def _written_pool_cache_key(role: str, job_description: str, resume_text: str) -> str:
+    payload = json.dumps(
+        {
+            "role": role.strip().lower(),
+            "job_description": job_description.strip(),
+            "resume_text": resume_text.strip(),
+            "question_count": WRITTEN_QUESTION_POOL_SIZE,
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _load_or_generate_written_question_pool(
+    role: str,
+    job_description: str,
+    resume_text: str,
+) -> list[dict[str, Any]]:
+    """相同简历与岗位复用题池，展示时仍重新打乱题目和选项。"""
+    now = time.monotonic()
+    stale_keys = [
+        key
+        for key, (created_at, _questions) in _WRITTEN_POOL_CACHE.items()
+        if now - created_at > WRITTEN_POOL_CACHE_TTL_SECONDS
+    ]
+    for key in stale_keys:
+        _WRITTEN_POOL_CACHE.pop(key, None)
+
+    cache_key = _written_pool_cache_key(role, job_description, resume_text)
+    cached = _WRITTEN_POOL_CACHE.get(cache_key)
+    if cached is not None:
+        return copy.deepcopy(cached[1])
+
+    use_llm = os.getenv("INTERVIEW_WRITTEN_USE_LLM", "false").lower() == "true"
+    if use_llm:
+        try:
+            questions = _generate_llm_written_question_pool(
+                role=role,
+                job_description=job_description,
+                resume_text=resume_text,
+            )
+        except LLMCallError:
+            questions = _build_local_written_question_pool(role, job_description, resume_text)
+    else:
+        questions = _build_local_written_question_pool(role, job_description, resume_text)
+    if len(_WRITTEN_POOL_CACHE) >= WRITTEN_POOL_CACHE_MAX_ITEMS:
+        oldest_key = min(_WRITTEN_POOL_CACHE, key=lambda key: _WRITTEN_POOL_CACHE[key][0])
+        _WRITTEN_POOL_CACHE.pop(oldest_key, None)
+    _WRITTEN_POOL_CACHE[cache_key] = (now, copy.deepcopy(questions))
+    return questions
+
+
+def build_written_exam(
+    target_role: str,
+    job_description: str,
+    resume_text: str,
+    *,
+    rng: random.Random | random.SystemRandom | None = None,
+) -> dict[str, Any]:
+    """生成一份与岗位和简历相关、题序与选项顺序随机的六题笔试。"""
+    role = _infer_role(target_role, job_description, resume_text)
+    question_pool = _load_or_generate_written_question_pool(role, job_description, resume_text)
+    randomizer = rng or random.SystemRandom()
+    selected = (
+        randomizer.sample(question_pool, QUESTION_COUNT)
+        if len(question_pool) > QUESTION_COUNT
+        else list(question_pool)
+    )
+    randomizer.shuffle(selected)
+
+    questions: list[dict[str, Any]] = []
+    for index, source in enumerate(selected, start=1):
+        option_pairs = list(enumerate(source["options"]))
+        randomizer.shuffle(option_pairs)
+        correct_index = next(
+            position
+            for position, (original_index, _option) in enumerate(option_pairs)
+            if original_index == source["correct_index"]
+        )
+        questions.append({
+            "id": f"q{index}",
+            "question": source["question"],
+            "options": [option for _original_index, option in option_pairs],
+            "correct_index": correct_index,
+            "explanation": source["explanation"],
+            "category": source["category"],
+        })
+
+    return {
+        "exam_id": str(uuid.uuid4()),
+        "target_role": role,
+        "job_description": job_description[:2200],
+        "resume_text": resume_text[:3200],
+        "questions": questions,
+        "total_questions": len(questions),
+    }
+
+
+def grade_written_exam(
+    exam_session: dict[str, Any],
+    answers: dict[str, Any],
+) -> dict[str, Any]:
+    """批改笔试并返回逐题结果，空题按错误处理。"""
+    questions = exam_session.get("questions") or []
+    if not isinstance(questions, list) or not questions:
+        raise ValueError("笔试会话中没有题目")
+    if not isinstance(answers, dict):
+        answers = {}
+
+    correct_count = 0
+    details: list[dict[str, Any]] = []
+    for question in questions:
+        question_id = _safe_text(question.get("id"))
+        try:
+            selected_index = int(answers.get(question_id))
+        except (TypeError, ValueError):
+            selected_index = -1
+        correct_index = int(question.get("correct_index", -1))
+        is_correct = selected_index == correct_index
+        correct_count += int(is_correct)
+        options = question.get("options") or []
+        details.append({
+            "id": question_id,
+            "question": _safe_text(question.get("question")),
+            "category": _safe_text(question.get("category")),
+            "selected_index": selected_index,
+            "correct_index": correct_index,
+            "selected_answer": options[selected_index] if 0 <= selected_index < len(options) else "未作答",
+            "correct_answer": options[correct_index] if 0 <= correct_index < len(options) else "",
+            "is_correct": is_correct,
+            "explanation": _safe_text(question.get("explanation")),
+        })
+
+    total = len(questions)
+    return {
+        "correct_count": correct_count,
+        "total_questions": total,
+        "score": round(correct_count / total * 100),
+        "details": details,
+    }
 
 
 def build_interview_session(

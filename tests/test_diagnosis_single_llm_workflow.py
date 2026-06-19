@@ -1,7 +1,10 @@
 import unittest
 from unittest.mock import patch
 
-from app.agent.diagnosis_agent import run_diagnosis_agent
+from app.agent.diagnosis_agent import (
+    run_diagnosis_agent,
+    run_diagnosis_agent_stream,
+)
 
 
 STUDENT = {
@@ -75,6 +78,29 @@ class DiagnosisSingleLlmWorkflowTests(unittest.TestCase):
         self.assertEqual(len(result["dimension_insights"]), 4)
         self.assertEqual(len(result["quality_review"]), 4)
         self.assertIn(draft["quality_notes"][0], result["quality_review"])
+
+    def test_stream_returns_nodes_in_workflow_order_before_complete(self):
+        draft = build_collaborative_draft()
+
+        with patch(
+            "app.agent.diagnosis_agent._invoke_json_agent",
+            return_value=(draft, True, ""),
+        ):
+            events = list(run_diagnosis_agent_stream(STUDENT))
+
+        self.assertEqual(
+            [event.get("node") for event in events[:-1]],
+            [
+                "extract_profile",
+                "score_ability",
+                "analyze_profile_evidence",
+                "diagnose_ability",
+                "review_profile",
+            ],
+        )
+        self.assertEqual(events[-1]["type"], "complete")
+        self.assertEqual(len(events[-1]["result"]["workflow_steps"]), 5)
+        self.assertEqual(events[-1]["result"]["summary"], draft["assessment_summary"])
 
 
 if __name__ == "__main__":

@@ -585,6 +585,132 @@
             font-weight: 700;
         }
 
+        .live-upload-form {
+            width: 100%;
+            display: grid;
+            grid-template-columns: minmax(300px, 1fr) auto auto;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .live-drop-zone {
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border: 1.5px dashed #5fbca8;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #115e59;
+            cursor: pointer;
+            transition: border-color .18s ease, background .18s ease;
+        }
+
+        .live-drop-zone:hover,
+        .live-drop-zone.dragging {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .live-drop-zone.has-file {
+            border-style: solid;
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+
+        .live-drop-icon {
+            width: 30px;
+            height: 30px;
+            display: inline-grid;
+            place-items: center;
+            flex: none;
+            border-radius: 8px;
+            background: #dbeafe;
+            color: #2563eb;
+            font-weight: 900;
+        }
+
+        .live-drop-text {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 800;
+        }
+
+        .live-file-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .live-generate-button:disabled,
+        .profile-action-disabled {
+            opacity: .45;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .live-state {
+            min-width: 92px;
+            padding: 7px 11px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .live-state.running { background: #dbeafe; color: #1d4ed8; }
+        .live-state.complete { background: #dcfce7; color: #047857; }
+        .live-state.error { background: #fee2e2; color: #b91c1c; }
+
+        .live-placeholder {
+            color: #a0aabc !important;
+        }
+
+        .live-placeholder-block {
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #d8e0eb;
+            border-radius: 8px;
+            background: #fafbfd;
+            color: #9aa6b7;
+            text-align: center;
+        }
+
+        .live-panel-active {
+            border-color: #93c5fd;
+            box-shadow: 0 10px 28px rgba(37, 99, 235, .12);
+            animation: liveReveal .32s ease both;
+        }
+
+        .live-typing::after {
+            content: "";
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            margin-left: 3px;
+            vertical-align: -2px;
+            background: #2563eb;
+            animation: liveCursor .75s step-end infinite;
+        }
+
+        @keyframes liveReveal {
+            from { opacity: .5; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes liveCursor {
+            50% { opacity: 0; }
+        }
+
         .growth-path {
             display: grid;
             gap: 14px;
@@ -666,6 +792,15 @@
             .profile-actions {
                 justify-content: flex-start;
             }
+
+            .live-upload-form {
+                grid-template-columns: 1fr auto;
+            }
+
+            .live-state {
+                grid-column: 1 / -1;
+                justify-self: start;
+            }
         }
 
         @media screen and (max-width: 720px) {
@@ -696,6 +831,14 @@
             .profile-header h1 {
                 font-size: 28px;
             }
+
+            .live-upload-form {
+                grid-template-columns: 1fr;
+            }
+
+            .live-state {
+                grid-column: auto;
+            }
         }
     </style>
 </head>
@@ -709,14 +852,14 @@
             </div>
 
             <nav class="profile-actions" aria-label="页面操作">
-                <a href="/job/match" class="profile-btn">岗位匹配分析</a>
-                <a href="/employment/guidance" class="profile-btn">精准就业指导</a>
-                {% if record %}
-                <form action="/ability/profile/{{ record.id }}/export-json" method="post" class="profile-export-form">
-                    <button type="submit" class="profile-link-btn">输出 JSON 文件</button>
+                <a id="jobMatchAction" href="/job/match" class="profile-btn{% if generation_mode %} profile-action-disabled{% endif %}">岗位匹配分析</a>
+                <a id="employmentAction" href="/employment/guidance" class="profile-btn{% if generation_mode %} profile-action-disabled{% endif %}">精准就业指导</a>
+                {% if record or generation_mode %}
+                <form id="profileExportForm" action="{% if record %}/ability/profile/{{ record.id }}/export-json{% endif %}" method="post" class="profile-export-form">
+                    <button id="profileExportButton" type="submit" class="profile-link-btn"{% if generation_mode %} disabled{% endif %}>输出 JSON 文件</button>
                 </form>
                 {% endif %}
-                <a href="/student/input" class="profile-link-btn">重新诊断</a>
+                <a href="/ability/profile" class="profile-link-btn">重新诊断</a>
                 <a href="/" class="profile-link-btn">返回首页</a>
             </nav>
         </header>
@@ -740,9 +883,21 @@
         {% endif %}
 
         <section class="route-split">
+            {% if generation_mode %}
+            <form id="liveProfileForm" class="live-upload-form">
+                <label id="liveDropZone" class="live-drop-zone" for="liveResumeFile">
+                    <span class="live-drop-icon" aria-hidden="true">↑</span>
+                    <span id="liveDropText" class="live-drop-text">拖入或点击选择简历（PDF、DOCX、TXT、MD、CSV）</span>
+                </label>
+                <input id="liveResumeFile" class="live-file-input" name="resume_file" type="file" accept=".pdf,.docx,.txt,.md,.csv">
+                <button id="liveGenerateButton" class="profile-btn live-generate-button" type="submit" disabled>生成能力画像</button>
+                <span id="liveState" class="live-state">等待上传</span>
+            </form>
+            {% else %}
             <p>当前页面只呈现学生基础信息、能力雷达图、画像总结、证据归因和风险提示；岗位匹配放在独立分析页。</p>
             <a href="/job/match" class="profile-btn">进入岗位匹配</a>
             <a href="/employment/guidance" class="profile-link-btn">进入就业指导</a>
+            {% endif %}
         </section>
 
         <div class="profile-grid" style="margin-top: 20px;">
@@ -752,19 +907,19 @@
                     <div class="student-meta">
                         <div>
                             <span>姓名</span>
-                            <strong>{{ student.name }}</strong>
+                            <strong id="studentName"{% if generation_mode %} class="live-placeholder"{% endif %}>{{ student.name if not generation_mode else '—' }}</strong>
                         </div>
                         <div>
                             <span>专业</span>
-                            <strong>{{ student.major }}</strong>
+                            <strong id="studentMajor"{% if generation_mode %} class="live-placeholder"{% endif %}>{{ student.major if not generation_mode else '—' }}</strong>
                         </div>
                         <div>
                             <span>年级</span>
-                            <strong>{{ student.grade }}</strong>
+                            <strong id="studentGrade"{% if generation_mode %} class="live-placeholder"{% endif %}>{{ student.grade if not generation_mode else '—' }}</strong>
                         </div>
                         <div>
                             <span>目标岗位</span>
-                            <strong>{{ student.target_job }}</strong>
+                            <strong id="studentTargetJob"{% if generation_mode %} class="live-placeholder"{% endif %}>{{ student.target_job if not generation_mode else '—' }}</strong>
                         </div>
                     </div>
                 </section>
@@ -773,24 +928,25 @@
                     <h2>LLM 协作与工具调用链</h2>
                     <div class="collab-summary">
                         <div class="collab-metric">
-                            <strong>{{ agent_roster|length }}</strong>
+                            <strong id="agentRosterCount">{{ agent_roster|length if not generation_mode else '—' }}</strong>
                             <span>协作专家角色</span>
                         </div>
                         <div class="collab-metric">
-                            <strong>{{ llm_agents|length }}</strong>
+                            <strong id="llmAgentCount">{{ llm_agents|length if not generation_mode else '—' }}</strong>
                             <span>LLM 成功调用</span>
                         </div>
                         <div class="collab-metric">
-                            <strong>{{ tool_calls|length }}</strong>
+                            <strong id="toolCallCount">{{ tool_calls|length if not generation_mode else '—' }}</strong>
                             <span>工具调用次数</span>
                         </div>
                         <div class="collab-metric">
-                            <strong>{{ collaboration_log|length }}</strong>
+                            <strong id="handoffCount">{{ collaboration_log|length if not generation_mode else '—' }}</strong>
                             <span>专家交接记录</span>
                         </div>
                     </div>
 
                     <h3>工具调用日志</h3>
+                    <div id="toolCallsContainer">
                     {% if tool_calls %}
                     <ul class="tool-call-list">
                         {% for call in tool_calls %}
@@ -806,10 +962,12 @@
                         {% endfor %}
                     </ul>
                     {% else %}
-                    <p class="empty-state">当前记录没有保存工具调用链。重新诊断后会显示每个专家调用的工具和产出。</p>
+                    <p class="empty-state{% if generation_mode %} live-placeholder-block{% endif %}">{% if generation_mode %}等待画像采集智能体输出工具日志…{% else %}当前记录没有保存工具调用链。重新诊断后会显示每个专家调用的工具和产出。{% endif %}</p>
                     {% endif %}
+                    </div>
 
                     <h3 style="margin-top: 18px;">专家交接记录</h3>
+                    <div id="handoffContainer">
                     {% if collaboration_log %}
                     <ul class="handoff-list">
                         {% for item in collaboration_log %}
@@ -823,9 +981,11 @@
                         {% endfor %}
                     </ul>
                     {% else %}
-                    <p class="empty-state">暂无专家交接记录。</p>
+                    <p class="empty-state{% if generation_mode %} live-placeholder-block{% endif %}">{% if generation_mode %}等待智能体交接…{% else %}暂无专家交接记录。{% endif %}</p>
                     {% endif %}
+                    </div>
 
+                    <div id="reviewFindingsContainer">
                     {% if review_findings %}
                     <h3 style="margin-top: 18px;">审计发现</h3>
                     <ul class="finding-list">
@@ -837,24 +997,26 @@
                         {% endfor %}
                     </ul>
                     {% endif %}
+                    </div>
                 </section>
 
-                {% if agent_result %}
+                {% if agent_result or generation_mode %}
                 <section class="profile-panel profile-summary-panel">
                     <h2>画像总结</h2>
-                    {% if profile_tags %}
-                    <div class="tag-list" style="margin-bottom: 14px;">
+                    <div id="profileTags" class="tag-list" style="margin-bottom: 14px;{% if not profile_tags %} display:none;{% endif %}">
+                        {% if profile_tags %}
                         {% for tag in profile_tags %}
                         <span class="profile-tag">{{ tag }}</span>
                         {% endfor %}
+                        {% endif %}
                     </div>
-                    {% endif %}
-                    <p class="summary-text">{{ summary }}</p>
+                    <p id="profileSummary" class="summary-text{% if generation_mode %} live-placeholder-block{% endif %}">{{ summary if summary else ('等待能力归因智能体生成画像总结…' if generation_mode else '') }}</p>
                 </section>
 
                 <section class="split-columns profile-split-panel">
                     <div class="profile-panel">
                         <h2>当前优势</h2>
+                        <div id="advantagesContainer">
                         {% if advantages %}
                         <ul class="analysis-list">
                             {% for item in advantages %}
@@ -862,12 +1024,14 @@
                             {% endfor %}
                         </ul>
                         {% else %}
-                        <p class="empty-state">暂无优势结论。</p>
+                        <p class="empty-state{% if generation_mode %} live-placeholder-block{% endif %}">{% if generation_mode %}等待分析优势…{% else %}暂无优势结论。{% endif %}</p>
                         {% endif %}
+                        </div>
                     </div>
 
                     <div class="profile-panel">
                         <h2>能力短板</h2>
+                        <div id="weaknessesContainer">
                         {% if weaknesses %}
                         <ul class="analysis-list">
                             {% for item in weaknesses %}
@@ -875,13 +1039,15 @@
                             {% endfor %}
                         </ul>
                         {% else %}
-                        <p class="empty-state">暂无短板结论。</p>
+                        <p class="empty-state{% if generation_mode %} live-placeholder-block{% endif %}">{% if generation_mode %}等待分析短板…{% else %}暂无短板结论。{% endif %}</p>
                         {% endif %}
+                        </div>
                     </div>
                 </section>
 
                 <section class="profile-panel profile-dimensions-panel">
                     <h2>四维能力洞察</h2>
+                    <div id="dimensionInsightsContainer">
                     {% if dimension_insights %}
                     <div class="dimension-grid">
                         {% for item in dimension_insights %}
@@ -908,12 +1074,26 @@
                         {% endfor %}
                     </div>
                     {% else %}
+                    {% if generation_mode %}
+                    <div class="dimension-grid">
+                        {% for name in ['专业基础能力', '技术实践能力', '工具技能能力', '职业发展能力'] %}
+                        <article class="dimension-item live-placeholder" data-live-dimension="{{ loop.index0 }}">
+                            <div class="dimension-head"><strong>{{ name }}</strong><span class="score-badge">— 分</span></div>
+                            <p class="level-line">等待评分</p>
+                            <p>相关结论将在智能体完成分析后逐字生成。</p>
+                        </article>
+                        {% endfor %}
+                    </div>
+                    {% else %}
                     <p class="empty-state">暂无四维洞察。旧记录可重新诊断后生成。</p>
                     {% endif %}
+                    {% endif %}
+                    </div>
                 </section>
 
                 <section class="profile-panel profile-evidence-panel">
                     <h2>证据抽取卡</h2>
+                    <div id="evidenceCardsContainer">
                     {% if evidence_cards %}
                     <div class="evidence-grid">
                         {% for card in evidence_cards %}
@@ -938,8 +1118,9 @@
                         {% endfor %}
                     </div>
                     {% else %}
-                    <p class="empty-state">暂无证据卡。</p>
+                    <p class="empty-state{% if generation_mode %} live-placeholder-block{% endif %}">{% if generation_mode %}等待证据抽取智能体生成证据卡…{% else %}暂无证据卡。{% endif %}</p>
                     {% endif %}
+                    </div>
                 </section>
 
                 {% endif %}
@@ -965,10 +1146,10 @@
                         <div class="score-item">
                             <div class="score-title">
                                 <strong>专业基础能力</strong>
-                                <span>{{ ability_scores.professional }} 分</span>
+                                <span id="professionalScore">{{ ability_scores.professional if not generation_mode else '—' }} 分</span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress" style="width: {{ ability_scores.professional }}%;"></div>
+                                <div id="professionalProgress" class="progress" style="width: {{ ability_scores.professional }}%;"></div>
                             </div>
                             <p>{{ ability_explain.professional }}</p>
                         </div>
@@ -976,10 +1157,10 @@
                         <div class="score-item">
                             <div class="score-title">
                                 <strong>技术实践能力</strong>
-                                <span>{{ ability_scores.practice }} 分</span>
+                                <span id="practiceScore">{{ ability_scores.practice if not generation_mode else '—' }} 分</span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress" style="width: {{ ability_scores.practice }}%;"></div>
+                                <div id="practiceProgress" class="progress" style="width: {{ ability_scores.practice }}%;"></div>
                             </div>
                             <p>{{ ability_explain.practice }}</p>
                         </div>
@@ -987,10 +1168,10 @@
                         <div class="score-item">
                             <div class="score-title">
                                 <strong>工具技能能力</strong>
-                                <span>{{ ability_scores.tools }} 分</span>
+                                <span id="toolsScore">{{ ability_scores.tools if not generation_mode else '—' }} 分</span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress" style="width: {{ ability_scores.tools }}%;"></div>
+                                <div id="toolsProgress" class="progress" style="width: {{ ability_scores.tools }}%;"></div>
                             </div>
                             <p>{{ ability_explain.tools }}</p>
                         </div>
@@ -998,10 +1179,10 @@
                         <div class="score-item">
                             <div class="score-title">
                                 <strong>职业发展能力</strong>
-                                <span>{{ ability_scores.career }} 分</span>
+                                <span id="careerScore">{{ ability_scores.career if not generation_mode else '—' }} 分</span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress" style="width: {{ ability_scores.career }}%;"></div>
+                                <div id="careerProgress" class="progress" style="width: {{ ability_scores.career }}%;"></div>
                             </div>
                             <p>{{ ability_explain.career }}</p>
                         </div>
@@ -1010,6 +1191,7 @@
 
                 <section class="profile-panel profile-focus-panel">
                     <h2>发展焦点</h2>
+                    <div id="developmentFocusContainer">
                     {% if development_focus %}
                     <div class="focus-grid">
                         {% for item in development_focus %}
@@ -1030,12 +1212,14 @@
                         {% endfor %}
                     </div>
                     {% else %}
-                    <p class="empty-state">暂无发展焦点。</p>
+                    <p class="empty-state{% if generation_mode %} live-placeholder-block{% endif %}">{% if generation_mode %}等待生成发展焦点…{% else %}暂无发展焦点。{% endif %}</p>
                     {% endif %}
+                    </div>
                 </section>
 
                 <section class="profile-panel profile-risk-panel">
                     <h2>风险提示</h2>
+                    <div id="riskFlagsContainer">
                     {% if risk_flags %}
                     <ul class="risk-list">
                         {% for item in risk_flags %}
@@ -1043,12 +1227,14 @@
                         {% endfor %}
                     </ul>
                     {% else %}
-                    <p class="empty-state">暂无风险提示。</p>
+                    <p class="empty-state{% if generation_mode %} live-placeholder-block{% endif %}">{% if generation_mode %}等待证据复核…{% else %}暂无风险提示。{% endif %}</p>
                     {% endif %}
+                    </div>
                 </section>
 
                 <section class="profile-panel profile-review-panel">
                     <h2>质量复核</h2>
+                    <div id="qualityReviewContainer">
                     {% if quality_review %}
                     <ul class="review-list">
                         {% for item in quality_review %}
@@ -1056,13 +1242,17 @@
                         {% endfor %}
                     </ul>
                     {% else %}
-                    <p class="empty-state">暂无质量复核结论。</p>
+                    <p class="empty-state{% if generation_mode %} live-placeholder-block{% endif %}">{% if generation_mode %}等待质量复核智能体…{% else %}暂无质量复核结论。{% endif %}</p>
                     {% endif %}
+                    </div>
                 </section>
             </aside>
         </div>
     </main>
 
-    <script src="/static/js/ability_radar.js?v=1"></script>
+    <script src="/static/js/ability_radar.js?v=2"></script>
+    {% if generation_mode %}
+    <script src="/static/js/ability_profile_live.js?v=1"></script>
+    {% endif %}
 </body>
 </html>

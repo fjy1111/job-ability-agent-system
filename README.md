@@ -2,7 +2,7 @@
 pip install requirements.txt
 
 2、运行程序
-python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8080
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8080 //如果端口被占用，请换端口
 
 更新记录
 2026-06-01 fjy

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=14">
+</head>
+<body class="interview-loading-body">
+    <main class="interview-loading-card">
+        <span class="interview-loading-logo"><i></i></span>
+        <p class="interview-eyebrow">AI Mock Interview</p>
+        <h1>新页面已打开</h1>
+        <p id="loadingMessage">正在读取简历与目标岗位...</p>
+        <div class="interview-loading-track"><span id="loadingProgress"></span></div>
+        <div class="interview-loading-steps">
+            <span class="active">提取岗位重点</span>
+            <span>生成 6 道笔试题</span>
+            <span>随机排列题目与选项</span>
+        </div>
+        <div class="interview-loading-error" id="loadingError" hidden></div>
+    </main>
+
+    <script>
+        const progress = document.getElementById("loadingProgress");
+        const message = document.getElementById("loadingMessage");
+        const steps = [...document.querySelectorAll(".interview-loading-steps span")];
+        const stages = [
+            { delay: 120, width: 20, text: "正在读取简历与目标岗位...", step: 0 },
+            { delay: 900, width: 48, text: "正在围绕岗位能力生成笔试题...", step: 1 },
+            { delay: 2600, width: 76, text: "正在校验题目并随机排列选项...", step: 2 }
+        ];
+        stages.forEach((stage) => {
+            window.setTimeout(() => {
+                progress.style.width = `${stage.width}%`;
+                message.textContent = stage.text;
+                steps.forEach((item, index) => item.classList.toggle("active", index <= stage.step));
+            }, stage.delay);
+        });
+
+        window.addEventListener("message", (event) => {
+            if (event.origin !== window.location.origin || event.data?.type !== "interview-generation-error") {
+                return;
+            }
+            const error = document.getElementById("loadingError");
+            error.hidden = false;
+            error.textContent = event.data.message || "生成失败，请关闭页面后重试。";
+            message.textContent = "模拟面试生成失败";
+            progress.classList.add("error");
+        });
+
+        const launchId = new URLSearchParams(window.location.search).get("launch_id");
+        if (launchId) {
+            const pollStatus = async () => {
+                try {
+                    const response = await fetch(`/interview/session/status/${encodeURIComponent(launchId)}`, {
+                        cache: "no-store"
+                    });
+                    const data = await response.json();
+                    if (data.status === "ready" && data.redirect_url) {
+                        progress.style.width = "100%";
+                        message.textContent = "笔试题已生成，正在进入...";
+                        window.location.replace(data.redirect_url);
+                        return;
+                    }
+                    if (data.status === "error") {
+                        throw new Error(data.message || "生成失败，请稍后重试。")
+                    }
+                    window.setTimeout(pollStatus, 700);
+                } catch (error) {
+                    const errorPanel = document.getElementById("loadingError");
+                    errorPanel.hidden = false;
+                    errorPanel.textContent = error.message || "网络异常，请稍后重试。";
+                    message.textContent = "模拟面试生成失败";
+                    progress.classList.add("error");
+                }
+            };
+            pollStatus();
+        }
+    </script>
+</body>
+</html>
