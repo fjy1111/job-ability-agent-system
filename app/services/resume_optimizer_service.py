@@ -348,6 +348,33 @@ def _select_non_overlapping_matches(
     return selected
 
 
+def _add_new_text_highlight_matches(
+    matches: list[tuple[int, int, str]],
+    original_text: str,
+    optimized_text: str,
+    patterns: list[str],
+    title: str,
+) -> None:
+    if not title:
+        return
+
+    original_compact = re.sub(r"\s+", "", str(original_text or "")).casefold()
+    for pattern in patterns:
+        for match in re.finditer(pattern, optimized_text, flags=re.IGNORECASE):
+            start, end = match.span()
+            while start < end and optimized_text[start].isspace():
+                start += 1
+            while end > start and optimized_text[end - 1].isspace():
+                end -= 1
+            if start >= end:
+                continue
+
+            phrase = optimized_text[start:end]
+            phrase_compact = re.sub(r"\s+", "", phrase).casefold()
+            if phrase_compact and phrase_compact not in original_compact:
+                matches.append((start, end, title))
+
+
 def build_highlighted_optimized_html(
     original_resume_text: str,
     optimized_resume_text: str,
@@ -357,8 +384,7 @@ def build_highlighted_optimized_html(
     Build safe HTML for the optimized resume and highlight text likely added
     because of expert annotation rules.
     """
-    del original_resume_text
-
+    original_text = str(original_resume_text or "")
     text = str(optimized_resume_text or "")
     rules = [rule for rule in (expert_rules_used or []) if isinstance(rule, dict)]
     if not text:
@@ -436,8 +462,9 @@ def build_highlighted_optimized_html(
         rules,
         ("项目时间", "起止时间", "开发周期"),
     )
-    _add_highlight_matches(
+    _add_new_text_highlight_matches(
         matches,
+        original_text,
         text,
         [
             r"(?:项目时间|开发周期)[：:\s]*\d{4}[./-]\d{1,2}\s*(?:-|–|—|~|至)\s*\d{4}[./-]\d{1,2}",
@@ -454,7 +481,7 @@ def build_highlighted_optimized_html(
         matches,
         text,
         [
-            r"(?:个人职责与成果|技术方案\s*\+\s*解决问题\s*\+\s*效果|项目时间)",
+            r"(?:个人职责与成果|技术方案\s*\+\s*解决问题\s*\+\s*效果)",
         ],
         project_detail_title,
     )

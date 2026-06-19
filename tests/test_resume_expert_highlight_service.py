@@ -25,6 +25,14 @@ ENGLISH_RULE = {
     "suggestion": "英语四六级建议写明分数。",
 }
 
+PROJECT_TIME_RULE = {
+    "id": "rule_002",
+    "category": "project_experience",
+    "title": "项目经历需要补充项目时间",
+    "problem_patterns": ["项目经历", "项目时间", "起止时间", "开发周期"],
+    "suggestion": "项目经历应补充起止时间。",
+}
+
 
 def test_highlights_quantified_percentage_result():
     html = build_highlighted_optimized_html(
@@ -83,3 +91,26 @@ def test_escapes_html_special_characters_to_avoid_xss():
     assert "<script>" not in html
     assert "&lt;script&gt;alert(1)&lt;/script&gt;" in html
     assert 'class="expert-highlight"' in html
+
+
+def test_existing_project_time_is_not_automatically_highlighted():
+    html = build_highlighted_optimized_html(
+        "Linux 文件服务器｜2024.03-2024.06",
+        "Linux 文件服务器｜2024.03-2024.06\n主要负责后端接口开发。",
+        [PROJECT_TIME_RULE],
+    )
+
+    assert 'class="expert-highlight"' not in html
+    assert "2024.03-2024.06" in html
+
+
+def test_new_project_time_can_be_highlighted_when_absent_from_original():
+    html = build_highlighted_optimized_html(
+        "Linux 文件服务器",
+        "Linux 文件服务器｜2024.03-2024.06\n主要负责后端接口开发。",
+        [PROJECT_TIME_RULE],
+    )
+
+    assert 'class="expert-highlight"' in html
+    assert 'title="项目经历需要补充项目时间"' in html
+    assert ">2024.03-2024.06<" in html
