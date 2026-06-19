@@ -9,7 +9,7 @@
     }
 
     const labels = ["专业基础", "职业发展", "工具技能", "技术实践"];
-    const scores = [
+    let scores = [
         Number(container.dataset.professional),
         Number(container.dataset.career),
         Number(container.dataset.tools),
@@ -114,6 +114,23 @@
     }
 
     draw();
+
+    window.updateAbilityRadar = function (nextScores) {
+        const values = nextScores || {};
+        scores = [
+            Number(values.professional),
+            Number(values.career),
+            Number(values.tools),
+            Number(values.practice),
+        ].map(function (score) {
+            return Number.isFinite(score) ? Math.max(0, Math.min(100, score)) : 0;
+        });
+        container.dataset.professional = String(scores[0]);
+        container.dataset.career = String(scores[1]);
+        container.dataset.tools = String(scores[2]);
+        container.dataset.practice = String(scores[3]);
+        draw();
+    };
 
     if ("ResizeObserver" in window) {
         const resizeObserver = new ResizeObserver(draw);

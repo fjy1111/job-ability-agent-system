@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=13">
+</head>
+<body class="interview-session-body">
+    <header class="interview-session-topbar">
+        <a class="interview-session-brand" href="/interview/mock">
+            <span class="interview-brand-mark"><span></span></span>
+            <span>
+                <strong>AI 综合模拟面试</strong>
+                <small>独立面试空间</small>
+            </span>
+        </a>
+        <div class="interview-session-actions">
+            <span>{{ username }}</span>
+            <a href="/interview/mock">重新准备</a>
+        </div>
+    </header>
+
+    <main class="interview-session-workspace">
+        <section class="interview-session-hero">
+            <div>
+                <p class="interview-eyebrow">Complete Interview</p>
+                <h1>{{ exam_session.target_role if exam_session else "模拟面试暂未创建" }}</h1>
+                <p>从岗位笔试到视频面试，完整演练一次真实招聘流程。</p>
+            </div>
+            <div class="interview-session-stepper" id="interviewStepper">
+                <div class="active" data-step="written"><span>01</span><strong>笔试</strong></div>
+                <i></i>
+                <div data-step="video"><span>02</span><strong>视频面试</strong></div>
+                <i></i>
+                <div data-step="review"><span>03</span><strong>复盘</strong></div>
+            </div>
+        </section>
+
+        {% for warning in warnings %}
+        <div class="interview-session-alert warning">{{ warning }}</div>
+        {% endfor %}
+
+        {% if errors %}
+        <section class="interview-session-error">
+            <span>!</span>
+            <h2>本次模拟面试未能创建</h2>
+            {% for error in errors %}<p>{{ error }}</p>{% endfor %}
+            <a href="/interview/mock">返回准备页</a>
+        </section>
+        {% else %}
+        <script id="writtenExamData" type="application/json">{{ exam_session | tojson }}</script>
+
+        <section class="written-exam-shell" id="writtenPhase">
+            <div class="written-exam-head">
+                <div>
+                    <span class="interview-phase-chip">第一阶段</span>
+                    <h2>岗位能力笔试</h2>
+                    <p>以下 6 道单选题根据你的简历和目标岗位随机生成，全部作答后统一提交。</p>
+                </div>
+                <div class="written-exam-count"><strong>6</strong><span>道单选题</span></div>
+            </div>
+
+            <form id="writtenExamForm" class="written-question-list">
+                {% for question in exam_session.questions %}
+                <fieldset class="written-question-card" data-question-id="{{ question.id }}">
+                    <legend>
+                        <span>{{ "%02d" | format(loop.index) }}</span>
+                        <strong>{{ question.question }}</strong>
+                    </legend>
+                    <small>{{ question.category }}</small>
+                    <div class="written-option-list">
+                        {% for option in question.options %}
+                        <label>
+                            <input type="radio" name="{{ question.id }}" value="{{ loop.index0 }}">
+                            <span>{{ "ABCD"[loop.index0] }}</span>
+                            <strong>{{ option }}</strong>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+                {% endfor %}
+
+                <div class="written-submit-bar">
+                    <div>
+                        <strong id="writtenAnsweredCount">已作答 0 / 6</strong>
+                        <span>提交后会显示成绩与逐题解析</span>
+                    </div>
+                    <button class="interview-primary-action" type="submit" id="submitWrittenButton">提交笔试</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="written-result-shell" id="writtenResultPhase" hidden>
+            <div class="written-score-card">
+                <div class="written-score-ring" id="writtenScoreRing"><strong id="writtenScore">0</strong><span>分</span></div>
+                <div>
+                    <span class="interview-phase-chip">笔试完成</span>
+                    <h2 id="writtenResultTitle">正在计算成绩</h2>
+                    <p id="writtenResultSummary"></p>
+                </div>
+                <button class="interview-primary-action" type="button" id="startVideoInterviewButton">
+                    进入视频面试
+                </button>
+            </div>
+            <div class="written-review-list" id="writtenReviewList"></div>
+            <p class="interview-privacy-note centered">点击进入后才会申请摄像头权限；视频帧只在本地用于表情趋势分析。</p>
+        </section>
+
+        <section class="video-interview-shell" id="videoPhase" hidden>
+            <div class="interview-room-header">
+                <div>
+                    <p class="interview-eyebrow">Live Video Interview</p>
+                    <h2>视频模拟面试间</h2>
+                </div>
+                <div class="video-room-status"><span></span>面试进行中</div>
+            </div>
+
+            <div class="video-interview-grid">
+                <section class="candidate-camera-panel">
+                    <div class="candidate-camera-frame" id="candidateCameraFrame">
+                        <video id="candidateVideo" autoplay muted playsinline></video>
+                        <div class="camera-placeholder" id="cameraPlaceholder">
+                            <span></span>
+                            <strong>开启候选人画面</strong>
+                            <p>开始前请确认光线充足，并保持面部位于画面中央</p>
+                            <button type="button" id="enableCameraButton">开启摄像头与表情监测</button>
+                        </div>
+                        <div class="candidate-camera-badge" id="cameraBadge">摄像头未开启</div>
+                        <canvas id="expressionCanvas" hidden></canvas>
+                    </div>
+                    <div class="camera-privacy-strip">
+                        <span></span>
+                        画面仅在本地处理，不上传、不录制
+                    </div>
+                    <div class="ai-interviewer-tile">
+                        <img src="/static/images/ai-interviewer.png" alt="AI 面试官林老师">
+                        <div><strong>林老师 · AI 面试官</strong><span>在线提问与即时点评</span></div>
+                    </div>
+                </section>
+
+                <section class="interview-dialogue-panel video-dialogue-panel">
+                    <div class="interview-progress video-progress">
+                        <div><span id="roundLabel">第 1 / 6 轮</span><strong id="roleLabel">{{ exam_session.target_role }}</strong></div>
+                        <div class="interview-progress-track"><span id="roundProgress"></span></div>
+                    </div>
+                    <div class="conversation-list" id="conversationList" aria-live="polite"></div>
+                    <form class="interview-answer-form" id="answerForm">
+                        <label for="answerText">我的回答</label>
+                        <textarea id="answerText" rows="6" placeholder="面对镜头像正式面试一样作答，也可以先口述再整理为文字"></textarea>
+                        <button class="interview-primary-action" type="submit" id="submitAnswerButton">提交回答</button>
+                    </form>
+                </section>
+
+                <aside class="video-coach-column">
+                    <section class="expression-coach-panel">
+                        <div class="expression-coach-head">
+                            <div><span class="expression-live-dot"></span><strong>表情教练</strong></div>
+                            <em id="expressionStatus">模型准备中</em>
+                        </div>
+                        <div class="expression-reading">
+                            <div><span>当前状态</span><strong id="expressionLabel">等待画面</strong></div>
+                            <div><span>紧张趋势</span><strong id="tensionValue">--</strong></div>
+                        </div>
+                        <div class="tension-track"><span id="tensionBar"></span></div>
+                        <div class="calm-reminder" id="calmReminder" aria-live="assertive">
+                            <span>呼吸提示</span>
+                            <p>保持自然呼吸，看向镜头，按自己的节奏回答。</p>
+                        </div>
+                        <p class="expression-disclaimer">表情识别仅提供练习提示，不代表对心理状态的医学或专业判断。</p>
+                    </section>
+
+                    <section class="interview-advice-panel video-advice-panel">
+                        <h2>即时建议</h2>
+                        <div id="adviceContent" class="interview-empty-advice">
+                            <p>提交第一轮回答后，这里会显示评分、优点和改进建议。</p>
+                        </div>
+                    </section>
+                </aside>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    {% if exam_session %}<script src="/static/js/mock_interview.js?v=4" defer></script>{% endif %}
+</body>
+</html>

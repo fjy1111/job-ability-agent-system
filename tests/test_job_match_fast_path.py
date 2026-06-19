@@ -12,6 +12,7 @@ from app.services.job_vector_service import (
     build_job_vector_index,
     clear_job_vector_index_cache,
 )
+from app.services.match_cache_service import build_match_profile_version
 
 
 STUDENT = {
@@ -134,6 +135,33 @@ class JobMatchFastPathTests(unittest.TestCase):
             len(local_matches),
         )
         self.assertEqual(result[0]["match_source"], "llm")
+
+    def test_match_profile_cache_version_ignores_diagnosis_record_id(self):
+        assessment = {
+            "ability_scores": {"professional": 80, "practice": 75},
+            "recognized_skills": ["Java", "MySQL"],
+        }
+        first = build_match_profile_version(
+            STUDENT,
+            assessment,
+            user_id=7,
+            resume_hash="same-resume-hash",
+        )
+        second = build_match_profile_version(
+            dict(STUDENT),
+            dict(assessment),
+            user_id=7,
+            resume_hash="same-resume-hash",
+        )
+        changed_score = build_match_profile_version(
+            STUDENT,
+            {**assessment, "ability_scores": {"professional": 81, "practice": 75}},
+            user_id=7,
+            resume_hash="same-resume-hash",
+        )
+
+        self.assertEqual(first, second)
+        self.assertNotEqual(first, changed_score)
 
     def test_llm_gap_path_failure_falls_back_to_local_path(self):
         matches = calculate_job_match(STUDENT, JOBS)

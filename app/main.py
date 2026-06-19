@@ -12,13 +12,28 @@ from urllib.parse import urlencode
 from dotenv import load_dotenv
 from datetime import datetime
 
-from fastapi import FastAPI, Request, Form, Depends, HTTPException, UploadFile, File
+from fastapi import FastAPI, Request, Response, Form, Depends, HTTPException, UploadFile, File
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import PlainTextResponse, RedirectResponse
+from fastapi.responses import PlainTextResponse, RedirectResponse, StreamingResponse
+from starlette.concurrency import run_in_threadpool
 from starlette.middleware.sessions import SessionMiddleware
 
-from sqlalchemy import Boolean, Float, ForeignKey, create_engine, String, Text, Integer, DateTime, or_, select
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    Float,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    Text,
+    create_engine,
+    inspect,
+    or_,
+    select,
+    text,
+)
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -35,17 +50,24 @@ from app.services.ability_match_service import (
     match_profile_to_job as match_profile_to_job_local,
     score_four_dimensions as score_four_dimensions_local,
 )
-from app.agent.diagnosis_agent import AGENT_ROSTER, run_diagnosis_agent
+from app.agent.diagnosis_agent import (
+    AGENT_ROSTER,
+    run_diagnosis_agent,
+    run_diagnosis_agent_stream,
+)
 from app.services.llm_errors import LLMCallError
 from app.services.llm_gap_path_agent import generate_top5_gap_paths
 from app.services.match_cache_service import (
     MATCH_CACHE_ALGORITHM_VERSION,
     build_job_version,
+    build_match_profile_version,
 )
-# from app.services.mock_interview_service import (
-#     build_interview_session,
-#     respond_to_interview_answer,
-# )
+from app.services.mock_interview_service import (
+    build_interview_session,
+    build_written_exam,
+    grade_written_exam,
+    respond_to_interview_answer,
+)
 from app.services.resume_optimizer_service import (
     extract_resume_text_from_upload,
     optimize_resume,
@@ -60,6 +82,12 @@ from app.services.course_ability_inference_service import (
 )
 from app.services.resume_profile_extractor_service import (
     extract_student_profile_from_resume,
+)
+from app.services.ability_profile_cache_service import (
+    attach_resume_cache_metadata,
+    build_cached_agent_events,
+    build_resume_cache_hash,
+    is_matching_cached_result,
 )
 from app.services.privacy_service import (
     candidate_privacy_label,
@@ -160,6 +188,9 @@ class DiagnosisRecord(Base):
     学生历史诊断记录表
     """
     __tablename__ = "diagnosis_records"
+    __table_args__ = (
+        Index("ix_diagnosis_records_user_resume_hash", "user_id", "resume_hash"),
+    )
 
     id: Mapped[int] = mapped_column(
         Integer,
@@ -195,6 +226,11 @@ class DiagnosisRecord(Base):
     agent_result_json: Mapped[str | None] = mapped_column(
         Text,
         nullable=True
+    )
+
+    resume_hash: Mapped[str | None] = mapped_column(
+        String(64),
+        nullable=True,
     )
 
     created_at: Mapped[datetime] = mapped_column(
@@ -1463,8 +1499,37 @@ def init_course_job_mapping_data():
         db.close()
 
 
-# 自动创建数据库表
+def ensure_diagnosis_resume_hash_schema() -> None:
+    """为已有 diagnosis_records 平滑补充简历缓存键和联合索引。"""
+    inspector = inspect(engine)
+    column_names = {
+        column["name"]
+        for column in inspector.get_columns("diagnosis_records")
+    }
+    if "resume_hash" not in column_names:
+        with engine.begin() as connection:
+            connection.execute(text(
+                "ALTER TABLE diagnosis_records "
+                "ADD COLUMN resume_hash VARCHAR(64) NULL"
+            ))
+
+    inspector = inspect(engine)
+    index_names = {
+        index["name"]
+        for index in inspector.get_indexes("diagnosis_records")
+    }
+    index_name = "ix_diagnosis_records_user_resume_hash"
+    if index_name not in index_names:
+        with engine.begin() as connection:
+            connection.execute(text(
+                f"CREATE INDEX {index_name} "
+                "ON diagnosis_records (user_id, resume_hash)"
+            ))
+
+
+# 自动创建数据库表，并为旧数据库补充缓存字段。
 Base.metadata.create_all(bind=engine)
+ensure_diagnosis_resume_hash_schema()
 
 # 默认不初始化演示岗位数据，避免影响真实可追溯数据。
 if os.getenv("INIT_DEMO_JOB_DATA", "false").lower() == "true":
@@ -1931,27 +1996,44 @@ def build_match_assessment(record: DiagnosisRecord) -> dict:
 
 
 def build_persistent_match_cache_key(
-    diagnosis_id: int,
+    student_record: DiagnosisRecord,
     job_version: str,
     result_type: str,
 ) -> str:
-    raw = ":".join([
-        str(diagnosis_id),
-        job_version,
-        MATCH_CACHE_ALGORITHM_VERSION,
-        result_type,
-    ])
+    student_data = build_student_data(student_record)
+    assessment = build_match_assessment(student_record)
+    profile_version = build_match_profile_version(
+        student_data,
+        assessment,
+        user_id=student_record.user_id,
+        resume_hash=student_record.resume_hash or "",
+    )
+    model_name = (
+        os.getenv("ABILITY_MATCH_MODEL")
+        or os.getenv("LLM_MODEL")
+        or os.getenv("OPENAI_MODEL")
+        or os.getenv("DEEPSEEK_MODEL")
+        or "deepseek-chat"
+    )
+    payload = {
+        "profile_version": profile_version,
+        "job_version": job_version,
+        "model_name": model_name if result_type == "llm" else "local",
+        "algorithm_version": MATCH_CACHE_ALGORITHM_VERSION,
+        "result_type": result_type,
+    }
+    raw = json.dumps(payload, ensure_ascii=False, sort_keys=True)
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
 def load_persistent_match_cache(
     db: Session,
-    diagnosis_id: int,
+    student_record: DiagnosisRecord,
     job_version: str,
     result_type: str,
 ) -> list[dict] | None:
     cache_key = build_persistent_match_cache_key(
-        diagnosis_id,
+        student_record,
         job_version,
         result_type,
     )
@@ -1971,20 +2053,20 @@ def load_persistent_match_cache(
 
 def save_persistent_match_cache(
     db: Session,
-    diagnosis_id: int,
+    student_record: DiagnosisRecord,
     job_version: str,
     result_type: str,
     results: list[dict],
 ) -> None:
     cache_key = build_persistent_match_cache_key(
-        diagnosis_id,
+        student_record,
         job_version,
         result_type,
     )
     (
         db.query(JobMatchCacheRecord)
         .filter(
-            JobMatchCacheRecord.diagnosis_id == diagnosis_id,
+            JobMatchCacheRecord.diagnosis_id == student_record.id,
             JobMatchCacheRecord.result_type == result_type,
             JobMatchCacheRecord.cache_key != cache_key,
         )
@@ -1998,13 +2080,16 @@ def save_persistent_match_cache(
     if record is None:
         record = JobMatchCacheRecord(
             cache_key=cache_key,
-            diagnosis_id=diagnosis_id,
+            diagnosis_id=student_record.id,
             job_version=job_version,
             algorithm_version=MATCH_CACHE_ALGORITHM_VERSION,
             result_type=result_type,
             result_json="[]",
         )
     record.result_json = json.dumps(results, ensure_ascii=False, default=str)
+    record.diagnosis_id = student_record.id
+    record.job_version = job_version
+    record.algorithm_version = MATCH_CACHE_ALGORITHM_VERSION
     record.updated_at = datetime.now()
     db.add(record)
     db.commit()
@@ -2084,7 +2169,7 @@ def get_job_matches_for_record(
 
     job_matches = load_persistent_match_cache(
         db,
-        student_record.id,
+        student_record,
         job_version,
         "llm",
     )
@@ -2094,7 +2179,7 @@ def get_job_matches_for_record(
     if job_matches is None:
         job_matches = load_persistent_match_cache(
             db,
-            student_record.id,
+            student_record,
             job_version,
             "local",
         )
@@ -2110,7 +2195,7 @@ def get_job_matches_for_record(
         )
         save_persistent_match_cache(
             db,
-            student_record.id,
+            student_record,
             job_version,
             "local",
             job_matches,
@@ -3212,7 +3297,9 @@ def detect_agent_intent(message: str) -> str:
 
 def render_ability_profile(
     request: Request,
-    record: DiagnosisRecord | None
+    record: DiagnosisRecord | None,
+    *,
+    generation_mode: bool = False,
 ):
     """
     统一渲染能力画像页面。
@@ -3283,6 +3370,7 @@ def render_ability_profile(
             "ability_scores": ability_scores,
             "ability_explain": ability_explain,
             "record": record,
+            "generation_mode": generation_mode,
             "username": request.session.get("username"),
 
             "agent_result": agent_result,
@@ -4536,6 +4624,273 @@ def mock_interview_page(request: Request):
     )
 
 
+MOCK_INTERVIEW_EXAM_CACHE: dict[str, dict] = {}
+MOCK_INTERVIEW_LAUNCH_STATUS: dict[str, dict] = {}
+MOCK_INTERVIEW_EXAM_TTL_SECONDS = 60 * 60
+
+
+def cache_mock_interview_exam(user_id: int, context: dict) -> str:
+    """短期保存新标签页所需的笔试上下文，避免把简历数据放进 URL。"""
+    now = datetime.now().timestamp()
+    stale_ids = [
+        exam_id
+        for exam_id, item in MOCK_INTERVIEW_EXAM_CACHE.items()
+        if now - float(item.get("created_at", 0)) > MOCK_INTERVIEW_EXAM_TTL_SECONDS
+    ]
+    for exam_id in stale_ids:
+        MOCK_INTERVIEW_EXAM_CACHE.pop(exam_id, None)
+
+    exam_session = context.get("exam_session") or {}
+    exam_id = str(exam_session.get("exam_id") or secrets.token_urlsafe(18))
+    MOCK_INTERVIEW_EXAM_CACHE[exam_id] = {
+        "user_id": user_id,
+        "created_at": now,
+        **context,
+    }
+    return exam_id
+
+
+@app.get("/interview/session")
+def mock_interview_session_redirect(request: Request):
+    """无会话 ID 时返回准备页，避免刷新旧 POST 地址出现 405。"""
+    redirect_response = get_login_redirect(request)
+    if redirect_response:
+        return redirect_response
+    return RedirectResponse(url="/interview/mock", status_code=303)
+
+
+@app.get("/interview/session/{exam_id}")
+def mock_interview_session_view(request: Request, exam_id: str):
+    redirect_response = get_login_redirect(request)
+    if redirect_response:
+        return redirect_response
+
+    cached = MOCK_INTERVIEW_EXAM_CACHE.get(exam_id)
+    user_id = request.session.get("user_id")
+    if not cached or cached.get("user_id") != user_id:
+        cached = {
+            "exam_session": None,
+            "uploaded_filename": "",
+            "warnings": [],
+            "errors": ["该模拟面试会话已过期，请返回准备页重新生成。"],
+        }
+
+    return templates.TemplateResponse(
+        request,
+        "mock_interview_session.html",
+        {
+            "title": "AI 综合模拟面试",
+            "username": request.session.get("username"),
+            **{
+                key: cached.get(key)
+                for key in ("exam_session", "uploaded_filename", "warnings", "errors")
+            },
+        },
+    )
+
+
+@app.get("/interview/session-loading")
+def mock_interview_session_loading(request: Request):
+    redirect_response = get_login_redirect(request)
+    if redirect_response:
+        return redirect_response
+    return templates.TemplateResponse(
+        request,
+        "mock_interview_loading.html",
+        {
+            "title": "正在生成模拟面试",
+            "username": request.session.get("username"),
+        },
+    )
+
+
+@app.get("/interview/session/status/{launch_id}")
+def mock_interview_session_status(request: Request, launch_id: str):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return {"status": "error", "message": "登录已失效，请重新登录。"}
+    launch = MOCK_INTERVIEW_LAUNCH_STATUS.get(launch_id)
+    if not launch:
+        return {"status": "pending"}
+    if launch.get("user_id") != user_id:
+        return {"status": "error", "message": "无权访问该模拟面试。"}
+    return {
+        "status": launch.get("status", "pending"),
+        "redirect_url": launch.get("redirect_url", ""),
+        "message": launch.get("message", ""),
+    }
+
+
+async def build_mock_interview_exam_context(
+    *,
+    target_role: str,
+    job_description: str,
+    resume_text: str,
+    resume_file: UploadFile | None,
+) -> dict:
+    upload_warnings: list[str] = []
+    uploaded_filename = ""
+    uploaded_resume_text = ""
+    if resume_file is not None and resume_file.filename:
+        uploaded_filename = resume_file.filename
+        file_content = await resume_file.read()
+        uploaded_resume_text, upload_warnings = extract_resume_text_from_upload(
+            uploaded_filename,
+            file_content,
+        )
+
+    final_target_role = target_role.strip()
+    final_job_description = job_description.strip()
+    final_resume_text = resume_text.strip() or uploaded_resume_text.strip()
+    errors: list[str] = []
+    exam_session = None
+    if not final_target_role and not final_job_description and not final_resume_text:
+        errors.append("请至少填写目标岗位信息，或粘贴、上传一份简历。")
+    else:
+        try:
+            exam_session = await run_in_threadpool(
+                build_written_exam,
+                final_target_role,
+                final_job_description,
+                final_resume_text,
+            )
+        except LLMCallError:
+            errors.append("笔试题生成失败，请检查模型配置后重新尝试。")
+
+    return {
+        "exam_session": exam_session,
+        "uploaded_filename": uploaded_filename,
+        "warnings": upload_warnings,
+        "errors": errors,
+    }
+
+
+@app.post("/interview/session/create")
+async def mock_interview_session_create(
+    request: Request,
+    launch_id: str = Form(""),
+    target_role: str = Form(""),
+    job_description: str = Form(""),
+    resume_text: str = Form(""),
+    resume_file: UploadFile | None = File(None),
+):
+    """后台生成笔试题；前端已提前打开加载页，因此无需等待空白标签页。"""
+    if not request.session.get("user_id"):
+        return {"ok": False, "errors": ["请先登录后使用 AI 模拟面试。"]}
+
+    user_id = int(request.session["user_id"])
+    launch_id = launch_id.strip() or secrets.token_urlsafe(18)
+    now = datetime.now().timestamp()
+    stale_launch_ids = [
+        item_id
+        for item_id, item in MOCK_INTERVIEW_LAUNCH_STATUS.items()
+        if now - float(item.get("created_at", 0)) > MOCK_INTERVIEW_EXAM_TTL_SECONDS
+    ]
+    for item_id in stale_launch_ids:
+        MOCK_INTERVIEW_LAUNCH_STATUS.pop(item_id, None)
+    MOCK_INTERVIEW_LAUNCH_STATUS[launch_id] = {
+        "user_id": user_id,
+        "status": "pending",
+        "created_at": now,
+    }
+    context = await build_mock_interview_exam_context(
+        target_role=target_role,
+        job_description=job_description,
+        resume_text=resume_text,
+        resume_file=resume_file,
+    )
+    exam_id = cache_mock_interview_exam(user_id, context)
+    redirect_url = f"/interview/session/{exam_id}"
+    MOCK_INTERVIEW_LAUNCH_STATUS[launch_id] = {
+        "user_id": user_id,
+        "status": "ready",
+        "redirect_url": redirect_url,
+        "created_at": datetime.now().timestamp(),
+    }
+    return {
+        "ok": not context["errors"],
+        "redirect_url": redirect_url,
+        "errors": context["errors"],
+    }
+
+
+@app.post("/interview/session")
+async def mock_interview_session_page(
+    request: Request,
+    target_role: str = Form(""),
+    job_description: str = Form(""),
+    resume_text: str = Form(""),
+    resume_file: UploadFile | None = File(None),
+):
+    """在新页面中创建岗位笔试，笔试完成后再进入视频面试。"""
+    redirect_response = get_login_redirect(request)
+    if redirect_response:
+        return redirect_response
+
+    context = await build_mock_interview_exam_context(
+        target_role=target_role,
+        job_description=job_description,
+        resume_text=resume_text,
+        resume_file=resume_file,
+    )
+    exam_id = cache_mock_interview_exam(int(request.session["user_id"]), context)
+    return RedirectResponse(url=f"/interview/session/{exam_id}", status_code=303)
+
+
+@app.post("/interview/written/submit")
+async def mock_interview_written_submit(request: Request):
+    """批改六题笔试，并生成后续视频面试会话。"""
+    if not request.session.get("user_id"):
+        return {
+            "ok": False,
+            "errors": ["请先登录后使用 AI 模拟面试。"],
+        }
+
+    try:
+        payload = await request.json()
+    except Exception:
+        return {
+            "ok": False,
+            "errors": ["笔试数据格式不正确，请重新开始。"],
+        }
+
+    exam_session = payload.get("exam_session") or {}
+    answers = payload.get("answers") or {}
+    if not exam_session:
+        return {
+            "ok": False,
+            "errors": ["笔试会话已失效，请返回准备页重新生成。"],
+        }
+
+    try:
+        written_result = grade_written_exam(exam_session, answers)
+        interview_session = build_interview_session(
+            target_role=str(exam_session.get("target_role") or "").strip(),
+            job_description=str(exam_session.get("job_description") or "").strip(),
+            resume_text=str(exam_session.get("resume_text") or "").strip(),
+        )
+    except ValueError:
+        return {
+            "ok": False,
+            "errors": ["笔试题数据不完整，请返回准备页重新生成。"],
+        }
+    except LLMCallError:
+        return {
+            "ok": False,
+            "errors": ["视频面试问题生成失败，请稍后重试。"],
+        }
+
+    return {
+        "ok": True,
+        "written_result": written_result,
+        "session": interview_session,
+        "opening_message": interview_session["opening_message"],
+        "question": interview_session["current_question"],
+        "round_index": interview_session["current_round"],
+        "total_rounds": interview_session["total_rounds"],
+    }
+
+
 @app.post("/interview/start")
 async def mock_interview_start(
     request: Request,
@@ -4783,10 +5138,9 @@ def student_submit(
 @app.get("/ability/profile")
 def ability_profile(
     request: Request,
-    db: Session = Depends(get_db)
 ):
     """
-    显示最近一次提交的学生能力画像。
+    打开一张新的空白能力画像，由用户上传简历后主动开始生成。
     """
 
     redirect_response = get_login_redirect(request)
@@ -4794,18 +5148,318 @@ def ability_profile(
     if redirect_response:
         return redirect_response
 
-    user_id = request.session.get("user_id")
-    latest_record = db.scalar(
-        select(DiagnosisRecord)
-        .where(DiagnosisRecord.user_id == user_id)
-        .order_by(
-            DiagnosisRecord.created_at.desc(),
-            DiagnosisRecord.id.desc()
+    return render_ability_profile(
+        request,
+        None,
+        generation_mode=True,
+    )
+
+
+def _stream_json_line(payload: dict) -> str:
+    return json.dumps(payload, ensure_ascii=False) + "\n"
+
+
+def _generate_ability_profile_stream(
+    *,
+    user_id: int,
+    message: str,
+    uploaded_filename: str,
+    resume_text: str,
+    upload_warnings: list[str],
+    resume_hash: str,
+):
+    """按简历解析和 LangGraph 节点顺序输出 NDJSON 事件。"""
+    db = SessionLocal()
+    try:
+        yield _stream_json_line({
+            "type": "accepted",
+            "title": "简历已接收",
+            "text": f"已读取 {uploaded_filename}，正在提取学生基础信息。",
+            "warnings": upload_warnings,
+        })
+
+        student_data = extract_student_profile_from_resume(message, resume_text)
+        student_context = {
+            **student_data,
+            "resume_text": resume_text,
+            "normalized_text": resume_text,
+        }
+        yield _stream_json_line({
+            "type": "profile",
+            "title": "基础信息已识别",
+            "text": (
+                f"姓名：{student_data['name']}；专业：{student_data['major']}；"
+                f"学历：{student_data['grade']}；目标岗位：{student_data['target_job']}。"
+            ),
+            "student": {
+                key: student_data[key]
+                for key in ("name", "major", "grade", "target_job")
+            },
+        })
+
+        agent_result = None
+        for event in run_diagnosis_agent_stream(student_context):
+            if event["type"] == "complete":
+                agent_result = event["result"]
+                continue
+
+            output = event.get("output", {})
+            workflow_steps = output.get("workflow_steps") or []
+            step = workflow_steps[-1] if workflow_steps else {}
+            yield _stream_json_line({
+                "type": "agent_step",
+                "node": event.get("node", ""),
+                "step": step.get("step", ""),
+                "title": step.get("agent", "能力画像智能体"),
+                "text": step.get("output", "本步骤已完成。"),
+                "status": step.get("status", "completed"),
+                "ability_scores": output.get("ability_scores"),
+                "summary": output.get("summary", ""),
+                "data": {
+                    key: output[key]
+                    for key in (
+                        "ability_scores",
+                        "score_evidence",
+                        "recognized_skills",
+                        "profile_tags",
+                        "risk_flags",
+                        "evidence_cards",
+                        "summary",
+                        "advantages",
+                        "weaknesses",
+                        "dimension_insights",
+                        "development_focus",
+                        "quality_review",
+                        "tool_calls",
+                        "collaboration_log",
+                        "review_findings",
+                        "llm_agents",
+                    )
+                    if key in output
+                },
+            })
+
+        if not agent_result:
+            raise RuntimeError("能力画像工作流未返回最终结果")
+
+        agent_result["student_profile"] = {
+            key: student_data[key]
+            for key in ("name", "major", "grade", "target_job")
+        }
+        agent_result = attach_resume_cache_metadata(agent_result, resume_hash)
+        ability_scores = agent_result["ability_scores"]
+        record = DiagnosisRecord(
+            user_id=user_id,
+            name=student_data["name"],
+            major=student_data["major"],
+            grade=student_data["grade"],
+            target_job=student_data["target_job"],
+            skills=student_data["skills"],
+            projects=student_data["projects"],
+            competitions=student_data["competitions"],
+            certificates=student_data["certificates"],
+            self_intro=student_data["self_intro"],
+            professional_score=ability_scores["professional"],
+            practice_score=ability_scores["practice"],
+            tools_score=ability_scores["tools"],
+            career_score=ability_scores["career"],
+            agent_status="completed",
+            agent_result_json=json.dumps(agent_result, ensure_ascii=False),
+            resume_hash=resume_hash,
         )
+        db.add(record)
+        db.commit()
+        db.refresh(record)
+
+        yield _stream_json_line({
+            "type": "complete",
+            "title": "能力画像生成完成",
+            "text": agent_result.get("summary", "四维能力画像已经生成。"),
+            "redirect_url": f"/ability/profile/{record.id}",
+            "metrics": {
+                "agent_roster": len(agent_result.get("agent_roster", [])),
+                "llm_agents": len(agent_result.get("llm_agents", [])),
+                "tool_calls": len(agent_result.get("tool_calls", [])),
+                "collaboration_log": len(agent_result.get("collaboration_log", [])),
+            },
+        })
+    except LLMCallError:
+        db.rollback()
+        yield _stream_json_line({
+            "type": "error",
+            "title": "生成失败",
+            "text": "调用 LLM 失败，请检查模型配置后重试。",
+        })
+    except Exception:
+        db.rollback()
+        logger.exception("流式生成能力画像失败")
+        yield _stream_json_line({
+            "type": "error",
+            "title": "生成失败",
+            "text": "能力画像生成失败，请稍后重试。",
+        })
+    finally:
+        db.close()
+
+
+def _find_cached_ability_profile(
+    db: Session,
+    *,
+    user_id: int,
+    resume_hash: str,
+) -> dict | None:
+    """从当前用户最近的诊断记录中查找同一份简历的完整画像。"""
+    record = db.scalar(
+        select(DiagnosisRecord)
+        .where(
+            DiagnosisRecord.user_id == user_id,
+            DiagnosisRecord.resume_hash == resume_hash,
+            DiagnosisRecord.agent_status == "completed",
+            DiagnosisRecord.agent_result_json.is_not(None),
+        )
+        .order_by(DiagnosisRecord.created_at.desc(), DiagnosisRecord.id.desc())
         .limit(1)
     )
 
-    return render_ability_profile(request, latest_record)
+    if record is not None:
+        agent_result = load_agent_result(record)
+        if is_matching_cached_result(agent_result, resume_hash):
+            return {
+                "record_id": record.id,
+                "student": build_student_data(record),
+                "agent_result": agent_result,
+            }
+    return None
+
+
+def _generate_cached_ability_profile_stream(
+    *,
+    cached_profile: dict,
+    uploaded_filename: str,
+):
+    """把 diagnosis_records 中的完整画像重新拆段，保持逐字生成体验。"""
+    record_id = cached_profile["record_id"]
+    student_data = cached_profile["student"]
+    agent_result = cached_profile["agent_result"]
+
+    yield _stream_json_line({
+        "type": "accepted",
+        "cache_hit": True,
+        "title": "已命中历史画像缓存",
+        "text": f"检测到 {uploaded_filename} 与历史简历相同，正在读取数据库画像。",
+    })
+    yield _stream_json_line({
+        "type": "profile",
+        "cache_hit": True,
+        "title": "基础信息已从缓存读取",
+        "text": "已从 diagnosis_records 读取学生基础信息。",
+        "student": {
+            key: student_data.get(key, "无")
+            for key in ("name", "major", "grade", "target_job")
+        },
+    })
+
+    for event in build_cached_agent_events(agent_result):
+        yield _stream_json_line(event)
+
+    yield _stream_json_line({
+        "type": "complete",
+        "cache_hit": True,
+        "title": "缓存画像加载完成",
+        "text": agent_result.get("summary", "四维能力画像已经加载。"),
+        "redirect_url": f"/ability/profile/{record_id}",
+        "metrics": {
+            "agent_roster": len(agent_result.get("agent_roster", [])),
+            "llm_agents": len(agent_result.get("llm_agents", [])),
+            "tool_calls": len(agent_result.get("tool_calls", [])),
+            "collaboration_log": len(agent_result.get("collaboration_log", [])),
+        },
+    })
+
+
+@app.post("/ability/profile/generate")
+async def ability_profile_generate(
+    request: Request,
+    resume_file: UploadFile | None = File(None),
+):
+    """接收一份简历，并按智能体执行顺序实时返回画像文本。"""
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return StreamingResponse(
+            iter([_stream_json_line({
+                "type": "error",
+                "title": "请先登录",
+                "text": "登录后才能生成能力画像。",
+            })]),
+            media_type="application/x-ndjson",
+        )
+
+    if resume_file is None or not resume_file.filename:
+        return StreamingResponse(
+            iter([_stream_json_line({
+                "type": "error",
+                "title": "缺少简历",
+                "text": "请先拖入 PDF、Word 或文本简历。",
+            })]),
+            media_type="application/x-ndjson",
+        )
+
+    uploaded_filename = resume_file.filename
+    file_content = await resume_file.read()
+    resume_text, upload_warnings = extract_resume_text_from_upload(
+        uploaded_filename,
+        file_content,
+    )
+    if not resume_text:
+        message = upload_warnings[0] if upload_warnings else "未能从简历中读取有效文本。"
+        return StreamingResponse(
+            iter([_stream_json_line({
+                "type": "error",
+                "title": "简历解析失败",
+                "text": message,
+            })]),
+            media_type="application/x-ndjson",
+        )
+
+    resume_hash = build_resume_cache_hash(resume_text)
+    cache_db = SessionLocal()
+    try:
+        cached_profile = _find_cached_ability_profile(
+            cache_db,
+            user_id=user_id,
+            resume_hash=resume_hash,
+        )
+    finally:
+        cache_db.close()
+
+    if cached_profile:
+        response = StreamingResponse(
+            _generate_cached_ability_profile_stream(
+                cached_profile=cached_profile,
+                uploaded_filename=uploaded_filename,
+            ),
+            media_type="application/x-ndjson",
+        )
+        response.headers["Cache-Control"] = "no-cache, no-transform"
+        response.headers["X-Accel-Buffering"] = "no"
+        response.headers["X-Ability-Profile-Cache"] = "HIT"
+        return response
+
+    response = StreamingResponse(
+        _generate_ability_profile_stream(
+            user_id=user_id,
+            message="请根据这份简历生成能力画像",
+            uploaded_filename=uploaded_filename,
+            resume_text=resume_text,
+            upload_warnings=upload_warnings,
+            resume_hash=resume_hash,
+        ),
+        media_type="application/x-ndjson",
+    )
+    response.headers["Cache-Control"] = "no-cache, no-transform"
+    response.headers["X-Accel-Buffering"] = "no"
+    response.headers["X-Ability-Profile-Cache"] = "MISS"
+    return response
 
 
 @app.get("/ability/profile/{record_id}")
@@ -5183,6 +5837,7 @@ def job_match_export_pdf(
 @app.post("/job/match/refine")
 def job_match_refine(
     request: Request,
+    response: Response,
     db: Session = Depends(get_db)
 ):
     """按需使用一次 LLM 对本地 TOP10 精排，失败时保留本地结果。"""
@@ -5207,11 +5862,12 @@ def job_match_refine(
 
     cached = load_persistent_match_cache(
         db,
-        student_record.id,
+        student_record,
         job_version,
         "llm",
     )
     if cached is not None:
+        response.headers["X-Job-Match-Cache"] = "HIT"
         return {
             "ok": True,
             "cached": True,
@@ -5221,7 +5877,7 @@ def job_match_refine(
 
     local_matches = load_persistent_match_cache(
         db,
-        student_record.id,
+        student_record,
         job_version,
         "local",
     )
@@ -5234,7 +5890,7 @@ def job_match_refine(
         )
         save_persistent_match_cache(
             db,
-            student_record.id,
+            student_record,
             job_version,
             "local",
             local_matches,
@@ -5254,12 +5910,13 @@ def job_match_refine(
     if used_llm:
         save_persistent_match_cache(
             db,
-            student_record.id,
+            student_record,
             job_version,
             "llm",
             refined,
         )
 
+    response.headers["X-Job-Match-Cache"] = "MISS"
     return {
         "ok": used_llm,
         "cached": False,
@@ -5317,8 +5974,8 @@ async def job_match_path(
     job_records = db.query(JobKnowledgeRecord).all()
     job_version = build_job_version(job_records)
     matches = (
-        load_persistent_match_cache(db, student_record.id, job_version, "llm")
-        or load_persistent_match_cache(db, student_record.id, job_version, "local")
+        load_persistent_match_cache(db, student_record, job_version, "llm")
+        or load_persistent_match_cache(db, student_record, job_version, "local")
     )
     if matches is None:
         matches = calculate_job_match(
@@ -5329,7 +5986,7 @@ async def job_match_path(
         )
         save_persistent_match_cache(
             db,
-            student_record.id,
+            student_record,
             job_version,
             "local",
             matches,

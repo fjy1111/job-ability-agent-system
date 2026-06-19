@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Integer, String, Text
+from sqlalchemy import DateTime, Index, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.database import Base
@@ -11,6 +11,14 @@ class DiagnosisRecord(Base):
     学生历史诊断记录表
     """
     __tablename__ = "diagnosis_records"
+    __table_args__ = (
+        Index("ix_diagnosis_records_user_resume_hash", "user_id", "resume_hash"),
+    )
+
+    user_id: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+    )
 
     id: Mapped[int] = mapped_column(
         Integer,
@@ -92,6 +100,11 @@ class DiagnosisRecord(Base):
     agent_result_json: Mapped[str | None] = mapped_column(
         Text,
         nullable=True
+    )
+
+    resume_hash: Mapped[str | None] = mapped_column(
+        String(64),
+        nullable=True,
     )
 
     created_at: Mapped[datetime] = mapped_column(

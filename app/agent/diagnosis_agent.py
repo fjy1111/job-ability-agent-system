@@ -1248,15 +1248,8 @@ diagnosis_graph = build_diagnosis_graph()
 # 对外调用函数
 # =========================================================
 
-def run_diagnosis_agent(student_data: dict[str, str]) -> dict[str, Any]:
-    """
-    main.py 只需要调用这个函数即可获得完整诊断结果。
-    """
-
-    result = diagnosis_graph.invoke({
-        "student": student_data
-    })
-
+def _build_diagnosis_result(result: DiagnosisState) -> dict[str, Any]:
+    """把 LangGraph 内部状态收敛成页面和数据库使用的公开结果。"""
     return {
         "ability_scores": result["ability_scores"],
         "score_evidence": result["score_evidence"],
@@ -1280,3 +1273,43 @@ def run_diagnosis_agent(student_data: dict[str, str]) -> dict[str, Any]:
         "used_llm": result.get("used_llm", False),
         "agent_warning": result.get("agent_warning", "")
     }
+
+
+def run_diagnosis_agent_stream(student_data: dict[str, str]):
+    """
+    按 LangGraph 节点完成顺序返回增量状态，供 Web 端实时展示生成过程。
+
+    每个事件都带有当前节点、本节点输出和截至当前的合并状态；最后一个
+    ``complete`` 事件包含与 ``run_diagnosis_agent`` 完全相同的公开结果。
+    """
+    merged_state: DiagnosisState = {"student": student_data}
+
+    for update in diagnosis_graph.stream(
+        {"student": student_data},
+        stream_mode="updates",
+    ):
+        for node_name, node_output in update.items():
+            if not isinstance(node_output, dict):
+                continue
+            merged_state.update(node_output)
+            yield {
+                "type": "node",
+                "node": node_name,
+                "output": node_output,
+                "state": dict(merged_state),
+            }
+
+    yield {
+        "type": "complete",
+        "result": _build_diagnosis_result(merged_state),
+    }
+
+
+def run_diagnosis_agent(student_data: dict[str, str]) -> dict[str, Any]:
+    """
+    main.py 只需要调用这个函数即可获得完整诊断结果。
+    """
+    result = diagnosis_graph.invoke({
+        "student": student_data
+    })
+    return _build_diagnosis_result(result)

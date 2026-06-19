@@ -592,7 +592,7 @@
             <div class="match-source">
                 {% if match_source == "llm" %}
                 <span class="source-badge ai">AI 精排结果</span>
-                <span>已对本地 TOP10 完成一次 AI 精排，结果已持久化缓存。</span>
+                <span>{% if match_cached %}已命中 AI 精排数据库缓存，本次跳过 LLM。{% else %}已对本地 TOP10 完成一次 AI 精排，结果已持久化缓存。{% endif %}</span>
                 {% else %}
                 <span class="source-badge">本地即时匹配</span>
                 <span>基于已保存画像、技能覆盖和岗位相似度生成，无需等待 LLM。</span>
@@ -613,7 +613,7 @@
             </div>
         </div>
         <p id="match-status" class="match-status">
-            {% if match_cached %}本次结果来自 MySQL 缓存。{% else %}本次已完成新的本地匹配计算。{% endif %}
+            {% if match_cached and match_source == "llm" %}已从 MySQL 快速读取相同画像的 AI 精排结果。{% elif match_cached %}本次本地匹配结果来自 MySQL 缓存。{% else %}本次已完成新的本地匹配计算。{% endif %}
         </p>
         {% endif %}
 

@@ -23,7 +23,7 @@ from typing import Any
 """
 
 # 缓存版本号：当 prompt、评分公式、候选岗位召回策略发生变化时，手动改这个值即可让旧缓存失效。
-MATCH_CACHE_ALGORITHM_VERSION = "match_cache_v7_reliable_ai_refine"
+MATCH_CACHE_ALGORITHM_VERSION = "match_cache_v8_profile_persistent_ai_refine"
 
 # 默认缓存有效期：30 分钟。比赛演示时，重复刷新页面基本都会命中缓存。
 DEFAULT_TTL_SECONDS = 30 * 60
@@ -100,6 +100,29 @@ def build_job_version(job_records: list[Any]) -> str:
     normalized_jobs.sort(key=lambda item: (item.get("id", ""), item.get("job_name", "")))
 
     raw_text = json.dumps(normalized_jobs, ensure_ascii=False, sort_keys=True, default=str)
+    return hashlib.sha256(raw_text.encode("utf-8")).hexdigest()
+
+
+def build_match_profile_version(
+    student_data: dict[str, Any],
+    assessment: dict[str, Any],
+    *,
+    user_id: int | None = None,
+    resume_hash: str = "",
+) -> str:
+    """生成与诊断记录编号无关、但能反映画像实质变化的稳定版本号。"""
+    payload = {
+        "user_id": user_id,
+        "resume_hash": _safe_text(resume_hash).strip(),
+        "student": _normalize_student_data(student_data),
+        "assessment": {
+            "ability_scores": assessment.get("ability_scores", {}),
+            "score_evidence": assessment.get("score_evidence", {}),
+            "recognized_skills": assessment.get("recognized_skills", []),
+            "target_roles": assessment.get("target_roles", []),
+        },
+    }
+    raw_text = json.dumps(payload, ensure_ascii=False, sort_keys=True, default=str)
     return hashlib.sha256(raw_text.encode("utf-8")).hexdigest()
 
 
