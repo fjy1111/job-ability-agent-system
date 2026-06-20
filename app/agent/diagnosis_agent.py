@@ -10,6 +10,7 @@ from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, START, END
 
 from app.services.llm_errors import LLMCallError
+from app.services.model_config_service import create_configured_chat_model
 
 
 # =========================================================
@@ -598,32 +599,11 @@ def extract_json_from_llm_text(text: str) -> dict:
 
 
 def _create_llm() -> ChatOpenAI | None:
-    """
-    根据 .env 创建大模型。
-    支持 DeepSeek 等 OpenAI 兼容接口。
-    """
-
-    use_llm = os.getenv("USE_LLM", "true").lower() == "true"
-    api_key = os.getenv("LLM_API_KEY", "").strip()
-    base_url = os.getenv("LLM_BASE_URL", "").strip()
-    model = os.getenv("LLM_MODEL", "").strip()
-
-    if not use_llm:
-        raise LLMCallError()
-
-    if not api_key:
-        raise LLMCallError()
-
-    if not model:
-        raise LLMCallError()
-
-    return ChatOpenAI(
-        model=model,
-        api_key=api_key,
-        base_url=base_url or None,
+    return create_configured_chat_model(
         temperature=0.2,
         timeout=60,
-        max_retries=2
+        max_retries=2,
+        task_name="DIAGNOSIS",
     )
 
 

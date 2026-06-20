@@ -19,6 +19,7 @@ except Exception:  # pragma: no cover
     ChatOpenAI = None
 
 from app.services.llm_errors import LLMCallError
+from app.services.model_config_service import create_configured_chat_model
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -75,39 +76,12 @@ def _safe_json_loads(text: str) -> dict[str, Any]:
 def _create_llm() -> Any:
     if ChatOpenAI is None:
         raise LLMCallError()
-    if os.getenv("USE_LLM", "true").lower() != "true":
-        raise LLMCallError()
-
-    api_key = (
-        os.getenv("LLM_API_KEY", "").strip()
-        or os.getenv("OPENAI_API_KEY", "").strip()
-        or os.getenv("DEEPSEEK_API_KEY", "").strip()
-        or os.getenv("DASHSCOPE_API_KEY", "").strip()
-    )
-    base_url = (
-        os.getenv("LLM_BASE_URL", "").strip()
-        or os.getenv("OPENAI_BASE_URL", "").strip()
-        or os.getenv("DEEPSEEK_BASE_URL", "").strip()
-        or os.getenv("DASHSCOPE_BASE_URL", "").strip()
-    )
-    model = (
-        os.getenv("INTERVIEW_MODEL", "").strip()
-        or os.getenv("LLM_MODEL", "").strip()
-        or os.getenv("OPENAI_MODEL", "").strip()
-        or os.getenv("DEEPSEEK_MODEL", "").strip()
-        or os.getenv("DASHSCOPE_MODEL", "").strip()
-    )
-
-    if not api_key or not model:
-        raise LLMCallError()
-
-    return ChatOpenAI(
-        model=model,
-        api_key=api_key,
-        base_url=base_url or None,
+    return create_configured_chat_model(
         temperature=0.35,
         timeout=60,
         max_retries=0,
+        task_name="INTERVIEW",
+        legacy_task_model_envs=("INTERVIEW_MODEL",),
     )
 
 

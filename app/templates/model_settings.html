@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+    <meta name="referrer" content="no-referrer">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=18">
+</head>
+<body class="agent-chat-body">
+    <div class="agent-shell">
+        <aside class="agent-sidebar">
+            <a class="agent-brand" href="/">
+                <span class="agent-brand-mark">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M12 3l8 5v8l-8 5-8-5V8z"></path>
+                        <path d="M12 7v10"></path>
+                        <path d="M8 10l8 4"></path>
+                    </svg>
+                </span>
+                <span><strong>就业能力智能体</strong><small>Ability Agent</small></span>
+            </a>
+
+            <nav class="agent-nav" aria-label="主导航">
+                <a href="/"><span>智能体聊天</span></a>
+                <a href="/ability/profile"><span>能力画像</span></a>
+                <a href="/job/match"><span>TOP5岗位匹配</span></a>
+                <a href="/employment/guidance"><span>就业指导</span></a>
+                <a href="/collaboration"><span>三方协同</span></a>
+                <a class="active" href="/settings">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1A8 8 0 0 0 15 6l-.3-2.6h-4L10.4 6a8 8 0 0 0-1.5.9l-2.4-1-2 3.4 2 1.5a7 7 0 0 0 0 2.2l-2 1.5 2 3.4 2.4-1a8 8 0 0 0 1.5.9l.3 2.6h4l.3-2.6a8 8 0 0 0 1.5-.9l2.4 1 2-3.4-2-1.5a7 7 0 0 0 .1-1z"></path>
+                    </svg>
+                    <span>模型设置</span>
+                </a>
+            </nav>
+
+            <div class="agent-sidebar-footer">
+                <span class="agent-user">{{ username }} · {{ role_label }}</span>
+                <a href="/logout">退出登录</a>
+            </div>
+        </aside>
+
+        <main class="model-settings-main">
+            <header class="model-settings-header">
+                <div>
+                    <p>MODEL ROUTING</p>
+                    <h1>大模型设置</h1>
+                    <span>选择后会应用到能力画像、岗位精排、成长路径、课程推理、简历优化和模拟面试。</span>
+                </div>
+                <div class="model-current-badge">
+                    <small>当前使用</small>
+                    <strong>{{ selected_config.display_name }}</strong>
+                    <span>{{ selected_config.model or "未配置模型 ID" }}</span>
+                </div>
+            </header>
+
+            {% if message %}<div class="model-settings-alert success">{{ message }}</div>{% endif %}
+            {% if error %}<div class="model-settings-alert error">{{ error }}</div>{% endif %}
+
+            <section class="model-security-note">
+                <strong>密钥不会进入网页或数据库</strong>
+                <p>设置页只保存模型类型。API Key、接口地址和实际模型 ID 仍从服务器 `.env` 读取，浏览器只能看到是否已配置。</p>
+            </section>
+
+            <form action="/settings/model" method="post" class="model-settings-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="model-option-grid">
+                    {% for option in model_options %}
+                    <label class="model-option-card model-{{ option.key }}{% if selected_key == option.key %} selected{% endif %}{% if not option.configured %} unavailable{% endif %}">
+                        <input type="radio" name="model_key" value="{{ option.key }}" {% if selected_key == option.key %}checked{% endif %} {% if not option.configured %}disabled{% endif %}>
+                        <span class="model-option-dot"></span>
+                        <span class="model-option-content">
+                            <span class="model-option-topline">
+                                <strong>{{ option.display_name }}</strong>
+                                {% if option.configured %}<b class="configured">已配置</b>{% else %}<b>未配置</b>{% endif %}
+                            </span>
+                            <small>{{ option.provider_name }}</small>
+                            <p>{{ option.description }}</p>
+                            <span class="model-option-meta"><em>模型 ID</em>{{ option.model }}</span>
+                            <span class="model-option-meta"><em>接口</em>{{ option.base_url }}</span>
+                        </span>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <div class="model-settings-actions">
+                    <a href="/">取消</a>
+                    <button type="submit">保存并切换模型</button>
+                </div>
+            </form>
+
+            <section class="model-env-guide">
+                <h2>首次使用需要配置 `.env`</h2>
+                <div>
+                    <code>CHATGPT_API_KEY / CHATGPT_BASE_URL / CHATGPT_MODEL</code>
+                    <code>GEMINI_API_KEY / GEMINI_BASE_URL / GEMINI_MODEL</code>
+                    <code>DEEPSEEK_API_KEY / DEEPSEEK_BASE_URL / DEEPSEEK_MODEL</code>
+                </div>
+                <p>修改 `.env` 后需要重启 FastAPI。不要把 API Key 填进聊天、截图、前端表单或数据库。</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

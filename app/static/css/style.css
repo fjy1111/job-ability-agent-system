@@ -6,6 +6,350 @@ body {
 }
 
 /* =========================
+   大模型设置
+========================= */
+
+.model-settings-main {
+    grid-column: 2 / 4;
+    min-width: 0;
+    overflow-y: auto;
+    padding: 42px clamp(28px, 5vw, 76px) 64px;
+    box-sizing: border-box;
+}
+
+.model-settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.model-settings-header p,
+.model-settings-header h1,
+.model-settings-header span {
+    margin: 0;
+}
+
+.model-settings-header p {
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+}
+
+.model-settings-header h1 {
+    margin-top: 8px;
+    color: #111827;
+    font-size: 34px;
+}
+
+.model-settings-header > div > span {
+    display: block;
+    margin-top: 10px;
+    color: #64748b;
+    line-height: 1.7;
+}
+
+.model-current-badge {
+    min-width: 210px;
+    padding: 15px 18px;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    background: #eff6ff;
+}
+
+.model-current-badge small,
+.model-current-badge strong,
+.model-current-badge span {
+    display: block;
+}
+
+.model-current-badge small {
+    color: #64748b;
+    font-weight: 800;
+}
+
+.model-current-badge strong {
+    margin-top: 4px;
+    color: #174ea6;
+    font-size: 19px;
+}
+
+.model-current-badge span {
+    margin-top: 4px;
+    color: #475569;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.model-settings-alert,
+.model-security-note,
+.model-settings-form,
+.model-env-guide {
+    max-width: 1180px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.model-settings-alert {
+    margin-top: 18px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-weight: 800;
+}
+
+.model-settings-alert.success {
+    border: 1px solid #a7f3d0;
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.model-settings-alert.error {
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.model-security-note {
+    margin-top: 24px;
+    padding: 16px 18px;
+    border: 1px solid #a7f3d0;
+    border-radius: 10px;
+    background: #f0fdf4;
+}
+
+.model-security-note strong {
+    color: #047857;
+}
+
+.model-security-note p {
+    margin: 6px 0 0;
+    color: #41645a;
+    line-height: 1.65;
+}
+
+.model-settings-form {
+    margin-top: 22px;
+}
+
+.model-option-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.model-option-card {
+    --model-accent: #2563eb;
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    min-height: 300px;
+    padding: 21px;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.model-option-card.model-chatgpt { --model-accent: #10a37f; }
+.model-option-card.model-gemini { --model-accent: #4285f4; }
+.model-option-card.model-deepseek { --model-accent: #4d6bfe; }
+
+.model-option-card:hover,
+.model-option-card.selected {
+    border-color: var(--model-accent);
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--model-accent) 16%, transparent);
+}
+
+.model-option-card.unavailable {
+    cursor: not-allowed;
+    opacity: 0.67;
+    box-shadow: none;
+}
+
+.model-option-card > input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.model-option-dot {
+    width: 18px;
+    height: 18px;
+    margin-top: 4px;
+    border: 2px solid #cbd5e1;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+.model-option-card.selected .model-option-dot {
+    border: 5px solid var(--model-accent);
+}
+
+.model-option-content,
+.model-option-topline,
+.model-option-meta {
+    display: block;
+}
+
+.model-option-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.model-option-topline strong {
+    color: #111827;
+    font-size: 21px;
+}
+
+.model-option-topline b {
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.model-option-topline b.configured {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.model-option-content > small {
+    display: block;
+    margin-top: 6px;
+    color: var(--model-accent);
+    font-weight: 800;
+}
+
+.model-option-content > p {
+    min-height: 70px;
+    margin: 18px 0;
+    color: #475569;
+    line-height: 1.65;
+}
+
+.model-option-meta {
+    margin-top: 10px;
+    color: #334155;
+    font-size: 12px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+
+.model-option-meta em {
+    display: block;
+    color: #94a3b8;
+    font-style: normal;
+    font-weight: 800;
+}
+
+.model-settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.model-settings-actions a,
+.model-settings-actions button {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 0 18px;
+    font: inherit;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.model-settings-actions a {
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    background: #ffffff;
+}
+
+.model-settings-actions button {
+    border: 0;
+    color: #ffffff;
+    background: #2563eb;
+    cursor: pointer;
+}
+
+.model-env-guide {
+    margin-top: 28px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.model-env-guide h2 {
+    margin: 0;
+    color: #111827;
+    font-size: 18px;
+}
+
+.model-env-guide > div {
+    display: grid;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.model-env-guide code {
+    padding: 9px 11px;
+    border-radius: 7px;
+    background: #f8fafc;
+    color: #334155;
+    overflow-wrap: anywhere;
+}
+
+.model-env-guide p {
+    margin: 14px 0 0;
+    color: #b45309;
+    line-height: 1.65;
+}
+
+@media screen and (max-width: 1050px) {
+    .model-option-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .model-option-card {
+        min-height: 0;
+    }
+
+    .model-option-content > p {
+        min-height: 0;
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .model-settings-main {
+        grid-column: 1;
+        padding: 24px 16px 44px;
+    }
+
+    .model-settings-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .model-current-badge {
+        min-width: 0;
+    }
+}
+
+/* =========================
    综合模拟面试：笔试 + 视频面试
 ========================= */
 

@@ -100,6 +100,14 @@ from app.services.privacy_service import (
     require_valid_csrf,
     verify_password,
 )
+from app.services.model_config_service import (
+    DEFAULT_MODEL_KEY,
+    get_model_options,
+    normalize_model_key,
+    reset_active_model_key,
+    resolve_model_config,
+    set_active_model_key,
+)
 
 # =========================================================
 # 项目路径配置
@@ -180,6 +188,36 @@ class User(Base):
         DateTime,
         default=datetime.now,
         nullable=False
+    )
+
+
+class UserModelSetting(Base):
+    """用户选择的大模型，仅保存模型类型，不保存任何 API Key。"""
+    __tablename__ = "user_model_settings"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("users.id"),
+        unique=True,
+        nullable=False,
+        index=True,
+    )
+    model_key: Mapped[str] = mapped_column(
+        String(30),
+        default=DEFAULT_MODEL_KEY,
+        nullable=False,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.now,
+        nullable=False,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.now,
+        onupdate=datetime.now,
+        nullable=False,
     )
 
 
@@ -1593,8 +1631,14 @@ async def add_privacy_security_headers(request: Request, call_next):
     if ENFORCE_HTTPS and not is_https:
         return RedirectResponse(str(request.url.replace(scheme="https")), status_code=307)
 
-    response = await call_next(request)
-    protected_path = request.url.path.startswith(("/collaboration", "/login", "/register"))
+    selected_model = request.scope.get("session", {}).get("llm_model_key")
+    model_token = set_active_model_key(selected_model)
+    try:
+        response = await call_next(request)
+    finally:
+        reset_active_model_key(model_token)
+
+    protected_path = request.url.path.startswith(("/collaboration", "/settings", "/login", "/register"))
     if protected_path:
         response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, private, max-age=0"
         response.headers["Pragma"] = "no-cache"
@@ -1724,6 +1768,36 @@ def get_login_redirect(request: Request):
         )
 
     return None
+
+
+def get_user_model_key(db: Session, user_id: int | None) -> str:
+    if not user_id:
+        return DEFAULT_MODEL_KEY
+    setting = db.scalar(
+        select(UserModelSetting).where(UserModelSetting.user_id == user_id)
+    )
+    return normalize_model_key(setting.model_key if setting else DEFAULT_MODEL_KEY)
+
+
+def build_model_settings_context(
+    request: Request,
+    db: Session,
+    message: str = "",
+    error: str = "",
+) -> dict:
+    selected_key = get_user_model_key(db, request.session.get("user_id"))
+    request.session["llm_model_key"] = selected_key
+    return {
+        "title": "大模型设置",
+        "username": request.session.get("username"),
+        "role_label": get_session_role_label(request),
+        "selected_key": selected_key,
+        "selected_config": resolve_model_config(selected_key),
+        "model_options": get_model_options(),
+        "csrf_token": get_or_create_csrf_token(request),
+        "message": message,
+        "error": error,
+    }
 
 
 def build_collaboration_redirect(
@@ -3679,6 +3753,7 @@ def login_submit(
     request.session["username"] = user.username
     request.session["user_role"] = selected_role
     request.session["role_label"] = TRIPARTY_ROLE_LABELS[selected_role]
+    request.session["llm_model_key"] = get_user_model_key(db, user.id)
 
     return RedirectResponse(
         url="/collaboration",
@@ -3713,6 +3788,8 @@ def index(request: Request):
     if redirect_response:
         return redirect_response
 
+    active_model = resolve_model_config(request.session.get("llm_model_key"))
+
     return templates.TemplateResponse(
         request,
         "index.html",
@@ -3720,9 +3797,81 @@ def index(request: Request):
             "title": "岗位能力达成学生成长诊断与精准就业智能体系统",
             "username": request.session.get("username"),
             "role_label": get_session_role_label(request),
+            "active_model_name": active_model["display_name"],
             "message": ""
         }
     )
+
+
+@app.get("/settings")
+def model_settings_page(
+    request: Request,
+    message: str = "",
+    error: str = "",
+    db: Session = Depends(get_db),
+):
+    redirect_response = get_login_redirect(request)
+    if redirect_response:
+        return redirect_response
+    return templates.TemplateResponse(
+        request,
+        "model_settings.html",
+        build_model_settings_context(request, db, message=message, error=error),
+    )
+
+
+@app.post("/settings/model")
+def save_model_settings(
+    request: Request,
+    model_key: str = Form(...),
+    csrf_token: str = Form(""),
+    db: Session = Depends(get_db),
+):
+    redirect_response = get_login_redirect(request)
+    if redirect_response:
+        return redirect_response
+
+    require_valid_csrf(request, csrf_token)
+    enforce_collaboration_rate_limit(request, "model-settings", limit=12)
+
+    available_keys = {item["key"] for item in get_model_options()}
+    raw_key = (model_key or "").strip().lower()
+    if raw_key not in available_keys:
+        return templates.TemplateResponse(
+            request,
+            "model_settings.html",
+            build_model_settings_context(request, db, error="请选择系统支持的大模型。"),
+            status_code=400,
+        )
+
+    config = resolve_model_config(raw_key)
+    if not config["configured"]:
+        return templates.TemplateResponse(
+            request,
+            "model_settings.html",
+            build_model_settings_context(
+                request,
+                db,
+                error=f"{config['display_name']} 尚未在 .env 配置 API Key 和实际模型 ID。",
+            ),
+            status_code=400,
+        )
+
+    user_id = request.session.get("user_id")
+    setting = db.scalar(
+        select(UserModelSetting).where(UserModelSetting.user_id == user_id)
+    )
+    if setting is None:
+        setting = UserModelSetting(user_id=user_id, model_key=raw_key)
+    else:
+        setting.model_key = raw_key
+        setting.updated_at = datetime.now()
+    db.add(setting)
+    db.commit()
+
+    request.session["llm_model_key"] = raw_key
+    message = urlencode({"message": f"已切换为 {config['display_name']}，后续 LLM 任务将使用该配置。"})
+    return RedirectResponse(url=f"/settings?{message}", status_code=303)
 
 
 @app.get("/collaboration")

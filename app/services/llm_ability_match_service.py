@@ -26,6 +26,7 @@ except Exception:  # 避免单文件语法检查时因项目路径问题失败
     retrieve_jobs_by_vector = None
 
 from app.services.llm_errors import LLMCallError
+from app.services.model_config_service import create_configured_chat_model
 
 load_dotenv()
 
@@ -342,48 +343,13 @@ def diversify_candidate_records(
 
 
 def _create_llm() -> ChatOpenAI:
-    """创建兼容 OpenAI 接口的大模型客户端。
-
-    兼容两套 .env 命名：
-    - 通用：LLM_API_KEY / LLM_BASE_URL / LLM_MODEL
-    - DeepSeek：DEEPSEEK_API_KEY / DEEPSEEK_BASE_URL / DEEPSEEK_MODEL / ABILITY_MATCH_MODEL
-    """
-    if os.getenv("USE_LLM", "true").lower() != "true":
-        raise LLMCallError()
-
-    api_key = (
-        os.getenv("LLM_API_KEY")
-        or os.getenv("OPENAI_API_KEY")
-        or os.getenv("DEEPSEEK_API_KEY")
-        or os.getenv("DASHSCOPE_API_KEY")
+    return create_configured_chat_model(
+        temperature=0,
+        timeout=int(os.getenv("JOB_MATCH_LLM_TIMEOUT_SECONDS", "120")),
+        max_retries=0,
+        task_name="ABILITY_MATCH",
+        legacy_task_model_envs=("ABILITY_MATCH_MODEL",),
     )
-    if not api_key:
-        raise LLMCallError()
-
-    base_url = (
-        os.getenv("LLM_BASE_URL")
-        or os.getenv("OPENAI_BASE_URL")
-        or os.getenv("DEEPSEEK_BASE_URL")
-        or os.getenv("DASHSCOPE_BASE_URL")
-    )
-    model = (
-        os.getenv("ABILITY_MATCH_MODEL")
-        or os.getenv("LLM_MODEL")
-        or os.getenv("OPENAI_MODEL")
-        or os.getenv("DEEPSEEK_MODEL")
-        or "deepseek-chat"
-    )
-
-    kwargs: dict[str, Any] = {
-        "model": model,
-        "temperature": 0,
-        "api_key": api_key,
-        "timeout": int(os.getenv("JOB_MATCH_LLM_TIMEOUT_SECONDS", "120")),
-        "max_retries": 0,
-    }
-    if base_url:
-        kwargs["base_url"] = base_url
-    return ChatOpenAI(**kwargs)
 
 
 def _ensure_assessment_payload(data: dict[str, Any]) -> None:

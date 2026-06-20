@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 
 from app.services.llm_errors import LLMCallError
+from app.services.model_config_service import create_configured_chat_model
 
 load_dotenv()
 
@@ -36,42 +37,13 @@ def safe_json_loads(text: str) -> Dict[str, Any]:
 
 
 def _create_llm() -> ChatOpenAI:
-    if os.getenv("USE_LLM", "true").lower() != "true":
-        raise LLMCallError()
-
-    api_key = (
-        os.getenv("LLM_API_KEY")
-        or os.getenv("OPENAI_API_KEY")
-        or os.getenv("DEEPSEEK_API_KEY")
-        or os.getenv("DASHSCOPE_API_KEY")
+    return create_configured_chat_model(
+        temperature=0.25,
+        timeout=int(os.getenv("JOB_MATCH_LLM_TIMEOUT_SECONDS", "30")),
+        max_retries=0,
+        task_name="GAP_PATH",
+        legacy_task_model_envs=("GAP_PATH_MODEL",),
     )
-    model = (
-        os.getenv("GAP_PATH_MODEL")
-        or os.getenv("LLM_MODEL")
-        or os.getenv("OPENAI_MODEL")
-        or os.getenv("DEEPSEEK_MODEL")
-        or os.getenv("DASHSCOPE_MODEL")
-    )
-    base_url = (
-        os.getenv("LLM_BASE_URL")
-        or os.getenv("OPENAI_BASE_URL")
-        or os.getenv("DEEPSEEK_BASE_URL")
-        or os.getenv("DASHSCOPE_BASE_URL")
-    )
-
-    if not api_key or not model:
-        raise LLMCallError()
-
-    kwargs: dict[str, Any] = {
-        "model": model,
-        "api_key": api_key,
-        "temperature": 0.25,
-        "timeout": int(os.getenv("JOB_MATCH_LLM_TIMEOUT_SECONDS", "30")),
-        "max_retries": 0,
-    }
-    if base_url:
-        kwargs["base_url"] = base_url
-    return ChatOpenAI(**kwargs)
 
 
 def _validate_gap_paths(parsed: Dict[str, Any], expected_count: int) -> List[Dict[str, Any]]:
